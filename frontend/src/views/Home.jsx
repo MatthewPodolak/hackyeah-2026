@@ -8,6 +8,7 @@ import ThemeToggler from "@/components/theme-toggler";
 import AddQuestionary from "@/components/add-questionary";
 import ProblemDetails from "@/components/problem-details";
 import ProblemSolutions from "@/components/problem-solutions";
+import { useProposal } from "@/api/context/ProposalContext";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
@@ -19,6 +20,7 @@ export default function Home() {
   const { data: problems, isError } = useProblems();
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
+  const { openProposal } = useProposal();
 
   useEffect(() => {
     if (isError) showToast(null, "error");
@@ -60,7 +62,7 @@ export default function Home() {
       </svg>
     </div>
 
-    <ProblemDetails problem={selectedProblem} onClose={() => setSelectedProblem(null)} />
+    <ProblemDetails problem={selectedProblem} onClose={() => setSelectedProblem(null)} onProposeSolution={openProposal} />
 
     <AddQuestionary open={questOpen} onClose={() => setQuestOpen(false)} onSubmitted={setSubmitResult} />
 

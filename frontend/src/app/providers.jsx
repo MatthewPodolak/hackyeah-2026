@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "next-themes";
 import GlobalErrorCatcher from "@/helpers/GlobalErrorCatcher";
 import { AuthProvider } from "@/api/context/AuthContext";
+import { ProposalProvider } from "@/api/context/ProposalContext";
 
 export default function Providers({ children }) {
   const [queryClient] = useState(() => new QueryClient());
@@ -14,7 +15,9 @@ export default function Providers({ children }) {
         <GlobalErrorCatcher>
           <QueryClientProvider client={queryClient}>
             <AuthProvider>
-              {children}
+              <ProposalProvider>
+                {children}
+              </ProposalProvider>
               <Toaster position="bottom-right" richColors closeButton />
             </AuthProvider>
           </QueryClientProvider>

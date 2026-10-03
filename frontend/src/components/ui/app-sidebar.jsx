@@ -5,17 +5,18 @@ import { usePathname } from "next/navigation"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 
 import { useAuth } from "@/api/context/AuthContext"
+import { useProposal } from "@/api/context/ProposalContext"
 
 const items = [
-  { title: "Home", url: "/" },
+  { title: "Mapa problemow", url: "/" },
   { title: "Innowacje", url: "/innovations" },
-  { title: "Inbox", url: "/inbox" },
-  { title: "Settings", url: "/settings" },
+  { title: "Zaproponuj innowacje", action: "proposal" },
 ]
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { isAuthed, openPanel } = useAuth()
+  const { openProposal } = useProposal()
 
   return (
     <Sidebar>
@@ -27,13 +28,19 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    render={<Link href={item.url} />}
-                    // sub-pages (e.g. /innovations/bawita) keep their section highlighted
-                    isActive={item.url === "/" ? pathname === "/" : pathname.startsWith(item.url)}
-                  >
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
+                  {item.action === "proposal" ? (
+                    <SidebarMenuButton className="cursor-pointer" onClick={() => openProposal()}>
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  ) : (
+                    <SidebarMenuButton
+                      render={<Link href={item.url} />}
+                      // sub-pages (e.g. /innovations/bawita) keep their section highlighted
+                      isActive={item.url === "/" ? pathname === "/" : pathname.startsWith(item.url)}
+                    >
+                      <span>{item.title}</span>
+                    </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
