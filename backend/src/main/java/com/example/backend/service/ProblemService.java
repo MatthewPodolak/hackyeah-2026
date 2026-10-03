@@ -20,6 +20,7 @@ public class ProblemService {
         Problem problem = problemMapper.toEntity(request);
         if (request.authorId() != null) {
             appUserRepository.findById(request.authorId()).ifPresent(problem::setAuthor);
+            //as
         }
         Problem savedProblem = problemRepository.save(problem);
         return problemMapper.toResponse(savedProblem);
