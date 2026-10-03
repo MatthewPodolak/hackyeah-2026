@@ -5,6 +5,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useUnseenIdeasCount } from "@/api/hooks/useAdminIdeas"
+import { usePendingAccounts, useUnseenProblems } from "@/api/hooks/useAdmin"
+import AccessibilityControls from "@/components/accessibility-controls"
 
 import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useToast } from "@/helpers/ToastProvider"
@@ -13,27 +15,83 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import { Logout01Icon } from "@hugeicons/core-free-icons"
 import { useProposal } from "@/api/context/ProposalContext"
 
-const items = [
+const publicItems = [
   { title: "Mapa problemów", url: "/" },
   { title: "Biblioteka innowacji", url: "/innovations" },
   { title: "Zaproponuj innowację", action: "proposal" },
-  { title: "Moje propozycje", url: "/my-ideas" },
+  { title: "Partnerstwa", url: "/partnerships" },
   { title: "Baza wiedzy", url: "/knowledge" },
 ]
 
+const myItems = [
+  { title: "Moje zgłoszenia", url: "/my-reports" },
+  { title: "Moje propozycje", url: "/my-ideas" },
+  { title: "Wiadomości", url: "/messages", requiresLogin: true },
+  { title: "Moje testy", url: "/my-tests", requiresLogin: true },
+  { title: "Plan wdrożenia innowacji", url: "/implementation-plan", requiresLogin: true },
+]
+
 const institutionItems = [
-  { title: "Zgłoszone problemy", url: "/reported-problems" },
-  { title: "Zgłoszone innowacje", url: "/reported-innovations", badge: "unseenIdeas" },
+  { title: "Zgłoszone problemy", url: "/reported-problems", badge: "unseenProblems", badgeLabel: "nowe" },
+  { title: "Zgłoszone innowacje", url: "/reported-innovations", badge: "unseenIdeas", badgeLabel: "nowe" },
+  { title: "Zgłoszenia do testów", url: "/test-participations" },
+  { title: "Trendy i potrzeby", url: "/trends" },
   { title: "Nabory grantowe", url: "/grant-calls" },
 ]
 
+const ropsItems = [
+  { title: "Konta instytucji", url: "/admin/accounts", badge: "pendingAccounts", badgeLabel: "czeka na akceptację" },
+  { title: "Katalog wiedzy", url: "/admin/catalog" },
+]
+
+function NavGroup({ label, items, isActive, badges = {}, onAction }) {
+  return (
+    <SidebarGroup>
+      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => {
+            const count = item.badge ? badges[item.badge] : 0
+            return (
+              <SidebarMenuItem key={item.title}>
+                {item.action ? (
+                  <SidebarMenuButton className="cursor-pointer" onClick={() => onAction?.(item.action)}>
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                ) : (
+                  <SidebarMenuButton
+                    render={<Link href={item.url} />}
+                    isActive={isActive(item.url)}
+                    aria-current={isActive(item.url) ? "page" : undefined}
+                  >
+                    <span>{item.title}</span>
+                    {count > 0 && <span className="sr-only">, {item.badgeLabel}: {count}</span>}
+                  </SidebarMenuButton>
+                )}
+                {count > 0 && (
+                  <SidebarMenuBadge aria-hidden="true" className="bg-emerald-700 text-white peer-hover/menu-button:text-white peer-data-active/menu-button:text-white">
+                    {count}
+                  </SidebarMenuBadge>
+                )}
+              </SidebarMenuItem>
+            )
+          })}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  )
+}
+
 export function AppSidebar() {
   const pathname = usePathname();
-  const { isLogged, user, roleLabel, openPanel, logout, hasRole } = useAuth()
+  const { isLogged, user, roleLabel, openPanel, logout, hasRole, isPendingInstitution, accountStatus } = useAuth()
   const { showToast } = useToast()
   const { openProposal } = useProposal()
   const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
+  const isRops = hasRole(ROLES.ROPS)
   const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
+  const { data: unseenProblems } = useUnseenProblems(isInstitution)
+  const { data: pendingAccounts } = usePendingAccounts(isRops)
 
   const isActive = (url) => (url === "/" ? pathname === "/" : pathname.startsWith(url))
 
@@ -49,60 +107,19 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <nav aria-label="Menu główne">
+          <NavGroup label="Nawigacja" items={publicItems} isActive={isActive} onAction={() => openProposal()} />
+          <NavGroup label="Moje sprawy" items={myItems.filter((item) => !item.requiresLogin || isLogged)} isActive={isActive} />
+          {isInstitution && (
+            <NavGroup label={`Panel ${roleLabel}`} items={institutionItems} isActive={isActive} badges={{ unseenIdeas, unseenProblems }} />
+          )}
+          {isRops && <NavGroup label="Administracja ROPS" items={ropsItems} isActive={isActive} badges={{ pendingAccounts }} />}
+        </nav>
         <SidebarGroup>
-          <SidebarGroupLabel>Nawigacja</SidebarGroupLabel>
+          <SidebarGroupLabel>Ułatwienia dostępu</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  {item.action === "proposal" ? (
-                    <SidebarMenuButton className="cursor-pointer" onClick={() => openProposal()}>
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  ) : (
-                    <SidebarMenuButton
-                      render={<Link href={item.url} />}
-                      // sub-pages (e.g. /innovations/bawita) keep their section highlighted
-                      isActive={isActive(item.url)}
-                      aria-current={isActive(item.url) ? "page" : undefined}
-                    >
-                      <span>{item.title}</span>
-                    </SidebarMenuButton>
-                  )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <AccessibilityControls />
           </SidebarGroupContent>
         </SidebarGroup>
-        {isInstitution && (
-          <SidebarGroup>
-            <SidebarGroupLabel>Panel {roleLabel}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {institutionItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton
-                      render={<Link href={item.url} />}
-                      isActive={isActive(item.url)}
-                      aria-current={isActive(item.url) ? "page" : undefined}
-                    >
-                      <span>{item.title}</span>
-                      {item.badge === "unseenIdeas" && unseenIdeas > 0 && (
-                        <span className="sr-only">, nowe: {unseenIdeas}</span>
-                      )}
-                    </SidebarMenuButton>
-                    {item.badge === "unseenIdeas" && unseenIdeas > 0 && (
-                      <SidebarMenuBadge aria-hidden="true" className="bg-emerald-700 text-white peer-hover/menu-button:text-white peer-data-active/menu-button:text-white">
-                        {unseenIdeas}
-                      </SidebarMenuBadge>
-                    )}
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-        </nav>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
@@ -117,6 +134,11 @@ export function AppSidebar() {
                     <span className="sr-only">Zalogowano jako </span>
                     <span className="font-medium break-words">{user.name}</span>
                     <span className="text-xs text-muted-foreground break-all">{roleLabel} · {user.email}</span>
+                    {isPendingInstitution && (
+                      <span className="mt-1 text-xs font-medium">
+                        {accountStatus === "REJECTED" ? "Wniosek o konto instytucji został odrzucony" : "Konto czeka na akceptację ROPS"}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <Button variant="ghost" size="icon-sm" className="cursor-pointer" onClick={handleLogout} aria-label="Wyloguj" title="Wyloguj">

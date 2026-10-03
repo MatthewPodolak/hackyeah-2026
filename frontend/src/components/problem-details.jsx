@@ -6,6 +6,8 @@ import { Alert02Icon, BulbIcon, Calendar03Icon, Cancel01Icon, Location01Icon } f
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useProblem } from "@/api/hooks/useProblemsQuery"
+import StatusPill from "@/components/status-pill"
+import { problemStatus } from "@/lib/problems"
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories"
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" })
@@ -70,7 +72,10 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
             </Button>
           </div>
 
-          <ul className="flex flex-wrap gap-1.5" aria-label="Kategorie">
+          <ul className="flex flex-wrap items-center gap-1.5" aria-label="Status i kategorie">
+            <li>
+              <StatusPill meta={problemStatus(problem.status)} />
+            </li>
             <li>
               <Badge variant="secondary">
                 <span aria-hidden="true">{category.icon}</span> {category.label}

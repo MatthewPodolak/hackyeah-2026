@@ -8,13 +8,20 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "DEMENTIA_MEMORY",
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Dorosłe osoby cierpiące na zespół otępienny we wczesnym stadium oraz osoby rehabilitowane pamięciowo po udarach i wylewach.",
     "whoCanImplement": "Placówki wsparcia dziennego seniorów, domy pomocy społecznej, miejskie dzienne domy pomocy społecznej, warsztaty terapii zajęciowej, osoby indywidualne.",
@@ -26,7 +33,8 @@
       "video": "https://www.youtube.com/watch?v=o7UhDlebLJo",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/bawita.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/o7UhDlebLJo/hqdefault.jpg"
   },
   {
     "id": "senior-cuder",
@@ -37,15 +45,24 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "HEALTH_REHAB",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "LONELINESS",
       "DEMENTIA_MEMORY",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Gra przeznaczona jest dla osób w podeszłym wieku. Została stworzona z myślą zarówno o osobach bardzo dobrze funkcjonujących i samodzielnych jak również tych wymagających opieki w miejscu zamieszkania/przebywania.",
     "whoCanImplement": "Z rozwiązania mogą skorzystać instytucje, organizacje pozarządowe i podmioty organizujące opiekę nad osobami starszymi, grupy formalne i nieformalne współpracujące z seniorami, osoby indywidualne, które mają seniora w swoim otoczeniu. Może również stać się narzędziem pomocnym przy zacieśnianiu więzi z osobami, które na co dzień zajmują się seniorem. Gra doskonale sprawdzi się w Klubach Seniorów, Centrach Aktywności Seniora, Domach Opieki, Domach Seniora, ZOL-ach, Domach Dziennego Pobytu, Sanatoriach oraz innych miejscach, w których odbywają się spotkania z seniorami.",
@@ -57,7 +74,8 @@
       "video": "https://www.youtube.com/watch?v=o5TP10ZStNA",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/seniorcuder.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/o5TP10ZStNA/hqdefault.jpg"
   },
   {
     "id": "merkury",
@@ -68,12 +86,19 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "DIGITAL_EXCLUSION",
       "PUBLIC_SERVICES"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze, którym towarzyszy strach i niepewność przy korzystaniu z urządzeń samoobsługowych.",
     "whoCanImplement": "Organizacje pozarządowe wspierające aktywność seniorów, dzienne domy pomocy społecznej, kluby seniora.",
@@ -82,10 +107,11 @@
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,merkury",
       "leaflet": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/ROPS_Folder_IN_Merkury_v4_www.pdf",
-      "video": "https://www.youtube.com/watch?v=BK6a8fjELR0&amp;t=48s",
+      "video": "https://www.youtube.com/watch?v=BK6a8fjELR0&t=48s",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/merkury.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/BK6a8fjELR0/hqdefault.jpg"
   },
   {
     "id": "organizator-kompleksowej-opieki-w-miejscu-zamieszkania",
@@ -96,14 +122,23 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "DAILY_LIFE_CARE",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "CARE_ACCESS",
       "CAREGIVER_SUPPORT",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Odbiorcami innowacji mogą być osoby, które osiągnęły stan umożliwiający im opuszczenie szpitala, ale wymagają intensywnej opieki domowej wynikającej z zaawansowanego wieku, utrudniającego rekonwalescencję lub ich stan zdrowia i samodzielności znacząco zmienił się podczas hospitalizacji. Równocześnie innowacja wspiera osoby, które mieszkają z pacjentem i stają się jego naturalnymi opiekunami.",
     "whoCanImplement": "Po model rozwiązania mogą sięgnąć podmioty organizujące pracę pielęgniarek (szczególnie opieki długoterminowej), ale też jednostki organizacyjne samorządu, które chciałyby wprowadzić „Organizatora kompleksowej opieki w miejscu zamieszkania” np. jako specjalistyczną usługę opiekuńczą.",
@@ -114,7 +149,8 @@
       "leaflet": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/01_model_COD.pdf",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/organizatorkompleksowejopieki.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "przenosne-modularne-lazienki",
@@ -125,14 +161,24 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "POVERTY",
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "FINANCIAL_DIFFICULTY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY",
+      "DAILY_LIFE_CARE",
+      "LONELINESS_WELLBEING"
     ],
     "problemTags": [
       "POVERTY",
       "DAILY_INDEPENDENCE",
       "LONELINESS"
+    ],
+    "challengeAreas": [
+      "POVERTY",
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby ubogie oraz osoby zamieszkujące lokale nieposiadające łazienki, które nie mogą jej zainstalować np. z powodu nieuregulowanej sytuacji własnościowej lokalu.",
     "whoCanImplement": "Urząd gminy, ośrodki pomocy społecznej, powiatowe centra pomocy rodzinie, organizacje pozarządowe wspierające osoby ubogie.",
@@ -144,7 +190,8 @@
       "video": "https://www.youtube.com/watch?v=Pl5bkpxEqgs",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/przenosnelazienki.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/Pl5bkpxEqgs/hqdefault.jpg"
   },
   {
     "id": "terapeuta-przestrzeni",
@@ -155,13 +202,21 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "DAILY_LIFE_CARE",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE",
       "CARE_ACCESS",
       "SAFETY"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze mieszkające samodzielnie albo z rodziną, które wymagają wsparcia by móc pozostać w swoim miejscu zamieszkania",
     "whoCanImplement": "Ośrodki pomocy społecznej, miejskie dzienne domy pomocy społecznej, domy pomocy społecznej, centra aktywnościseniorów, organizacje pozarządowe",
@@ -171,7 +226,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,terapeuta-przestrzeni",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/terapeutaprzestrzeni.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "talerze-zdrowia",
@@ -182,14 +238,25 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "HEALTH",
-      "DISABILITY"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "HEALTHY_LIFESTYLE",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "HEALTH",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Seniorzy, osoby z niepełnosprawnością (szczególnie intelektualną), osoby, które pragną poznać zasady sporządzania zbilansowanych posiłków.",
     "whoCanImplement": "Osoby z grupy docelowej, miejskie dzienne domy pomocy społecznej, domy pomocy społecznej, centra aktywności seniora, warsztaty terapi zajęciowej, opiekunowie/rodzina.",
@@ -199,7 +266,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,talerze-zdrowia",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/talerzezdrowia.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "therapy-set",
@@ -210,12 +278,20 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "REHABILITATION",
       "CARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze wymagające opieki w miejscu zamieszkania i ich opiekunowie, mieszkańcy DPS i innych ośrodków pobytu dziennego.",
     "whoCanImplement": "Podmioty organizujące i realizujące opiekę nad osobami starszymi (DPS, ZOL, hospicja, w tym hospicja domowe, organizacje pozarządowe), osoby indywidualne, warsztaty terapii zajęciowej.",
@@ -225,7 +301,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,therapy-set",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/therapyset.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "sciezka-treningu-umyslu",
@@ -236,13 +313,20 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "DEMENTIA_MEMORY",
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby starsze o ograniczonej percepcji (głównie te, u których pojawiają się pierwsze objawy chorób otępiennych) oraz osoby z niepełnosprawnością intelektualną.",
     "whoCanImplement": "Podmioty dysponujące przestrzenią dostępną dla szerokiego grona odbiorców (ścieżki mogą znaleźć się w parkach miejskich, na bulwarach, trasach spacerowych), domy pomocy społecznej, instytucje wspierające osoby z niepełnosprawnością intelektualną.",
@@ -252,7 +336,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,sciezka-treningu-umyslu",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/sciezkatreninguumyslu.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "edu-gra-hahaha",
@@ -263,15 +348,27 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "MENTAL_HEALTH",
-      "DISABILITY"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "HEALTH_REHAB",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "REHABILITATION",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "MENTAL_HEALTH",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby starsze o ograniczonej mobilności i percepcji, osoby z niepełnosprawnością intelektualną.",
     "whoCanImplement": "Organizacje pozarządowe, podmioty pracujące z osobami starszymi i z osobami z niepełnosprawnością (np. Warsztaty Terapii Zajęciowej, szkoły specjalne).",
@@ -281,7 +378,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,edu-gra-hahaha",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/edugra.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "obu-obuwie-po-domu",
@@ -292,12 +390,19 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "SAFETY",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze, powyżej 65. roku życia, z dysfunkcjami w zakresie małej i/lub dużej motoryki (w tym problemy z fizjonomią stopy, np. tzw. haluksy) oraz dysfunkcjami wzroku.",
     "whoCanImplement": "Podmioty gospodarcze zajmujące się produkcją obuwia, ośrodki wsparcia dla osób starszych (miejskie dzienne domy pomocy społecznej, domy pomocy społecznej itp.), sanatoria, ośrodki rehabilitacyjne, osoby prywatne.",
@@ -307,7 +412,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,obu-obuwie-po-domu",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/obuobuwie.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "centrum-antydepresyjne",
@@ -318,13 +424,20 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "LONELINESS"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Osoby starsze wymagające opieki w miejscu zamieszkania i ich opiekunowie",
     "whoCanImplement": "Podmioty organizujące usługi opiekuńcze w miejscu zamieszkania, w tym jednostki samorządu terytorialnego, organizacje pozarządowe, podmioty ekonomii społecznej.",
@@ -334,7 +447,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,centrum-antydepresyjne",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/centrumantydepresyjne.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zeglowanie-w-wyobrazni-czyli-sposob-na-strachy-na-wodzie",
@@ -345,13 +459,25 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze o ograniczonej mobilności i percepcji, młodzież i dzieci z niepełnosprawnością ruchową, osoby odczuwające lęk przed wodą.",
     "whoCanImplement": "Organizatorzy turystyki żaglowej/wodnej, ośrodki opieki nad seniorami, instytucje wspierające osoby z niepełnosprawnością ruchową.",
@@ -361,7 +487,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,zeglowanie-w-wyobrazni-czyli-sposob-na-strachy-na-wodzie",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zeglowaniewwyobrazni.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "stworzenie-narzedzia-ulatwiajacego-seniorom-prawidlowe-regulowanie-spraw-spadkowych",
@@ -372,11 +499,18 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "PUBLIC_SERVICES"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze, osoby chorujące i w stanach terminalnych.",
     "whoCanImplement": "Hospicja, organizacje pozarządowe zajmujące się osobami terminalnie chorymi, osoby prywatne.",
@@ -386,7 +520,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,stworzenie-narzedzia-ulatwiajacego-seniorom-prawidlowe-regulowanie-spraw-spadkowych",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/narzedziespadkowe.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "mobilne-centrum-pomocy-dla-osob-starszych",
@@ -397,14 +532,23 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "LONELINESS",
       "MENTAL_HEALTH",
       "PUBLIC_SERVICES",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze, niesamodzielne, mieszkające na wsi.",
     "whoCanImplement": "Samorządy lokalne, gminne ośrodki pomocy społecznej, organizacje pozarządowe.",
@@ -414,7 +558,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,mobilne-centrum-pomocy-dla-osob-starszych",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mobilnecentrumpomocy.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "kody-qr-na-pomoc-seniorom",
@@ -425,14 +570,22 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS",
-      "HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "DEMENTIA_MEMORY",
       "SAFETY",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "SENIORS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby starsze, w tym osoby z zaburzeniami pamięci czy chorobami otępiennymi",
     "whoCanImplement": "Organizacje pozarządowe, służby ratownictwa medycznego, placówki podstawowej opieki zdrowotnej, jednostki organizacyjne pomocy społecznej, instytucje publiczne działające na rzecz seniorów, np. Centra Aktywności Seniorów.",
@@ -442,7 +595,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,kody-qr-na-pomoc-seniorom",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/kodyqr.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "e-rzecznik-konsumenta-seniora",
@@ -453,11 +607,18 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "PUBLIC_SERVICES"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze",
     "whoCanImplement": "Organizacje pozarządowe zajmujące się prawami konsumentów, rzecznicy praw konsumenta przy podmiotach publicznych, takich jak Urząd Miasta, Urząd Gminy, Starostwo Powiatowe itp., Urząd Ochrony Praw Konsumenta, Rzecznik Praw Obywatelskich, Centra Aktywności Seniorów, Miejskie Dzienne Domy Pomocy Społecznej.",
@@ -467,7 +628,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,e-rzecznik-konsumenta-seniora",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/erzecznik.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "sciezka-motosensoryczna",
@@ -478,12 +640,20 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "REHABILITATION",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Odbiorcami rozwiązania są osoby starsze i osoby z niepełnosprawnościami (ze szczególnym uwzględnieniem dysfunkcji narządu ruchu). Korzystanie ze „Ścieżki moto-sensorycznej” pozwoli kontynuować program terapeutyczny poza specjalistycznymi ośrodkami zajmującymi się fizjoterapią i dzięki temu może zatrzymać lub spowolnić proces obniżającego się poziomu sprawności u użytkowników.",
     "whoCanImplement": "Z rozwiązania mogą skorzystać instytucje, podmioty, firmy i osoby dysponujące ogólnodostępnym lub nadającym się do udostępnienia terenem (gminy, powiaty, placówki medyczne czy opiekuńcze, które dysponują terenami zielonymi, itp.).",
@@ -495,7 +665,8 @@
       "video": "https://www.youtube.com/watch?v=4DKP0XK440U",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/sciezkamotosensoryczna.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/4DKP0XK440U/hqdefault.jpg"
   },
   {
     "id": "korytarz-wspomnien",
@@ -506,11 +677,18 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "DEMENTIA_MEMORY"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze, w tym osoby z problemami pamięci i osoby z chorobami otępiennymi.",
     "whoCanImplement": "Domy Pomocy Społecznej",
@@ -520,7 +698,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,korytarz-wspomnien",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/korytarzwspomnien.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "wirtualne-izby-pamieci",
@@ -531,13 +710,22 @@
     "targetGroups": [
       "SENIORS"
     ],
-    "challengeAreas": [
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "LONELINESS_WELLBEING",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "DIGITAL_EXCLUSION",
       "LONELINESS",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze",
     "whoCanImplement": "Centra aktywności seniora, lokalne grupy wsparcia seniorów, organizacje pozarządowe, insytutcje kultury.",
@@ -547,7 +735,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-seniorow,wirtualne-izby-pamieci",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wirtualneizby.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "komix-zyciowy",
@@ -558,13 +747,22 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE",
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "FAMILY_SUPPORT"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE",
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Wychowankowie placówek opiekuńczo-wychowawczych w okresie dojrzewania",
     "whoCanImplement": "Placówki opiekuńczo-wychowawcze typu rodzinnego i instytucjonalnego, szkoły publiczne i niepubliczne, psychologowie, pedagodzy.",
@@ -576,7 +774,8 @@
       "video": "https://www.youtube.com/watch?v=hohm7FnsukY",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/komix.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/hohm7FnsukY/hqdefault.jpg"
   },
   {
     "id": "patryk-i-kropka",
@@ -587,13 +786,25 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "COMMUNICATION",
       "CULTURE_LEISURE",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Młodzież z niepełnosprawnością intelektualną w stopniu umiarkowanym.",
     "whoCanImplement": "Nauczyciele współorganizujący, biblioteki publiczne, biblioteki szkolne, szkoły integracyjne, terapeuci osób z niepełnosprawnością intelektualną, warsztaty terapii zajęciowej.",
@@ -605,7 +816,8 @@
       "video": "https://youtu.be/JfmyToWVuOs",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/patrykikropka.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/JfmyToWVuOs/hqdefault.jpg"
   },
   {
     "id": "edki-kredki-terapeutyczne",
@@ -616,11 +828,21 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci ze spastycznością kończyny górnej",
     "whoCanImplement": "Rehabilitanci, rodzice i opiekunowie dzieci ze spastycznością kończyny górnej, nauczyciele wychowania przedszkolnego, wczesnoszkolnego i szkolnego.",
@@ -629,10 +851,11 @@
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,edki-kredki-terapeutyczne",
       "leaflet": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/ROPS_Folder_IN_Edki_v6_www.pdf",
-      "video": "https://www.youtube.com/watch?v=ev173g-d_vA&amp;t=5s",
+      "video": "https://www.youtube.com/watch?v=ev173g-d_vA&t=5s",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/terapeutycznekredki.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/ev173g-d_vA/hqdefault.jpg"
   },
   {
     "id": "rodzina-adopcyjna-dorasta",
@@ -643,12 +866,21 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "LONELINESS_WELLBEING"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "MENTAL_HEALTH"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Rodziny adopcyjne wychowujące dzieci w wieku nastoletnim",
     "whoCanImplement": "Rodziny adopcyjne, których dzieci wchodzą w wiek nastoletni, organizacje i podmioty zajmujące się wsparciem rodzin adopcyjnych, ośrodki adopcyjne, psychologowie, terapeuci.",
@@ -660,7 +892,8 @@
       "video": "https://www.youtube.com/watch?v=HZzYekiW_nY",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/rodzinaadopcyjna.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/HZzYekiW_nY/hqdefault.jpg"
   },
   {
     "id": "puzzle-3d",
@@ -671,12 +904,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "EDUCATION",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci niewidome lub niedowidzące.",
     "whoCanImplement": "Nauczyciele szkół dla dzieci niewidomych a także rodzice dzieci z niepełnosprawnością wzroku, organizacje pozarządowe wspierające tą grupę dzieci.",
@@ -688,7 +932,8 @@
       "video": "https://www.youtube.com/watch?v=T_OM-4WqGzE",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wykorzystaniedruku3d.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/T_OM-4WqGzE/hqdefault.jpg"
   },
   {
     "id": "hop-hop-mobilny-plac-zabaw",
@@ -699,13 +944,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "HEALTH"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION",
       "HEALTHY_LIFESTYLE"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "HEALTH"
     ],
     "targetGroupDescription": "Dzieci w wieku przedszkolnym i wczesnoszkolnym z niepełnosprawnościami ruchowymi typu: nieprawidłowe napięcie mięśniowe, obniżona zdolność motoryczna ciała, problemy przetwarzania sensorycznego w obrębie układu proprioceptywnego czy układu równowagi.",
     "whoCanImplement": "Rehabilitanci, fizjoterapeuci i terapeuci integracji sensorycznej oraz rodzice dzieci z niepełnosprawnością ruchową, które mają problem z obniżoną zdolnością motoryczną ciała i zaburzeniami przetwarzania sensorycznego.",
@@ -717,7 +972,8 @@
       "video": "https://www.youtube.com/watch?v=kE9lpr4OJPQ",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/hophop.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/kE9lpr4OJPQ/hqdefault.jpg"
   },
   {
     "id": "mobilny-pomocnik-dydaktyczno-sensoryczny-dla-uczniowstudentow-ze-spektrum-autyzmu",
@@ -728,11 +984,19 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci i młodzież z zaburzeniami ze spektrum autyzmu, osoby posiadające orzeczenie o potrzebie kształcenia specjalnego.",
     "whoCanImplement": "Rodzice i opiekunowie, nauczyciele i terapeuci osób z ASD, szkoły i uniwersytety.",
@@ -742,7 +1006,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,mobilny-pomocnik-dydaktyczno-sensoryczny-dla-uczniowstudentow-ze-spektrum-autyzmu",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mobilnypomocnik.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "przewodnik-dla-osob-z-asd-moje-potrzeby-gdzie-i-jak-je-realizowac",
@@ -753,13 +1018,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "DAILY_LIFE_CARE",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "SOCIAL_INCLUSION",
       "DAILY_INDEPENDENCE",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby posiadające diagnozę ASD (autyzm lub zespół Aspergera) w okresie dojrzewania (do 13 r.ż) lub dorosłości oraz posiadające umiejętność czytania i elementarną umiejętność komunikowania się.",
     "whoCanImplement": "Szkoły specjalne, szkoły publiczne z klasami specjalnymi, szkoły niepubliczne, placówki wsparcia osób z ASD.",
@@ -769,7 +1044,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,przewodnik-dla-osob-z-asd-moje-potrzeby-gdzie-i-jak-je-realizowac",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/przewodnikasd.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "bez-presji-z-depresji",
@@ -780,12 +1056,20 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "CHILDREN_YOUTH"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Dzieci i młodzież w wieku od 10 do 13 lat (od 4 do 8 klasy szkoły podstawowej), które wracają do czynnego funkcjonowania w życiu społecznym po dłuższej nieobecności spowodowanej trudnościami w sferze emocji, terapią lub leczeniem psychiatrycznym związanym z zaburzeniami nastroju, kryzysami psychicznymi, stanami lękowymi oraz rodzice, rówieśnicy oraz nauczyciele, osób zmagających się z trudnościami w powrocie do funkcjonowania w życiu społecznym i szkolnym.",
     "whoCanImplement": "Placówki oświatowe, poradnie psychologiczno-pedagogiczne, ośrodki interwencji kryzysowej, szpitale psychiatryczne z oddziałami dla dzieci i młodzieży.",
@@ -795,7 +1079,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,bez-presji-z-depresji",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/bezpresji.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "bez-stresu-do-sukcesu-terapia-neurologiczna-przyjazna-dziecku",
@@ -806,13 +1091,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "HEALTH"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "HEALTH"
     ],
     "targetGroupDescription": "Dzieci z niepełnosprawnością i zagrożone trwałą niepełnosprawnością między 6. miesiącem a 3. rokiem życia, dzieci obarczone trudnościami rozwojowymi, które odmawiają współpracy z prowadzącym, ponieważ ćwiczenia rehabilitacyjne wykraczają poza ich możliwości koncentracji i stanowią dla nich dyskomfort.",
     "whoCanImplement": "Placówki fizjoterapeutyczne, rodzice/opiekunowie, ośrodki wczesnego wspomagania rozwoju, dzienne i całodobowe oddziały rehabilitacyjne.",
@@ -822,7 +1117,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,bez-stresu-do-sukcesu-terapia-neurologiczna-przyjazna-dziecku",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/bezstresudosukcesu.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "uwaznione-rodzienstwo",
@@ -833,13 +1129,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE",
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "CAREGIVER_SUPPORT"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Rodzice dzieci z niepełnosprawnością, rodzeństwo dzieci z niepełnosprawnością.",
     "whoCanImplement": "Ośrodki wsparcia, poradnie psychologiczne, ośrodki wczesnego wspomagania rozwoju.",
@@ -849,7 +1155,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,uwaznione-rodzienstwo",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/uwaznionerodzenstwo.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "brzuszkole-brzuszek-zostaje-w-przedszkolu",
@@ -860,12 +1167,20 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "HEALTH",
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "HEALTHY_LIFESTYLE"
+    ],
+    "challengeAreas": [
+      "HEALTH",
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Dzieci w wieku 4-7 la tz nadwagą/otyłością lub ryzykiem nadwagi/otyłości",
     "whoCanImplement": "Placówki medyczne, przedszkola, organizacje pozarządowe.",
@@ -875,7 +1190,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,brzuszkole-brzuszek-zostaje-w-przedszkolu",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/brzuszkole.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "to-nie-koniec-swiata-to-poczatek-swiata",
@@ -886,13 +1202,25 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE",
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "CAREGIVER_SUPPORT"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Rodziny borykające się z trudnościami wychowawczymi związanymi z zaburzeniami lub niepełnosprawnością występującymi u dziecka.",
     "whoCanImplement": "Instytucje i organizacje zajmujące się organizacją opieki i wsparcia dla rodzin w kórych funkcjonuje dziecko z niepełnosprawnością, rodziny borykające się z trudnościami związanymi z niepełnosprawnością występującą u dziecka.",
@@ -902,7 +1230,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,to-nie-koniec-swiata-to-poczatek-swiata",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/toniekoniecswiata.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "jezykolamacz",
@@ -913,11 +1242,19 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci w wieku 3-10 lat ze spektrum autyzmu borykające się z małym zasobem słownictwa, z komunikacją z opiekunami, z artykułowaniem swoich potrzeb i komunikacją z rówieśnikami.",
     "whoCanImplement": "Rodzice i opiekunowie prawni grupy odbiorców, pedagodzy i logopedzi, które będą wykorzystywać rozwiązanie podczas zajęć z grupą odbiorców, szkoły specjalne i integracyjne, placówki wspomagające terapię osób ze spektrum.",
@@ -927,7 +1264,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,jezykolamacz",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/jezykolamacz.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "piosenki-uczestniczace",
@@ -938,13 +1276,23 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "COMMUNICATION",
       "SOCIAL_INCLUSION",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci w wieku 1-3 lat, niemówiące oraz z trudnościami w komunikacji, które nie są w stanie porozumiewać się w sposób werbalny, dzieci, których komunikacja jest niepełna, nieczytelna.",
     "whoCanImplement": "Rodzice i opiekunowie, placówki opiekuńcze, poradnie specjalistyczne, przedszkola i żłobki.",
@@ -954,7 +1302,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,piosenki-uczestniczace",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/piosenkiuczestniczace.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "moj-pomocny-virtual-world",
@@ -965,12 +1314,21 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "MIGRANT_INTEGRATION",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Dzieci i młodzież ukraińska w wieku szkolnym.",
     "whoCanImplement": "Szkoły podstawowe i średnie przyjmujące ukraińskich uczniów do polskiego systemu edukacji.",
@@ -980,7 +1338,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,moj-pomocny-virtual-world",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/virtualworld.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "mobilna-pomoc-terapeutyczna",
@@ -991,12 +1350,19 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "VIOLENCE",
       "FAMILY_SUPPORT"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Rodziny lub poszczególni członkowie rodzin, które doświadczają kryzysu (ze szczególnym uwzględniem przemocy domowej), ale nie zgłaszają potrzeby skorzystania z pomocy.",
     "whoCanImplement": "Ośrodki pomocy społecznej, przede wszystkim na wsi i w mniejszych miejscowościach.",
@@ -1006,7 +1372,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,mobilna-pomoc-terapeutyczna",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mobilnapomoc.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "marimbaza",
@@ -1017,13 +1384,22 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "SOCIAL_INCLUSION",
       "EDUCATION",
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Młodzież uczącą się i mieszkającą w specjalnych ośrodkach szkolno-wychowawczych oraz w młodzieżowych ośrodkach socjoterapii",
     "whoCanImplement": "Specjalnye ośrodkki szkolno-wychowawcze, młodzieżowe ośrodki socjoterapii, świetlice środowiskowe, świetlice socjoterpauetyczne, placówki wsparcia dziennego.",
@@ -1033,7 +1409,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,marimbaza",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/marimbaza.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "nasz-wspolny-rodzinny-swiat-poznaje-ucze-reaguje",
@@ -1044,14 +1421,25 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "FAMILY_FOSTER_CARE",
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "DAILY_LIFE_CARE",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "CAREGIVER_SUPPORT",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "FAMILY_FOSTER_CARE",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Rodziny borykające się z trudnościami wychowawczymi związanymi z zaburzeniami lub niepełnosprawnością dzieci",
     "whoCanImplement": "Instytucje i organizacje zajmujące się organizacją opieki i wsparcia dla rodzin w kryzysie, rodziny borykające się z trudnościami wychowawczymi związanymi z zaburzeniami lub niepełnosprawnością występującymi u dziecka/dzieci.",
@@ -1061,7 +1449,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,nasz-wspolny-rodzinny-swiat-poznaje-ucze-reaguje",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/naszwspolnyrodzinnyswiat.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "mpatyk",
@@ -1072,12 +1461,21 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "SOCIAL_INCLUSION",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dzieci i młodzież – w szczególności ze środowisk, w których trudno o edukację związaną z dostosowaniem społecznym, osoby z niepełnosprawnością.",
     "whoCanImplement": "Ośrodki wspierające osoby z niepełnosprawnościami, szkoły podstawowe i ponadpodstawowe, młodzieżowe ośrodki wychowawcze.",
@@ -1087,7 +1485,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-dzieci-mlodziezy-i-rodziny,mpatyk",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mpatyk.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "czas-na-aktywnosc",
@@ -1098,12 +1497,22 @@
     "targetGroups": [
       "CHILDREN_YOUTH_FAMILY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "SOCIAL_INCLUSION",
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością intelektualną w wieku 18-25 lat. Innowacja szczególnie kierowana jest do dorosłych osób z zespołem Downa",
     "whoCanImplement": "Instytucje wspierające i świadczące usługi na rzecz osób niepełnoprawnych intelektualnie, w tym osób z zespołem Downa, np.: Środowiskowe Domy Samopomocy, Warsztaty Terapii Zajęciowej, szkoły,organizacje pozarządowe.",
@@ -1115,7 +1524,8 @@
       "video": "https://www.youtube.com/watch?v=QgkpdYndqNU",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/czasnaaktywnosc.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/QgkpdYndqNU/hqdefault.jpg"
   },
   {
     "id": "agencja-pracy-incydentalnej",
@@ -1126,11 +1536,18 @@
     "targetGroups": [
       "LABOR_MARKET"
     ],
-    "challengeAreas": [
-      "POVERTY"
+    "whoCategories": [
+      "FINANCIAL_DIFFICULTY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY"
     ],
     "problemTags": [
       "EMPLOYMENT",
+      "POVERTY"
+    ],
+    "challengeAreas": [
       "POVERTY"
     ],
     "targetGroupDescription": "Osoby w kryzysie bezdomności i /lub psychicznym i/lub długotrwale bezrobotne i/lub z przeszłościa kryminalną i/lub osoby z niepełnosprawnością, który to kryzys skutkuje niemożnością podjęcia pracy wiążącej się z określonym czasem czy wymiarem",
@@ -1141,7 +1558,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-rynku-pracy,agencja-pracy-incydentalnej",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/agencjapracy.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "niewypaleni",
@@ -1152,12 +1570,22 @@
     "targetGroups": [
       "LABOR_MARKET"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "WORK_MONEY",
+      "LONELINESS_WELLBEING"
     ],
     "problemTags": [
       "EMPLOYMENT",
       "MENTAL_HEALTH"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością intelektualną",
     "whoCanImplement": "Podmioty oferujące wsparcie osobom z niepełnosprawnością intelektualną, pracodawcy zatrudniający osoby z niepełnosprawnością intelektualną.",
@@ -1167,7 +1595,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-rynku-pracy,niewypaleni",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/niewypaleni.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "konsultant-etr",
@@ -1178,12 +1607,22 @@
     "targetGroups": [
       "LABOR_MARKET"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "WORK_MONEY",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "EMPLOYMENT",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością intelektualną wraz z rodzinami tych osób.",
     "whoCanImplement": "Podmioty (np. szkoły, urzędy) zainteresowane tworzeniem informacji o swoim funkcjonowaniu w formie tekstów łatwych do czytania i rozumienia, szkoły specjalne, urzędy wojewódzkie, miasta i gminy.",
@@ -1193,7 +1632,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-rynku-pracy,konsultant-etr",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/konsultantetr.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "mobilna-gielda-pracy",
@@ -1204,11 +1644,18 @@
     "targetGroups": [
       "LABOR_MARKET"
     ],
-    "challengeAreas": [
-      "POVERTY"
+    "whoCategories": [
+      "FINANCIAL_DIFFICULTY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY"
     ],
     "problemTags": [
       "EMPLOYMENT"
+    ],
+    "challengeAreas": [
+      "POVERTY"
     ],
     "targetGroupDescription": "Innowacja skierowana jest do kobiet nieaktywnych zawodowo, mieszkanek obszarów wiejskich, które z uwagi na miejsce zamieszkania (tereny wiejskie) mają trudności w dostępie do rynku pracy i nie widzą szans na aktywność zawodową.",
     "whoCanImplement": "Samorządy gminne, w tym zwłaszcza ośrodki pomocy społecznej, powiatowe urzędy pracy, lokalne organizacje pozarządowe prowadzące działania z zakresu rynku pracy, przedsiębiorcy i pracodawcy zainteresowani zatrudnieniem pracowników, agencje zatrudnienia i lokalne instytucje rynku pracy.",
@@ -1218,7 +1665,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-rynku-pracy,mobilna-gielda-pracy",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mobilnagielda.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "oddawacze",
@@ -1229,12 +1677,20 @@
     "targetGroups": [
       "LABOR_MARKET"
     ],
-    "challengeAreas": [
-      "POVERTY"
+    "whoCategories": [
+      "FINANCIAL_DIFFICULTY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "POVERTY",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "POVERTY"
     ],
     "targetGroupDescription": "Osoby ubogie",
     "whoCanImplement": "Organizacje pozarządowe działające lokalnie, miasta i gminy.",
@@ -1244,7 +1700,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-rynku-pracy,oddawacze",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/oddawacze.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "uniodziez",
@@ -1255,12 +1712,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "MOBILITY",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością narządu ruchu poruszające się na wózku.",
     "whoCanImplement": "Rozwiązanie skierowane jest do osób z niepełnosprawnością ruchową, poruszających się na wózku. Ponieważ płaszcz powstał zgodnie zasadami projektowania uniwersalnego jest w pełni funkcjonalnym okryciem również dla osób sprawnych.",
@@ -1269,10 +1736,11 @@
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,uniodziez",
       "leaflet": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/09_Model_unidziez.pdf",
-      "video": "https://www.youtube.com/watch?v=hBY1SnqLXV0&amp;t=23s",
+      "video": "https://www.youtube.com/watch?v=hBY1SnqLXV0&t=23s",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/uniodziez.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/hBY1SnqLXV0/hqdefault.jpg"
   },
   {
     "id": "zakupy-na-jednym-wozku-z-dzieckiem-z-niepelnosprawnoscia-ruchowa",
@@ -1283,13 +1751,24 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "CAREGIVER_SUPPORT",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Rodzice/opiekunowie dzieci z niepełnosprawnością ruchową (m.in. mózgowym porażeniem dziecięcym).",
     "whoCanImplement": "Sklepy wielkopowierzchniowe, markety budowlane, dyskonty spożywcze.",
@@ -1301,7 +1780,8 @@
       "video": "https://www.youtube.com/watch?v=2tUImD7I-CE",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zakupynajednymwozku.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/2tUImD7I-CE/hqdefault.jpg"
   },
   {
     "id": "kompleksowa-pomoc-dla-osob-po-amputacji-konczyny-dolnej",
@@ -1312,13 +1792,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "HEALTH"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby po amputacji kończyny dolnej",
     "whoCanImplement": "Instytucje, podmioty gospodarcze i prawne opiekujące się osobami po amputacji, jednostki samorządu terytorialnego w ramach świadczenia usług opiekuńczych, szpitale.",
@@ -1328,7 +1817,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,kompleksowa-pomoc-dla-osob-po-amputacji-konczyny-dolnej",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/kompleksowapomocpoamputacji.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "puzzles-ramp",
@@ -1339,11 +1829,21 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby posiadające problemy z poruszaniem się np. osoby otyłe, starsze, poruszające się o lasce, przy pomocy balkonika rehabilitacyjnego lub na wózku, a także osoby z wózkami dziecięcymi.",
     "whoCanImplement": "Placówki użyteczności publicznej, podmioty prywatne, osoby prywatne.",
@@ -1353,7 +1853,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,puzzles-ramp",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/puzzlesramp.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "chlap-pro",
@@ -1364,12 +1865,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "MOBILITY",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z protezami ud i podudzia",
     "whoCanImplement": "Osoby poruszające się z pomocą protez uda lub podudzia, ośrodki wsparcia osób z niepełnosprawnościami, urzędy miasta i gmin, na terenie których mieszkają osoby korzystające z protez.",
@@ -1379,7 +1890,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,chlap-pro",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/chlappro.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "marina-pai",
@@ -1390,13 +1902,24 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "MOBILITY",
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "SENIORS"
     ],
     "targetGroupDescription": "Zarządcy i projektanci marin oraz osoby starsze mające trudności w poruszaniu się, osoby z niepełnosprawnością narządu wzroku i ruchu, które posiadają doświadczenie w zakresie uprawiania żeglarstwa.",
     "whoCanImplement": "Zarządcy i projektanci marin (morskich i śródlądowych)",
@@ -1406,7 +1929,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,marina-pai",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/marinapai.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zakupy-bez-barier",
@@ -1417,13 +1941,26 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY",
+      "SIGHT",
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "SENIORS"
     ],
     "targetGroupDescription": "Rozwiązanie kierowane jest do osób z niepełnosprawnościami (np. niewidzących, z dysfunkcja narządu ruchu, z niepełnosprawnością intelektualną) i do osób starszych.",
     "whoCanImplement": "Sklepy wielkopowierzchniowe, jednostki publiczne, które mogą podjąć się koordynacji „Zakupów bez barier” na swoim terenie (Urzędy Gmin, Ośrodki Pomocy Społecznej lub inne podmioty realizujące politykę senioralną oraz na rzecz osób z niepełnosprawnościami).",
@@ -1435,7 +1972,8 @@
       "video": "https://www.youtube.com/watch?v=v2cD6yEJQos",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zakupybezbarier.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/v2cD6yEJQos/hqdefault.jpg"
   },
   {
     "id": "nakreceni-na-aktywnosc",
@@ -1446,13 +1984,21 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "MOBILITY",
       "SOCIAL_INCLUSION",
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością, które mają ograniczoną możliwość poruszania się",
     "whoCanImplement": "Osoby z różnymi typami niepełnosprawności, ich opiekunowie/rodziny, ośrodki wspierające osoby z niepełnosprawnościami.",
@@ -1462,7 +2008,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,nakreceni-na-aktywnosc",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/nakreceninaaktywnosc.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "moduly-niezaleznosci",
@@ -1473,12 +2020,24 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY",
+      "SIGHT",
+      "HEARING"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnościami, seniorzy, osoby o ograniczeniach wynikających ze stanu zdrowia (również ograniczeniach czasowych).",
     "whoCanImplement": "Osoby z niepełnosprawnościami, osoby o ograniczeniach wynikających ze stanu zdrowia (również ograniczeniach czasowych), ich opiekunowie/rodziny/osoby towarzyszące, producenci kamperów i samochodów dostawczych, wypożyczalnie kamperów, biura turystyczne.",
@@ -1486,7 +2045,8 @@
     "disseminationProgram": null,
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,moduly-niezaleznosci"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "biustspinka",
@@ -1497,11 +2057,20 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Kobiety posiadające różnego rodzaju ograniczenia fizyczne i ruchowe, które utrudniają lub uniemożliwiają samodzielne założenie biustonosza (m.in. poruszające się na wózku, z niepełnosprawnością wrodzoną, z mózgowym porażeniem dziecięcym, z niepełnosprawnością nabytą w wyniku wypadku lub choroby, kobiety z dysfunkcją ramienia, kobiety po amputacji piersi, kobiety z zaburzeniami ruchu w wyniku udaru lub przebytej operacji, kobiety cierpiące na otyłość).",
     "whoCanImplement": "Gabinety rehabilitacyjne, szkoły, szpitale, sklepy z bielizną, przychodnie, oddziały rehabilitacyjne.",
@@ -1511,7 +2080,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,biustspinka",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/biustspinka.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "szablony-piekna",
@@ -1522,11 +2092,20 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Kobiety z ograniczoną ruchomością, poruszające się na wózkach, zmagające się z niedowładami lub przykurczami kończyn, skutkującymi mniejszymi możliwościami ruchowymi w zakresie codziennego funkcjonowania.",
     "whoCanImplement": "Organizacje pozarządowe wspierające aktywizację osób z niepełnosprawnością ruchową, sklepy z odzieżą/bielizną, firmy bieliźniarskie, ośrodki rehabilitacji działające w obszarze wsparcia osób z niepełnosprawnościami",
@@ -1536,7 +2115,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,szablony-piekna",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/szablonypiekna.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "ev-modul-do-wozkow-inwalidzkich",
@@ -1547,11 +2127,20 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby, które z powodów zdrowotnych poruszają się na wózkach",
     "whoCanImplement": "Producenci wózków inwalidzkich, szpitale, ośrodki rehabilitacyjne.",
@@ -1561,7 +2150,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,ev-modul-do-wozkow-inwalidzkich",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/evmodul.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dostepny-stol-targowy",
@@ -1572,12 +2162,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby starsze, osoby z niepełnosprawnościami, osoby poruszające się o kulach ortopedycznych, z balkonikami, osoby z zaburzeniami równowagi, z ograniczoną sprawnością ruchową kończyn górnych, z zaburzoną motoryką dłoni i palców, używające ortez, poruszające się na wózkach inwalidzkich",
     "whoCanImplement": "Podmioty będące właścicielami targowisk, urzędy gmin, jednostki edukacyjne, kulturalne",
@@ -1587,7 +2187,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,dostepny-stol-targowy",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dostepnystol.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "cloudleg",
@@ -1598,11 +2199,20 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Odbiorcy innowacji to osoby po amputacji kończyn dolnych powyżej kolan lub ich braku od urodzenia, niekorzystające z medycznych protez lub protez funkcjonalnych, na co dzień poruszające się na wózku, osoby które niedawno doświadczyły utraty nóg i dopiero oswajają się z nowym wizerunkiem.",
     "whoCanImplement": "Osoby indywidualne po amputacji kończyn dolnych, placówki rehabilitacyjne, szpitale, organizacje wspierające aktywizację osób z niepełnosprawnością ruchową, po amputacjach i poruszających się na wózku.",
@@ -1612,7 +2222,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,cloudleg",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/cloudleg.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "lekki-wozek-aktywny",
@@ -1623,11 +2234,20 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością ruchową, neurologiczną oraz każdą inną, która wymaga korzystania z wózka aktywnego.",
     "whoCanImplement": "Producent dysponujący odpowiednim zapleczem do rozwoju konstrukcji (np. producent sprzętu sportowego m.in. rowerów).",
@@ -1637,7 +2257,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,lekki-wozek-aktywny",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/lekkiwozekaktywny.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "wozek-szermierczy",
@@ -1648,12 +2269,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Zawodniczki i zawodnicy uprawiające/ uprawiający szermierkę na wózkach, zarówno na poziomie rekreacyjnym, jak i zawodnicy startujący w turniejach.",
     "whoCanImplement": "Kluby sportowe i organizacje zajmujące się organizacją treningów i zawodów dla osób poruszajacych się na wózkach.",
@@ -1663,7 +2294,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,wozek-szermierczy",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wozekszermierczy.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dostepna-szermierka",
@@ -1674,12 +2306,22 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Zawodniczki i zawodnicy uprawiające/ uprawiający szermierkę na wózkach, zarówno na poziomie rekreacyjnym, jak i zawodnicy startujący w turniejach.",
     "whoCanImplement": "Kluby sportowe i organizacje zajmujące się organizacją treningów i zawodów dla osób poruszajacych się na wózkach",
@@ -1689,7 +2331,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-o-ograniczonej-mobilnosci,dostepna-szermierka",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dostepnaszermierka.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "innotextil",
@@ -1700,14 +2343,24 @@
     "targetGroups": [
       "LIMITED_MOBILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "SENIORS",
-      "HEALTH"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "MOBILITY"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "SENIORS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Grupę docelową rozwiązania stanowią osoby starsze (dzięki samodzielnej rehabilitacji w warunkach domowych seniorzy mają możliwość zyskania większej niezależności i podtrzymania sprawności fizycznej) oraz osoby z organiczeniami narządu ruchu.",
     "whoCanImplement": "Firmy odzieżowe, placówki specjalizujące się w rehabilitacji osób starszych czy placówki medyczne.",
@@ -1719,7 +2372,8 @@
       "video": "https://www.youtube.com/watch?v=ScqdHaNxYa8",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/innotextil.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/ScqdHaNxYa8/hqdefault.jpg"
   },
   {
     "id": "straznik",
@@ -1730,12 +2384,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
-      "SAFETY",
-      "COMMUNICATION"
+      "COMMUNICATION",
+      "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche, niedosłyszące/słabosłyszące oraz głuchoniewidome.",
     "whoCanImplement": "Osoby prywatne ale przede wszystkim hotele, pensjonaty, akademiki w celu zwiększenia bezpieczeństwa gości o specjalnych potrzebach.",
@@ -1747,7 +2411,8 @@
       "video": "https://www.youtube.com/watch?v=zYVr0zMAqWE",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/straznik.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/zYVr0zMAqWE/hqdefault.jpg"
   },
   {
     "id": "wsparcie-imprez-masowych-dla-osob-z-niepelnosprawnoscia-wzroku",
@@ -1758,12 +2423,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome i niedowidzące oraz osoby poruszające się na wózkach.",
     "whoCanImplement": "Organizatorzy imprez masowych, koncertów, wydarzeń plenerowych, spektakli, firmy eventowe, jednostki kultury, biura festiwalowe, teatry, uczelnie, organizatorzy konferencji.",
@@ -1775,7 +2450,8 @@
       "video": "https://www.youtube.com/watch?v=3s2kYAWWVkM",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wsparcieimprez.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/3s2kYAWWVkM/hqdefault.jpg"
   },
   {
     "id": "teleasystent",
@@ -1786,12 +2462,21 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE",
       "CARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome",
     "whoCanImplement": "Z rozwiązania mogą skorzystać instytucje, organizacje pozarządowe i podmioty współpracujące z osobami niewidzącymi i słabowidzącymi (potencjalnie również podmioty wspierające osoby z innymi rodzajami niepełnosprawności).",
@@ -1803,7 +2488,8 @@
       "video": "https://www.youtube.com/watch?v=8xUBVF_5CWU",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/teleasystent.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/8xUBVF_5CWU/hqdefault.jpg"
   },
   {
     "id": "hear-it",
@@ -1814,13 +2500,24 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "WORK_MONEY",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "EDUCATION",
       "EMPLOYMENT",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche, zainteresowane kształceniem w obszarze IT.",
     "whoCanImplement": "Szkoły policealne, uczelnie wyższe, technika, licea, organizacje pozarządowe zajmując się aktywizacją zawodową osób g/Głuchych.",
@@ -1832,7 +2529,8 @@
       "video": "https://www.youtube.com/watch?v=uDLOSoCb3E8",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/hearit.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/uDLOSoCb3E8/hqdefault.jpg"
   },
   {
     "id": "gluchy-czytelnik-w-bibliotece",
@@ -1843,12 +2541,23 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche, szczególnie rodzice, którzy posiadają dzieci w wieku szkolnym, zarówno słyszące (KODA), jak i dzieci g/Głuche oraz słabosłyszące.",
     "whoCanImplement": "Biblioteki publiczne, biblioteki szkolne, szkoły integracyjne.",
@@ -1860,7 +2569,8 @@
       "video": "https://www.youtube.com/watch?v=BoAC-J1Owr4",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/gluchyczytelnik.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/BoAC-J1Owr4/hqdefault.jpg"
   },
   {
     "id": "blue-sea-eye",
@@ -1871,11 +2581,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome, osoby niedowidzące.",
     "whoCanImplement": "Osoby z dysfunkcją narządu wzroku, podmioty organizujące rejsy uwzględniające załogantów z z dysfunkcją narządu wzroku, kluby żeglarskie, organizacje pozarządowe wspierające osoby z dysfunkcją narządu wzroku.",
@@ -1885,7 +2604,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,blue-sea-eye",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/blueseaeye.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "osoby-niewidome-i-niedowidzace-jako-nauczyciele-jezyka-polskiego",
@@ -1896,12 +2616,23 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY",
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "WORK_MONEY",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "EMPLOYMENT",
+      "MIGRANT_INTEGRATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
       "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Migranci z krajów wschodnich, którzy przyjeżdżając do Polski nie posługują się językiem polskim w stopniu komunikatywn, osoby z niepełnosprawnością narządu wzroku.",
@@ -1912,7 +2643,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,osoby-niewidome-i-niedowidzace-jako-nauczyciele-jezyka-polskiego",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/osobyniewidomejakonauczyciele.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "ngoz-nawigacja-glosowa-osob-zaleznych",
@@ -1923,12 +2655,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "MOBILITY",
       "PUBLIC_SERVICES"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome i słabowidzące",
     "whoCanImplement": "Rozwiązanie jest kierowane do odbiorców takich jak placówki użyteczności publicznej, czyli muzea, urzędy, teatry, przychodnie zdrowia czy szkoły i uczelnie. Budynki mieszczące tego typu instytucje powinny być w pełni dostępne dla wszystkich użytkowników, aby każdy miał możliwość uczestnictwa w życiu społecznym, kulturalnym i w pełni realizował swój potencjał obywatela i konsumenta.",
@@ -1940,7 +2682,8 @@
       "video": "https://www.youtube.com/watch?v=ZiGxSX-VRfg",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/ngoz.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/ZiGxSX-VRfg/hqdefault.jpg"
   },
   {
     "id": "wibraap",
@@ -1951,11 +2694,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche i niedosłyszące.",
     "whoCanImplement": "Z innowacją mogą skorzystać przede wszystkim: organizatorzy koncertów i innych wydarzeń muzycznych, w tym spektakli, performansów w których dźwięki odgrywają dużą rolę. Potencjalnie filharmonie, teatry muzyczne, domy kultury, twórcy, którzy chcieliby wzbogacić i/lub rozwinąć swoje spektakle w oparciu o poza-słuchowe doświadczanie muzyki.",
@@ -1967,7 +2719,8 @@
       "video": "https://www.youtube.com/watch?v=nmsEAH6BbR0",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wibraap.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/nmsEAH6BbR0/hqdefault.jpg"
   },
   {
     "id": "my-way-to-culture",
@@ -1978,12 +2731,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością narządu ruchu, słuchu, wzroku, które z uwagi na towarzyszące im niepełnosprawności mają utrudniony dostęp do oferty instytucji kultury.",
     "whoCanImplement": "Muzea, galerie, placówki kultury, które organizują wystawy.",
@@ -1993,7 +2756,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,my-way-to-culture",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mywaytoculture.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "glucha-ankieta",
@@ -2004,11 +2768,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche, badacze, którzy chcą ująć w swoich wynikach użytkowników PJM.",
     "whoCanImplement": "Badacze indywidualni, uczelnie wyższe i środowiska akademickie, instytuty badawcze.",
@@ -2018,7 +2791,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,glucha-ankieta",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/gluchaankieta.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dostepny-wniosek-dla-ggluchych",
@@ -2029,12 +2803,21 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "PUBLIC_SERVICES",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche i niedosłyszące posługujące się Polskim Językiem Migowym",
     "whoCanImplement": "Podmioty administracji publicznej, jednostki prywatne oraz organizacje pozarządowe wspierające dostępność dla osób g/Głuchych.",
@@ -2044,7 +2827,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,dostepny-wniosek-dla-ggluchych",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dostepnywniosek.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "czytamoda",
@@ -2055,11 +2839,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome i osoby z zaburzeniami widzenia",
     "whoCanImplement": "Sklepy odzieżone stacjonarne oraz online, centra handlowe.",
@@ -2069,7 +2862,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,czytamoda",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/czytamoda.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dostepny-transport-publiczny",
@@ -2080,12 +2874,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "MOBILITY_BARRIERS",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "MOBILITY",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z dysfunkcją narządu wzroku, osoby, które regularnie korzystają z komunikacji miejskiej w Warszawie.",
     "whoCanImplement": "Przedstawiciele Warszawskiego Transportu Publicznego, opiekunowie i bliscy osób z zaburzeniami wzroku, ośrodki wspierające osoby z zaburzeniami widzenia.",
@@ -2095,7 +2899,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,dostepny-transport-publiczny",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dostepnytransport.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "turystyka-gorskawspinaczka-dostepna-dla-wszystkich",
@@ -2106,11 +2911,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością wzroku",
     "whoCanImplement": "Obiekty sportowe, podmioty organizujące turystykę górską dla osób z dysfunkcją narządu wzroku, organizacje pozarządowe wspierające osoby z dysfunkcją narządu wzroku.",
@@ -2118,7 +2932,8 @@
     "disseminationProgram": null,
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,turystyka-gorskawspinaczka-dostepna-dla-wszystkich"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zdobadz-swoje-szczyty",
@@ -2129,11 +2944,21 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT",
+      "HEARING"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością fizyczno-motoryczną, osoby z niepełnosprawnością sensoryczną, osoby z niepełnosprawnością wzroku i słuchu.",
     "whoCanImplement": "Samorządy terytorialne, na których terenach leżą szlaki górskie, PTTK, parki krajobrazowe i narodowe, organizacje działające na rzecz turystyki, organizacje działające na rzecz osób z niepełnosprawnościami.",
@@ -2143,7 +2968,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,zdobadz-swoje-szczyty",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zdobadzswojeszczyty.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "spotkania-kulturlove",
@@ -2154,12 +2980,19 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnościami, w szczególności w stopniu znacznym, osoby mające problemy z samodzielnym poruszaniem się w przestrzeni publicznej.",
     "whoCanImplement": "Instytucje kultury, sportu czy rekreacji, organizatorzy wydarzeń kulturalnych.",
@@ -2169,7 +3002,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,spotkania-kulturlove",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/spotkaniakulturlove.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zmysly-w-ruchu-model-choreografii-dla-osob-niewidomych",
@@ -2180,12 +3014,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby niewidome i słabowidzące.",
     "whoCanImplement": "Osoby niewidome i słabowidzące, placówki i podmioty, które mogą zorganizować takie zajęcia, instytucje kultury.",
@@ -2193,7 +3037,8 @@
     "disseminationProgram": null,
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,zmysly-w-ruchu-model-choreografii-dla-osob-niewidomych"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "kaski-binauralne",
@@ -2204,12 +3049,22 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "SIGHT"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "REHABILITATION",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością narządu wzroku – zarówno te, które niedawno utraciły wzrok czy osoby niedowidzące, jak i osoby, które w niedługim czasie go utracą.",
     "whoCanImplement": "Osoby z niepełnosprawnością narządu wzroku, organizacje zajmujące się rehabilitacją osób niewidomych.",
@@ -2219,7 +3074,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,kaski-binauralne",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/kaskibinauralne.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "wielodziedzinowy-slownik-terminow-specjalistycznych-pl-pjm",
@@ -2230,11 +3086,20 @@
     "targetGroups": [
       "SENSORY_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "HEARING"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby g/Głuche i niedosłyszące",
     "whoCanImplement": "Użytkownicy indywidualni (osoby głuche - specjaliści w danych dziedzinach), tłumacze PL-PJM, uczelnie wyższe i ich kadra.",
@@ -2244,7 +3109,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-sensoryczna,wielodziedzinowy-slownik-terminow-specjalistycznych-pl-pjm",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wielodziedzinowyslownik.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "bajkala",
@@ -2255,10 +3121,18 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
+      "MIGRANT_INTEGRATION"
+    ],
+    "challengeAreas": [
       "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Dzieci czeczeńskie przebywające w Polsce pod opieką rodziny, z nadanym statusem pobytu pozwalającymi na samodzielne funkcjonowanie rodziny",
@@ -2269,7 +3143,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,bajkala",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/bajkala.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dialog-ponad-kulturami",
@@ -2280,13 +3155,23 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION",
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "MIGRANT_INTEGRATION"
+    ],
+    "challengeAreas": [
+      "MIGRANT_INTEGRATION",
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Dzieci doświadczające porwania rodzicielskiego, dzieci zagrożone porwaniem rodzicielskim, dzieci obywateli różnych krajów, których rodzice pozostają w konflikcie rodzicielskim",
     "whoCanImplement": "Mediatorzy, prawnicy, pracownicy służb, którzy stykają się z problemem porwań rodzicielskich w swojej pracy, szkoły i uczelnie, w których uczą się dzieci pochodzące z odmiennych kręgów kulturowych, ośrodki pomocy rodzinie, centra praw kobiet.",
@@ -2296,7 +3181,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,dialog-ponad-kulturami",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dialogponadkulturami.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "wortal-informacyjny",
@@ -2307,12 +3193,20 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "MIGRANT_INTEGRATION",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Uchodźcy z Afganistanu",
     "whoCanImplement": "Organizacje wspierające uchodźców, centra pomocy cudzoziemcom, urzędy, placówki medyczne",
@@ -2322,7 +3216,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,wortal-informacyjny",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/wortalinformacyjny.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dialog-ponad-kulturami-1",
@@ -2333,11 +3228,19 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "COMMUNICATION",
+      "MIGRANT_INTEGRATION"
+    ],
+    "challengeAreas": [
       "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Mniejszość afgańskia przebywająca w Polsce",
@@ -2348,7 +3251,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,dialog-ponad-kulturami-1",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dialog.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "health-guide-pl",
@@ -2359,13 +3263,21 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION",
-      "HEALTH"
+    "whoCategories": [
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS",
       "MIGRANT_INTEGRATION"
+    ],
+    "challengeAreas": [
+      "MIGRANT_INTEGRATION",
+      "HEALTH"
     ],
     "targetGroupDescription": "Obcokrajowcy przebywający w Polsce legalnie (na podstawie zatrudnienia, odbywania nauki i/lub statusu uchodźcy) oraz ich rodziny, zwłaszcza dzieci.",
     "whoCanImplement": "Obcokrajowcy (pracownicy, studenci, i/lub uchodźcy i ich rodziny którzy przebywają wraz z rodzinami w Polsce legalnie i mają prawo do bezpłatnej opieki medycznej w ramach polskiego systemu służby zdrowia), kadry administracyjne i personel polskiego systemu publicznej służby zdrowia",
@@ -2375,7 +3287,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,health-guide-pl",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/healthguide.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zrozum-moja-kulture-zrozum-mnie",
@@ -2386,12 +3299,19 @@
     "targetGroups": [
       "FOREIGNERS"
     ],
-    "challengeAreas": [
-      "MIGRANT_INTEGRATION"
+    "whoCategories": [
+      "PEOPLE_FROM_ABROAD"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "MIGRANT_INTEGRATION",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "MIGRANT_INTEGRATION"
     ],
     "targetGroupDescription": "Obcokrajowcy, którzy mieszkają i pracują w Polsce, uchodźcy, grupy wykluczone społecznie ze względu na różnice kulturowe.",
     "whoCanImplement": "Szkoły, uczelnie, domy kultury, organizacje pozarządowe, które pracują na rzecz integracji środowisk imigranckich.",
@@ -2401,7 +3321,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-cudzoziemcow,zrozum-moja-kulture-zrozum-mnie",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zrozummojakulture.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "urzedowy-ambaras",
@@ -2412,12 +3333,22 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "PUBLIC_SERVICES",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Innowacja skierowana jest do osób dorosłych z niepełnosprawnością intelektualną",
     "whoCanImplement": "Podmioty działające na rzecz osób z niepełnosprawnością intelektualną m.in. Warsztaty Terapii Zajęciowej, Środowiskowe Domy Samopomocy, organizacje pozarządowe.",
@@ -2427,7 +3358,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,urzedowy-ambaras",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/urzedowyambaras.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "stop-otylosci-innowacyjna-metoda-pracy-z-osobami-niepelnosprawnymi-intelektualnie",
@@ -2438,12 +3370,21 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "HEALTH"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "HEALTHY_LIFESTYLE"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "HEALTH"
     ],
     "targetGroupDescription": "Dorosłe osoby z niepełnosprawnością intelektualną z otyłością II i III stopnia.",
     "whoCanImplement": "Placówki wspierające i aktywizujące osoby niepełnosprawne intelektualnie w środowisku lokalnym, jak również personel placówek świadczących stacjonarną opiekę wzmacniając swoje kompetencji i warsztat pracy.",
@@ -2453,7 +3394,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,stop-otylosci-innowacyjna-metoda-pracy-z-osobami-niepelnosprawnymi-intelektualnie",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/stopotylosci.zip",
       "usageRules": "https://rops.krakow.pl/mpliki/IS/BIBLIOTEKA_INNOWACJI_SPOECZNYCH/Zasady_wykorzystania_innowacji_MIIS.pdf"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "pelna-wokanda",
@@ -2464,12 +3406,22 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "PUBLIC_SERVICES",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Innowacja skierowana jest do osób dorosłych z niepełnosprawnością intelektualną",
     "whoCanImplement": "Podmioty działające na rzecz osób z niepełnosprawnością intelektualną m.in. Warsztaty Terapii Zajęciowej, Środowiskowe Domy Samopomocy, organizacje pozarządowe.",
@@ -2479,7 +3431,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,pelna-wokanda",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/pelnawokanda.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "pelnia-zdrowia",
@@ -2490,13 +3443,23 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "HEALTH"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "FAMILY_UPBRINGING"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS",
       "EDUCATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "HEALTH"
     ],
     "targetGroupDescription": "Innowacja skierowana jest do osób dorosłych z niepełnosprawnością intelektualną.",
     "whoCanImplement": "Podmioty działające na rzecz osób z niepełnosprawnością intelektualną m.in. Warsztaty Terapii Zajęciowej, Środowiskowe Domy Samopomocy, organizacje pozarządowe a także opiekunowie tych osób.",
@@ -2506,7 +3469,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,pelnia-zdrowia",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/pelniazdrowia.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "niepelnosprawnosc-szansa-na-pelnosprawnosc-w-pracy-i-zyciu",
@@ -2517,12 +3481,23 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "WORK_MONEY",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "EMPLOYMENT",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Innowacja jest kierowana do osób z umiarkowanym stopniem niepełnosprawności intelektualnej, które wymagają specjalistycznej pomocy przy wzmocnieniu ich samodzielności w dorosłym życiu.",
     "whoCanImplement": "Warsztaty Terapii Zajęciowej, Środowiskowe Dom Samopomocy, Zakłady Aktywności Zawodowej, organizacje pozarządowe organizujące wsparcie dla odbiorców.",
@@ -2532,7 +3507,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,niepelnosprawnosc-szansa-na-pelnosprawnosc-w-pracy-i-zyciu",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/niepelnosprawnoscszansa.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "dostepna-polska",
@@ -2543,12 +3519,22 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "FREE_TIME_INTEGRATION",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "CULTURE_LEISURE",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Dorosłe osoby z niepełnosprawnością intelektualną w stopniu lekkim i umiarkowanym oraz ich rodziny.",
     "whoCanImplement": "Jednostki organizacyjne pomocy społecznej, organizacje pozarządowe, ośrodki wspierające dorosłe osoby z niepełnosprawnością intelektualną.",
@@ -2558,7 +3544,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,dostepna-polska",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/dostepnapolska.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "zalatw-to-sam",
@@ -2569,12 +3556,22 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "PUBLIC_SERVICES",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby z niepełnosprawnością intelektualną (głównie dorosłe osoby z lekkim i umiarkowanym stopniem niepełnosprawności).",
     "whoCanImplement": "Warsztaty Terapii Zajęciowej, środowiskowe domy samopomocy, wszelkie organizacje wspierające osoby z niepełnosprawnością intelektualną.",
@@ -2584,7 +3581,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,zalatw-to-sam",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/zalatwtosam.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "go-ahead-mow-smialo",
@@ -2595,12 +3593,23 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "COMMUNICATION",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Młodzież z niepełnosprawnością intelektualną i osoby dorosłe z niepełnosprawnością intelektualną.",
     "whoCanImplement": "Warsztaty Terapii Zajęciowej, szkoły integracyjne i specjalne, organizacje pozarządowe wspierające osoby z niepełnosprawnością intelektualną.",
@@ -2610,7 +3619,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,go-ahead-mow-smialo",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/goahead.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "autyzm-i-ja",
@@ -2621,13 +3631,23 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "FAMILIES_CAREGIVERS",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "INFO_DIGITAL_OFFICES"
     ],
     "problemTags": [
       "EDUCATION",
       "COMMUNICATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": "Dzieci w wieku przedszkolnym ze spektrum autyzmu.",
     "whoCanImplement": "Placówki edukacji przedszkolnej, placówki wczesnej interwencji, szkoły.",
@@ -2637,7 +3657,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,autyzm-i-ja",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/autyzmija.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "podroz-poza-domem-w-wirtualnej-rzeczywistosci",
@@ -2648,13 +3669,24 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "PEOPLE_WITH_DISABILITY"
+    ],
+    "disabilityTypes": [
+      "INTELLECTUAL"
+    ],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Osoby z orzeczeniem niepełnosprawności intelektualnej a także dzieci w wieku szkolnym, które odczuwają lęk przed wychodzeniem z domu.",
     "whoCanImplement": "Rodzice, opiekunowie, terapeuci, pedagodzy, szkoły specjalne, placówki opiekuńcze.",
@@ -2664,7 +3696,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,podroz-poza-domem-w-wirtualnej-rzeczywistosci",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/podrozpozadomem.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "ta-sciezka-terapeutyczna-sciezka-kulturowa-dla-dzieci-i-doroslych-z-autyzmem",
@@ -2675,12 +3708,21 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "INFO_DIGITAL_OFFICES",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "PUBLIC_SERVICES",
       "CULTURE_LEISURE"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Młodzież i starsze dzieci ze spektrum autyzmu.",
     "whoCanImplement": "Organizacje pozarządowe wspierające osoby ze spektrum autyzmu, podmioty organizujące treningi samodzielności dla tego typu osób",
@@ -2690,7 +3732,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,ta-sciezka-terapeutyczna-sciezka-kulturowa-dla-dzieci-i-doroslych-z-autyzmem",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/tasciezka.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "osa-i-eco-puzzle",
@@ -2701,14 +3744,24 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY",
-      "FAMILY_FOSTER_CARE"
+    "whoCategories": [
+      "FAMILIES_CAREGIVERS",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "FAMILY_UPBRINGING",
+      "WORK_MONEY",
+      "FREE_TIME_INTEGRATION"
     ],
     "problemTags": [
       "FAMILY_SUPPORT",
       "EMPLOYMENT",
       "SOCIAL_INCLUSION"
+    ],
+    "challengeAreas": [
+      "DISABILITY",
+      "FAMILY_FOSTER_CARE"
     ],
     "targetGroupDescription": null,
     "whoCanImplement": "Dorosłe osoby ze spektrum autyzmu, ich rodzina i bliscy.",
@@ -2718,7 +3771,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,osa-i-eco-puzzle",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/osaiecopuzzle.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "rodzinny-system-wzajemnej-pomocy",
@@ -2729,13 +3783,23 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "FAMILIES_CAREGIVERS",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY",
+      "FREE_TIME_INTEGRATION",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "EMPLOYMENT",
       "SOCIAL_INCLUSION",
       "CAREGIVER_SUPPORT"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby dorosłe z autyzmem w przedziale wiekowym 20-26 lat, które ukończyły proces nauki, nie kontynuują edukacji, jednocześnie nie są aktywne zawodowo i nie zostały przyjęte do WTZ oraz ich opiekunów nieformalnych, którzy na co dzień sprawują nad nimi opiekę.",
     "whoCanImplement": "Jest to oferta, którą można wdrożyć w warunkach domowych/rodzinnych/sąsiedzkich i nadać jej regularny, profesjonalny, optymalny format, ale oferta może być trudna w skalowaniu. Skalowania wymaga dotarcie do nieformalnych grup, nieformalnych opiekunów, rodziców osób dorosłych z ASD, co w rzeczywistości może stanowić dodatkowe wyzwanie w strategii upowszechniania innowacji. Tego typu grupy- nieformalne, działające indywidualnie, elastycznie powinny być też przygotowane do wdrożenia modelu, przeszkolone i wsparte konsultacjami specjalistycznymi.",
@@ -2745,7 +3809,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,rodzinny-system-wzajemnej-pomocy",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/rodzinnysystem.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "mix-ar-i-vr-dla-koordynacji-ruchowej",
@@ -2756,11 +3821,19 @@
     "targetGroups": [
       "INTELLECTUAL_DISABILITY"
     ],
-    "challengeAreas": [
-      "DISABILITY"
+    "whoCategories": [
+      "CHILDREN_YOUTH",
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION"
+    ],
+    "challengeAreas": [
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby w spektrum autyzmu",
     "whoCanImplement": "Rodzice i opiekunowie, wychowawcy i przedstawiciele szkół (przede wszystkim szkół specjalnych)",
@@ -2770,7 +3843,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-z-niepelnosprawnoscia-intelektualna,mix-ar-i-vr-dla-koordynacji-ruchowej",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/mixarvr.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "szlakiem-ludzi-bezdomnych",
@@ -2781,13 +3855,21 @@
     "targetGroups": [
       "HOMELESSNESS"
     ],
-    "challengeAreas": [
-      "HOMELESSNESS",
-      "HEALTH"
+    "whoCategories": [
+      "HOMELESS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "HOMELESSNESS",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HOMELESSNESS",
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby w kryzysie bezdomności.",
     "whoCanImplement": "Gminy miejskie, gminy miejsko-wiejskie i wiejskie.",
@@ -2797,7 +3879,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-w-kryzysie-bezdomnosci,szlakiem-ludzi-bezdomnych",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/szlakiemludzibezdomnych.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "wiejski-program-pomocy-osobom-w-kryzysie-bezdomnosci-sciezka-feniksa",
@@ -2808,11 +3891,19 @@
     "targetGroups": [
       "HOMELESSNESS"
     ],
-    "challengeAreas": [
+    "whoCategories": [
+      "HOMELESS",
+      "FINANCIAL_DIFFICULTY"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "WORK_MONEY"
+    ],
+    "problemTags": [
       "HOMELESSNESS",
       "POVERTY"
     ],
-    "problemTags": [
+    "challengeAreas": [
       "HOMELESSNESS",
       "POVERTY"
     ],
@@ -2824,7 +3915,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-osob-w-kryzysie-bezdomnosci,wiejski-program-pomocy-osobom-w-kryzysie-bezdomnosci-sciezka-feniksa",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/sciezkafeniksa.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "paszport-pacjenta-z-choroba-rzadka",
@@ -2835,11 +3927,18 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HEALTH"
     ],
     "targetGroupDescription": "Pacjenci chorujący na choroby rzadkie",
     "whoCanImplement": "Lekarze, fizjoterapeuci – ta grupa może korzystać z paszportu, propagować rozwiązanie w środowisku, opracować kolejne specyfikacje chorób (w ramach innowacji powstały karty 3 chorób rzadkich: dystrofia mięśniowa Duchenne’a, zespół Williamsa, zespół Marfana). Rodzice, pacjenci z chorobą rzadką – ta grupa może korzystać z paszportu, propagować rozwiązanie w środowisku, zainteresować tematem organizacje zrzeszające pacjentów z chorobami rzadkimi.",
@@ -2851,7 +3950,8 @@
       "video": "https://www.youtube.com/watch?v=7QedTbxzsPk",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/paszportpacjenta.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/7QedTbxzsPk/hqdefault.jpg"
   },
   {
     "id": "himalaje-autyzmu",
@@ -2862,12 +3962,19 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH",
-      "DISABILITY"
+    "whoCategories": [
+      "AUTISM_SPECTRUM"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HEALTH",
+      "DISABILITY"
     ],
     "targetGroupDescription": "Osoby dorosłe neuroatypowe (przede wszytskim ze spektrum autyzmu) przejawiające trudne zachowania nieakceptowane społeczne.",
     "whoCanImplement": "Placówki medyczne, szpitala, rodziny osób przejawiających trudne zachowania, asystenci osób z niepełnosprawnością, organizacje pozarządowe i podmioty zatrudniające asystentów osób z niepełnosprawnością.",
@@ -2879,7 +3986,8 @@
       "video": "https://www.youtube.com/watch?v=q31uQ435YAo",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/himalajeautyzmu.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/q31uQ435YAo/hqdefault.jpg"
   },
   {
     "id": "gra-o-zdrowie",
@@ -2890,13 +3998,21 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "MENTAL_HEALTH",
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "WORK_MONEY"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "EMPLOYMENT"
+    ],
+    "challengeAreas": [
+      "MENTAL_HEALTH",
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby doświadczające kryzysu psychicznego (w szczególności mowa o pacjentach z doświadczeniem psychozy, objawami zaburzeń psychotycznych i zaburzeniami nastroju), powracające na rynek pracy.",
     "whoCanImplement": "Jednostki wspierające osoby doświadczające kryzysów psychicznych (np. oddziały dzienne), środowiskowe domy samopomocy, kluby pacjenta ale także szkoły publiczne, prywatne przygotowujące młode osoby do wejścia na rynek pracy, Ochotnicze Hufce Pracy, Wojewódzkie Urzędy Pracy.",
@@ -2908,7 +4024,8 @@
       "video": "https://www.youtube.com/watch?v=YRzg98fveHc",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/graozdrowie.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": "https://img.youtube.com/vi/YRzg98fveHc/hqdefault.jpg"
   },
   {
     "id": "telerehabilitacja-oddechowa",
@@ -2919,12 +4036,19 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "REHABILITATION",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby z dysfunkcją układu oddechowego, osoby starsze o ograniczonej mobilności, osoby z terenów oddalonych, osoby z niepełnosprawnością.",
     "whoCanImplement": "Podmioty (w tym przychodnie rehabilitacyjne) zapewniające wsparcie dla osób dysfunkcją układu oddechowego, naturalni opiekunowie tych pacjentów.",
@@ -2934,7 +4058,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,telerehabilitacja-oddechowa",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/telerehabilitacja.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "inteligentny-organizer-do-lekow",
@@ -2945,13 +4070,22 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH",
-      "SENIORS"
+    "whoCategories": [
+      "OLDER_PEOPLE",
+      "FAMILIES_CAREGIVERS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "DAILY_LIFE_CARE",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "CAREGIVER_SUPPORT",
-      "SAFETY"
+      "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HEALTH",
+      "SENIORS"
     ],
     "targetGroupDescription": "Osoby starsze (które samodzielnie zarządzają przyjmowaniem przez siebie leków przyjmowanych „na stałe” oraz posiadają umiejętność posługiwania się smartfonem) oraz ich opiekunowie (kontrolujących przyjmowanie leków przez podopiecznych).",
     "whoCanImplement": "Osoby prywatne, apteki, koncerny farmaceutyczne",
@@ -2961,7 +4095,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,inteligentny-organizer-do-lekow",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/inteligentnyorganizer.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "drogowskazy-ajkum",
@@ -2972,12 +4107,20 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "MOBILITY_BARRIERS"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS",
       "MOBILITY"
+    ],
+    "challengeAreas": [
+      "HEALTH"
     ],
     "targetGroupDescription": "Innowacja kierowana jest do pacjentów chorujący onkologicznie, których percepcja ze względu na proces chorobowy i leczniczy jest znacząco obniżona.",
     "whoCanImplement": "Centrum specjalistycznego leczenia onkologicznego, szpitale, przychodnie.",
@@ -2985,7 +4128,8 @@
     "disseminationProgram": null,
     "links": {
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,drogowskazy-ajkum"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "cold-box",
@@ -2996,12 +4140,20 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "HEALTH_REHAB",
+      "DAILY_LIFE_CARE"
     ],
     "problemTags": [
       "HEALTHCARE_ACCESS",
       "DAILY_INDEPENDENCE"
+    ],
+    "challengeAreas": [
+      "HEALTH"
     ],
     "targetGroupDescription": "Osoby chorujące na cukrzycę oraz inne osoby, które muszą mieć przy sobie leki wymagające stałego chłodzenia.",
     "whoCanImplement": "Osoby prywatne, apteki, przychodnie medyczne.",
@@ -3011,7 +4163,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,cold-box",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/coldbox.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "pacjent-pro",
@@ -3022,13 +4175,21 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "MENTAL_HEALTH",
-      "HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "MENTAL_HEALTH",
+      "HEALTH"
     ],
     "targetGroupDescription": "Pacjenci z ograniczonymi możliwościami percepcji ze względu na niepełnosprawność intelektualną oraz dysfunkcje poznawcze związane z zaburzeniami psychicznymi, pacjenci przyjęci na oddział ogólnopsychiatryczny.",
     "whoCanImplement": "Szpitale psychiatryczne, Centra Zdrowia Psychicznego.",
@@ -3038,7 +4199,8 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,pacjent-pro",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/pacjentpro.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   },
   {
     "id": "oncotriada",
@@ -3049,13 +4211,21 @@
     "targetGroups": [
       "HEALTH_MEDICINE"
     ],
-    "challengeAreas": [
-      "HEALTH",
-      "MENTAL_HEALTH"
+    "whoCategories": [
+      "ALL_RESIDENTS"
+    ],
+    "disabilityTypes": [],
+    "problemCategories": [
+      "LONELINESS_WELLBEING",
+      "HEALTH_REHAB"
     ],
     "problemTags": [
       "MENTAL_HEALTH",
       "HEALTHCARE_ACCESS"
+    ],
+    "challengeAreas": [
+      "HEALTH",
+      "MENTAL_HEALTH"
     ],
     "targetGroupDescription": "Osoby na wczesnym etapie diagnozy onkologicznej.",
     "whoCanImplement": "Osoby na wczesnym etapie diagnozy onkologicznej, psychoonkolodzy, pacjenci w fazie remisji, poradnie psychologiczne i psychoonkologiczne, szpitale onkologiczne, organizacje pozarządowe wspierające pacjentów w chorobie onkologicznej.",
@@ -3065,6 +4235,7 @@
       "details": "https://rops.krakow.pl/innowacje-spoleczne/biblioteka-innowacji-spolecznych/dla-zdrowia-i-medycyny,oncotriada",
       "materials": "https://rops.krakow.pl/pliki/IS/bibloteka/oncotriada.zip",
       "usageRules": "https://creativecommons.org/licenses/by/4.0/deed.pl"
-    }
+    },
+    "thumbnailUrl": null
   }
 ]

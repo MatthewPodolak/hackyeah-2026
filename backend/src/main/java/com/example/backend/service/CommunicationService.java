@@ -24,9 +24,9 @@ public class CommunicationService {
     private final AppUserRepository users;
 
     @Transactional
-    public Long createConversation(NewConversationRequest r) {
-        AppUser user = users.findById(r.userId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie znaleziono użytkownika: " + r.userId()));
+    public Long createConversation(NewConversationRequest r, Long userId) {
+        AppUser user = users.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nieznany użytkownik"));
 
         Conversation c = Conversation.builder()
                 .subject(r.subject().trim())
@@ -52,7 +52,7 @@ public class CommunicationService {
         AppUser u = users.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Nieprawidłowy identyfikator użytkownika"));
 
-        boolean isStaff = (u.getRole() == Role.ADMIN || u.getRole() == Role.EXPERT);
+        boolean isStaff = isStaff(u);
 
         // Personel ROPS i eksperci widzą wszystkie wątki; mieszkaniec widzi tylko swoje
         List<Conversation> list = isStaff
@@ -77,14 +77,14 @@ public class CommunicationService {
     }
 
     @Transactional
-    public MessageItem addReply(Long conversationId, MessageRequest r) {
-        Conversation c = authorizeAccess(conversationId, r.senderId());
+    public MessageItem addReply(Long conversationId, MessageRequest r, Long senderId) {
+        Conversation c = authorizeAccess(conversationId, senderId);
 
         if ("CLOSED".equalsIgnoreCase(c.getStatus())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ten wątek został zamknięty.");
         }
 
-        AppUser sender = users.findById(r.senderId())
+        AppUser sender = users.findById(senderId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN));
 
         ConversationMessage m = ConversationMessage.builder()
@@ -112,9 +112,9 @@ public class CommunicationService {
     }
 
     @Transactional
-    public void createPartnershipPost(PartnershipRequest r) {
-        AppUser author = users.findById(r.userId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nie znaleziono autora o ID: " + r.userId()));
+    public void createPartnershipPost(PartnershipRequest r, Long authorId) {
+        AppUser author = users.findById(authorId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nieznany użytkownik"));
 
         PartnershipPost post = PartnershipPost.builder()
                 .author(author)
@@ -149,12 +149,15 @@ public class CommunicationService {
         AppUser u = users.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Nieznany użytkownik"));
 
-        boolean isStaff = (u.getRole() == Role.ADMIN || u.getRole() == Role.EXPERT);
-        if (!isStaff && !c.getOwner().getId().equals(userId)) {
+        if (!isStaff(u) && !c.getOwner().getId().equals(userId)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Brak uprawnień do tego wątku rozmowy");
         }
 
         return c;
+    }
+
+    private static boolean isStaff(AppUser u) {
+        return u.getRole() == Role.ADMIN || u.getRole() == Role.EXPERT || u.isApprovedInstitution();
     }
 
     private ConversationItem toConversationItem(Conversation c) {

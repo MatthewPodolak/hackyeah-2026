@@ -1,6 +1,7 @@
 package com.example.backend.dto;
 
 import com.example.backend.model.ProblemCategory;
+import com.example.backend.model.ProblemStatus;
 import com.example.backend.model.TargetGroup;
 
 import java.time.Instant;
@@ -14,5 +15,6 @@ public record ProblemSummaryResponse(
         Instant localDate,
         String street,
         ProblemCategory category,
-        TargetGroup targetGroup
+        TargetGroup targetGroup,
+        ProblemStatus status
 ) {}

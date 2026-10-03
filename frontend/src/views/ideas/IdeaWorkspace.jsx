@@ -21,7 +21,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import AiFeedback from "@/components/ai-feedback";
 import { CanvasField, formatCanvasValue } from "@/components/canvas/canvas-fields";
-import { useCanvasSpec, useIdeaByToken, useIdeaFeedback, useSaveCanvas, useSuggestCanvas } from "@/api/hooks/useCanvas";
+import { useCanvasSpec, useIdeaByToken, useIdeaFeedback, useSaveCanvas, useSuggestCanvas, useVisualize } from "@/api/hooks/useCanvas";
+import { API } from "@/api/endpoints";
 import { useActiveGrantCalls, useGrantApplication } from "@/api/hooks/useGrantCalls";
 import { useToast } from "@/helpers/ToastProvider";
 import { IDEA_STATUS } from "@/lib/ideas";
@@ -363,6 +364,49 @@ function GrantTab({ token, beforeAi }) {
   );
 }
 
+function VisualizationTab({ token, idea }) {
+  const visualize = useVisualize(token);
+  const { showToast } = useToast();
+  const [description, setDescription] = useState("");
+  const [version, setVersion] = useState(() => idea.updatedAt ?? "");
+  const [alt, setAlt] = useState(idea.visualizationAlt ?? "");
+  const hasImage = idea.hasVisualization || !!visualize.data;
+
+  const run = async () => {
+    try {
+      const res = await visualize.mutateAsync(description.trim());
+      setAlt(res.alt);
+      setVersion(String(Date.now()));
+    } catch (err) {
+      showToast(err?.status === 429 ? "Za dużo zapytań do AI, spróbuj za chwilę" : err?.body?.message ?? null, "error");
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2 rounded-xl bg-muted/50 p-4">
+        <p className="text-sm text-muted-foreground">
+          AI narysuje ilustrację Twojego pomysłu na podstawie fiszki. Możesz dopisać, co ma się na niej znaleźć, np. wygląd przedmiotu albo miejsce.
+        </p>
+        <label htmlFor="viz-description" className="text-sm font-medium">Co ma pokazywać ilustracja? (opcjonalnie)</label>
+        <Textarea id="viz-description" rows={2} maxLength={600} value={description} onChange={(e) => setDescription(e.target.value)} />
+        <Button className="self-start" onClick={run} disabled={visualize.isPending}>
+          {visualize.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
+          {visualize.isPending ? "AI rysuje… (do minuty)" : hasImage ? "Wygeneruj nową wizualizację" : "Wygeneruj wizualizację"}
+        </Button>
+      </div>
+      <p role="status" className="sr-only">{visualize.isPending ? "Trwa generowanie ilustracji" : visualize.data ? "Ilustracja jest gotowa" : ""}</p>
+      {hasImage && (
+        <figure className="flex flex-col gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element -- image served by backend */}
+          <img src={`${API.idea.visualization(token)}?v=${encodeURIComponent(version)}`} alt={alt || `Ilustracja pomysłu ${idea.title}`} className="w-full max-w-xl rounded-xl border" />
+          <figcaption className="text-xs text-muted-foreground">Ilustracja wygenerowana przez AI. Może nie oddawać wszystkich szczegółów pomysłu.</figcaption>
+        </figure>
+      )}
+    </div>
+  );
+}
+
 function Workspace({ token, details, spec }) {
   const [answers, setAnswers] = useState(() => details.canvas ?? {});
   const [dirty, setDirty] = useState(false);
@@ -408,9 +452,10 @@ function Workspace({ token, details, spec }) {
       </header>
 
       <Tabs defaultValue="canvas" className="gap-4">
-        <TabsList>
+        <TabsList className="h-auto! flex-wrap">
           <TabsTrigger value="canvas">Kanwa innowacji</TabsTrigger>
           <TabsTrigger value="feedback">Ocena AI</TabsTrigger>
+          <TabsTrigger value="visual">Wizualizacja</TabsTrigger>
           <TabsTrigger value="grant">Wniosek grantowy</TabsTrigger>
         </TabsList>
         <TabsContent value="canvas">
@@ -418,6 +463,9 @@ function Workspace({ token, details, spec }) {
         </TabsContent>
         <TabsContent value="feedback">
           <FeedbackTab token={token} feedback={details.feedback} beforeAi={beforeAi} />
+        </TabsContent>
+        <TabsContent value="visual">
+          <VisualizationTab token={token} idea={idea} />
         </TabsContent>
         <TabsContent value="grant">
           <GrantTab token={token} beforeAi={beforeAi} />

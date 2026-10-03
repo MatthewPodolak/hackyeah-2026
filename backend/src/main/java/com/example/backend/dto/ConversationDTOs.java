@@ -1,7 +1,6 @@
 package com.example.backend.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -10,14 +9,12 @@ import java.time.LocalDateTime;
 public class ConversationDTOs {
 
     public record NewConversationRequest(
-            @NotNull Long userId,
             @NotBlank @Size(max = 200) String subject,
             @NotBlank @Pattern(regexp = "QUESTION|MENTORING|PARTNERSHIP") String type,
             @NotBlank @Size(max = 4000) String content
     ) {}
 
     public record MessageRequest(
-            @NotNull Long senderId,
             @NotBlank @Size(max = 4000) String content
     ) {}
 
@@ -44,7 +41,6 @@ public class ConversationDTOs {
     ) {}
 
     public record PartnershipRequest(
-            @NotNull Long userId,
             @NotBlank @Size(max = 200) String title,
             @NotBlank @Size(max = 4000) String description,
             @NotBlank @Size(max = 100) String lookingFor

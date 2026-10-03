@@ -30,6 +30,7 @@ import { IDEA_STATUS, READINESS } from "@/lib/ideas";
 import { getTargetGroupOption } from "@/lib/problemCategories";
 import AiFeedback from "@/components/ai-feedback";
 import Modal from "@/components/modal";
+import { API } from "@/api/endpoints";
 import { CanvasSummary } from "@/components/canvas/canvas-fields";
 import { useCanvasSpec } from "@/api/hooks/useCanvas";
 
@@ -205,6 +206,14 @@ function IdeaDetails({ id, onClose }) {
                 )}
 
                 {idea.sourceProblemId != null && <SourceProblem id={idea.sourceProblemId} />}
+
+                {idea.hasVisualization && (
+                  <figure className="flex flex-col gap-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- image served by backend */}
+                    <img src={API.adminIdea.visualization(idea.id)} alt={idea.visualizationAlt || `Ilustracja pomysłu ${idea.title}`} className="max-h-80 w-full rounded-xl border object-contain" />
+                    <figcaption className="text-xs text-muted-foreground">Ilustracja wygenerowana przez AI na prośbę autora.</figcaption>
+                  </figure>
+                )}
 
                 {details.data.canvas && Object.keys(details.data.canvas).length > 0 && (
                   <section className="rounded-xl border p-4">

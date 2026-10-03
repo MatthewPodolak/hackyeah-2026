@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import InnovationDetails from "@/views/innovations/InnovationDetails";
 import { getInnovation } from "@/lib/innovations";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const innovation = await getInnovation(id);

@@ -1,14 +1,40 @@
 import innovations from "@/data/innovations.json";
 import formCategories from "@/data/form-categories.json";
 
-// Static dataset (ROPS Biblioteka Innowacji Społecznych) until the backend serves innovations.
-// Kept async so callers don't change when this becomes an API call.
+const API_ORIGIN = process.env.API_ORIGIN_INTERNAL ?? "http://localhost:8080";
+
+async function fetchCatalog(path) {
+  const res = await fetch(`${API_ORIGIN}/api/v1/knowledge/innovations${path}`, { cache: "no-store", signal: AbortSignal.timeout(5000) });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+function withDefaults(innovation) {
+  return {
+    ...innovation,
+    links: innovation.links ?? {},
+    whoCategories: innovation.whoCategories ?? [],
+    problemCategories: innovation.problemCategories ?? [],
+    disabilityTypes: innovation.disabilityTypes ?? [],
+  };
+}
+
 export async function getInnovations() {
-  return innovations;
+  try {
+    return (await fetchCatalog("")).map(withDefaults);
+  } catch {
+    return innovations;
+  }
 }
 
 export async function getInnovation(id) {
-  return innovations.find((innovation) => innovation.id === id) ?? null;
+  try {
+    const innovation = await fetchCatalog(`/${encodeURIComponent(id)}`);
+    return innovation ? withDefaults(innovation) : null;
+  } catch {
+    return innovations.find((innovation) => innovation.id === id) ?? null;
+  }
 }
 
 export function getWhoCategory(key) {

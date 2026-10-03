@@ -40,4 +40,22 @@ public class Problem {
 
     @Enumerated(EnumType.STRING)
     private TargetGroup targetGroup;
+
+    @Column(unique = true, updatable = false)
+    private String trackingToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ProblemStatus status;
+
+    @Column(columnDefinition = "TEXT")
+    private String adminReply;
+
+    private Boolean adminSeen;
+
+    private Instant updatedAt;
+
+    public ProblemStatus effectiveStatus() {
+        return status == null ? ProblemStatus.SUBMITTED : status;
+    }
 }

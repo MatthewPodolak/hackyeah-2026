@@ -16,6 +16,38 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import innovations from "@/data/innovations.json"
 import { InnovationCover } from "@/components/innovation-card"
 import Modal from "@/components/modal"
+import { useToast } from "@/helpers/ToastProvider"
+import { Copy01Icon } from "@hugeicons/core-free-icons"
+
+function TrackingCode({ token }) {
+  const { showToast } = useToast()
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(token)
+      showToast("Skopiowano kod zgłoszenia", "success")
+    } catch {
+      showToast(null, "error")
+    }
+  }
+
+  return (
+    <div className="rounded-xl border bg-muted/50 p-3 text-sm">
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Kod Twojego zgłoszenia</p>
+      <div className="mt-1 flex items-center gap-2">
+        <code className="min-w-0 flex-1 break-all font-mono">{token}</code>
+        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label="Kopiuj kod zgłoszenia">
+          <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+          Kopiuj
+        </Button>
+      </div>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Pod tym kodem sprawdzisz status i odpowiedź ROPS w zakładce{" "}
+        <Link href="/my-reports" className="font-medium text-foreground underline underline-offset-4">Moje zgłoszenia</Link>.
+      </p>
+    </div>
+  )
+}
 
 const innovationsById = new Map(innovations.map((innovation) => [innovation.id, innovation]))
 
@@ -120,6 +152,7 @@ export default function ProblemSolutions({ result, onClose }) {
           </CardHeader>
 
           <CardContent className="flex flex-col gap-3">
+            {result.trackingToken && <TrackingCode token={result.trackingToken} />}
             {matches.length > 0 ? (
               <>
                 <div>

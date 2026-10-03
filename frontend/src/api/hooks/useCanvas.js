@@ -50,3 +50,12 @@ export function useKnowledgeResources() {
     staleTime: 10 * 60_000,
   });
 }
+
+export function useVisualize(token) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (description) => IdeaService.visualize(token, description),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["ideas", "token", token] }),
+  });
+}

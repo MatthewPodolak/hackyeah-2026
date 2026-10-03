@@ -8,6 +8,8 @@ import com.example.backend.service.InnovationTestingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,20 +23,26 @@ public class TestingController {
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationResponse joinTest(
             @PathVariable String innovationId,
-            @Valid @RequestBody ParticipationRequest request) {
-        return testingService.submitParticipation(innovationId, request);
+            @Valid @RequestBody ParticipationRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        return testingService.submitParticipation(innovationId, request, userId(jwt));
     }
 
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
     public void submitReview(
             @PathVariable String innovationId,
-            @Valid @RequestBody ReviewRequest request) {
-        testingService.submitReview(innovationId, request);
+            @Valid @RequestBody ReviewRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        testingService.submitReview(innovationId, request, userId(jwt));
     }
 
     @GetMapping("/reviews")
     public ReviewsResponse getReviews(@PathVariable String innovationId) {
         return testingService.getReviews(innovationId);
+    }
+
+    private static Long userId(Jwt jwt) {
+        return jwt == null ? null : Long.valueOf(jwt.getSubject());
     }
 }

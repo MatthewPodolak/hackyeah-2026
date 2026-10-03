@@ -22,6 +22,8 @@ public record IdeaResponse(
         boolean hasCanvas,
         boolean hasFeedback,
         boolean publishConsent,
+        boolean hasVisualization,
+        String visualizationAlt,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}
