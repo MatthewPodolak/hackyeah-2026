@@ -42,4 +42,14 @@ public class Conversation {
     @Builder.Default
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    /** ROPS albo JST; puste w starszych wątkach oznacza ROPS */
+    @Column(length = 10)
+    private String recipientType;
+
+    private String recipientGminaId;
+
+    public String effectiveRecipientType() {
+        return recipientType == null ? "ROPS" : recipientType;
+    }
 }

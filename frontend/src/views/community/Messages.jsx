@@ -19,13 +19,21 @@ import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { useConversationMessages, useConversations, useCreateConversation, useReply, useSetConversationStatus } from "@/api/hooks/useCommunication";
 import { useToast } from "@/helpers/ToastProvider";
 import { useFormErrors } from "@/helpers/useFormErrors";
+import { useRegions } from "@/api/hooks/useRegionsQuery";
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select";
 import { CONVERSATION_STATUS, CONVERSATION_TYPE } from "@/lib/community";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const TYPES = Object.entries(CONVERSATION_TYPE);
 
-function NewConversation({ onCreated, onClose }) {
-  const [form, setForm] = useState({ type: "QUESTION", subject: "", content: "" });
+const RECIPIENTS = [
+  { value: "ROPS", label: "ROPS Kraków", hint: "Pytania o innowacje, mentoring, granty i partnerstwa" },
+  { value: "JST", label: "Samorząd gminy", hint: "Lokalne sprawy – wiadomość trafi do urzędu wybranej gminy" },
+];
+
+function NewConversation({ canChooseRecipient, onCreated, onClose }) {
+  const regions = useRegions();
+  const [form, setForm] = useState({ type: "QUESTION", subject: "", content: "", recipient: "ROPS", gminaId: "" });
   const create = useCreateConversation();
   const { showToast } = useToast();
   const { fail, clear, fieldProps, errorProps } = useFormErrors("conv");
@@ -37,10 +45,17 @@ function NewConversation({ onCreated, onClose }) {
 
   const submit = async (e) => {
     e.preventDefault();
+    if (form.recipient === "JST" && !form.gminaId) return fail("gminaId", "Wybierz gminę, do której piszesz");
     if (!form.subject.trim()) return fail("subject", "Podaj temat rozmowy");
     if (!form.content.trim()) return fail("content", "Napisz wiadomość");
     try {
-      const id = await create.mutateAsync({ type: form.type, subject: form.subject.trim(), content: form.content.trim() });
+      const id = await create.mutateAsync({
+        type: form.type,
+        subject: form.subject.trim(),
+        content: form.content.trim(),
+        recipient: canChooseRecipient ? form.recipient : "ROPS",
+        gminaId: canChooseRecipient && form.recipient === "JST" ? form.gminaId : null,
+      });
       showToast("Rozmowa została rozpoczęta", "success");
       onCreated(id);
     } catch (err) {
@@ -55,7 +70,9 @@ function NewConversation({ onCreated, onClose }) {
         <div className="flex items-start gap-3">
           <div className="min-w-0 flex-1">
             <CardTitle><h2 id="conv-heading" className="text-base font-semibold">Nowa rozmowa</h2></CardTitle>
-            <CardDescription className="mt-1">Twoją wiadomość zobaczą eksperci ROPS i przedstawiciele samorządów.</CardDescription>
+            <CardDescription className="mt-1">
+              {canChooseRecipient ? "Wybierz, do kogo piszesz: do ROPS albo do samorządu swojej gminy." : "Wiadomość trafi do pracowników ROPS Kraków."}
+            </CardDescription>
           </div>
           <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
@@ -65,6 +82,34 @@ function NewConversation({ onCreated, onClose }) {
       <CardContent>
         <form onSubmit={submit} noValidate>
           <FieldGroup>
+            {canChooseRecipient && (
+              <fieldset className="flex flex-col gap-2">
+                <legend className="mb-2 text-sm font-medium">Do kogo piszesz?</legend>
+                {RECIPIENTS.map((option) => (
+                  <label key={option.value} className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3", form.recipient === option.value ? "border-primary bg-muted/60" : "border-foreground/45")}>
+                    <input type="radio" name="conv-recipient" value={option.value} checked={form.recipient === option.value} onChange={set("recipient")} className="mt-1 size-4 accent-[var(--primary)]" />
+                    <span>
+                      <span className="block text-sm font-medium">{option.label}</span>
+                      <span className="block text-xs text-muted-foreground">{option.hint}</span>
+                    </span>
+                  </label>
+                ))}
+                {form.recipient === "JST" && (
+                  <Field>
+                    <FieldLabel htmlFor="conv-gminaId">Gmina (wymagane)</FieldLabel>
+                    <NativeSelect {...fieldProps("gminaId")} required className="w-full" value={form.gminaId} onChange={set("gminaId")}>
+                      <NativeSelectOption value="" disabled>{regions.isPending ? "Wczytywanie…" : "Wybierz gminę"}</NativeSelectOption>
+                      {(regions.data?.powiaty ?? []).map((powiat) => (
+                        <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
+                          {powiat.gminy.map((g) => <NativeSelectOption key={g.id} value={g.id}>{g.label}</NativeSelectOption>)}
+                        </NativeSelectOptGroup>
+                      ))}
+                    </NativeSelect>
+                    <FieldError {...errorProps("gminaId")} />
+                  </Field>
+                )}
+              </fieldset>
+            )}
             <fieldset className="flex flex-col gap-2">
               <legend className="mb-2 text-sm font-medium">Rodzaj rozmowy</legend>
               {TYPES.map(([value, meta]) => (
@@ -137,7 +182,7 @@ function Thread({ conversation, headingRef }) {
         <div className="min-w-0">
           <h2 id="thread-heading" ref={headingRef} tabIndex={-1} className="font-semibold break-words outline-none">{conversation.subject}</h2>
           <p className="text-xs text-muted-foreground">
-            {CONVERSATION_TYPE[conversation.type]?.label ?? conversation.type} · rozpoczęta przez {conversation.ownerName}
+            {CONVERSATION_TYPE[conversation.type]?.label ?? conversation.type} · od: {conversation.ownerName} · do: {conversation.recipientLabel}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -202,8 +247,10 @@ function Thread({ conversation, headingRef }) {
 }
 
 function MessagesView() {
-  const { hasRole } = useAuth();
+  const { hasRole, role, user } = useAuth();
   const isStaff = hasRole(ROLES.JST, ROLES.ROPS);
+  const canWrite = role !== ROLES.ROPS;
+  const canChooseRecipient = role !== ROLES.JST && role !== ROLES.ROPS;
   const conversations = useConversations();
   const [selectedId, setSelectedId] = useState(null);
   const [creating, setCreating] = useState(false);
@@ -231,13 +278,19 @@ function MessagesView() {
           <div>
             <h1 className="font-heading text-2xl font-semibold">Wiadomości</h1>
             <p className="text-muted-foreground">
-              {isStaff ? "Pytania i prośby o wsparcie od mieszkańców i organizacji" : "Rozmowy z ekspertami ROPS i samorządem"}
+              {role === ROLES.ROPS
+                ? "Wiadomości od mieszkańców, organizacji i samorządów skierowane do ROPS"
+                : role === ROLES.JST
+                  ? "Wiadomości od mieszkańców do Twojej gminy i Twoje rozmowy z ROPS"
+                  : "Rozmowy z ROPS i samorządem Twojej gminy"}
             </p>
           </div>
-          <Button onClick={() => setCreating(true)}>
-            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Nowa rozmowa
-          </Button>
+          {canWrite && (
+            <Button onClick={() => setCreating(true)}>
+              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              {role === ROLES.JST ? "Napisz do ROPS" : "Nowa rozmowa"}
+            </Button>
+          )}
         </header>
 
         {conversations.isPending ? (
@@ -249,7 +302,7 @@ function MessagesView() {
                 <HugeiconsIcon icon={Chatting01Icon} strokeWidth={2} aria-hidden="true" />
               </EmptyMedia>
               <EmptyTitle>Brak rozmów</EmptyTitle>
-              <EmptyDescription>{isStaff ? "Gdy ktoś napisze, rozmowa pojawi się tutaj." : "Zadaj pytanie albo poproś o mentoring, klikając „Nowa rozmowa”."}</EmptyDescription>
+              <EmptyDescription>{isStaff || !canWrite ? "Gdy ktoś napisze, rozmowa pojawi się tutaj." : "Zadaj pytanie albo poproś o mentoring, klikając „Nowa rozmowa”."}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         ) : (
@@ -270,7 +323,7 @@ function MessagesView() {
                       <span className="font-medium break-words">{c.subject}</span>
                       <span className="text-xs text-muted-foreground">
                         {CONVERSATION_TYPE[c.type]?.label ?? c.type}
-                        {isStaff && ` · ${c.ownerName}`}
+                        {c.ownerId === user?.id ? ` · do: ${c.recipientLabel}` : ` · od: ${c.ownerName}`}
                       </span>
                       <StatusPill meta={CONVERSATION_STATUS[c.status]} />
                     </button>
@@ -287,8 +340,9 @@ function MessagesView() {
         )}
       </div>
 
-      <Modal open={creating} onClose={() => setCreating(false)} labelledBy="conv-heading" className="max-w-lg">
+      <Modal open={creating && canWrite} onClose={() => setCreating(false)} labelledBy="conv-heading" className="max-w-lg">
         <NewConversation
+          canChooseRecipient={canChooseRecipient}
           onClose={() => setCreating(false)}
           onCreated={(id) => {
             setCreating(false);
