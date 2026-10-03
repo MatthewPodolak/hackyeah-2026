@@ -37,4 +37,8 @@ public class ProblemService {
 
         return new ProblemWithMatchesResponse(problemMapper.toResponse(saved), matches);
     }
+
+    public List<ProblemSummaryResponse> getProblems() {
+        return problemRepository.findAllSummaries();
+    }
 }
