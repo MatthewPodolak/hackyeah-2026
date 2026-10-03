@@ -10,7 +10,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { useFormErrors } from "@/helpers/useFormErrors";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { useIdeasByTokens } from "@/api/hooks/useIdeasQuery";
 import { useUpdateIdea } from "@/api/hooks/useIdeaMutation";
@@ -43,13 +44,17 @@ function EditForm({ token, idea, onDone }) {
   });
   const updateIdea = useUpdateIdea();
   const { showToast } = useToast();
+  const { fail, clear, fieldProps, errorProps } = useFormErrors(`edit-${token}`);
 
-  const set = (key) => (e) => setDraft((d) => ({ ...d, [key]: e.target.value }));
+  const set = (key) => (e) => {
+    setDraft((d) => ({ ...d, [key]: e.target.value }));
+    clear(key);
+  };
 
   const save = async (e) => {
     e.preventDefault();
     if (draft.title.trim().length < 3) {
-      showToast("Tytuł musi mieć co najmniej 3 znaki!", "error");
+      fail("title", "Tytuł musi mieć co najmniej 3 znaki!");
       return;
     }
     try {
@@ -64,24 +69,26 @@ function EditForm({ token, idea, onDone }) {
       showToast("Zapisano zmiany", "success");
       onDone();
     } catch (err) {
-      showToast(err?.body?.message ?? null, "error");
+      if (err?.body?.message) fail("title", err.body.message);
+      else showToast(null, "error");
     }
   };
 
   return (
-    <form onSubmit={save} className="border-t pt-4">
+    <form onSubmit={save} noValidate aria-label={`Edycja propozycji: ${idea.title}`} className="border-t pt-4">
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor={`t-${token}`}>Tytuł</FieldLabel>
-          <Input id={`t-${token}`} value={draft.title} maxLength={150} onChange={set("title")} />
+          <FieldLabel htmlFor={`edit-${token}-title`}>Tytuł</FieldLabel>
+          <Input {...fieldProps("title")} required value={draft.title} maxLength={150} onChange={set("title")} />
+          <FieldError {...errorProps("title")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`p-${token}`}>Krótki opis</FieldLabel>
-          <Textarea id={`p-${token}`} rows={3} value={draft.problemDescription} onChange={set("problemDescription")} />
+          <FieldLabel htmlFor={`edit-${token}-problemDescription`}>Krótki opis</FieldLabel>
+          <Textarea id={`edit-${token}-problemDescription`} rows={3} value={draft.problemDescription} onChange={set("problemDescription")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`e-${token}`}>Istota</FieldLabel>
-          <Textarea id={`e-${token}`} rows={4} value={draft.essence} onChange={set("essence")} />
+          <FieldLabel htmlFor={`edit-${token}-essence`}>Istota</FieldLabel>
+          <Textarea id={`edit-${token}-essence`} rows={4} value={draft.essence} onChange={set("essence")} />
         </Field>
         <div className="flex justify-end gap-2">
           <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
@@ -97,7 +104,14 @@ function EditForm({ token, idea, onDone }) {
 function IdeaCard({ token, query }) {
   const [editing, setEditing] = useState(false);
 
-  if (query.isPending) return <Skeleton className="h-40 w-full rounded-xl" />;
+  if (query.isPending) {
+    return (
+      <div role="status">
+        <span className="sr-only">Wczytywanie propozycji</span>
+        <Skeleton aria-hidden="true" className="h-40 w-full rounded-xl" />
+      </div>
+    );
+  }
 
   if (query.isError) {
     return (
@@ -106,7 +120,7 @@ function IdeaCard({ token, query }) {
           {query.error?.status === 404 ? "Nie znaleziono propozycji o kodzie" : "Nie udało się wczytać propozycji"}{" "}
           <code className="break-all font-mono text-foreground">{token}</code>
         </span>
-        <Button variant="ghost" size="sm" onClick={() => forgetIdeaToken(token)}>Usuń</Button>
+        <Button variant="ghost" size="sm" onClick={() => forgetIdeaToken(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>
       </div>
     );
   }
@@ -115,16 +129,16 @@ function IdeaCard({ token, query }) {
   const readiness = READINESS[idea.readiness];
 
   return (
-    <article className="flex flex-col gap-3 rounded-xl border bg-card p-5">
+    <article aria-labelledby={`idea-${token}`} className="flex flex-col gap-3 rounded-xl border bg-card p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
-          <h2 className="text-base font-semibold leading-snug break-words">{idea.title}</h2>
+          <h2 id={`idea-${token}`} className="text-base font-semibold leading-snug break-words">{idea.title}</h2>
           <p className="text-xs text-muted-foreground">
             Wysłano {idea.createdAt ? dateFormat.format(new Date(idea.createdAt)) : "—"} · kod{" "}
             <code className="font-mono">{token}</code>
           </p>
         </div>
-        <StatusBadge status={idea.status} />
+        <p className="shrink-0"><span className="sr-only">Status: </span><StatusBadge status={idea.status} /></p>
       </div>
 
       {idea.problemDescription && (
@@ -150,9 +164,9 @@ function IdeaCard({ token, query }) {
 
       {idea.adminReply && (
         <div className="flex gap-2 rounded-xl bg-violet-500/10 p-3 text-sm">
-          <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-violet-600 dark:text-violet-300" />
+          <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-violet-700 dark:text-violet-300" />
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-violet-700 dark:text-violet-300">Odpowiedź Hubu</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-violet-800 dark:text-violet-300">Odpowiedź Hubu</p>
             <p className="whitespace-pre-line">{idea.adminReply}</p>
           </div>
         </div>
@@ -163,16 +177,16 @@ function IdeaCard({ token, query }) {
       ) : (
         <div className="flex flex-wrap justify-end gap-2">
           <Button variant="ghost" size="sm" onClick={() => forgetIdeaToken(token)}>
-            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
-            Usuń z listy
+            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            Usuń z listy<span className="sr-only">: {idea.title}</span>
           </Button>
           <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
-            <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" />
-            Edytuj
+            <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            Edytuj<span className="sr-only">: {idea.title}</span>
           </Button>
           <Link href={`/my-ideas/${encodeURIComponent(token)}`} className={buttonVariants({ size: "sm" })}>
-            Rozwiń pomysł
-            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" />
+            Rozwiń pomysł<span className="sr-only">: {idea.title}</span>
+            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" aria-hidden="true" />
           </Link>
         </div>
       )}
@@ -203,19 +217,23 @@ export default function MyIdeas() {
             <p className="text-muted-foreground">Status i odpowiedzi Hubu na Twoje pomysły</p>
           </div>
           <Button onClick={() => openProposal()}>
-            <HugeiconsIcon icon={BulbIcon} strokeWidth={2} data-icon="inline-start" />
+            <HugeiconsIcon icon={BulbIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
             Nowa propozycja
           </Button>
         </header>
 
-        <form onSubmit={addCode} className="mb-6 flex gap-2">
+        <form onSubmit={addCode} className="mb-6 flex flex-col gap-2">
+          <label htmlFor="idea-code" className="text-sm font-medium">Masz kod propozycji z innego urządzenia?</label>
+          <div className="flex gap-2">
           <Input
+            id="idea-code"
             value={code}
-            placeholder="Masz kod propozycji z innego urządzenia? Wklej go tutaj"
-            aria-label="Kod propozycji"
+            autoComplete="off"
+            placeholder="Wklej kod propozycji"
             onChange={(e) => setCode(e.target.value)}
           />
           <Button type="submit" variant="outline">Dodaj</Button>
+          </div>
         </form>
 
         {tokens.length ? (

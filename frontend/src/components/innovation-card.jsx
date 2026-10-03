@@ -68,12 +68,12 @@ export function InnovationCard({ innovation }) {
       <InnovationCover innovation={innovation} />
       <CardHeader>
         <CardTitle>
-          <h2 className="text-base font-semibold">
+          <h3 className="text-base font-semibold">
             {/* stretched link: makes the whole card clickable with a single tab stop */}
             <Link href={`/innovations/${innovation.id}`} className="outline-none after:absolute after:inset-0">
               {innovation.name}
             </Link>
-          </h2>
+          </h3>
         </CardTitle>
         <CardDescription className="line-clamp-3">
           {innovation.shortDescription || innovation.description}

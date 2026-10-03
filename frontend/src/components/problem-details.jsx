@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert02Icon, BulbIcon, Calendar03Icon, Cancel01Icon, Location01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
@@ -11,6 +12,29 @@ const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeS
 
 export default function ProblemDetails({ problem, onClose, onProposeSolution }) {
   const details = useProblem(problem?.id)
+  const headingRef = useRef(null)
+  const onCloseRef = useRef(onClose)
+  const problemId = problem?.id
+
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
+  useEffect(() => {
+    if (problemId == null) return
+    const opener = document.activeElement
+    headingRef.current?.focus({ preventScroll: true })
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onCloseRef.current?.()
+    }
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("keydown", onKeyDown)
+      if (opener instanceof HTMLElement && opener.isConnected && !document.querySelector("[role=dialog]")) {
+        opener.focus({ preventScroll: true })
+      }
+    }
+  }, [problemId])
 
   if (!problem) return null
 
@@ -19,26 +43,29 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
   const targetGroup = getTargetGroupOption(problem.targetGroup)
 
   return (
-    <div className="absolute z-[1000] left-4 right-20 bottom-4 sm:right-auto sm:w-120 animate-in fade-in slide-in-from-bottom-4 duration-200">
+    <section
+      aria-labelledby="problem-details-heading"
+      className="absolute z-[1000] left-4 right-20 bottom-4 sm:right-auto sm:w-120 animate-in fade-in slide-in-from-bottom-4 duration-200"
+    >
       <div className="flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl">
-        <div className="h-1.5 shrink-0 bg-red-500" />
+        <div aria-hidden="true" className="h-1.5 shrink-0 bg-red-500" />
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-5">
           <div className="flex items-start gap-3">
-            <div className="shrink-0 size-11 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center">
+            <div aria-hidden="true" className="shrink-0 size-11 rounded-full bg-red-500/10 text-red-700 dark:text-red-400 flex items-center justify-center">
               <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-6" />
             </div>
 
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium uppercase tracking-wide text-red-600 dark:text-red-400">
+              <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">
                 Zgłoszony problem
               </p>
-              <h2 className="text-lg font-semibold leading-snug break-words">
+              <h2 id="problem-details-heading" ref={headingRef} tabIndex={-1} className="text-lg font-semibold leading-snug break-words outline-none">
                 {problem.title}
               </h2>
             </div>
 
-            <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij">
+            <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły problemu">
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
             </Button>
           </div>
@@ -68,15 +95,17 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
 
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl bg-muted/50 px-3 py-2.5 text-sm text-muted-foreground">
             <span className="flex min-w-0 items-center gap-1.5">
-              <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" />
-              <span className="truncate">
+              <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
+              <span className="sr-only">Miejsce: </span>
+              <span className="break-words">
                 {problem.street ?? `${problem.latitude.toFixed(5)}, ${problem.longitude.toFixed(5)}`}
               </span>
             </span>
             {problem.localDate && (
               <span className="flex shrink-0 items-center gap-1.5 tabular-nums">
-                <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" />
-                {dateFormat.format(new Date(problem.localDate))}
+                <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
+                <span className="sr-only">Zgłoszono: </span>
+                <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time>
               </span>
             )}
           </div>
@@ -85,13 +114,13 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
         <div className="shrink-0 border-t p-4">
           <Button
             size="lg"
-            className="w-full bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+            className="w-full bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-700 dark:hover:bg-emerald-800"
             onClick={() => onProposeSolution?.(problem)}
           >
             Zaproponuj rozwiązanie
           </Button>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

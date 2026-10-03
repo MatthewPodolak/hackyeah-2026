@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Add01Icon, Cancel01Icon, Delete02Icon } from "@hugeicons/core-free-icons"
+import { Add01Icon, Cancel01Icon, Delete02Icon, Tick02Icon } from "@hugeicons/core-free-icons"
+import SelectChip from "@/components/select-chip"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -21,24 +22,15 @@ function findOption(options, value) {
   return (options ?? []).find((option) => optionValue(option) === value)
 }
 
-function Chip({ active, onClick, children, disabled }) {
-  return (
-    <button
-      type="button"
-      aria-pressed={active}
-      disabled={disabled}
-      onClick={onClick}
-      className={cn(
-        "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-40",
-        active ? "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300" : "hover:bg-muted"
-      )}
-    >
-      {children}
-    </button>
-  )
+function Chip(props) {
+  return <SelectChip {...props} />
 }
 
-function SingleField({ section, value, onChange }) {
+function SelectedMark() {
+  return <HugeiconsIcon icon={Tick02Icon} strokeWidth={2.5} aria-hidden="true" className="absolute right-2 top-2 size-4 text-emerald-800 dark:text-emerald-300" />
+}
+
+function SingleField({ section, value, onChange, labelledBy }) {
   const selected = typeof value === "object" && value !== null ? value.value : value
   const text = typeof value === "object" && value !== null ? value.text ?? "" : ""
 
@@ -46,7 +38,7 @@ function SingleField({ section, value, onChange }) {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div role="radiogroup" aria-labelledby={labelledBy} className="grid gap-2 sm:grid-cols-2">
         {section.options.map((option) => {
           const active = selected === optionValue(option)
           return (
@@ -57,10 +49,11 @@ function SingleField({ section, value, onChange }) {
               aria-checked={active}
               onClick={() => select(optionValue(option))}
               className={cn(
-                "flex flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                active ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500" : "hover:bg-muted"
+                "relative flex flex-col items-start gap-1 rounded-xl border p-3 pr-8 text-left transition-colors",
+                active ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
               )}
             >
+              {active && <SelectedMark />}
               <span className="flex items-center gap-1.5 text-sm font-medium">
                 {option.icon && <span aria-hidden="true">{option.icon}</span>}
                 {optionLabel(option)}
@@ -74,6 +67,7 @@ function SingleField({ section, value, onChange }) {
         <Textarea
           rows={2}
           value={text}
+          aria-label={section.withText}
           placeholder={section.withText}
           onChange={(e) => onChange({ value: selected ?? null, text: e.target.value })}
         />
@@ -82,7 +76,7 @@ function SingleField({ section, value, onChange }) {
   )
 }
 
-function MultiField({ section, value, onChange }) {
+function MultiField({ section, value, onChange, labelledBy }) {
   const selected = Array.isArray(value) ? value : []
   const [other, setOther] = useState("")
   const known = new Set(section.options.map(optionValue))
@@ -106,7 +100,7 @@ function MultiField({ section, value, onChange }) {
           Wybierz maksymalnie {section.maxSelected} ({selected.length}/{section.maxSelected})
         </p>
       )}
-      <div className="flex flex-wrap gap-2">
+      <div role="group" aria-labelledby={labelledBy} className="flex flex-wrap gap-2">
         {section.options.map((option) => {
           const item = optionValue(option)
           const active = selected.includes(item)
@@ -118,9 +112,9 @@ function MultiField({ section, value, onChange }) {
           )
         })}
         {custom.map((item) => (
-          <Chip key={item} active onClick={() => toggle(item)}>
+          <Chip key={item} active onClick={() => toggle(item)} aria-label={`${item} (własny wpis, kliknij, aby usunąć)`}>
             {item}
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-3" />
+            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-3" aria-hidden="true" />
           </Chip>
         ))}
       </div>
@@ -129,6 +123,7 @@ function MultiField({ section, value, onChange }) {
           <Input
             value={other}
             disabled={full}
+            aria-label={`Inna odpowiedź: ${section.title}`}
             placeholder="Inne — wpisz własne"
             onChange={(e) => setOther(e.target.value)}
             onKeyDown={(e) => {
@@ -146,14 +141,14 @@ function MultiField({ section, value, onChange }) {
   )
 }
 
-function TextListField({ section, value, onChange }) {
+function TextListField({ section, value, onChange, labelledBy }) {
   const items = Array.isArray(value) && value.length ? value : [""]
 
   const update = (index, text) => onChange(items.map((item, i) => (i === index ? text : item)))
   const remove = (index) => onChange(items.filter((_, i) => i !== index))
 
   return (
-    <div className="flex flex-col gap-2">
+    <div role="group" aria-labelledby={labelledBy} className="flex flex-col gap-2">
       {section.hints?.length > 0 && (
         <ul className="list-disc pl-5 text-xs text-muted-foreground">
           {section.hints.map((hint) => <li key={hint}>{hint}</li>)}
@@ -161,14 +156,19 @@ function TextListField({ section, value, onChange }) {
       )}
       {items.map((item, index) => (
         <div key={index} className="flex gap-2">
-          <Input value={item} placeholder="Wpisz osobę, grupę lub instytucję" onChange={(e) => update(index, e.target.value)} />
-          <Button type="button" variant="ghost" size="icon" aria-label="Usuń" onClick={() => remove(index)}>
-            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
+          <Input
+            value={item}
+            aria-label={`${section.title}, pozycja ${index + 1}`}
+            placeholder="Wpisz osobę, grupę lub instytucję"
+            onChange={(e) => update(index, e.target.value)}
+          />
+          <Button type="button" variant="ghost" size="icon" aria-label={`Usuń pozycję ${index + 1}`} onClick={() => remove(index)}>
+            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} aria-hidden="true" />
           </Button>
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" className="self-start" onClick={() => onChange([...items, ""])} disabled={items.length >= 20}>
-        <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
+        <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
         Dodaj pozycję
       </Button>
     </div>
@@ -187,21 +187,22 @@ function PartnerListField({ section, value, onChange }) {
       <ul className="grid gap-2 text-xs text-muted-foreground sm:grid-cols-3">
         {section.roles.map((role) => (
           <li key={role.value} className="rounded-lg bg-muted/60 p-2">
-            <span className="font-medium text-foreground">{role.icon} {role.label}</span>
+            <span className="font-medium text-foreground"><span aria-hidden="true">{role.icon} </span>{role.label}</span>
             <br />
             {role.description}
           </li>
         ))}
       </ul>
       {partners.map((partner, index) => (
-        <div key={index} className="flex flex-col gap-2 rounded-xl border p-3">
+        <fieldset key={index} className="flex flex-col gap-2 rounded-xl border p-3">
+          <legend className="sr-only">Partner {index + 1}{partner.name ? `: ${partner.name}` : ""}</legend>
           <div className="flex gap-2">
-            <Input value={partner.name ?? ""} placeholder="Nazwa partnera" onChange={(e) => update(index, { name: e.target.value })} />
-            <Button type="button" variant="ghost" size="icon" aria-label="Usuń partnera" onClick={() => remove(index)}>
-              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
+            <Input value={partner.name ?? ""} aria-label={`Nazwa partnera ${index + 1}`} placeholder="Nazwa partnera" onChange={(e) => update(index, { name: e.target.value })} />
+            <Button type="button" variant="ghost" size="icon" aria-label={`Usuń partnera ${index + 1}`} onClick={() => remove(index)}>
+              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} aria-hidden="true" />
             </Button>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div role="group" aria-label="Jak pomaga" className="flex flex-wrap gap-2">
             {section.roles.map((role) => {
               const roles = partner.roles ?? []
               const active = roles.includes(role.value)
@@ -217,17 +218,17 @@ function PartnerListField({ section, value, onChange }) {
             })}
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <NativeSelect className="sm:w-64" value={partner.status ?? "POTENTIAL"} onChange={(e) => update(index, { status: e.target.value })} aria-label="Status partnera">
+            <NativeSelect className="sm:w-64" value={partner.status ?? "POTENTIAL"} onChange={(e) => update(index, { status: e.target.value })} aria-label={`Status partnera ${index + 1}`}>
               {section.statuses.map((status) => (
                 <NativeSelectOption key={status.value} value={status.value}>{status.label}</NativeSelectOption>
               ))}
             </NativeSelect>
-            <Input value={partner.note ?? ""} placeholder="Jak pomaga? (opcjonalnie)" onChange={(e) => update(index, { note: e.target.value })} />
+            <Input value={partner.note ?? ""} aria-label={`Notatka o partnerze ${index + 1}`} placeholder="Jak pomaga? (opcjonalnie)" onChange={(e) => update(index, { note: e.target.value })} />
           </div>
-        </div>
+        </fieldset>
       ))}
       <Button type="button" variant="outline" size="sm" className="self-start" onClick={add} disabled={partners.length >= 20}>
-        <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
+        <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
         Dodaj partnera
       </Button>
     </div>
@@ -242,13 +243,16 @@ function ImpactField({ section, value, onChange }) {
       {section.dimensions.map((dimension) => (
         <div key={dimension.value} className="flex flex-col gap-2 rounded-xl border p-3">
           <div>
-            <p className="text-sm font-medium">{dimension.icon} {dimension.label}</p>
-            <p className="text-xs text-muted-foreground">{dimension.description}</p>
+            <p id={`impact-${dimension.value}`} className="text-sm font-medium"><span aria-hidden="true">{dimension.icon} </span>{dimension.label}</p>
+            <p id={`impact-${dimension.value}-desc`} className="text-xs text-muted-foreground">{dimension.description}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div role="radiogroup" aria-labelledby={`impact-${dimension.value}`} aria-describedby={`impact-${dimension.value}-desc`} className="flex flex-wrap gap-2">
             {section.levels.map((level) => (
               <Chip
                 key={level.value}
+                role="radio"
+                aria-pressed={undefined}
+                aria-checked={levels[dimension.value] === level.value}
                 active={levels[dimension.value] === level.value}
                 onClick={() => onChange({ ...levels, [dimension.value]: level.value })}
               >
@@ -262,11 +266,11 @@ function ImpactField({ section, value, onChange }) {
   )
 }
 
-export function CanvasField({ section, value, onChange }) {
+export function CanvasField({ section, value, onChange, labelledBy }) {
   switch (section.type) {
-    case "single": return <SingleField section={section} value={value} onChange={onChange} />
-    case "multi": return <MultiField section={section} value={value} onChange={onChange} />
-    case "textList": return <TextListField section={section} value={value} onChange={onChange} />
+    case "single": return <SingleField section={section} value={value} onChange={onChange} labelledBy={labelledBy} />
+    case "multi": return <MultiField section={section} value={value} onChange={onChange} labelledBy={labelledBy} />
+    case "textList": return <TextListField section={section} value={value} onChange={onChange} labelledBy={labelledBy} />
     case "partnerList": return <PartnerListField section={section} value={value} onChange={onChange} />
     case "impactMatrix": return <ImpactField section={section} value={value} onChange={onChange} />
     default: return null

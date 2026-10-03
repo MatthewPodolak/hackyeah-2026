@@ -5,6 +5,7 @@ import { BulbIcon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingStatus from "@/components/loading-status";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { useProposal } from "@/api/context/ProposalContext";
 import { READINESS } from "@/lib/ideas";
@@ -15,11 +16,11 @@ export default function IdeasGallery({ query }) {
 
   if (query.isPending) {
     return (
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <LoadingStatus label="Wczytywanie pomysłów mieszkańców" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }, (_, i) => (
           <Skeleton key={i} className="h-56 w-full rounded-2xl" />
         ))}
-      </div>
+      </LoadingStatus>
     );
   }
 
@@ -50,11 +51,11 @@ export default function IdeasGallery({ query }) {
           <li key={idea.id}>
             <article className="flex h-full flex-col gap-3 rounded-2xl border bg-card p-5">
               <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                   <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wide text-emerald-600 dark:text-emerald-400">Pomysł mieszkańca</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Pomysł mieszkańca</p>
                   <h2 className="font-semibold leading-snug break-words">{idea.title}</h2>
                 </div>
               </div>

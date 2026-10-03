@@ -6,6 +6,7 @@ import { Alert02Icon, Calendar03Icon, InboxIcon, Location01Icon, Search01Icon } 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingStatus from "@/components/loading-status";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
 import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES } from "@/api/context/AuthContext";
@@ -41,14 +42,15 @@ function ProblemsList() {
             <h1 className="font-heading text-2xl font-semibold">Zgłoszone problemy</h1>
             <p className="text-muted-foreground">Problemy zgłoszone przez mieszkańców na mapie</p>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <p aria-live="polite" aria-atomic="true" className="text-sm text-muted-foreground">
+            <span className="sr-only">Wyniki: </span>
             {visible.length} z {sorted.length}
           </p>
         </header>
 
-        <InputGroup className="mb-6">
+        <InputGroup role="search" className="mb-6">
           <InputGroupAddon>
-            <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />
+            <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" />
           </InputGroupAddon>
           <InputGroupInput
             type="search"
@@ -60,16 +62,16 @@ function ProblemsList() {
         </InputGroup>
 
         {isPending ? (
-          <div className="flex flex-col gap-3">
+          <LoadingStatus label="Wczytywanie zgłoszonych problemów" className="flex flex-col gap-3">
             {Array.from({ length: 4 }, (_, i) => (
               <Skeleton key={i} className="h-28 w-full rounded-xl" />
             ))}
-          </div>
+          </LoadingStatus>
         ) : visible.length > 0 ? (
           <ul className="flex flex-col gap-3">
             {visible.map((problem) => (
               <li key={problem.id} className="flex gap-4 rounded-xl border bg-card p-4">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
+                <div aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-700 dark:text-red-400">
                   <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-5" />
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
@@ -83,21 +85,23 @@ function ProblemsList() {
                     </Badge>
                   </div>
                   {problem.description && (
-                    <p className="line-clamp-3 text-sm text-muted-foreground whitespace-pre-line break-words">
+                    <p className="text-sm text-muted-foreground whitespace-pre-line break-words">
                       {problem.description}
                     </p>
                   )}
                   <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                     <span className="flex min-w-0 items-center gap-1.5">
-                      <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" />
-                      <span className="truncate">
+                      <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
+                      <span className="sr-only">Miejsce: </span>
+                      <span className="break-words">
                         {problem.street ?? `${problem.latitude?.toFixed(5)}, ${problem.longitude?.toFixed(5)}`}
                       </span>
                     </span>
                     {problem.localDate && (
                       <span className="flex items-center gap-1.5 tabular-nums">
-                        <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" />
-                        {dateFormat.format(new Date(problem.localDate))}
+                        <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
+                        <span className="sr-only">Zgłoszono: </span>
+                        <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time>
                       </span>
                     )}
                   </div>

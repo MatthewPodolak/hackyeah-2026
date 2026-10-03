@@ -7,7 +7,7 @@ function Spinner({
   ...props
 }) {
   return (
-    <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} data-slot="spinner" role="status" aria-label="Loading" className={cn("size-4 animate-spin", className)} {...props} />
+    <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} data-slot="spinner" role="status" aria-label="Ładowanie" className={cn("size-4 animate-spin", className)} {...props} />
   )
 }
 

@@ -1,12 +1,15 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { BulbIcon, Cancel01Icon, CheckmarkCircle02Icon, Copy01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import Modal from "@/components/modal"
+import SelectChip from "@/components/select-chip"
+import { useFormErrors } from "@/helpers/useFormErrors"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -40,10 +43,10 @@ function buildProblemDescription(form) {
 }
 
 function validate(form) {
-  if (form.title.trim().length < 3) return "Tytuł musi mieć co najmniej 3 znaki!"
-  if (!form.summary.trim()) return emptyField("krótki opis")
-  if (!form.essence.trim()) return emptyField("istotę rozwiązania")
-  if (!form.who.length && !form.whoOther.trim()) return "Wybierz, dla kogo jest rozwiązanie!"
+  if (form.title.trim().length < 3) return ["title", "Tytuł musi mieć co najmniej 3 znaki!"]
+  if (!form.summary.trim()) return ["summary", emptyField("krótki opis")]
+  if (!form.essence.trim()) return ["essence", emptyField("istotę rozwiązania")]
+  if (!form.who.length && !form.whoOther.trim()) return ["who", "Wybierz, dla kogo jest rozwiązanie, albo wpisz inną grupę!"]
   return null
 }
 
@@ -54,18 +57,28 @@ export default function ProposeSolution({ open, problem, onClose }) {
   const addIdea = useAddIdea()
   const draftIdea = useDraftIdea()
   const [aiText, setAiText] = useState("")
+  const { fail, clear, reset, fieldProps, errorProps } = useFormErrors("s")
+  const successRef = useRef(null)
 
-  if (!open) return null
+  useEffect(() => {
+    if (submitted) successRef.current?.focus({ preventScroll: true })
+  }, [submitted])
 
-  const set = (key) => (value) => setForm((f) => ({ ...f, [key]: value }))
+  const set = (key) => (value) => {
+    setForm((f) => ({ ...f, [key]: value }))
+    clear(key === "whoOther" ? "who" : key)
+  }
 
-  const toggleWho = (key) =>
+  const toggleWho = (key) => {
     setForm((f) => ({ ...f, who: f.who.includes(key) ? f.who.filter((k) => k !== key) : [...f.who, key] }))
+    clear("who")
+  }
 
   const close = () => {
     setForm(EMPTY)
     setSubmitted(null)
     setAiText("")
+    reset()
     onClose?.()
   }
 
@@ -75,7 +88,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
 
     const error = validate(form)
     if (error) {
-      showToast(error, "error")
+      fail(...error)
       return
     }
 
@@ -93,15 +106,17 @@ export default function ProposeSolution({ open, problem, onClose }) {
       setSubmitted(idea)
       showToast(IDEA_ADDED_MSG, "success")
     } catch (err) {
-      showToast(err?.status === 400 ? err.body?.message ?? null : null, "error")
+      if (err?.status === 400 && err.body?.message) fail("title", err.body.message)
+      else showToast(null, "error")
     }
   }
 
   const fillWithAi = async () => {
     if (aiText.trim().length < 10) {
-      showToast("Opisz pomysł w kilku zdaniach, żeby AI miało z czego skorzystać!", "error")
+      fail("ai", "Opisz pomysł w kilku zdaniach, żeby AI miało z czego skorzystać!")
       return
     }
+    clear("ai")
 
     try {
       const draft = await draftIdea.mutateAsync({ text: aiText.trim(), sourceProblemId: problem?.id ?? null })
@@ -128,18 +143,19 @@ export default function ProposeSolution({ open, problem, onClose }) {
   }
 
   return (
-    <div onClick={(e) => { if (e.target === e.currentTarget) close() }} className="fixed inset-0 z-[2000] flex overflow-y-auto bg-black/40 p-6">
-      <div className="m-auto w-full max-w-xl animate-in fade-in zoom-in-95 duration-200">
+    <Modal open={open} onClose={close} labelledBy="s-heading" describedBy="s-subheading" className="max-w-xl">
         <Card className="pt-0">
-          <div className="h-1.5 bg-emerald-500" />
+          <div aria-hidden="true" className="h-1.5 bg-emerald-500" />
           <CardHeader>
             <div className="flex items-start gap-3">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <div aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                 <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-6" />
               </div>
               <div className="min-w-0 flex-1">
-                <CardTitle>{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</CardTitle>
-                <CardDescription className="mt-1">
+                <CardTitle>
+                  <h2 id="s-heading" className="text-base font-semibold">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
+                </CardTitle>
+                <CardDescription id="s-subheading" className="mt-1">
                   {problem ? (
                     <>Problem: <span className="font-medium text-foreground">{problem.title}</span></>
                   ) : (
@@ -147,7 +163,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
                   )}
                 </CardDescription>
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={close} aria-label="Zamknij">
+              <Button variant="ghost" size="icon-sm" onClick={close} aria-label="Zamknij okno">
                 <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
               </Button>
             </div>
@@ -156,11 +172,11 @@ export default function ProposeSolution({ open, problem, onClose }) {
           <CardContent>
             {submitted ? (
               <div className="flex flex-col items-center gap-4 py-2 text-center">
-                <div className="flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                <div aria-hidden="true" className="flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                   <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-8" />
                 </div>
                 <div>
-                  <p className="text-lg font-semibold">Dziękujemy za propozycję!</p>
+                  <h3 ref={successRef} tabIndex={-1} className="text-lg font-semibold outline-none">Dziękujemy za propozycję!</h3>
                   <p className="text-sm text-muted-foreground">
                     „{submitted.title}” trafiła do Hubu i czeka na weryfikację.
                   </p>
@@ -168,9 +184,9 @@ export default function ProposeSolution({ open, problem, onClose }) {
                 <div className="w-full rounded-xl border bg-muted/50 p-3 text-left">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Kod Twojej propozycji</p>
                   <div className="mt-1 flex items-center gap-2">
-                    <code className="min-w-0 flex-1 truncate font-mono text-sm">{submitted.trackingToken}</code>
-                    <Button type="button" variant="outline" size="sm" onClick={copyToken}>
-                      <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" />
+                    <code className="min-w-0 flex-1 break-all font-mono text-sm">{submitted.trackingToken}</code>
+                    <Button type="button" variant="outline" size="sm" onClick={copyToken} aria-label="Kopiuj kod propozycji">
+                      <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
                       Kopiuj
                     </Button>
                   </div>
@@ -185,20 +201,22 @@ export default function ProposeSolution({ open, problem, onClose }) {
                 </div>
               </div>
             ) : (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <FieldGroup>
-                <div className="flex flex-col gap-2 rounded-xl border border-dashed border-emerald-500/50 bg-emerald-500/5 p-3">
+                <p className="text-sm text-muted-foreground">Pola tytuł, krótki opis, istota i dla kogo są wymagane.</p>
+                <div className="flex flex-col gap-2 rounded-xl border border-dashed border-emerald-700/60 bg-emerald-500/5 p-3">
                   <label htmlFor="s-ai" className="flex items-center gap-1.5 text-sm font-medium">
-                    <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-4 text-emerald-600 dark:text-emerald-400" />
-                    Pomóż mi opisać
+                    <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
+                    Pomóż mi opisać (opcjonalnie)
                   </label>
                   <Textarea
-                    id="s-ai"
+                    {...fieldProps("ai")}
                     rows={2}
                     value={aiText}
                     placeholder="Opisz pomysł własnymi słowami, a AI wypełni pola poniżej"
                     onChange={(e) => setAiText(e.target.value)}
                   />
+                  <FieldError {...errorProps("ai")} />
                   <Button type="button" variant="outline" size="sm" className="self-end" onClick={fillWithAi} disabled={draftIdea.isPending}>
                     {draftIdea.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" />}
                     {draftIdea.isPending ? "AI pisze..." : "Uzupełnij z AI"}
@@ -208,68 +226,67 @@ export default function ProposeSolution({ open, problem, onClose }) {
                 <Field>
                   <FieldLabel htmlFor="s-title">Tytuł</FieldLabel>
                   <Input
-                    id="s-title"
+                    {...fieldProps("title")}
+                    required
                     value={form.title}
                     maxLength={150}
                     placeholder="Krótka nazwa Twojego pomysłu"
                     onChange={(e) => set("title")(e.target.value)}
                   />
+                  <FieldError {...errorProps("title")} />
                 </Field>
 
                 <Field>
                   <FieldLabel htmlFor="s-summary">Krótki opis</FieldLabel>
                   <Textarea
-                    id="s-summary"
+                    {...fieldProps("summary")}
+                    required
                     rows={3}
                     value={form.summary}
                     placeholder="Co to jest? Opisz w 2–3 zdaniach."
                     onChange={(e) => set("summary")(e.target.value)}
                   />
+                  <FieldError {...errorProps("summary")} />
                 </Field>
 
                 <Field>
                   <FieldLabel htmlFor="s-essence">Istota</FieldLabel>
                   <Textarea
-                    id="s-essence"
+                    {...fieldProps("essence")}
+                    required
                     rows={4}
                     value={form.essence}
                     placeholder="Na czym polega rozwiązanie i co jest w nim nowego?"
                     onChange={(e) => set("essence")(e.target.value)}
                   />
+                  <FieldError {...errorProps("essence")} />
                 </Field>
 
                 <Field>
-                  <FieldLabel>Dla kogo</FieldLabel>
-                  <FieldDescription>Wybierz jedną lub kilka grup docelowych</FieldDescription>
-                  <div className="flex flex-wrap gap-2">
-                    {WHO.map(([key, category]) => {
-                      const active = form.who.includes(key)
-                      return (
-                        <button
-                          key={key}
-                          type="button"
-                          aria-pressed={active}
-                          onClick={() => toggleWho(key)}
-                          className={cn(
-                            "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                            active
-                              ? "border-emerald-500 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                              : "hover:bg-muted"
-                          )}
-                        >
-                          <span aria-hidden="true">{category.icon}</span>
-                          {category.label}
-                        </button>
-                      )
-                    })}
+                  <p id="s-who-label" className="text-sm font-medium">Dla kogo</p>
+                  <FieldDescription id="s-who-hint">Wybierz jedną lub kilka grup docelowych</FieldDescription>
+                  <div
+                    {...fieldProps("who", "s-who-hint")}
+                    role="group"
+                    aria-labelledby="s-who-label"
+                    className="flex flex-wrap gap-2"
+                  >
+                    {WHO.map(([key, category]) => (
+                      <SelectChip key={key} active={form.who.includes(key)} onClick={() => toggleWho(key)}>
+                        <span aria-hidden="true">{category.icon}</span>
+                        {category.label}
+                      </SelectChip>
+                    ))}
                   </div>
+                  <FieldLabel htmlFor="s-whoOther" className="sr-only">Inna grupa lub doprecyzowanie</FieldLabel>
                   <Input
+                    id="s-whoOther"
                     value={form.whoOther}
                     placeholder="Inna grupa lub doprecyzowanie (opcjonalnie)"
                     onChange={(e) => set("whoOther")(e.target.value)}
                   />
+                  <FieldError {...errorProps("who")} />
                 </Field>
-           
 
                 <Field orientation="horizontal">
                   <Checkbox
@@ -287,7 +304,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
                     type="submit"
                     size="lg"
                     disabled={addIdea.isPending}
-                    className="w-full bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500"
+                    className="w-full bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-700 dark:hover:bg-emerald-800"
                   >
                     {addIdea.isPending ? "Wysyłanie..." : "Wyślij propozycję"}
                   </Button>
@@ -297,8 +314,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
             )}
           </CardContent>
         </Card>
-      </div>
-    </div>
+    </Modal>
   )
 }
 
@@ -309,15 +325,15 @@ function SimilarInnovations({ token }) {
 
   return (
     <div className="w-full text-left">
-      <p className="mb-2 text-sm font-semibold">Podobne istniejące innowacje</p>
+      <h4 className="mb-2 text-sm font-semibold">Podobne istniejące innowacje</h4>
       {similar.isPending ? (
-        <p className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Spinner /> Szukam podobnych rozwiązań...
+        <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Spinner aria-hidden="true" /> Szukam podobnych rozwiązań...
         </p>
       ) : similar.data?.length ? (
         <ol className="flex flex-col gap-3">
           {similar.data.map((match, i) => (
-            <MatchItem key={match.id} match={match} rank={i + 1} />
+            <MatchItem key={match.id} match={match} rank={i + 1} headingLevel={5} />
           ))}
         </ol>
       ) : (

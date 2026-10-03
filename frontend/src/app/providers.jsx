@@ -18,7 +18,7 @@ export default function Providers({ children }) {
               <ProposalProvider>
                 {children}
               </ProposalProvider>
-              <Toaster position="bottom-right" richColors closeButton />
+              <Toaster position="bottom-right" richColors closeButton containerAriaLabel="Powiadomienia" />
             </AuthProvider>
           </QueryClientProvider>
         </GlobalErrorCatcher>

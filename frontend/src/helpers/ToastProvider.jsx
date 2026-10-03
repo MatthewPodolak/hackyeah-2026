@@ -6,7 +6,7 @@ const DEFAULT_MSG = {
   success: SUCCESS_MSG,
 };
 
-export function showToast(message = null, type = "info", { duration = 3000, id } = {}) {
+export function showToast(message = null, type = "info", { duration = type === "error" ? 8000 : 6000, id } = {}) {
   const fn = toast[type] ?? toast.info;
   return fn(message ?? DEFAULT_MSG[type] ?? "", { duration, id });
 }

@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon, Calendar03Icon, Delete02Icon, Edit02Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import LoadingStatus from "@/components/loading-status";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { useFormErrors } from "@/helpers/useFormErrors";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES } from "@/api/context/AuthContext";
@@ -24,46 +26,61 @@ function today() {
 function callState(call) {
   const now = today();
   if (call.openTo < now) return { label: "Zakończony", className: "bg-muted text-muted-foreground" };
-  if (call.openFrom > now) return { label: "Zaplanowany", className: "bg-sky-500/15 text-sky-700 dark:text-sky-300" };
-  return { label: "Aktywny", className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" };
+  if (call.openFrom > now) return { label: "Zaplanowany", className: "bg-sky-500/15 text-sky-800 dark:text-sky-300" };
+  return { label: "Aktywny", className: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" };
 }
 
 function GrantForm({ initial, onDone }) {
   const [form, setForm] = useState(initial);
   const save = useSaveGrantCall();
   const { showToast } = useToast();
+  const { fail, clear, fieldProps, errorProps } = useFormErrors("g");
+  const headingRef = useRef(null);
 
-  const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
+  const set = (key) => (e) => {
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+    clear(key);
+  };
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name.trim()) return showToast("Podaj nazwę naboru!", "error");
-    if (!form.openFrom || !form.openTo) return showToast("Podaj daty naboru!", "error");
-    if (form.openTo < form.openFrom) return showToast("Data końca nie może być przed datą początku!", "error");
+    if (!form.name.trim()) return fail("name", "Podaj nazwę naboru");
+    if (!form.openFrom) return fail("openFrom", "Podaj datę rozpoczęcia naboru");
+    if (!form.openTo) return fail("openTo", "Podaj datę zakończenia naboru");
+    if (form.openTo < form.openFrom) return fail("openTo", "Data końca nie może być przed datą początku");
     try {
       await save.mutateAsync({ ...form, name: form.name.trim() });
       showToast(initial.id ? "Zapisano nabór" : "Dodano nabór", "success");
       onDone();
     } catch (err) {
-      showToast(err?.body?.message ?? null, "error");
+      if (err?.body?.message) fail("name", err.body.message);
+      else showToast(null, "error");
     }
   };
 
   return (
-    <form onSubmit={submit} className="rounded-xl border bg-card p-5">
+    <form onSubmit={submit} noValidate aria-labelledby="g-form-heading" className="rounded-xl border bg-card p-5">
+      <h2 id="g-form-heading" ref={headingRef} tabIndex={-1} className="mb-4 font-semibold outline-none">{initial.id ? `Edycja naboru: ${initial.name}` : "Nowy nabór"}</h2>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="g-name">Nazwa naboru</FieldLabel>
-          <Input id="g-name" value={form.name} placeholder="np. Małopolski Inkubator Innowacji 2026" onChange={set("name")} />
+          <FieldLabel htmlFor="g-name">Nazwa naboru (wymagane)</FieldLabel>
+          <Input {...fieldProps("name")} required value={form.name} placeholder="np. Małopolski Inkubator Innowacji 2026" onChange={set("name")} />
+          <FieldError {...errorProps("name")} />
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field>
-            <FieldLabel htmlFor="g-from">Od</FieldLabel>
-            <Input id="g-from" type="date" value={form.openFrom} onChange={set("openFrom")} />
+            <FieldLabel htmlFor="g-openFrom">Od (wymagane)</FieldLabel>
+            <Input {...fieldProps("openFrom")} required type="date" value={form.openFrom} onChange={set("openFrom")} />
+            <FieldError {...errorProps("openFrom")} />
           </Field>
           <Field>
-            <FieldLabel htmlFor="g-to">Do</FieldLabel>
-            <Input id="g-to" type="date" value={form.openTo} onChange={set("openTo")} />
+            <FieldLabel htmlFor="g-openTo">Do (wymagane)</FieldLabel>
+            <Input {...fieldProps("openTo")} required type="date" value={form.openTo} onChange={set("openTo")} />
+            <FieldError {...errorProps("openTo")} />
           </Field>
         </div>
         <Field>
@@ -72,8 +89,8 @@ function GrantForm({ initial, onDone }) {
         </Field>
         <Field>
           <FieldLabel htmlFor="g-sections">Wymagane sekcje wniosku</FieldLabel>
-          <Textarea id="g-sections" rows={4} value={form.requiredSections ?? ""} placeholder={"Opis problemu\nGrupa docelowa\nOpis rozwiązania\nHarmonogram\nBudżet"} onChange={set("requiredSections")} />
-          <FieldDescription>Jedna sekcja w linii. AI ułoży według nich szkic wniosku dla autorów pomysłów.</FieldDescription>
+          <Textarea id="g-sections" aria-describedby="g-sections-hint" rows={4} value={form.requiredSections ?? ""} placeholder={"Opis problemu\nGrupa docelowa\nOpis rozwiązania\nHarmonogram\nBudżet"} onChange={set("requiredSections")} />
+          <FieldDescription id="g-sections-hint">Jedna sekcja w linii. AI ułoży według nich szkic wniosku dla autorów pomysłów.</FieldDescription>
         </Field>
         <div className="flex justify-end gap-2">
           <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
@@ -110,7 +127,7 @@ function GrantCallsList() {
           </div>
           {!editing && (
             <Button onClick={() => setEditing(EMPTY)}>
-              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" />
+              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
               Nowy nabór
             </Button>
           )}
@@ -123,7 +140,7 @@ function GrantCallsList() {
         )}
 
         {calls.isPending ? (
-          <Skeleton className="h-32 w-full rounded-xl" />
+          <LoadingStatus label="Wczytywanie naborów"><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
         ) : calls.data?.length ? (
           <ul className="flex flex-col gap-3">
             {calls.data.map((call) => {
@@ -132,25 +149,26 @@ function GrantCallsList() {
                 <li key={call.id} className="flex flex-col gap-2 rounded-xl border bg-card p-4">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <h2 className="font-semibold">{call.name}</h2>
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${state.className}`}>{state.label}</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${state.className}`}><span className="sr-only">Status: </span>{state.label}</span>
                   </div>
                   <p className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
-                    <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" />
+                    <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" aria-hidden="true" />
+                    <span className="sr-only">Termin: </span>
                     {dateFormat.format(new Date(call.openFrom))} – {dateFormat.format(new Date(call.openTo))}
                   </p>
                   {call.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{call.description}</p>}
                   <div className="flex justify-end gap-2">
                     <Button variant="ghost" size="sm" onClick={() => del(call)} disabled={remove.isPending}>
-                      <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" />
-                      Usuń
+                      <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+                      Usuń<span className="sr-only"> nabór {call.name}</span>
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => setEditing({ ...EMPTY, ...call, description: call.description ?? "", requiredSections: call.requiredSections ?? "" })}
                     >
-                      <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" />
-                      Edytuj
+                      <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+                      Edytuj<span className="sr-only"> nabór {call.name}</span>
                     </Button>
                   </div>
                 </li>
