@@ -11,7 +11,6 @@ import java.util.List;
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
-    // Projection skips imageUrl, which can be a large base64 string
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude) from Problem p")
+    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street) from Problem p")
     List<ProblemSummaryResponse> findAllSummaries();
 }
