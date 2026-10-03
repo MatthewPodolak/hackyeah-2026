@@ -18,8 +18,9 @@ public class ProblemService {
 
     public ProblemResponse reportProblem(ProblemRequest request) {
         Problem problem = problemMapper.toEntity(request);
-        problem.setAuthor(appUserRepository.findById(request.authorId()).orElseThrow());
-
+        if (request.authorId() != null) {
+            appUserRepository.findById(request.authorId()).ifPresent(problem::setAuthor);
+        }
         Problem savedProblem = problemRepository.save(problem);
         return problemMapper.toResponse(savedProblem);
     }
