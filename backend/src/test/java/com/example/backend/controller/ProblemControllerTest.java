@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemResponse;
+import com.example.backend.dto.ProblemWithMatchesResponse;
 import com.example.backend.service.ProblemService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.Instant;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -47,16 +51,26 @@ class ProblemControllerTest {
                 50.06143,
                 19.93658,
                 "https://imgur.com/test.jpg",
-                1L
+                1L,
+                "STREET"
         );
 
-        ProblemResponse response = new ProblemResponse(
+        // 1. Tworzymy wewnętrzny obiekt ProblemResponse
+        ProblemResponse problemResponse = new ProblemResponse(
                 1L,
                 "Brak zjazdu",
                 "Wysoki krawężnik blokuje wózki",
                 50.06143,
                 19.93658,
-                "https://imgur.com/test.jpg"
+                "https://imgur.com/test.jpg",
+                Instant.now(),
+                "STREET"
+        );
+
+        // 2. Tworzymy wrapper z problemem i pustą listą dopasowań (lub uzupełnioną)
+        ProblemWithMatchesResponse response = new ProblemWithMatchesResponse(
+                problemResponse,
+                List.of()
         );
 
         when(problemService.reportProblem(any(ProblemRequest.class))).thenReturn(response);
@@ -67,9 +81,10 @@ class ProblemControllerTest {
 
                 .andExpect(status().isCreated())
 
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.title").value("Brak zjazdu"))
-                .andExpect(jsonPath("$.imageUrl").value("https://imgur.com/test.jpg"));
+                // 3. Zwróć uwagę na $.problem. przed polami
+                .andExpect(jsonPath("$.problem.id").value(1L))
+                .andExpect(jsonPath("$.problem.title").value("Brak zjazdu"))
+                .andExpect(jsonPath("$.problem.imageUrl").value("https://imgur.com/test.jpg"));
 
         verify(problemService, times(1)).reportProblem(any(ProblemRequest.class));
     }

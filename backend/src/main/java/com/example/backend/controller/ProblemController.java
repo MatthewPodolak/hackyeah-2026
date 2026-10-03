@@ -1,12 +1,12 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ProblemRequest;
-import com.example.backend.dto.ProblemResponse;
-import com.example.backend.dto.ProblemSummaryResponse;
+import com.example.backend.dto.ProblemWithMatchesResponse;
 import com.example.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import com.example.backend.dto.ProblemSummaryResponse;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class ProblemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProblemResponse createProblem(@RequestBody ProblemRequest request) {
+    public ProblemWithMatchesResponse createProblem(@RequestBody ProblemRequest request) {
         return problemService.reportProblem(request);
     }
 

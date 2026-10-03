@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.InnovationMatchResponse;
 import com.example.backend.dto.InnovationResponse;
 import com.example.backend.dto.MatchmakingRequest;
 import com.example.backend.service.MatchmakingService;
@@ -16,10 +17,8 @@ public class MatchmakingController {
 
     private final MatchmakingService matchmakingService;
 
-    // Zwraca bezpośrednio listę wyników i automatycznie nadaje status 200 OK
-    @PostMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public List<InnovationResponse> searchInnovations(@RequestBody MatchmakingRequest request) {
-        return matchmakingService.findMatches(request);
+    @PostMapping
+    public List<InnovationMatchResponse> match(@RequestBody MatchmakingRequest request) {
+        return matchmakingService.findMatches(request.problemDescription());
     }
 }
