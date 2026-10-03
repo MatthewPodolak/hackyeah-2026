@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -22,6 +22,8 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select"
 import Modal from "@/components/modal"
+import { SpeechButton } from "@/components/speech-button"
+import { useSpeechSupported } from "@/hooks/useSpeechToText"
 import { problemTokens } from "@/lib/problems"
 import { PROBLEM_CATEGORY_OPTIONS, TARGET_GROUP_OPTIONS } from "@/lib/problemCategories"
 import { findGmina, gminaCenter } from "@/lib/gminy"
@@ -75,6 +77,8 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const street = useStreet(form.location)
   const [address, setAddress] = useState("")
   const [searching, setSearching] = useState(false)
+  const titleRef = useRef(null)
+  const speechSupported = useSpeechSupported()
   const { fail, clear, reset, fieldProps, errorProps } = useFormErrors("q")
   const regions = useRegions()
   const shapes = useGminyShapes()
@@ -200,18 +204,24 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="q-title">Tytuł</FieldLabel>
-                <Input
-                  {...fieldProps("title")}
-                  required
-                  value={form.title}
-                  onChange={(e) => set("title")(e.target.value)}
-                />
+                <div className="relative">
+                  <Input
+                    {...fieldProps("title")}
+                    ref={titleRef}
+                    required
+                    className={speechSupported ? "pr-11" : undefined}
+                    value={form.title}
+                    onChange={(e) => set("title")(e.target.value)}
+                  />
+                  <SpeechButton target={titleRef} className="top-1/2 -translate-y-1/2" />
+                </div>
                 <FieldError {...errorProps("title")} />
               </Field>
               <Field>
                 <FieldLabel htmlFor="q-description">Opis</FieldLabel>
+                <FieldDescription id="q-description-hint">Nie podawaj imion, nazwisk ani adresów.</FieldDescription>
                 <Textarea
-                  {...fieldProps("description")}
+                  {...fieldProps("description", "q-description-hint")}
                   required
                   value={form.description}
                   onChange={(e) => set("description")(e.target.value)}
