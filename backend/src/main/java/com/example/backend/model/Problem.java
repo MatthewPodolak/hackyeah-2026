@@ -34,4 +34,10 @@ public class Problem {
     private Instant localDate;
 
     private String street;
+
+    @Enumerated(EnumType.STRING)
+    private ProblemCategory category;
+
+    @Enumerated(EnumType.STRING)
+    private TargetGroup targetGroup;
 }
