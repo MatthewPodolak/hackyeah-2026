@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Skeleton } from "@/components/ui/skeleton"
 import Modal from "@/components/modal"
 import LoadingStatus from "@/components/loading-status"
-import { useAuth } from "@/api/context/AuthContext"
+import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useAddReview, useInnovationReviews, useParticipate } from "@/api/hooks/useTesting"
 import { useToast } from "@/helpers/ToastProvider"
 import { useFormErrors } from "@/helpers/useFormErrors"
@@ -235,6 +235,8 @@ function ReviewForm({ innovationId, onDone }) {
 }
 
 export default function InnovationTesting({ innovationId, innovationName }) {
+  const { role } = useAuth()
+  const canTest = role !== ROLES.JST
   const reviews = useInnovationReviews(innovationId)
   const [dialog, setDialog] = useState(null)
   const close = () => setDialog(null)
@@ -242,29 +244,35 @@ export default function InnovationTesting({ innovationId, innovationName }) {
 
   return (
     <section aria-labelledby="section-testing" className="mt-10 border-t pt-8">
-      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold">Przetestuj i oceń</h2>
+      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold">{canTest ? "Przetestuj i oceń" : "Opinie i wdrożenie"}</h2>
       <p className="mb-4 text-muted-foreground">
-        Chcesz wypróbować tę innowację u siebie? Zgłoś się do testów. Testowałeś ją już? Podziel się opinią.
+        {canTest
+          ? "Chcesz wypróbować tę innowację u siebie? Zgłoś się do testów. Testowałeś ją już? Podziel się opinią."
+          : "Sprawdź, jak oceniają tę innowację testerzy, i przygotuj plan jej wdrożenia w swojej gminie."}
       </p>
       <div className="mb-6 flex flex-wrap gap-2">
-        <Button onClick={() => setDialog("participate")}>
-          <HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-          Zgłoś się do testów
-        </Button>
+        {canTest && (
+          <Button onClick={() => setDialog("participate")}>
+            <HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            Zgłoś się do testów
+          </Button>
+        )}
         <Link href={`/implementation-plan?innovation=${encodeURIComponent(innovationId)}`} className={buttonVariants({ variant: "outline" })}>
           Plan wdrożenia w mojej gminie
         </Link>
-        <Button variant="outline" onClick={() => setDialog("review")}>
-          <HugeiconsIcon icon={StarIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-          Dodaj opinię
-        </Button>
+        {canTest && (
+          <Button variant="outline" onClick={() => setDialog("review")}>
+            <HugeiconsIcon icon={StarIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            Dodaj opinię
+          </Button>
+        )}
       </div>
 
       <h3 className="mb-3 font-heading font-semibold">Opinie testerów</h3>
       {reviews.isPending ? (
         <LoadingStatus label="Wczytywanie opinii"><Skeleton className="h-24 w-full rounded-xl" /></LoadingStatus>
       ) : !data?.totalReviews ? (
-        <p className="text-sm text-muted-foreground">Ta innowacja nie ma jeszcze opinii. Twoja może być pierwsza!</p>
+        <p className="text-sm text-muted-foreground">{canTest ? "Ta innowacja nie ma jeszcze opinii. Twoja może być pierwsza!" : "Ta innowacja nie ma jeszcze opinii testerów."}</p>
       ) : (
         <>
           <p className="mb-4 flex flex-wrap items-center gap-2 text-sm">

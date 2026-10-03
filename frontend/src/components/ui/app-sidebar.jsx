@@ -27,20 +27,20 @@ const myItems = [
   { title: "Moje zgłoszenia", url: "/my-reports" },
   { title: "Moje propozycje", url: "/my-ideas" },
   { title: "Wiadomości", url: "/messages", requiresLogin: true },
-  { title: "Moje testy", url: "/my-tests", requiresLogin: true },
+  { title: "Moje testy", url: "/my-tests", requiresLogin: true, hiddenFor: ROLES.JST },
   { title: "Plan wdrożenia innowacji", url: "/implementation-plan", requiresLogin: true },
 ]
 
 const institutionItems = [
   { title: "Zgłoszone problemy", url: "/reported-problems", badge: "unseenProblems", badgeLabel: "nowe" },
   { title: "Zgłoszone innowacje", url: "/reported-innovations", badge: "unseenIdeas", badgeLabel: "nowe" },
-  { title: "Zgłoszenia do testów", url: "/test-participations" },
   { title: "Trendy i potrzeby", url: "/trends" },
   { title: "Nabory grantowe", url: "/grant-calls" },
 ]
 
 const ropsItems = [
   { title: "Konta instytucji", url: "/admin/accounts", badge: "pendingAccounts", badgeLabel: "czeka na akceptację" },
+  { title: "Zgłoszenia do testów", url: "/test-participations" },
   { title: "Katalog wiedzy", url: "/admin/catalog" },
 ]
 
@@ -84,13 +84,13 @@ function NavGroup({ label, items, isActive, badges = {}, onAction }) {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { isLogged, user, roleLabel, openPanel, logout, hasRole, isPendingInstitution, accountStatus } = useAuth()
+  const { isLogged, user, role, roleLabel, openPanel, logout, hasRole, isPendingInstitution, accountStatus } = useAuth()
   const { showToast } = useToast()
   const { openProposal } = useProposal()
   const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
   const isRops = hasRole(ROLES.ROPS)
   const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
-  const { data: unseenProblems } = useUnseenProblems(isInstitution)
+  const { data: unseenProblems } = useUnseenProblems(isRops)
   const { data: pendingAccounts } = usePendingAccounts(isRops)
 
   const isActive = (url) => (url === "/" ? pathname === "/" : pathname.startsWith(url))
@@ -108,7 +108,7 @@ export function AppSidebar() {
       <SidebarContent>
         <nav aria-label="Menu główne">
           <NavGroup label="Nawigacja" items={publicItems} isActive={isActive} onAction={() => openProposal()} />
-          <NavGroup label="Moje sprawy" items={myItems.filter((item) => !item.requiresLogin || isLogged)} isActive={isActive} />
+          <NavGroup label="Moje sprawy" items={myItems.filter((item) => (!item.requiresLogin || isLogged) && item.hiddenFor !== role)} isActive={isActive} />
           {isInstitution && (
             <NavGroup label={`Panel ${roleLabel}`} items={institutionItems} isActive={isActive} badges={{ unseenIdeas, unseenProblems }} />
           )}

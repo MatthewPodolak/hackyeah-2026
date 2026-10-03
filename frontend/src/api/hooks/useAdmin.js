@@ -106,15 +106,16 @@ export function useRemoveResource() {
   });
 }
 
-export function useStats() {
+export function useStats(gminaId) {
   return useQuery({
-    queryKey: ["admin", "stats"],
-    queryFn: ({ signal }) => AdminService.stats({ ct: signal }),
+    queryKey: ["admin", "stats", gminaId ?? "region"],
+    queryFn: ({ signal }) => AdminService.stats(gminaId, { ct: signal }),
+    placeholderData: (previous) => previous,
   });
 }
 
 export function useInsights() {
-  return useMutation({ mutationFn: () => AdminService.insights() });
+  return useMutation({ mutationFn: (gminaId) => AdminService.insights(gminaId) });
 }
 
 export function useRegions() {

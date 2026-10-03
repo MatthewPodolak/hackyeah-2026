@@ -151,7 +151,7 @@ function ParticipationsList() {
 
 export default function TestParticipationsAdmin() {
   return (
-    <RoleGuard roles={[ROLES.JST, ROLES.ROPS]}>
+    <RoleGuard roles={[ROLES.ROPS]} description="Zgłoszenia do testów rozpatrują pracownicy ROPS.">
       <ParticipationsList />
     </RoleGuard>
   );

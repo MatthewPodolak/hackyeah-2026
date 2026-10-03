@@ -9,6 +9,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import LoadingStatus from "@/components/loading-status";
 import StatusPill from "@/components/status-pill";
 import RoleGuard from "@/views/reported/RoleGuard";
+import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { useMyParticipations } from "@/api/hooks/useTesting";
 import { PARTICIPATION_STATUS } from "@/lib/community";
 import { useInnovationName } from "@/api/hooks/useAdmin";
@@ -73,9 +74,22 @@ function MyTestsList() {
 }
 
 export default function MyTests() {
+  const { role } = useAuth();
   return (
     <RoleGuard description="Zaloguj się, aby zobaczyć swoje zgłoszenia do testów.">
-      <MyTestsList />
+      {role === ROLES.JST ? (
+        <div className="flex flex-1 items-center justify-center p-6">
+          <Empty className="max-w-md border border-dashed">
+            <EmptyHeader>
+              <EmptyMedia variant="icon"><HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} aria-hidden="true" /></EmptyMedia>
+              <EmptyTitle>Testy są dla mieszkańców i organizacji</EmptyTitle>
+              <EmptyDescription>Konta samorządów nie zgłaszają się do testów. Opinie testerów znajdziesz na stronach innowacji.</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </div>
+      ) : (
+        <MyTestsList />
+      )}
     </RoleGuard>
   );
 }

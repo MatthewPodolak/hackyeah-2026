@@ -11,6 +11,10 @@ import { BarList, ChartCard, ColumnChart, StatTile } from "@/components/charts";
 import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { useInsights, useStats } from "@/api/hooks/useAdmin";
+import { useGminyIndex, useRegions } from "@/api/hooks/useRegionsQuery";
+import { gminaName } from "@/lib/gminy";
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select";
+import { useState } from "react";
 import { useToast } from "@/helpers/ToastProvider";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
 import { PROBLEM_STATUS } from "@/lib/problems";
@@ -27,14 +31,14 @@ function toMonthRows(buckets) {
   });
 }
 
-function Insights() {
+function Insights({ gminaId }) {
   const insights = useInsights();
   const { showToast } = useToast();
   const data = insights.data;
 
   const run = async () => {
     try {
-      await insights.mutateAsync();
+      await insights.mutateAsync(gminaId);
     } catch (err) {
       showToast(err?.status === 429 ? "Za dużo zapytań do AI, spróbuj za chwilę" : err?.body?.message ?? null, "error");
     }
@@ -75,9 +79,9 @@ function Insights() {
   );
 }
 
-function Dashboard() {
-  const { isRops } = useAuth();
-  const { data, isPending } = useStats();
+function Dashboard({ gminaId, showUnseen }) {
+  const { data, isPending, isPlaceholderData } = useStats(gminaId);
+  const gminy = useGminyIndex();
 
   if (isPending || !data) {
     return <LoadingStatus label="Wczytywanie statystyk" className="grid gap-4 md:grid-cols-2"><Skeleton className="h-48 rounded-2xl" /><Skeleton className="h-48 rounded-2xl" /></LoadingStatus>;
@@ -95,29 +99,42 @@ function Dashboard() {
   const statuses = data.problemsByStatus.map((b) => ({ key: b.key, label: PROBLEM_STATUS[b.key]?.label ?? b.key, value: b.count }));
   const ideaStatuses = data.ideasByStatus.map((b) => ({ key: b.key, label: IDEA_STATUS[b.key]?.label ?? b.key, value: b.count }));
   const readiness = data.ideasByReadiness.map((b) => ({ key: b.key, label: READINESS[b.key]?.label ?? b.key, value: b.count }));
+  const byGmina = (data.problemsByGmina ?? []).map((b) => ({ key: b.key, label: gminaName(gminy.get(b.key)) ?? b.key, value: b.count }));
+  const tile = (key, label, hint) => t[key] !== undefined && <StatTile key={key} label={label} value={t[key]} hint={hint} />;
   const ideaWho = data.ideasByWho.map((b) => {
     const o = getTargetGroupOption(b.key);
     return { key: b.key, label: o.label, icon: o.icon, value: b.count };
   });
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={`flex flex-col gap-6 transition-opacity ${isPlaceholderData ? "opacity-60" : ""}`} aria-busy={isPlaceholderData}>
+      <p className="text-sm">
+        <span className="text-muted-foreground">Zakres danych: </span>
+        <strong>{data.scope ? `${data.scope.label}${data.scope.powiatLabel ? `, ${data.scope.powiatLabel}` : ""}` : "całe województwo małopolskie"}</strong>
+        {data.scope?.population != null && <span className="text-muted-foreground"> · {new Intl.NumberFormat("pl-PL").format(data.scope.population)} mieszkańców (GUS)</span>}
+      </p>
       <section aria-label="Najważniejsze liczby" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatTile label="Zgłoszone problemy" value={t.problems} hint={`${t.problemsOpen} w toku`} />
-        <StatTile label="Nowe zgłoszenia" value={t.problemsUnseen} hint="jeszcze nieotwarte" />
-        <StatTile label="Pomysły na innowacje" value={t.ideas} hint={`${t.ideasUnseen} nowych`} />
-        <StatTile label="Zgłoszenia do testów" value={t.testParticipations} hint={`${t.testParticipationsPending} oczekuje`} />
-        <StatTile label="Otwarte rozmowy" value={t.conversationsOpen} />
-        <StatTile label="Ogłoszenia o partnerstwo" value={t.partnerships} />
-        <StatTile label="Opinie testerów" value={t.reviews} />
-        {isRops && <StatTile label="Konta czekające na akceptację" value={t.pendingAccounts} />}
+        {tile("problems", "Zgłoszone problemy", `${t.problemsOpen} w toku`)}
+        {showUnseen && tile("problemsUnseen", "Nowe zgłoszenia", "jeszcze nieotwarte")}
+        {tile("ideas", "Pomysły na innowacje", showUnseen ? `${t.ideasUnseen} nowych` : undefined)}
+        {tile("testParticipations", "Zgłoszenia do testów", `${t.testParticipationsPending} oczekuje`)}
+        {tile("conversationsOpen", "Otwarte rozmowy")}
+        {tile("partnerships", "Ogłoszenia o partnerstwo")}
+        {tile("reviews", "Opinie testerów")}
+        {tile("pendingAccounts", "Konta czekające na akceptację")}
       </section>
 
-      <Insights />
+      <Insights key={gminaId ?? "region"} gminaId={gminaId} />
 
       <ChartCard title="Zgłoszenia w czasie" description="Liczba zgłoszonych problemów w ostatnich 12 miesiącach">
         <ColumnChart rows={toMonthRows(data.problemsByMonth)} caption="Zgłoszenia w ostatnich 12 miesiącach" />
       </ChartCard>
+
+      {byGmina.length > 0 && (
+        <ChartCard title="Gminy z największą liczbą zgłoszeń" description="10 gmin, z których mieszkańcy zgłosili najwięcej problemów">
+          <BarList rows={byGmina} caption="Zgłoszenia według gmin" labelHeader="Gmina" />
+        </ChartCard>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <ChartCard title="Problemy według kategorii" description="Jakich obszarów dotyczą zgłoszenia">
@@ -140,6 +157,7 @@ function Dashboard() {
         </ChartCard>
       </div>
 
+      {!data.scope && (
       <ChartCard title="Najczęściej testowane innowacje" description="Zgłoszenia do testów i opinie testerów">
         {data.mostWantedInnovations.length ? (
           <table className="w-full text-left text-sm">
@@ -167,6 +185,49 @@ function Dashboard() {
           <p className="text-sm text-muted-foreground">Nikt jeszcze nie zgłosił się do testów.</p>
         )}
       </ChartCard>
+      )}
+    </div>
+  );
+}
+
+function ScopeFilter({ value, onChange }) {
+  const regions = useRegions();
+  return (
+    <div className="mb-6 flex flex-wrap items-end gap-3">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="trends-gmina" className="text-sm font-medium">Zakres</label>
+        <NativeSelect id="trends-gmina" className="sm:w-96" value={value ?? ""} onChange={(e) => onChange(e.target.value || null)}>
+          <NativeSelectOption value="">Całe województwo</NativeSelectOption>
+          {(regions.data?.powiaty ?? []).map((powiat) => (
+            <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
+              {powiat.gminy.map((g) => <NativeSelectOption key={g.id} value={g.id}>{g.label}</NativeSelectOption>)}
+            </NativeSelectOptGroup>
+          ))}
+        </NativeSelect>
+      </div>
+    </div>
+  );
+}
+
+function TrendsPanel() {
+  const { isRops, user } = useAuth();
+  const gminy = useGminyIndex();
+  const [gminaId, setGminaId] = useState(null);
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-14 pb-10 md:px-8">
+        <header className="mb-6">
+          <h1 className="font-heading text-2xl font-semibold">Trendy i potrzeby</h1>
+          <p className="text-muted-foreground">
+            {isRops
+              ? "Zagregowane dane o potrzebach mieszkańców Małopolski. Wybierz gminę, aby zobaczyć jej dane."
+              : `Zagregowane dane o potrzebach mieszkańców gminy: ${gminaName(gminy.get(user?.gminaId)) ?? "…"}`}
+          </p>
+        </header>
+        {isRops && <ScopeFilter value={gminaId} onChange={setGminaId} />}
+        <Dashboard gminaId={isRops ? gminaId : null} showUnseen={isRops} />
+      </div>
     </div>
   );
 }
@@ -174,15 +235,7 @@ function Dashboard() {
 export default function Trends() {
   return (
     <RoleGuard roles={[ROLES.JST, ROLES.ROPS]}>
-      <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-6xl px-4 pt-14 pb-10 md:px-8">
-          <header className="mb-6">
-            <h1 className="font-heading text-2xl font-semibold">Trendy i potrzeby</h1>
-            <p className="text-muted-foreground">Zagregowane dane o potrzebach mieszkańców Małopolski z platformy HUBMI</p>
-          </header>
-          <Dashboard />
-        </div>
-      </div>
+      <TrendsPanel />
     </RoleGuard>
   );
 }
