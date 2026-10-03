@@ -18,12 +18,24 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { useToast } from "@/helpers/ToastProvider"
+import { ROLES, ROLE_LABELS, useAuth } from "@/api/context/AuthContext"
+import {
+  EMAIL_TAKEN_MSG,
+  INVALID_CREDENTIALS_MSG,
+  LOGGED_IN_MSG,
+  REGISTERED_MSG,
+} from "@/helpers/Errors"
 
 const USER_TYPES = [
-  { value: "obywatel", label: "Obywatel" },
-  { value: "gpo", label: "GPO" },
-  { value: "urzad", label: "Urząd" },
+  { value: ROLES.CITIZEN, label: ROLE_LABELS.CITIZEN, short: "O", hint: "Mieszkaniec" },
+  { value: ROLES.JST, label: ROLE_LABELS.JST, short: "J", hint: "Samorząd" },
+  { value: ROLES.ROPS, label: ROLE_LABELS.ROPS, short: "R", hint: "Pomoc społeczna" },
 ]
+
+const EMPTY_LOGIN = {
+  email: "",
+  password: "",
+}
 
 const EMPTY_REGISTER = {
   name: "",
@@ -34,18 +46,43 @@ const EMPTY_REGISTER = {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+function errorMessage(error) {
+  if (error?.status === 401) return INVALID_CREDENTIALS_MSG
+  if (error?.status === 409) return EMAIL_TAKEN_MSG
+  return null
+}
+
 export function LoginForm({
   className,
+  initialMode = "login",
+  onSuccess,
   ...props
 }) {
   const { showToast } = useToast();
-  const [isLogin, setIsLogin] = useState(true);
-  const [selectedUserType, setSelectedUserType] = useState("obywatel");
+  const { login, register } = useAuth();
+  const [isLogin, setIsLogin] = useState(initialMode !== "register");
+  const [selectedUserType, setSelectedUserType] = useState(ROLES.CITIZEN);
+  const [loginData, setLoginData] = useState(EMPTY_LOGIN);
   const [registerData, setRegisterData] = useState(EMPTY_REGISTER);
   const [loading, setLoading] = useState(false);
 
+  const updateLogin = (field) => (e) =>
+    setLoginData((prev) => ({ ...prev, [field]: e.target.value }));
+
   const updateRegister = (field) => (e) =>
     setRegisterData((prev) => ({ ...prev, [field]: e.target.value }));
+
+  const validateLogin = () => {
+    const { email, password } = loginData;
+
+    if (!email.trim() || !password) {
+      return "Proszę wypełnij wszystkie pola";
+    }
+    if (!EMAIL_REGEX.test(email.trim())) {
+      return "Niepoprawny adres email";
+    }
+    return null;
+  };
 
   const validateRegister = () => {
     const { name, email, password, confirmPassword } = registerData;
@@ -68,7 +105,30 @@ export function LoginForm({
     return null;
   };
 
-  const register = async (e) => {
+  const submitLogin = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+
+    const error = validateLogin();
+    if (error) {
+      showToast(error, "error");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await login({ email: loginData.email.trim(), password: loginData.password });
+      showToast(LOGGED_IN_MSG, "success");
+      setLoginData(EMPTY_LOGIN);
+      onSuccess?.();
+    } catch (err) {
+      showToast(errorMessage(err), "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submitRegister = async (e) => {
     e.preventDefault();
     if (loading) return;
 
@@ -79,13 +139,22 @@ export function LoginForm({
     }
 
     setLoading(true);
-
-
+    try {
+      await register({
+        name: registerData.name.trim(),
+        email: registerData.email.trim(),
+        password: registerData.password,
+        role: selectedUserType,
+      });
+      showToast(REGISTERED_MSG, "success");
+      setRegisterData(EMPTY_REGISTER);
+      onSuccess?.();
+    } catch (err) {
+      showToast(errorMessage(err), "error");
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const loginInit = () => {
-    
-  }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -93,39 +162,41 @@ export function LoginForm({
         {isLogin ? (
           <>
             <CardHeader>
-              <CardTitle>Login to your account</CardTitle>
+              <CardTitle>Zaloguj się</CardTitle>
               <CardDescription>
-                Enter your email below to login to your account
+                Podaj email i hasło, aby zalogować się do konta
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form>
+              <form onSubmit={submitLogin} noValidate>
                 <FieldGroup>
                   <Field>
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
                       id="email"
                       type="email"
+                      autoComplete="email"
                       placeholder="m@example.com"
-                      required
+                      value={loginData.email}
+                      onChange={updateLogin("email")}
                     />
                   </Field>
                   <Field>
-                    <div className="flex items-center">
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
-                      <a
-                        href="#"
-                        className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                      >
-                        Forgot your password?
-                      </a>
-                    </div>
-                    <Input id="password" type="password" required />
+                    <FieldLabel htmlFor="password">Hasło</FieldLabel>
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete="current-password"
+                      value={loginData.password}
+                      onChange={updateLogin("password")}
+                    />
                   </Field>
                   <Field>
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" disabled={loading}>
+                      {loading ? "Logowanie..." : "Zaloguj"}
+                    </Button>
                     <FieldDescription className="text-center">
-                      Don&apos;t have an account? <a className="cursor-pointer" onClick={() => setIsLogin(false)}>Sign up</a>
+                      Nie masz konta? <a className="cursor-pointer" onClick={() => setIsLogin(false)}>Zarejestruj się</a>
                     </FieldDescription>
                   </Field>
                 </FieldGroup>
@@ -135,9 +206,9 @@ export function LoginForm({
         ):(
           <>
             <CardHeader>
-              <CardTitle>Create an account</CardTitle>
+              <CardTitle>Utwórz konto</CardTitle>
               <CardDescription>
-                Enter your details below to create your account
+                Wybierz typ konta i uzupełnij dane
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -149,6 +220,7 @@ export function LoginForm({
                     <button
                       key={type.value}
                       type="button"
+                      aria-pressed={selected}
                       onClick={() => setSelectedUserType(type.value)}
                       className={cn(
                         "flex flex-col items-center gap-2 cursor-pointer rounded-lg border-2 px-4 py-3 min-w-24 transition-colors",
@@ -165,22 +237,28 @@ export function LoginForm({
                             : "border-neutral-300 dark:border-neutral-700"
                         )}
                       >
-                        {type.label[0]}
+                        {type.short}
                       </div>
-                      <p className="text-sm font-medium">{type.label}</p>
+                      <div className="flex flex-col items-center">
+                        <p className="text-sm font-medium">{type.label}</p>
+                        <p className="text-xs text-muted-foreground">{type.hint}</p>
+                      </div>
                     </button>
                   )
                 })}
               </div>
 
-              <form onSubmit={register} noValidate>
+              <form onSubmit={submitRegister} noValidate>
                 <FieldGroup>
                   <Field>
-                    <FieldLabel htmlFor="name">Name</FieldLabel>
+                    <FieldLabel htmlFor="name">
+                      {selectedUserType === ROLES.CITIZEN ? "Imię i nazwisko" : "Nazwa instytucji"}
+                    </FieldLabel>
                     <Input
                       id="name"
                       type="text"
-                      placeholder="Jan Kowalski"
+                      autoComplete={selectedUserType === ROLES.CITIZEN ? "name" : "organization"}
+                      placeholder={selectedUserType === ROLES.CITIZEN ? "Jan Kowalski" : "Urząd Miasta Krakowa"}
                       value={registerData.name}
                       onChange={updateRegister("name")}
                     />
@@ -190,38 +268,41 @@ export function LoginForm({
                     <Input
                       id="register-email"
                       type="email"
+                      autoComplete="email"
                       placeholder="m@example.com"
                       value={registerData.email}
                       onChange={updateRegister("email")}
                     />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="register-password">Password</FieldLabel>
+                    <FieldLabel htmlFor="register-password">Hasło</FieldLabel>
                     <Input
                       id="register-password"
                       type="password"
+                      autoComplete="new-password"
                       value={registerData.password}
                       onChange={updateRegister("password")}
                     />
-                    <FieldDescription>Must be at least 8 characters long.</FieldDescription>
+                    <FieldDescription>Co najmniej 8 znaków.</FieldDescription>
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="confirm-password">Confirm password</FieldLabel>
+                    <FieldLabel htmlFor="confirm-password">Powtórz hasło</FieldLabel>
                     <Input
                       id="confirm-password"
                       type="password"
+                      autoComplete="new-password"
                       value={registerData.confirmPassword}
                       onChange={updateRegister("confirmPassword")}
                     />
                   </Field>
                   <Field>
                     <Button type="submit" disabled={loading}>
-                      {loading ? "Tworzenie konta..." : "Create account"}
+                      {loading ? "Tworzenie konta..." : "Utwórz konto"}
                     </Button>
                     <FieldDescription className="text-center">
-                      Already have an account?{" "}
+                      Masz już konto?{" "}
                       <a className="cursor-pointer" onClick={() => setIsLogin(true)}>
-                        Login
+                        Zaloguj się
                       </a>
                     </FieldDescription>
                   </Field>
