@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
 import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES } from "@/api/context/AuthContext";
+import { Badge } from "@/components/ui/badge";
+import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 
@@ -27,7 +29,7 @@ function ProblemsList() {
 
   const words = normalize(query).split(/\s+/).filter(Boolean);
   const visible = sorted.filter((problem) => {
-    const text = normalize([problem.title, problem.description, problem.street].join(" "));
+    const text = normalize([problem.title, problem.description, problem.street, getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
     return words.every((word) => text.includes(word));
   });
 
@@ -72,6 +74,14 @@ function ProblemsList() {
                 </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                   <h2 className="font-semibold leading-snug break-words">{problem.title}</h2>
+                  <div className="flex flex-wrap gap-1.5">
+                    <Badge variant="secondary">
+                      <span aria-hidden="true">{getProblemCategoryOption(problem.category).icon}</span> {getProblemCategoryOption(problem.category).label}
+                    </Badge>
+                    <Badge variant="outline">
+                      <span aria-hidden="true">{getTargetGroupOption(problem.targetGroup).icon}</span> {getTargetGroupOption(problem.targetGroup).label}
+                    </Badge>
+                  </div>
                   {problem.description && (
                     <p className="line-clamp-3 text-sm text-muted-foreground whitespace-pre-line break-words">
                       {problem.description}
