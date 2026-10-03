@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.ProblemRequest;
+import com.example.backend.dto.ProblemResponse;
 import com.example.backend.dto.ProblemWithMatchesResponse;
 import com.example.backend.service.ProblemService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,10 @@ public class ProblemController {
     @GetMapping("/get-problems")
     public List<ProblemSummaryResponse> getProblems() {
         return problemService.getProblems();
+    }
+
+    @GetMapping("/{id}")
+    public ProblemResponse getProblem(@PathVariable Long id) {
+        return problemService.getProblem(id);
     }
 }
