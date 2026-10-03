@@ -1,0 +1,117 @@
+[
+  {
+    "id": "FAMILY_FOSTER_CARE",
+    "name": "Rodzina i piecza zastępcza",
+    "definition": "Wsparcie rodzin przeżywających trudności w opiece nad dziećmi i ich wychowaniu oraz piecza zastępcza, gdy rodzice biologiczni nie mogą zapewnić dziecku opieki.",
+    "keyChallenges": [
+      "Zwiększenie liczby pozytywnie zweryfikowanych kandydatów na rodziny zastępcze",
+      "Priorytet dla rodzinnej pieczy zastępczej",
+      "Lepsza współpraca między powiatami w systemie pieczy zastępczej",
+      "Nierozdzielanie rodzeństwa przy umieszczaniu w pieczy",
+      "Skracanie pobytu w pieczy i szybkie kierowanie dzieci do docelowej formy opieki",
+      "Spójne funkcjonowanie systemu adopcyjnego"
+    ],
+    "persona": "Ania (7 l., zespół Downa) i Staś (12 l., niedosłyszący) – rodzeństwo z dysfunkcyjnej rodziny, wielokrotnie zmieniające rodziny zastępcze; potrzebują stabilizacji, nierozdzielania i specjalistycznego wsparcia."
+  },
+  {
+    "id": "HOMELESSNESS",
+    "name": "Bezdomność",
+    "definition": "Najbardziej jaskrawa forma wykluczenia społecznego – brak schronienia, wynikający zwykle z wielu przyczyn naraz (bezrobocie, ubóstwo, uzależnienia, przemoc, zadłużenie, rozpad rodziny, zaburzenia psychiczne).",
+    "keyChallenges": [
+      "Rosnąca liczba młodych bezdomnych (0–25 lat)",
+      "„Niewidzialność” i „niepoliczalność” młodych bezdomnych",
+      "Odrębne traktowanie bezdomności nastolatków i młodych dorosłych",
+      "Brak oferty wsparcia dla młodych w noclegowniach i schroniskach",
+      "Luka w przekazywaniu pomocy po opuszczeniu placówek opiekuńczo-wychowawczych",
+      "„Bezrodzinowość” – brak więzi emocjonalnych i społecznych"
+    ],
+    "persona": "Kuba (22 l.) – były wychowanek placówki, objawy uzależnienia, nie utrzymał mieszkania wspieranego; szuka noclegu i kogoś, kto wesprze go „w drodze ku dorosłości”."
+  },
+  {
+    "id": "DISABILITY",
+    "name": "Niepełnosprawność",
+    "definition": "Trwałe naruszenie sprawności organizmu, istotnie obniżające zdolność do pracy i samodzielnego życia; trudności są wielowymiarowe – medyczne, ekonomiczne, prawne, komunikacyjne, społeczne, edukacyjne i technologiczne.",
+    "keyChallenges": [
+      "Zwiększenie dostępu do rynku pracy",
+      "Wykształcenie pozwalające na samodzielność i rozwój zawodowy",
+      "Budowanie samodzielnych relacji społecznych i towarzyskich",
+      "Wsparcie emocjonalne",
+      "Wsparcie techniczne, infrastrukturalne, dostępność",
+      "Samodzielne przemieszczanie się i korzystanie z usług bez asysty",
+      "Dostęp do opieki medycznej, fizjoterapii i pomocy w codziennych czynnościach",
+      "Rozwój zainteresowań",
+      "Mieszkania dostosowane do potrzeb i ograniczeń funkcjonalnych"
+    ],
+    "persona": "Krystian (38 l.) – porażenie czterokończynowe, nie mówi, pracuje zdalnie obsługując komputer wzrokiem; mieszka sam w małej miejscowości, doskwiera mu samotność."
+  },
+  {
+    "id": "POVERTY",
+    "name": "Ubóstwo",
+    "definition": "Niewystarczające środki na zaspokojenie podstawowych potrzeb; najczęściej dotyka beneficjentów świadczeń, rolników i mieszkańców wsi poza aglomeracjami, a także tzw. pracujących biednych.",
+    "keyChallenges": [
+      "Ubóstwo dzieci – dobra wczesna opieka i edukacja (żłobki, przedszkola)",
+      "Ubóstwo seniorów",
+      "Ubóstwo osób z niepełnosprawnościami",
+      "Ubóstwo osób pracujących (np. rolników na małych areałach)",
+      "Ubóstwo osób bezrobotnych i bezdomnych – zatrudnienie socjalne, spółdzielczość socjalna",
+      "Ubóstwo uchodźców z Ukrainy",
+      "Ubóstwo energetyczne",
+      "Głód i niedożywienie"
+    ],
+    "persona": "Tomek (60 l.) – renta rolnicza, samotny, poczucie beznadziei, zagrożenie alkoholizmem; chce poznać ludzi, znaleźć pracę dorywczą i ogrzać dom na zimę."
+  },
+  {
+    "id": "MIGRANT_INTEGRATION",
+    "name": "Integracja cudzoziemców",
+    "definition": "Polityki włączające, które dają wszystkim mieszkańcom – także niemówiącym po polsku – równe szanse w życiu ekonomicznym, społecznym, kulturowym i w dostępie do usług publicznych.",
+    "keyChallenges": [
+      "Równy dostęp migrantów do usług społecznych",
+      "Zindywidualizowane usługi publiczne (tłumacz, asysta kulturowa, programy integracji)",
+      "Włączenie kulturowe, w tym dzieci i młodzieży szkolnej",
+      "Rynek pracy otwarty na cudzoziemców (język branżowy, uznawanie kwalifikacji)",
+      "Integracja dzieci migrantów w systemie edukacji",
+      "Postawy wolne od stereotypów wobec cudzoziemców",
+      "Zdrowie psychiczne cudzoziemców"
+    ],
+    "persona": "Swietłana (37 l.) z Ukrainy – samotnie z dwójką dzieci, nauczycielka szukająca pracy poza zawodem; problem z wynajmem mieszkania i adaptacją dzieci, które nie mówią po polsku."
+  },
+  {
+    "id": "HEALTH",
+    "name": "Zdrowie",
+    "definition": "Edukacja zdrowotna, dostęp do opieki medycznej, prewencja chorób i zdrowe środowisko; główne wyzwania to choroby serca, udary, nowotwory, choroby otępienne i przewlekłe oraz samotność nasilona przez pandemię.",
+    "keyChallenges": [
+      "Edukacja w zakresie zdrowego stylu życia, diety i aktywności fizycznej",
+      "Równy dostęp do wysokiej jakości opieki zdrowotnej",
+      "Dostosowanie opieki zdrowotnej do rosnącej liczby osób starszych (opieka długoterminowa)",
+      "Promocja zdrowia wśród dzieci i młodzieży",
+      "Świadomość zdrowia psychicznego i przeciwdziałanie stygmatyzacji"
+    ],
+    "persona": "Stanisław (56 l.) – pracuje i opiekuje się chorą matką, zaniedbuje własne zdrowie (otyłość, choroba serca), wycofany społecznie."
+  },
+  {
+    "id": "MENTAL_HEALTH",
+    "name": "Zdrowie psychiczne",
+    "definition": "Równowaga emocjonalna, psychiczna i społeczna – zdolność radzenia sobie ze stresem, utrzymywania relacji i podejmowania decyzji; rośnie liczba problemów u dzieci i młodzieży oraz dorosłych po pandemii.",
+    "keyChallenges": [
+      "Edukacja prozdrowotna w zakresie zdrowia psychicznego (dzieci, młodzież, seniorzy)",
+      "Kompetencje rodziców w rozpoznawaniu sygnałów problemów psychicznych u dzieci",
+      "Przejście z opieki instytucjonalnej na środowiskową",
+      "Ograniczanie stygmatyzacji osób z problemami psychicznymi"
+    ],
+    "persona": "Mateusz (17 l.) – izolacja, nadmiar czasu w sieci, stany depresyjne; Karina (41 l.) – choroba dwubiegunowa, wraca na rynek pracy i boi się odrzucenia."
+  },
+  {
+    "id": "SENIORS",
+    "name": "Seniorzy",
+    "definition": "Dostosowanie do starzejącego się społeczeństwa – opieka zdrowotna i opiekuńcza oraz godna, bezpieczna i jak najbardziej niezależna starość, wolna od izolacji i dyskryminacji.",
+    "keyChallenges": [
+      "Dostosowanie instytucji i usług zdrowotnych do starzejącego się społeczeństwa, także z użyciem nowych technologii",
+      "Projektowanie uniwersalne i mieszkalnictwo senioralne",
+      "Odpowiedzialne korzystanie z leków i suplementów (wielolekowość)",
+      "Aktywizacja i integracja seniorów",
+      "Rozwój kompetencji cyfrowych seniorów",
+      "Dostępność usług opiekuńczych w gminach, zwłaszcza dla osób samotnych"
+    ],
+    "persona": "Janina (73 l.) – mieszka sama w małym mieście, niedawno owdowiała, rzadko wychodzi z domu, przyjmuje wiele leków i suplementów."
+  }
+]

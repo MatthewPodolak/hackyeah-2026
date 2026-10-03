@@ -3,6 +3,9 @@ package com.example.backend.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+import java.time.LocalDate;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,4 +30,8 @@ public class Problem {
 
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
+
+    private Instant localDate;
+
+    private String street;
 }
