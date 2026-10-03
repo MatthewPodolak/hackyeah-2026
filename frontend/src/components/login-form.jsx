@@ -17,6 +17,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
 import { useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Tick02Icon } from "@hugeicons/core-free-icons"
@@ -202,9 +203,8 @@ export function LoginForm({
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="login-password">Hasło</FieldLabel>
-                    <Input
+                    <PasswordInput
                       {...loginErrors.fieldProps("password")}
-                      type="password"
                       autoComplete="current-password"
                       required
                       value={loginData.password}
@@ -314,9 +314,8 @@ export function LoginForm({
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="register-password">Hasło</FieldLabel>
-                    <Input
+                    <PasswordInput
                       {...registerErrors.fieldProps("password", "register-password-hint")}
-                      type="password"
                       required
                       autoComplete="new-password"
                       value={registerData.password}
@@ -327,9 +326,8 @@ export function LoginForm({
                   </Field>
                   <Field>
                     <FieldLabel htmlFor="register-confirmPassword">Powtórz hasło</FieldLabel>
-                    <Input
+                    <PasswordInput
                       {...registerErrors.fieldProps("confirmPassword")}
-                      type="password"
                       required
                       autoComplete="new-password"
                       value={registerData.confirmPassword}
