@@ -17,12 +17,14 @@ import LoadingStatus from "@/components/loading-status";
 import Modal from "@/components/modal";
 import StatusPill from "@/components/status-pill";
 import RoleGuard from "@/views/reported/RoleGuard";
-import { ROLES } from "@/api/context/AuthContext";
+import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { useAdminProblem, useAdminProblems, useReviewProblem } from "@/api/hooks/useAdmin";
-import { useProblem } from "@/api/hooks/useProblemsQuery";
+import { useProblem, useReportedProblems } from "@/api/hooks/useProblemsQuery";
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery";
 import { useToast } from "@/helpers/ToastProvider";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
 import { PROBLEM_STATUS, problemStatus } from "@/lib/problems";
+import { gminaName, problemPlace } from "@/lib/gminy";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const STATUSES = Object.keys(PROBLEM_STATUS);
@@ -104,10 +106,12 @@ function ReviewForm({ item, onDone }) {
   );
 }
 
-function ProblemDialog({ id, onClose }) {
-  const details = useAdminProblem(id);
+// readOnly (JST): public details only, replying and statuses stay with ROPS
+function ProblemDialog({ id, readOnly, onClose }) {
+  const details = useAdminProblem(readOnly ? null : id);
   const full = useProblem(id);
-  const item = details.data;
+  const gminy = useGminyIndex();
+  const item = readOnly ? (full.data ? { problem: full.data } : null) : details.data;
   const problem = item?.problem;
 
   return (
@@ -135,7 +139,7 @@ function ProblemDialog({ id, onClose }) {
               <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                 <StatusPill meta={problemStatus(problem.status)} />
                 {problem.localDate && <span>Zgłoszono <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time></span>}
-                <span>{item.authorName ? `przez ${item.authorName}` : "anonimowo"}</span>
+                {!readOnly && <span>{item.authorName ? `przez ${item.authorName}` : "anonimowo"}</span>}
               </div>
               <Badges problem={problem} />
               {full.data?.imageUrl && (
@@ -143,13 +147,11 @@ function ProblemDialog({ id, onClose }) {
                 <img src={full.data.imageUrl} alt={`Zdjęcie dołączone do zgłoszenia: ${problem.title}`} className="max-h-72 w-full rounded-xl border object-cover" />
               )}
               {problem.description && <p className="text-sm whitespace-pre-line break-words">{problem.description}</p>}
-              {problem.street && (
-                <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                  <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
-                  <span className="sr-only">Miejsce: </span>{problem.street}
-                </p>
-              )}
-              <ReviewForm key={`${problem.id}-${problem.status}`} item={item} onDone={onClose} />
+              <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
+                <span className="sr-only">Miejsce: </span>{problemPlace(problem, gminy)}
+              </p>
+              {!readOnly && <ReviewForm key={`${problem.id}-${problem.status}`} item={item} onDone={onClose} />}
             </>
           )}
         </CardContent>
@@ -159,7 +161,18 @@ function ProblemDialog({ id, onClose }) {
 }
 
 function ProblemsList() {
-  const { data, isPending } = useAdminProblems();
+  const { user, isJst } = useAuth();
+  const admin = useAdminProblems({ enabled: !isJst });
+  const mine = useReportedProblems(isJst ? user.id : null);
+  const gminy = useGminyIndex();
+  const jstItems = useMemo(
+    () => mine.data
+      ?.map((problem) => ({ problem, adminSeen: true }))
+      .sort((a, b) => (b.problem.localDate ?? "").localeCompare(a.problem.localDate ?? "")),
+    [mine.data]
+  );
+  const data = isJst ? jstItems : admin.data;
+  const isPending = isJst ? mine.isPending : admin.isPending;
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState(null);
   const [openId, setOpenId] = useState(null);
@@ -175,7 +188,7 @@ function ProblemsList() {
   const visible = all
     .filter((item) => !status || item.problem.status === status)
     .filter(({ problem }) => {
-      const text = normalize([problem.title, problem.description, problem.street, getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
+      const text = normalize([problem.title, problem.description, problemPlace(problem, gminy), getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
       return words.every((word) => text.includes(word));
     });
   const unseen = all.filter((item) => !item.adminSeen).length;
@@ -186,7 +199,11 @@ function ProblemsList() {
         <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 className="font-heading text-2xl font-semibold">Zgłoszone problemy</h1>
-            <p className="text-muted-foreground">Problemy zgłoszone przez mieszkańców. Odpowiedź trafia do zgłaszającego.</p>
+            <p className="text-muted-foreground">
+              {isJst
+                ? `Zgłoszenia mieszkańców z gminy: ${gminaName(gminy.get(user.gminaId)) ?? "…"}`
+                : "Problemy zgłoszone przez mieszkańców. Odpowiedź trafia do zgłaszającego."}
+            </p>
           </div>
           {unseen > 0 && <p className="text-sm font-medium">Nowe zgłoszenia: {unseen}</p>}
         </header>
@@ -241,12 +258,10 @@ function ProblemsList() {
                     <Badges problem={problem} />
                     {problem.description && <p className="line-clamp-2 text-sm text-muted-foreground break-words">{problem.description}</p>}
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                      {problem.street && (
-                        <span className="flex items-center gap-1.5">
-                          <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
-                          <span className="sr-only">Miejsce: </span>{problem.street}
-                        </span>
-                      )}
+                      <span className="flex items-center gap-1.5">
+                        <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
+                        <span className="sr-only">Miejsce: </span>{problemPlace(problem, gminy)}
+                      </span>
                       {problem.localDate && (
                         <span className="flex items-center gap-1.5 tabular-nums">
                           <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
@@ -271,12 +286,16 @@ function ProblemsList() {
             <EmptyHeader>
               <EmptyMedia variant="icon"><HugeiconsIcon icon={InboxIcon} strokeWidth={2} aria-hidden="true" /></EmptyMedia>
               <EmptyTitle>Brak problemów</EmptyTitle>
-              <EmptyDescription>{all.length ? "Żaden problem nie pasuje do filtrów." : "Nikt jeszcze nie zgłosił problemu."}</EmptyDescription>
+              <EmptyDescription>
+                {all.length
+                  ? "Żaden problem nie pasuje do filtrów."
+                  : isJst ? "Nikt jeszcze nie zgłosił problemu w Twojej gminie." : "Nikt jeszcze nie zgłosił problemu."}
+              </EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}
       </div>
-      {openId != null && <ProblemDialog id={openId} onClose={() => setOpenId(null)} />}
+      {openId != null && <ProblemDialog id={openId} readOnly={isJst} onClose={() => setOpenId(null)} />}
     </div>
   );
 }

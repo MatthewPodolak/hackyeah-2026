@@ -10,6 +10,9 @@ import ProblemDetails from "@/components/problem-details";
 import ProblemSolutions from "@/components/problem-solutions";
 import { useProposal } from "@/api/context/ProposalContext";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
+import { useGminyIndex, useGminyShapes } from "@/api/hooks/useRegionsQuery";
+import { useAuth } from "@/api/context/AuthContext";
+import { gminaName } from "@/lib/gminy";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
 
@@ -36,18 +39,29 @@ export default function Home() {
   const [submitResult, setSubmitResult] = useState(null);
   const { openProposal } = useProposal();
 
+  // a JST account sees only its own gmina: its border and its reports
+  const { user, isJst } = useAuth();
+  const myGminaId = isJst ? user.gminaId : null;
+  const shapes = useGminyShapes({ enabled: !!myGminaId });
+  const gminy = useGminyIndex();
+  const myArea = useMemo(
+    () => (myGminaId ? shapes.data?.find((shape) => shape.properties.id === myGminaId) ?? null : null),
+    [shapes.data, myGminaId]
+  );
+
   useEffect(() => {
     if (isError) showToast(null, "error");
   }, [isError, showToast]);
 
   const visibleProblems = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean);
-    if (!words.length) return problems ?? NO_PROBLEMS;
-    return (problems ?? NO_PROBLEMS).filter((problem) => {
+    const mine = myGminaId ? (problems ?? NO_PROBLEMS).filter((problem) => problem.gminaId === myGminaId) : problems ?? NO_PROBLEMS;
+    if (!words.length) return mine;
+    return mine.filter((problem) => {
       const text = normalize([problem.title, problem.description, problem.street].join(" "));
       return words.every((word) => text.includes(word));
     });
-  }, [problems, query]);
+  }, [problems, query, myGminaId]);
 
   return (
     <div className="flex flex-col flex-1 font-sans bg-background h-screen w-full relative">
@@ -74,12 +88,19 @@ export default function Home() {
 
       <div className="absolute inset-0 top-12">
         <MapView
+          area={myArea}
           problems={visibleProblems}
           selectedProblemId={selectedProblem?.id}
           onProblemClick={setSelectedProblem}
           onMapClick={() => setSelectedProblem(null)}
         />
       </div>
+
+      {myArea && (
+        <p className="absolute z-[1000] top-14 left-1/2 -translate-x-1/2 rounded-full border bg-background/95 px-3 py-1 text-xs font-medium shadow">
+          Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? "…"}
+        </p>
+      )}
 
       <button
         type="button"

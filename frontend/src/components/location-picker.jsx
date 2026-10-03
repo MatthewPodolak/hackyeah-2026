@@ -7,7 +7,7 @@ import { createAccessibleMap } from "@/lib/map";
 
 const LABEL = "Mapa wyboru lokalizacji. Kliknij miejsce, aby je zaznaczyć. Z klawiatury: strzałki przesuwają mapę, Enter zaznacza jej środek.";
 
-export default function LocationPicker({ value, onChange }) {
+export default function LocationPicker({ value, focus, onChange }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
@@ -59,6 +59,12 @@ export default function LocationPicker({ value, onChange }) {
       map.setView(markerRef.current.getLatLng(), 16);
     }
   }, [value]);
+
+  // show a gmina chosen from the list (no pin)
+  useEffect(() => {
+    if (!focus || !mapRef.current) return;
+    mapRef.current.setView([focus.lat, focus.lon], 11);
+  }, [focus]);
 
   return <div ref={containerRef} className="relative z-0 isolate w-full h-full" />;
 }

@@ -90,6 +90,6 @@ public class AuthService {
     }
 
     private static UserResponse toResponse(AppUser user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.effectiveStatus());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.effectiveStatus(), user.getGminaId());
     }
 }

@@ -39,6 +39,7 @@ export const API = {
   },
   config: {
     canvas: { method: "GET", url: "/api/v1/config/canvas" },
+    regions: { method: "GET", url: "/api/v1/config/regions" },
   },
   knowledge: {
     resources: { method: "GET", url: "/api/v1/knowledge/resources" },
@@ -94,6 +95,7 @@ export const API = {
     byToken: { method: "GET", url: (token) => `/api/v1/problems/by-token/${encodeURIComponent(token)}` },
     mine: { method: "GET", url: "/api/v1/me/problems" },
     get: { method: "GET", url: "/api/v1/problems/get-problems" },
+    reported: { method: "GET", url: "/api/v1/problems/reported" },
     getById: { method: "GET", url: (id) => `/api/v1/problems/${id}` }
   },
 };

@@ -32,6 +32,8 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    // JST only: the gmina this account works for (id from malopolska-units.json)
+    private String gminaId;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AccountStatus accountStatus;

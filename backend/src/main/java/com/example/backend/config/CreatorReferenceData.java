@@ -20,14 +20,15 @@ public class CreatorReferenceData {
     private final CanvasSpec canvas;
     private final FormCategories forms;
     private final RegionsData regions;
-    private final Set<String> gminaIds;
+    private final Map<String, String> powiatByGmina;
 
     public CreatorReferenceData(ObjectMapper mapper) throws IOException {
         canvas = read(mapper, "data/canvas.json", CanvasSpec.class);
         forms = read(mapper, "data/form-categories.json", FormCategories.class);
         regions = read(mapper, "data/malopolska-units.json", RegionsData.class);
-        gminaIds = regions.powiaty().stream().flatMap(p -> p.gminy().stream())
-                .map(RegionsData.Gmina::id).collect(Collectors.toSet());
+        powiatByGmina = regions.powiaty().stream()
+                .flatMap(p -> p.gminy().stream().map(g -> Map.entry(g.id(), p.id())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
     private static <T> T read(ObjectMapper m, String path, Class<T> type) throws IOException {
         try (InputStream in = new ClassPathResource(path).getInputStream()) { return m.readValue(in, type); }
@@ -36,7 +37,8 @@ public class CreatorReferenceData {
     public CanvasSpec canvas() { return canvas; }
     public FormCategories forms() { return forms; }
     public RegionsData regions() { return regions; }
-    public boolean gminaExists(String id) { return gminaIds.contains(id); }
+    public boolean gminaExists(String id) { return id != null && powiatByGmina.containsKey(id); }
+    public String powiatOf(String gminaId) { return powiatByGmina.get(gminaId); }
 
     public Optional<GminaWithPowiat> findGmina(String id) {
         if (id == null) return Optional.empty();

@@ -18,5 +18,7 @@ public record ProblemResponse(
         String street,
         ProblemCategory category,
         TargetGroup targetGroup,
+        String gminaId,
+        Boolean wholeGmina,
         ProblemStatus status
 ) {}

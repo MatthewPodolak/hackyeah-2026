@@ -24,7 +24,8 @@
           "label": "Bochnia – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 28339
+          "population": 28339,
+          "teryt": "1201011"
         },
         {
           "id": "bochnia-wies",
@@ -32,7 +33,8 @@
           "label": "Bochnia – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 20867
+          "population": 20867,
+          "teryt": "1201022"
         },
         {
           "id": "drwinia",
@@ -40,7 +42,8 @@
           "label": "Drwinia",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6354
+          "population": 6354,
+          "teryt": "1201032"
         },
         {
           "id": "lipnica-murowana",
@@ -48,7 +51,8 @@
           "label": "Lipnica Murowana",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5514
+          "population": 5514,
+          "teryt": "1201042"
         },
         {
           "id": "lapanow",
@@ -56,7 +60,8 @@
           "label": "Łapanów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8652
+          "population": 8652,
+          "teryt": "1201052"
         },
         {
           "id": "nowy-wisnicz",
@@ -64,7 +69,8 @@
           "label": "Nowy Wiśnicz",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 18.77,
-          "population": 14488
+          "population": 14488,
+          "teryt": "1201063"
         },
         {
           "id": "rzezawa",
@@ -72,7 +78,8 @@
           "label": "Rzezawa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11544
+          "population": 11544,
+          "teryt": "1201072"
         },
         {
           "id": "trzciana",
@@ -80,7 +87,8 @@
           "label": "Trzciana",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5702
+          "population": 5702,
+          "teryt": "1201082"
         },
         {
           "id": "zegocina",
@@ -88,9 +96,11 @@
           "label": "Żegocina",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5525
+          "population": 5525,
+          "teryt": "1201092"
         }
-      ]
+      ],
+      "teryt": "1201"
     },
     {
       "id": "brzeski",
@@ -105,7 +115,8 @@
           "label": "Borzęcin",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8088
+          "population": 8088,
+          "teryt": "1202012"
         },
         {
           "id": "brzesko",
@@ -113,7 +124,8 @@
           "label": "Brzesko",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 44.76,
-          "population": 35285
+          "population": 35285,
+          "teryt": "1202023"
         },
         {
           "id": "czchow",
@@ -121,7 +133,8 @@
           "label": "Czchów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 23.41,
-          "population": 9665
+          "population": 9665,
+          "teryt": "1202033"
         },
         {
           "id": "debno",
@@ -129,7 +142,8 @@
           "label": "Dębno",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 14482
+          "population": 14482,
+          "teryt": "1202042"
         },
         {
           "id": "gnojnik",
@@ -137,7 +151,8 @@
           "label": "Gnojnik",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8103
+          "population": 8103,
+          "teryt": "1202052"
         },
         {
           "id": "iwkowa",
@@ -145,7 +160,8 @@
           "label": "Iwkowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6649
+          "population": 6649,
+          "teryt": "1202062"
         },
         {
           "id": "szczurowa",
@@ -153,9 +169,11 @@
           "label": "Szczurowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9068
+          "population": 9068,
+          "teryt": "1202072"
         }
-      ]
+      ],
+      "teryt": "1202"
     },
     {
       "id": "chrzanowski",
@@ -170,7 +188,8 @@
           "label": "Alwernia",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 26.09,
-          "population": 12307
+          "population": 12307,
+          "teryt": "1203013"
         },
         {
           "id": "babice",
@@ -178,7 +197,8 @@
           "label": "Babice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8987
+          "population": 8987,
+          "teryt": "1203022"
         },
         {
           "id": "chrzanow",
@@ -186,7 +206,8 @@
           "label": "Chrzanów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 77.08,
-          "population": 43492
+          "population": 43492,
+          "teryt": "1203033"
         },
         {
           "id": "libiaz",
@@ -194,7 +215,8 @@
           "label": "Libiąż",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 75.51,
-          "population": 20908
+          "population": 20908,
+          "teryt": "1203043"
         },
         {
           "id": "trzebinia",
@@ -202,9 +224,11 @@
           "label": "Trzebinia",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 57.07,
-          "population": 32062
+          "population": 32062,
+          "teryt": "1203053"
         }
-      ]
+      ],
+      "teryt": "1203"
     },
     {
       "id": "dabrowski",
@@ -219,7 +243,8 @@
           "label": "Bolesław (pow. dąbrowski)",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 2628
+          "population": 2628,
+          "teryt": "1204012"
         },
         {
           "id": "dabrowa-tarnowska",
@@ -227,7 +252,8 @@
           "label": "Dąbrowa Tarnowska",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 54.59,
-          "population": 20869
+          "population": 20869,
+          "teryt": "1204023"
         },
         {
           "id": "greboszow",
@@ -235,7 +261,8 @@
           "label": "Gręboszów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3138
+          "population": 3138,
+          "teryt": "1204032"
         },
         {
           "id": "medrzechow",
@@ -243,7 +270,8 @@
           "label": "Mędrzechów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3249
+          "population": 3249,
+          "teryt": "1204042"
         },
         {
           "id": "olesno",
@@ -251,7 +279,8 @@
           "label": "Olesno",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7618
+          "population": 7618,
+          "teryt": "1204052"
         },
         {
           "id": "radgoszcz",
@@ -259,7 +288,8 @@
           "label": "Radgoszcz",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7388
+          "population": 7388,
+          "teryt": "1204062"
         },
         {
           "id": "szczucin",
@@ -267,9 +297,11 @@
           "label": "Szczucin",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 32.88,
-          "population": 12363
+          "population": 12363,
+          "teryt": "1204073"
         }
-      ]
+      ],
+      "teryt": "1204"
     },
     {
       "id": "gorlicki",
@@ -284,7 +316,8 @@
           "label": "Biecz",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 26.73,
-          "population": 15966
+          "population": 15966,
+          "teryt": "1205023"
         },
         {
           "id": "bobowa",
@@ -292,7 +325,8 @@
           "label": "Bobowa",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 31.97,
-          "population": 9594
+          "population": 9594,
+          "teryt": "1205033"
         },
         {
           "id": "gorlice-miasto",
@@ -300,7 +334,8 @@
           "label": "Gorlice – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 25166
+          "population": 25166,
+          "teryt": "1205011"
         },
         {
           "id": "gorlice-wies",
@@ -308,7 +343,8 @@
           "label": "Gorlice – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 16902
+          "population": 16902,
+          "teryt": "1205042"
         },
         {
           "id": "lipinki",
@@ -316,7 +352,8 @@
           "label": "Lipinki",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6654
+          "population": 6654,
+          "teryt": "1205052"
         },
         {
           "id": "luzna",
@@ -324,7 +361,8 @@
           "label": "Łużna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8252
+          "population": 8252,
+          "teryt": "1205062"
         },
         {
           "id": "moszczenica",
@@ -332,7 +370,8 @@
           "label": "Moszczenica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4921
+          "population": 4921,
+          "teryt": "1205072"
         },
         {
           "id": "ropa",
@@ -340,7 +379,8 @@
           "label": "Ropa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5505
+          "population": 5505,
+          "teryt": "1205082"
         },
         {
           "id": "sekowa",
@@ -348,7 +388,8 @@
           "label": "Sękowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4898
+          "population": 4898,
+          "teryt": "1205092"
         },
         {
           "id": "uscie-gorlickie",
@@ -356,9 +397,11 @@
           "label": "Uście Gorlickie",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6734
+          "population": 6734,
+          "teryt": "1205102"
         }
-      ]
+      ],
+      "teryt": "1205"
     },
     {
       "id": "krakowski",
@@ -373,7 +416,8 @@
           "label": "Czernichów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 15442
+          "population": 15442,
+          "teryt": "1206012"
         },
         {
           "id": "igolomia-wawrzenczyce",
@@ -381,7 +425,8 @@
           "label": "Igołomia-Wawrzeńczyce",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7852
+          "population": 7852,
+          "teryt": "1206022"
         },
         {
           "id": "iwanowice",
@@ -389,7 +434,8 @@
           "label": "Iwanowice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9841
+          "population": 9841,
+          "teryt": "1206032"
         },
         {
           "id": "jerzmanowice-przeginia",
@@ -397,7 +443,8 @@
           "label": "Jerzmanowice-Przeginia",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11144
+          "population": 11144,
+          "teryt": "1206042"
         },
         {
           "id": "kocmyrzow-luborzyca",
@@ -405,7 +452,8 @@
           "label": "Kocmyrzów-Luborzyca",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 18638
+          "population": 18638,
+          "teryt": "1206052"
         },
         {
           "id": "krzeszowice",
@@ -413,7 +461,8 @@
           "label": "Krzeszowice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 30.67,
-          "population": 31831
+          "population": 31831,
+          "teryt": "1206063"
         },
         {
           "id": "liszki",
@@ -421,7 +470,8 @@
           "label": "Liszki",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 18754
+          "population": 18754,
+          "teryt": "1206072"
         },
         {
           "id": "michalowice",
@@ -429,7 +479,8 @@
           "label": "Michałowice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 13549
+          "population": 13549,
+          "teryt": "1206082"
         },
         {
           "id": "mogilany",
@@ -437,7 +488,8 @@
           "label": "Mogilany",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 16533
+          "population": 16533,
+          "teryt": "1206092"
         },
         {
           "id": "skala",
@@ -445,7 +497,8 @@
           "label": "Skała",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 35.26,
-          "population": 10937
+          "population": 10937,
+          "teryt": "1206103"
         },
         {
           "id": "skawina",
@@ -453,7 +506,8 @@
           "label": "Skawina",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 54.25,
-          "population": 43999
+          "population": 43999,
+          "teryt": "1206113"
         },
         {
           "id": "slomniki",
@@ -461,7 +515,8 @@
           "label": "Słomniki",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 30.45,
-          "population": 13657
+          "population": 13657,
+          "teryt": "1206123"
         },
         {
           "id": "suloszowa",
@@ -469,7 +524,8 @@
           "label": "Sułoszowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5635
+          "population": 5635,
+          "teryt": "1206132"
         },
         {
           "id": "swiatniki-gorne",
@@ -477,7 +533,8 @@
           "label": "Świątniki Górne",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 21.3,
-          "population": 11208
+          "population": 11208,
+          "teryt": "1206143"
         },
         {
           "id": "wielka-wies",
@@ -485,7 +542,8 @@
           "label": "Wielka Wieś",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 17342
+          "population": 17342,
+          "teryt": "1206152"
         },
         {
           "id": "zabierzow",
@@ -493,7 +551,8 @@
           "label": "Zabierzów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 29837
+          "population": 29837,
+          "teryt": "1206162"
         },
         {
           "id": "zielonki",
@@ -501,9 +560,11 @@
           "label": "Zielonki",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 28079
+          "population": 28079,
+          "teryt": "1206172"
         }
-      ]
+      ],
+      "teryt": "1206"
     },
     {
       "id": "limanowski",
@@ -518,7 +579,8 @@
           "label": "Dobra",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10108
+          "population": 10108,
+          "teryt": "1207032"
         },
         {
           "id": "jodlownik",
@@ -526,7 +588,8 @@
           "label": "Jodłownik",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8770
+          "population": 8770,
+          "teryt": "1207042"
         },
         {
           "id": "kamienica",
@@ -534,7 +597,8 @@
           "label": "Kamienica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7802
+          "population": 7802,
+          "teryt": "1207052"
         },
         {
           "id": "laskowa",
@@ -542,7 +606,8 @@
           "label": "Laskowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8147
+          "population": 8147,
+          "teryt": "1207062"
         },
         {
           "id": "limanowa-miasto",
@@ -550,7 +615,8 @@
           "label": "Limanowa – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 14365
+          "population": 14365,
+          "teryt": "1207011"
         },
         {
           "id": "limanowa-wies",
@@ -558,7 +624,8 @@
           "label": "Limanowa – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 26127
+          "population": 26127,
+          "teryt": "1207072"
         },
         {
           "id": "lukowica",
@@ -566,7 +633,8 @@
           "label": "Łukowica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10194
+          "population": 10194,
+          "teryt": "1207082"
         },
         {
           "id": "mszana-dolna-miasto",
@@ -574,7 +642,8 @@
           "label": "Mszana Dolna – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 7807
+          "population": 7807,
+          "teryt": "1207021"
         },
         {
           "id": "mszana-dolna-wies",
@@ -582,7 +651,8 @@
           "label": "Mszana Dolna – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 17659
+          "population": 17659,
+          "teryt": "1207092"
         },
         {
           "id": "niedzwiedz",
@@ -590,7 +660,8 @@
           "label": "Niedźwiedź",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7326
+          "population": 7326,
+          "teryt": "1207102"
         },
         {
           "id": "slopnice",
@@ -598,7 +669,18 @@
           "label": "Słopnice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7032
+          "population": 7032,
+          "teryt": "1207112"
+        },
+        {
+          "id": "szczawa",
+          "name": "Szczawa",
+          "label": "Szczawa",
+          "type": "WIEJSKA",
+          "urbanizationPct": null,
+          "population": null,
+          "note": "Nowa gmina od 1.01.2025 r. (wydzielona z gminy Kamienica) – dane statystyczne za 2024 r. są wliczone w gminę Kamienica.",
+          "teryt": "1207132"
         },
         {
           "id": "tymbark",
@@ -606,9 +688,11 @@
           "label": "Tymbark",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6289
+          "population": 6289,
+          "teryt": "1207122"
         }
-      ]
+      ],
+      "teryt": "1207"
     },
     {
       "id": "m-krakow",
@@ -623,9 +707,11 @@
           "label": "Kraków",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 809168
+          "population": 809168,
+          "teryt": "1261011"
         }
-      ]
+      ],
+      "teryt": "1261"
     },
     {
       "id": "m-nowy-sacz",
@@ -640,9 +726,11 @@
           "label": "Nowy Sącz",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 79821
+          "population": 79821,
+          "teryt": "1262011"
         }
-      ]
+      ],
+      "teryt": "1262"
     },
     {
       "id": "m-tarnow",
@@ -657,9 +745,11 @@
           "label": "Tarnów",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 102123
+          "population": 102123,
+          "teryt": "1263011"
         }
-      ]
+      ],
+      "teryt": "1263"
     },
     {
       "id": "miechowski",
@@ -674,7 +764,8 @@
           "label": "Charsznica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7001
+          "population": 7001,
+          "teryt": "1208012"
         },
         {
           "id": "golcza",
@@ -682,7 +773,8 @@
           "label": "Gołcza",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5880
+          "population": 5880,
+          "teryt": "1208022"
         },
         {
           "id": "kozlow",
@@ -690,7 +782,8 @@
           "label": "Kozłów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4385
+          "population": 4385,
+          "teryt": "1208032"
         },
         {
           "id": "ksiaz-wielki",
@@ -698,7 +791,8 @@
           "label": "Książ Wielki",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 17.74,
-          "population": 4792
+          "population": 4792,
+          "teryt": "1208043"
         },
         {
           "id": "miechow",
@@ -706,7 +800,8 @@
           "label": "Miechów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 58.49,
-          "population": 18563
+          "population": 18563,
+          "teryt": "1208053"
         },
         {
           "id": "raclawice",
@@ -714,7 +809,8 @@
           "label": "Racławice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 2401
+          "population": 2401,
+          "teryt": "1208062"
         },
         {
           "id": "slaboszow",
@@ -722,9 +818,11 @@
           "label": "Słaboszów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3283
+          "population": 3283,
+          "teryt": "1208072"
         }
-      ]
+      ],
+      "teryt": "1208"
     },
     {
       "id": "myslenicki",
@@ -739,7 +837,8 @@
           "label": "Dobczyce",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 39.37,
-          "population": 15556
+          "population": 15556,
+          "teryt": "1209013"
         },
         {
           "id": "lubien",
@@ -747,7 +846,8 @@
           "label": "Lubień",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10108
+          "population": 10108,
+          "teryt": "1209022"
         },
         {
           "id": "myslenice",
@@ -755,7 +855,8 @@
           "label": "Myślenice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 38.82,
-          "population": 45557
+          "population": 45557,
+          "teryt": "1209033"
         },
         {
           "id": "pcim",
@@ -763,7 +864,8 @@
           "label": "Pcim",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11068
+          "population": 11068,
+          "teryt": "1209042"
         },
         {
           "id": "raciechowice",
@@ -771,7 +873,8 @@
           "label": "Raciechowice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6437
+          "population": 6437,
+          "teryt": "1209052"
         },
         {
           "id": "siepraw",
@@ -779,7 +882,8 @@
           "label": "Siepraw",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9714
+          "population": 9714,
+          "teryt": "1209062"
         },
         {
           "id": "sulkowice",
@@ -787,7 +891,8 @@
           "label": "Sułkowice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 42.61,
-          "population": 15221
+          "population": 15221,
+          "teryt": "1209073"
         },
         {
           "id": "tokarnia",
@@ -795,7 +900,8 @@
           "label": "Tokarnia",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8784
+          "population": 8784,
+          "teryt": "1209082"
         },
         {
           "id": "wisniowa",
@@ -803,9 +909,11 @@
           "label": "Wiśniowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7539
+          "population": 7539,
+          "teryt": "1209092"
         }
-      ]
+      ],
+      "teryt": "1209"
     },
     {
       "id": "nowosadecki",
@@ -820,7 +928,8 @@
           "label": "Podegrodzie",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 13640
+          "population": 13640,
+          "teryt": "1210142"
         },
         {
           "id": "rytro",
@@ -828,7 +937,8 @@
           "label": "Rytro",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3635
+          "population": 3635,
+          "teryt": "1210152"
         },
         {
           "id": "stary-sacz",
@@ -836,7 +946,8 @@
           "label": "Stary Sącz",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 36.67,
-          "population": 23466
+          "population": 23466,
+          "teryt": "1210163"
         },
         {
           "id": "chelmiec",
@@ -844,7 +955,8 @@
           "label": "Chełmiec",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 29880
+          "population": 29880,
+          "teryt": "1210022"
         },
         {
           "id": "grodek-nad-dunajcem",
@@ -852,7 +964,8 @@
           "label": "Gródek nad Dunajcem",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8858
+          "population": 8858,
+          "teryt": "1210032"
         },
         {
           "id": "grybow-miasto",
@@ -860,7 +973,8 @@
           "label": "Grybów – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 5918
+          "population": 5918,
+          "teryt": "1210011"
         },
         {
           "id": "grybow-wies",
@@ -868,7 +982,8 @@
           "label": "Grybów – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 25347
+          "population": 25347,
+          "teryt": "1210042"
         },
         {
           "id": "kamionka-wielka",
@@ -876,7 +991,8 @@
           "label": "Kamionka Wielka",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10489
+          "population": 10489,
+          "teryt": "1210052"
         },
         {
           "id": "korzenna",
@@ -884,7 +1000,8 @@
           "label": "Korzenna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 14434
+          "population": 14434,
+          "teryt": "1210062"
         },
         {
           "id": "krynica-zdroj",
@@ -892,7 +1009,8 @@
           "label": "Krynica-Zdrój",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 61.08,
-          "population": 15446
+          "population": 15446,
+          "teryt": "1210073"
         },
         {
           "id": "labowa",
@@ -900,7 +1018,8 @@
           "label": "Łabowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6059
+          "population": 6059,
+          "teryt": "1210082"
         },
         {
           "id": "lacko",
@@ -908,7 +1027,8 @@
           "label": "Łącko",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 16724
+          "population": 16724,
+          "teryt": "1210092"
         },
         {
           "id": "lososina-dolna",
@@ -916,7 +1036,8 @@
           "label": "Łososina Dolna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11187
+          "population": 11187,
+          "teryt": "1210102"
         },
         {
           "id": "muszyna",
@@ -924,7 +1045,8 @@
           "label": "Muszyna",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 39.95,
-          "population": 11100
+          "population": 11100,
+          "teryt": "1210113"
         },
         {
           "id": "nawojowa",
@@ -932,7 +1054,8 @@
           "label": "Nawojowa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8867
+          "population": 8867,
+          "teryt": "1210122"
         },
         {
           "id": "piwniczna-zdroj",
@@ -940,9 +1063,11 @@
           "label": "Piwniczna-Zdrój",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 54.16,
-          "population": 9826
+          "population": 9826,
+          "teryt": "1210133"
         }
-      ]
+      ],
+      "teryt": "1210"
     },
     {
       "id": "nowotarski",
@@ -957,7 +1082,8 @@
           "label": "Czarny Dunajec",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 16.51,
-          "population": 22119
+          "population": 22119,
+          "teryt": "1211033"
         },
         {
           "id": "czorsztyn",
@@ -965,7 +1091,8 @@
           "label": "Czorsztyn",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7590
+          "population": 7590,
+          "teryt": "1211042"
         },
         {
           "id": "jablonka",
@@ -973,7 +1100,8 @@
           "label": "Jabłonka",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 19213
+          "population": 19213,
+          "teryt": "1211052"
         },
         {
           "id": "kroscienko-nad-dunajcem",
@@ -981,7 +1109,8 @@
           "label": "Krościenko nad Dunajcem",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6602
+          "population": 6602,
+          "teryt": "1211062"
         },
         {
           "id": "lipnica-wielka",
@@ -989,7 +1118,8 @@
           "label": "Lipnica Wielka",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6061
+          "population": 6061,
+          "teryt": "1211072"
         },
         {
           "id": "lapsze-nizne",
@@ -997,7 +1127,8 @@
           "label": "Łapsze Niżne",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9265
+          "population": 9265,
+          "teryt": "1211082"
         },
         {
           "id": "nowy-targ-miasto",
@@ -1005,7 +1136,8 @@
           "label": "Nowy Targ – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 33040
+          "population": 33040,
+          "teryt": "1211011"
         },
         {
           "id": "nowy-targ-wies",
@@ -1013,7 +1145,8 @@
           "label": "Nowy Targ – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 24054
+          "population": 24054,
+          "teryt": "1211092"
         },
         {
           "id": "ochotnica-dolna",
@@ -1021,7 +1154,8 @@
           "label": "Ochotnica Dolna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8505
+          "population": 8505,
+          "teryt": "1211102"
         },
         {
           "id": "raba-wyzna",
@@ -1029,7 +1163,8 @@
           "label": "Raba Wyżna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 14438
+          "population": 14438,
+          "teryt": "1211112"
         },
         {
           "id": "rabka-zdroj",
@@ -1037,7 +1172,8 @@
           "label": "Rabka-Zdrój",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 73.76,
-          "population": 16452
+          "population": 16452,
+          "teryt": "1211123"
         },
         {
           "id": "spytkowice-nowotarski",
@@ -1045,7 +1181,8 @@
           "label": "Spytkowice (pow. nowotarski)",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4703
+          "population": 4703,
+          "teryt": "1211132"
         },
         {
           "id": "szaflary",
@@ -1053,7 +1190,8 @@
           "label": "Szaflary",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11310
+          "population": 11310,
+          "teryt": "1211142"
         },
         {
           "id": "szczawnica",
@@ -1061,9 +1199,11 @@
           "label": "Szczawnica",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 78.29,
-          "population": 6632
+          "population": 6632,
+          "teryt": "1211023"
         }
-      ]
+      ],
+      "teryt": "1211"
     },
     {
       "id": "olkuski",
@@ -1078,7 +1218,8 @@
           "label": "Bolesław (pow. olkuski)",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7488
+          "population": 7488,
+          "teryt": "1212032"
         },
         {
           "id": "bukowno",
@@ -1086,7 +1227,8 @@
           "label": "Bukowno",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 9288
+          "population": 9288,
+          "teryt": "1212011"
         },
         {
           "id": "klucze",
@@ -1094,7 +1236,8 @@
           "label": "Klucze",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 14362
+          "population": 14362,
+          "teryt": "1212042"
         },
         {
           "id": "olkusz",
@@ -1102,7 +1245,8 @@
           "label": "Olkusz",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 70.56,
-          "population": 45205
+          "population": 45205,
+          "teryt": "1212053"
         },
         {
           "id": "trzyciaz",
@@ -1110,7 +1254,8 @@
           "label": "Trzyciąż",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6906
+          "population": 6906,
+          "teryt": "1212062"
         },
         {
           "id": "wolbrom",
@@ -1118,9 +1263,11 @@
           "label": "Wolbrom",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 36.81,
-          "population": 21751
+          "population": 21751,
+          "teryt": "1212073"
         }
-      ]
+      ],
+      "teryt": "1212"
     },
     {
       "id": "oswiecimski",
@@ -1135,7 +1282,8 @@
           "label": "Brzeszcze",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 52.07,
-          "population": 20259
+          "population": 20259,
+          "teryt": "1213023"
         },
         {
           "id": "chelmek",
@@ -1143,7 +1291,8 @@
           "label": "Chełmek",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 67.94,
-          "population": 12213
+          "population": 12213,
+          "teryt": "1213033"
         },
         {
           "id": "kety",
@@ -1151,7 +1300,8 @@
           "label": "Kęty",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 52.91,
-          "population": 33146
+          "population": 33146,
+          "teryt": "1213043"
         },
         {
           "id": "osiek",
@@ -1159,7 +1309,8 @@
           "label": "Osiek",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8108
+          "population": 8108,
+          "teryt": "1213052"
         },
         {
           "id": "oswiecim-miasto",
@@ -1167,7 +1318,8 @@
           "label": "Oświęcim – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 35313
+          "population": 35313,
+          "teryt": "1213011"
         },
         {
           "id": "oswiecim-wies",
@@ -1175,7 +1327,8 @@
           "label": "Oświęcim – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 18977
+          "population": 18977,
+          "teryt": "1213062"
         },
         {
           "id": "polanka-wielka",
@@ -1183,7 +1336,8 @@
           "label": "Polanka Wielka",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4306
+          "population": 4306,
+          "teryt": "1213072"
         },
         {
           "id": "przeciszow",
@@ -1191,7 +1345,8 @@
           "label": "Przeciszów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6309
+          "population": 6309,
+          "teryt": "1213082"
         },
         {
           "id": "zator",
@@ -1199,9 +1354,11 @@
           "label": "Zator",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 39.53,
-          "population": 9047
+          "population": 9047,
+          "teryt": "1213093"
         }
-      ]
+      ],
+      "teryt": "1213"
     },
     {
       "id": "proszowicki",
@@ -1216,7 +1373,8 @@
           "label": "Koniusza",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9114
+          "population": 9114,
+          "teryt": "1214012"
         },
         {
           "id": "koszyce",
@@ -1224,7 +1382,8 @@
           "label": "Koszyce",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 14.7,
-          "population": 5204
+          "population": 5204,
+          "teryt": "1214023"
         },
         {
           "id": "nowe-brzesko",
@@ -1232,7 +1391,8 @@
           "label": "Nowe Brzesko",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 28.35,
-          "population": 5620
+          "population": 5620,
+          "teryt": "1214033"
         },
         {
           "id": "palecznica",
@@ -1240,7 +1400,8 @@
           "label": "Pałecznica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3449
+          "population": 3449,
+          "teryt": "1214042"
         },
         {
           "id": "proszowice",
@@ -1248,7 +1409,8 @@
           "label": "Proszowice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 37.17,
-          "population": 15381
+          "population": 15381,
+          "teryt": "1214053"
         },
         {
           "id": "radziemice",
@@ -1256,9 +1418,11 @@
           "label": "Radziemice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3161
+          "population": 3161,
+          "teryt": "1214062"
         }
-      ]
+      ],
+      "teryt": "1214"
     },
     {
       "id": "suski",
@@ -1273,7 +1437,8 @@
           "label": "Budzów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8790
+          "population": 8790,
+          "teryt": "1215032"
         },
         {
           "id": "bystra-sidzina",
@@ -1281,7 +1446,8 @@
           "label": "Bystra-Sidzina",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6825
+          "population": 6825,
+          "teryt": "1215042"
         },
         {
           "id": "jordanow-miasto",
@@ -1289,7 +1455,8 @@
           "label": "Jordanów – gmina miejska",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 5396
+          "population": 5396,
+          "teryt": "1215011"
         },
         {
           "id": "jordanow-wies",
@@ -1297,7 +1464,8 @@
           "label": "Jordanów – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11148
+          "population": 11148,
+          "teryt": "1215052"
         },
         {
           "id": "makow-podhalanski",
@@ -1305,7 +1473,8 @@
           "label": "Maków Podhalański",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 35.1,
-          "population": 15662
+          "population": 15662,
+          "teryt": "1215063"
         },
         {
           "id": "stryszawa",
@@ -1313,7 +1482,8 @@
           "label": "Stryszawa",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11866
+          "population": 11866,
+          "teryt": "1215072"
         },
         {
           "id": "sucha-beskidzka",
@@ -1321,7 +1491,8 @@
           "label": "Sucha Beskidzka",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 8727
+          "population": 8727,
+          "teryt": "1215021"
         },
         {
           "id": "zawoja",
@@ -1329,7 +1500,8 @@
           "label": "Zawoja",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8754
+          "population": 8754,
+          "teryt": "1215082"
         },
         {
           "id": "zembrzyce",
@@ -1337,9 +1509,11 @@
           "label": "Zembrzyce",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 5378
+          "population": 5378,
+          "teryt": "1215092"
         }
-      ]
+      ],
+      "teryt": "1215"
     },
     {
       "id": "tarnowski",
@@ -1354,7 +1528,8 @@
           "label": "Ciężkowice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 22.6,
-          "population": 10990
+          "population": 10990,
+          "teryt": "1216013"
         },
         {
           "id": "gromnik",
@@ -1362,7 +1537,8 @@
           "label": "Gromnik",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8748
+          "population": 8748,
+          "teryt": "1216022"
         },
         {
           "id": "lisia-gora",
@@ -1370,7 +1546,8 @@
           "label": "Lisia Góra",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 15684
+          "population": 15684,
+          "teryt": "1216032"
         },
         {
           "id": "plesna",
@@ -1378,7 +1555,8 @@
           "label": "Pleśna",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11709
+          "population": 11709,
+          "teryt": "1216042"
         },
         {
           "id": "radlow",
@@ -1386,7 +1564,8 @@
           "label": "Radłów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 28.88,
-          "population": 9367
+          "population": 9367,
+          "teryt": "1216053"
         },
         {
           "id": "ryglice",
@@ -1394,7 +1573,8 @@
           "label": "Ryglice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 23.75,
-          "population": 11134
+          "population": 11134,
+          "teryt": "1216063"
         },
         {
           "id": "rzepiennik-strzyzewski",
@@ -1402,7 +1582,8 @@
           "label": "Rzepiennik Strzyżewski",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6505
+          "population": 6505,
+          "teryt": "1216072"
         },
         {
           "id": "skrzyszow",
@@ -1410,7 +1591,8 @@
           "label": "Skrzyszów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 14188
+          "population": 14188,
+          "teryt": "1216082"
         },
         {
           "id": "szerzyny",
@@ -1418,7 +1600,8 @@
           "label": "Szerzyny",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 7472
+          "population": 7472,
+          "teryt": "1216162"
         },
         {
           "id": "tarnow-wies",
@@ -1426,7 +1609,8 @@
           "label": "Tarnów – gmina wiejska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 26496
+          "population": 26496,
+          "teryt": "1216092"
         },
         {
           "id": "tuchow",
@@ -1434,7 +1618,8 @@
           "label": "Tuchów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 36.24,
-          "population": 16946
+          "population": 16946,
+          "teryt": "1216103"
         },
         {
           "id": "wierzchoslawice",
@@ -1442,7 +1627,8 @@
           "label": "Wierzchosławice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10461
+          "population": 10461,
+          "teryt": "1216112"
         },
         {
           "id": "wietrzychowice",
@@ -1450,7 +1636,8 @@
           "label": "Wietrzychowice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 3696
+          "population": 3696,
+          "teryt": "1216122"
         },
         {
           "id": "wojnicz",
@@ -1458,7 +1645,8 @@
           "label": "Wojnicz",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 23.99,
-          "population": 13054
+          "population": 13054,
+          "teryt": "1216133"
         },
         {
           "id": "zakliczyn",
@@ -1466,7 +1654,8 @@
           "label": "Zakliczyn",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 12.74,
-          "population": 12337
+          "population": 12337,
+          "teryt": "1216143"
         },
         {
           "id": "zabno",
@@ -1474,9 +1663,11 @@
           "label": "Żabno",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 22.24,
-          "population": 18332
+          "population": 18332,
+          "teryt": "1216153"
         }
-      ]
+      ],
+      "teryt": "1216"
     },
     {
       "id": "tatrzanski",
@@ -1491,7 +1682,8 @@
           "label": "Biały Dunajec",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6807
+          "population": 6807,
+          "teryt": "1217022"
         },
         {
           "id": "bukowina-tatrzanska",
@@ -1499,7 +1691,8 @@
           "label": "Bukowina Tatrzańska",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 13545
+          "population": 13545,
+          "teryt": "1217032"
         },
         {
           "id": "koscielisko",
@@ -1507,7 +1700,8 @@
           "label": "Kościelisko",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 9122
+          "population": 9122,
+          "teryt": "1217042"
         },
         {
           "id": "poronin",
@@ -1515,7 +1709,8 @@
           "label": "Poronin",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11813
+          "population": 11813,
+          "teryt": "1217052"
         },
         {
           "id": "zakopane",
@@ -1523,9 +1718,11 @@
           "label": "Zakopane",
           "type": "MIEJSKA",
           "urbanizationPct": 100.0,
-          "population": 25059
+          "population": 25059,
+          "teryt": "1217011"
         }
-      ]
+      ],
+      "teryt": "1217"
     },
     {
       "id": "wadowicki",
@@ -1540,7 +1737,8 @@
           "label": "Andrychów",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 43.3,
-          "population": 41731
+          "population": 41731,
+          "teryt": "1218013"
         },
         {
           "id": "brzeznica",
@@ -1548,7 +1746,8 @@
           "label": "Brzeźnica",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10879
+          "population": 10879,
+          "teryt": "1218022"
         },
         {
           "id": "kalwaria-zebrzydowska",
@@ -1556,7 +1755,8 @@
           "label": "Kalwaria Zebrzydowska",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 21.53,
-          "population": 19819
+          "population": 19819,
+          "teryt": "1218033"
         },
         {
           "id": "lanckorona",
@@ -1564,7 +1764,8 @@
           "label": "Lanckorona",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6252
+          "population": 6252,
+          "teryt": "1218042"
         },
         {
           "id": "mucharz",
@@ -1572,7 +1773,8 @@
           "label": "Mucharz",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 4185
+          "population": 4185,
+          "teryt": "1218052"
         },
         {
           "id": "spytkowice-wadowicki",
@@ -1580,7 +1782,8 @@
           "label": "Spytkowice (pow. wadowicki)",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 10054
+          "population": 10054,
+          "teryt": "1218062"
         },
         {
           "id": "stryszow",
@@ -1588,7 +1791,8 @@
           "label": "Stryszów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 6764
+          "population": 6764,
+          "teryt": "1218072"
         },
         {
           "id": "tomice",
@@ -1596,7 +1800,8 @@
           "label": "Tomice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 8318
+          "population": 8318,
+          "teryt": "1218082"
         },
         {
           "id": "wadowice",
@@ -1604,7 +1809,8 @@
           "label": "Wadowice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 46.69,
-          "population": 36262
+          "population": 36262,
+          "teryt": "1218093"
         },
         {
           "id": "wieprz",
@@ -1612,9 +1818,11 @@
           "label": "Wieprz",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 12835
+          "population": 12835,
+          "teryt": "1218102"
         }
-      ]
+      ],
+      "teryt": "1218"
     },
     {
       "id": "wielicki",
@@ -1629,7 +1837,8 @@
           "label": "Biskupice",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11929
+          "population": 11929,
+          "teryt": "1219012"
         },
         {
           "id": "gdow",
@@ -1637,7 +1846,8 @@
           "label": "Gdów",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 18697
+          "population": 18697,
+          "teryt": "1219022"
         },
         {
           "id": "klaj",
@@ -1645,7 +1855,8 @@
           "label": "Kłaj",
           "type": "WIEJSKA",
           "urbanizationPct": 0.0,
-          "population": 11257
+          "population": 11257,
+          "teryt": "1219032"
         },
         {
           "id": "niepolomice",
@@ -1653,7 +1864,8 @@
           "label": "Niepołomice",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 51.27,
-          "population": 33602
+          "population": 33602,
+          "teryt": "1219043"
         },
         {
           "id": "wieliczka",
@@ -1661,9 +1873,13 @@
           "label": "Wieliczka",
           "type": "MIEJSKO_WIEJSKA",
           "urbanizationPct": 40.37,
-          "population": 69791
+          "population": 69791,
+          "teryt": "1219053"
         }
-      ]
+      ],
+      "teryt": "1219"
     }
-  ]
+  ],
+  "typeSource": "TERYT (PRG, GUGiK)",
+  "boundariesSource": "Państwowy Rejestr Granic (PRG), GUGiK – https://mapy.geoportal.gov.pl/wss/service/PZGIK/PRG/WFS/AdministrativeBoundaries"
 }

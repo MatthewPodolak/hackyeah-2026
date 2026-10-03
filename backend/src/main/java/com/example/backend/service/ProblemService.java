@@ -1,11 +1,13 @@
 package com.example.backend.service;
 
+import com.example.backend.config.CreatorReferenceData;
 import com.example.backend.dto.InnovationMatchResponse;
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemResponse;
 import com.example.backend.dto.ProblemSummaryResponse;
 import com.example.backend.dto.ProblemWithMatchesResponse;
 import com.example.backend.mapper.ProblemMapper;
+import com.example.backend.model.AppUser;
 import com.example.backend.dto.ProblemReviewRequest;
 import com.example.backend.dto.ProblemTrackingResponse;
 import com.example.backend.model.Problem;
@@ -33,6 +35,7 @@ public class ProblemService {
     private final ProblemMapper problemMapper;
     private final AppUserRepository appUserRepository;
     private final MatchmakingService matchmakingService;
+    private final CreatorReferenceData referenceData;
 
 
     public ProblemWithMatchesResponse reportProblem(ProblemRequest request, Long authorId) {
@@ -52,6 +55,14 @@ public class ProblemService {
         if (problem.getTargetGroup() == null) {
             problem.setTargetGroup(TargetGroup.OTHER);
         }
+        if (!referenceData.gminaExists(request.gminaId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wybierz gminę w Małopolsce");
+        }
+        problem.setPowiatId(referenceData.powiatOf(request.gminaId()));
+        problem.setWholeGmina(Boolean.TRUE.equals(request.wholeGmina()));
+        if (problem.getWholeGmina()) {
+            problem.setStreet(null);
+        }
         Problem saved = problemRepository.save(problem);
 
         String text = request.title() + "\n" + request.description();
@@ -62,6 +73,17 @@ public class ProblemService {
 
     public List<ProblemSummaryResponse> getProblems() {
         return problemRepository.findAllSummaries();
+    }
+
+    // JST sees reports from its own gmina, ROPS sees the whole region
+    public List<ProblemSummaryResponse> getReportedProblems(Long userId) {
+        AppUser user = appUserRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
+        return switch (user.getRole()) {
+            case ROPS, ADMIN -> problemRepository.findAllSummaries();
+            case JST -> problemRepository.findSummariesByGminaId(user.getGminaId());
+            default -> throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        };
     }
 
     public ProblemResponse getProblem(Long id) {

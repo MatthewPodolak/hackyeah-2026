@@ -37,6 +37,11 @@ public class ProblemController {
         return problemService.getProblems();
     }
 
+    @GetMapping("/reported")
+    public List<ProblemSummaryResponse> getReportedProblems(@AuthenticationPrincipal Jwt jwt) {
+        return problemService.getReportedProblems(Long.valueOf(jwt.getSubject()));
+    }
+
     @GetMapping("/{id}")
     public ProblemResponse getProblem(@PathVariable Long id) {
         return problemService.getProblem(id);

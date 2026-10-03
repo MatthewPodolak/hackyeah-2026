@@ -4,10 +4,11 @@ import { innovationName } from "@/lib/community";
 import { AdminService, CatalogService } from "@/api/services/AdminService";
 import { ProblemService } from "@/api/services/ProblemService";
 
-export function useAdminProblems() {
+export function useAdminProblems({ enabled = true } = {}) {
   return useQuery({
     queryKey: ["problems", "admin"],
     queryFn: ({ signal }) => AdminService.problems(null, { ct: signal }),
+    enabled,
   });
 }
 

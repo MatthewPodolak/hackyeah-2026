@@ -1,4 +1,4 @@
-import { KRAKOW_BOUNDS } from "@/lib/map";
+import { MALOPOLSKA_BOUNDS } from "@/lib/map";
 
 const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
 const NOMINATIM_SEARCH = "https://nominatim.openstreetmap.org/search";
@@ -35,7 +35,7 @@ export const GeocodeService = {
       format: "jsonv2",
       q: query,
       countrycodes: "pl",
-      viewbox: [KRAKOW_BOUNDS[0][1], KRAKOW_BOUNDS[1][0], KRAKOW_BOUNDS[1][1], KRAKOW_BOUNDS[0][0]].join(","),
+      viewbox: [MALOPOLSKA_BOUNDS[0][1], MALOPOLSKA_BOUNDS[1][0], MALOPOLSKA_BOUNDS[1][1], MALOPOLSKA_BOUNDS[0][0]].join(","),
       bounded: "1",
       limit: "1",
       "accept-language": "pl",

@@ -16,5 +16,7 @@ public record ProblemSummaryResponse(
         String street,
         ProblemCategory category,
         TargetGroup targetGroup,
+        String gminaId,
+        Boolean wholeGmina,
         ProblemStatus status
 ) {}
