@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login", "/api/v1/auth/logout").permitAll()
                         .requestMatchers("/api/v1/auth/me").authenticated()
+                        .requestMatchers("/api/v1/problems/reported").hasAnyRole("JST", "ROPS", "ADMIN")
                         .anyRequest().permitAll())
                 .oauth2ResourceServer(oauth -> oauth
                         .bearerTokenResolver(bearerTokenResolver(jwtDecoder))

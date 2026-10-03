@@ -30,6 +30,19 @@ export const ProblemService = {
     return res;
   },
 
+  // JST: reports from its gmina, ROPS: all reports
+  async reported({ ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.reported;
+
+    const res = await apiJson(url,
+      {
+        method: method
+      },
+      { ct, timeoutMs });
+
+    return res;
+  },
+
   async getById(id, { ct, timeoutMs } = {}) {
     const { method, url } = API.problem.getById;
 

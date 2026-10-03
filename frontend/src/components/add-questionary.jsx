@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Card,
   CardContent,
@@ -19,16 +20,20 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select"
 import Modal from "@/components/modal"
 import { PROBLEM_CATEGORY_OPTIONS, TARGET_GROUP_OPTIONS } from "@/lib/problemCategories"
+import { findGmina, gminaCenter } from "@/lib/gminy"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
+import { useGminyShapes, useRegions } from "@/api/hooks/useRegionsQuery"
 import { useStreet } from "@/api/hooks/useStreetQuery"
 import { GeocodeService } from "@/api/services/GeocodeService"
 import { useToast } from "@/helpers/ToastProvider"
 import { useFormErrors } from "@/helpers/useFormErrors"
 import {
+  EMPTY_GMINA_MSG,
   EMPTY_LOCATION_MSG,
+  OUTSIDE_MALOPOLSKA_MSG,
   PHOTO_TOO_LARGE_MSG,
   PROBLEM_ADDED_MSG,
   STREET_NOT_FOUND_MSG,
@@ -37,7 +42,8 @@ import {
 
 const LocationPicker = dynamic(() => import("@/components/location-picker"), { ssr: false })
 
-const EMPTY = { title: "", description: "", category: "", targetGroup: "", location: null, photo: null }
+// location = exact pin; wholeGmina = no pin, the report is about gminaId as a whole
+const EMPTY = { title: "", description: "", category: "", targetGroup: "", location: null, gminaId: "", wholeGmina: false, photo: null }
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024
 
 function readAsDataUrl(file) {
@@ -49,12 +55,14 @@ function readAsDataUrl(file) {
   })
 }
 
-function validate(form) {
+function validate(form, place) {
   if (!form.title.trim()) return ["title", emptyField("tytuł")]
   if (!form.description.trim()) return ["description", emptyField("opis")]
   if (!form.category) return ["category", "Wybierz kategorię problemu!"]
   if (!form.targetGroup) return ["targetGroup", "Wybierz, kogo dotyczy problem!"]
-  if (!form.location) return ["address", EMPTY_LOCATION_MSG]
+  if (!form.wholeGmina && !form.location) return ["address", EMPTY_LOCATION_MSG]
+  if (place.outside) return ["address", OUTSIDE_MALOPOLSKA_MSG]
+  if (!place.gminaId || !place.point) return ["gmina", EMPTY_GMINA_MSG]
   if (form.photo && form.photo.size > MAX_PHOTO_BYTES) return ["photo", PHOTO_TOO_LARGE_MSG]
   return null
 }
@@ -67,6 +75,14 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const [address, setAddress] = useState("")
   const [searching, setSearching] = useState(false)
   const { fail, clear, reset, fieldProps, errorProps } = useFormErrors("q")
+  const regions = useRegions()
+  const shapes = useGminyShapes()
+
+  const pinGmina = form.location && shapes.data ? findGmina(shapes.data, form.location) : null
+  const outside = !form.wholeGmina && !!form.location && !!shapes.data && !pinGmina
+  const gminaId = form.wholeGmina ? form.gminaId : pinGmina?.properties.id ?? ""
+  const wholeGminaShape = form.wholeGmina ? shapes.data?.find((shape) => shape.properties.id === form.gminaId) : null
+  const gminaFocus = useMemo(() => (wholeGminaShape ? gminaCenter(wholeGminaShape) : null), [wholeGminaShape])
 
   const photoPreview = useMemo(() => (form.photo ? URL.createObjectURL(form.photo) : null), [form.photo])
 
@@ -77,6 +93,28 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const set = (key) => (value) => {
     setForm((f) => ({ ...f, [key]: value }))
     clear(key === "location" ? "address" : key)
+  }
+
+  const clearPlaceErrors = () => {
+    clear("address")
+    clear("gmina")
+  }
+
+  const pickLocation = (location) => {
+    setForm((f) => ({ ...f, location, wholeGmina: false }))
+    clearPlaceErrors()
+  }
+
+  // a gmina from the list replaces a pin that lies in another gmina
+  const pickGmina = (id) => {
+    if (id === pinGmina?.properties.id) return
+    setForm((f) => ({ ...f, gminaId: id, wholeGmina: true, location: null }))
+    clearPlaceErrors()
+  }
+
+  const setWholeGmina = (checked) => {
+    setForm((f) => (checked ? { ...f, gminaId, wholeGmina: true, location: null } : { ...f, wholeGmina: false }))
+    clearPlaceErrors()
   }
 
   const close = () => {
@@ -96,7 +134,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     setSearching(true)
     try {
       const location = await GeocodeService.search(query)
-      if (location) set("location")(location)
+      if (location) pickLocation(location)
       else fail("address", STREET_NOT_FOUND_MSG)
     } catch {
       showToast(null, "error")
@@ -108,7 +146,8 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const error = validate(form)
+    const point = form.wholeGmina ? gminaFocus : form.location
+    const error = validate(form, { gminaId, outside, point })
     if (error) {
       fail(...error)
       return
@@ -118,12 +157,14 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
       const result = await addProblem.mutateAsync({
         title: form.title.trim(),
         description: form.description.trim(),
-        latitude: form.location.lat,
-        longitude: form.location.lon,
+        latitude: point.lat,
+        longitude: point.lon,
         imageUrl: form.photo ? await readAsDataUrl(form.photo) : null,
-        street: street.data ?? null,
+        street: form.wholeGmina ? null : street.data ?? null,
         category: form.category,
         targetGroup: form.targetGroup,
+        gminaId,
+        wholeGmina: form.wholeGmina,
       })
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
@@ -133,7 +174,9 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     }
   }
 
-  const locationStatus = !form.location
+  const locationStatus = form.wholeGmina
+    ? "Zgłoszenie dotyczy całej gminy. Kliknij na mapie, jeśli chcesz wskazać dokładne miejsce."
+    : !form.location
     ? "Wpisz adres i wybierz Szukaj albo kliknij miejsce na mapie."
     : street.isFetching
       ? "Szukam adresu..."
@@ -230,11 +273,47 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                 </div>
                 <FieldError {...errorProps("address")} />
                 <div className="h-56 w-full overflow-hidden rounded-md border">
-                  <LocationPicker value={form.location} onChange={set("location")} />
+                  <LocationPicker value={form.location} focus={gminaFocus} onChange={pickLocation} />
                 </div>
                 <FieldDescription id="q-location-status" aria-live="polite">
                   {locationStatus}
                 </FieldDescription>
+                {outside && (
+                  <p role="alert" className="text-sm text-destructive">{OUTSIDE_MALOPOLSKA_MSG}</p>
+                )}
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="q-gmina">Gmina</FieldLabel>
+                <NativeSelect
+                  {...fieldProps("gmina", "q-gmina-hint")}
+                  required
+                  className="w-full"
+                  value={gminaId}
+                  disabled={!regions.data}
+                  onChange={(e) => pickGmina(e.target.value)}
+                >
+                  <NativeSelectOption value="" disabled>
+                    {regions.isPending ? "Wczytuję gminy..." : "Wybierz gminę z listy"}
+                  </NativeSelectOption>
+                  {regions.data?.powiaty.map((powiat) => (
+                    <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
+                      {powiat.gminy.map((gmina) => (
+                        <NativeSelectOption key={gmina.id} value={gmina.id}>{gmina.label}</NativeSelectOption>
+                      ))}
+                    </NativeSelectOptGroup>
+                  ))}
+                </NativeSelect>
+                <FieldDescription id="q-gmina-hint">Uzupełnia się po wybraniu miejsca na mapie. Możesz też wybrać gminę bez mapy.</FieldDescription>
+                <FieldError {...errorProps("gmina")} />
+              </Field>
+              <Field orientation="horizontal">
+                <Checkbox
+                  id="q-whole-gmina"
+                  checked={form.wholeGmina}
+                  disabled={!gminaId}
+                  onCheckedChange={setWholeGmina}
+                />
+                <FieldLabel htmlFor="q-whole-gmina">Dotyczy całej gminy, bez dokładnego miejsca</FieldLabel>
               </Field>
               <Field>
                 <FieldLabel htmlFor="q-photo">Zdjęcie (opcjonalne, do 5 MB)</FieldLabel>
@@ -251,7 +330,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
               </Field>
               <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                 <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
-                <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching}>
+                <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || shapes.isPending}>
                   {addProblem.isPending ? "Szukam rozwiązań..." : "Dodaj"}
                 </Button>
               </div>

@@ -8,6 +8,14 @@ export function useProblems() {
   });
 }
 
+export function useReportedProblems(userId) {
+  return useQuery({
+    queryKey: ["problems", "reported", userId],
+    queryFn: ({ signal }) => ProblemService.reported({ ct: signal }),
+    enabled: userId != null,
+  });
+}
+
 export function useProblem(id) {
   return useQuery({
     queryKey: ["problems", id],

@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import { createAccessibleMap, onActivateKey } from "@/lib/map";
 
 const NO_PROBLEMS = [];
+const AREA_STYLE = { color: "#1d4ed8", weight: 3, dashArray: "8 6", fillColor: "#3b82f6", fillOpacity: 0.06 };
 
 function pinIcon(problem, selected) {
   const pin = document.createElement("span");
@@ -18,7 +19,8 @@ function pinIcon(problem, selected) {
   return L.divIcon({ html: pin, className: "problem-pin-wrapper", iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
 }
 
-export default function MapView({ target, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = "Mapa zgłoszonych problemów" }) {
+// area: optional GeoJSON feature (e.g. the gmina of a JST account), outlined and zoomed to
+export default function MapView({ target, area, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = "Mapa zgłoszonych problemów" }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
@@ -45,6 +47,14 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
       problemsLayerRef.current = null;
     };
   }, [label]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !area) return;
+    const layer = L.geoJSON(area, { style: AREA_STYLE, interactive: false }).addTo(map);
+    map.fitBounds(layer.getBounds(), { padding: [24, 24] });
+    return () => layer.remove();
+  }, [area]);
 
   useEffect(() => {
     const layer = problemsLayerRef.current;

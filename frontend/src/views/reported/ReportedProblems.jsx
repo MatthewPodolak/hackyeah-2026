@@ -7,11 +7,13 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/in
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import LoadingStatus from "@/components/loading-status";
-import { useProblems } from "@/api/hooks/useProblemsQuery";
+import { useReportedProblems } from "@/api/hooks/useProblemsQuery";
 import RoleGuard from "@/views/reported/RoleGuard";
-import { ROLES } from "@/api/context/AuthContext";
+import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
+import { gminaName, problemPlace } from "@/lib/gminy";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 
@@ -20,7 +22,11 @@ function normalize(text) {
 }
 
 function ProblemsList() {
-  const { data: problems, isPending } = useProblems();
+  // the backend filters: JST gets its own gmina, ROPS gets everything
+  const { user, isJst } = useAuth();
+  const { data: problems, isPending } = useReportedProblems(user?.id);
+  const gminy = useGminyIndex();
+  const myGmina = isJst ? gminaName(gminy.get(user.gminaId)) : null;
   const [query, setQuery] = useState("");
 
   const sorted = useMemo(
@@ -30,7 +36,7 @@ function ProblemsList() {
 
   const words = normalize(query).split(/\s+/).filter(Boolean);
   const visible = sorted.filter((problem) => {
-    const text = normalize([problem.title, problem.description, problem.street, getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
+    const text = normalize([problem.title, problem.description, problemPlace(problem, gminy), getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
     return words.every((word) => text.includes(word));
   });
 
@@ -40,7 +46,9 @@ function ProblemsList() {
         <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h1 className="font-heading text-2xl font-semibold">Zgłoszone problemy</h1>
-            <p className="text-muted-foreground">Problemy zgłoszone przez mieszkańców na mapie</p>
+            <p className="text-muted-foreground">
+              {isJst ? `Zgłoszenia mieszkańców z gminy: ${myGmina ?? "…"}` : "Zgłoszenia mieszkańców z całej Małopolski"}
+            </p>
           </div>
           <p aria-live="polite" aria-atomic="true" className="text-sm text-muted-foreground">
             <span className="sr-only">Wyniki: </span>
@@ -94,7 +102,7 @@ function ProblemsList() {
                       <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
                       <span className="sr-only">Miejsce: </span>
                       <span className="break-words">
-                        {problem.street ?? `${problem.latitude?.toFixed(5)}, ${problem.longitude?.toFixed(5)}`}
+                        {problemPlace(problem, gminy)}
                       </span>
                     </span>
                     {problem.localDate && (
@@ -117,7 +125,9 @@ function ProblemsList() {
               </EmptyMedia>
               <EmptyTitle>Brak problemów</EmptyTitle>
               <EmptyDescription>
-                {sorted.length ? "Żaden problem nie pasuje do wyszukiwania." : "Nikt jeszcze nie zgłosił problemu."}
+                {sorted.length
+                  ? "Żaden problem nie pasuje do wyszukiwania."
+                  : isJst ? "Nikt jeszcze nie zgłosił problemu w Twojej gminie." : "Nikt jeszcze nie zgłosił problemu."}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

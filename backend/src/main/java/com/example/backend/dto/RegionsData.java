@@ -17,11 +17,14 @@ public record RegionsData(String source,
                          @JsonProperty("isCity")
                          boolean isCity,
                          Integer population,
-                         List<Gmina> gminy) {}
+                         List<Gmina> gminy,
+                         String teryt) {}
     public record Gmina(String id,
                         String name,
                         String label,
                         String type,
                         Integer population,
-                        Double urbanizationPct) {}
+                        Double urbanizationPct,
+                        String teryt,
+                        String note) {}
 }

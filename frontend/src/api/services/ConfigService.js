@@ -8,6 +8,12 @@ export const ConfigService = {
     return apiJson(url, { method: method }, { ct, timeoutMs });
   },
 
+  async regions({ ct, timeoutMs } = {}) {
+    const { method, url } = API.config.regions;
+
+    return apiJson(url, { method: method }, { ct, timeoutMs });
+  },
+
   async resources({ ct, timeoutMs } = {}) {
     const { method, url } = API.knowledge.resources;
 

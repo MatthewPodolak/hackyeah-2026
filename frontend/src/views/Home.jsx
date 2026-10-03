@@ -10,6 +10,9 @@ import ProblemDetails from "@/components/problem-details";
 import ProblemSolutions from "@/components/problem-solutions";
 import { useProposal } from "@/api/context/ProposalContext";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
+import { useGminyIndex, useGminyShapes } from "@/api/hooks/useRegionsQuery";
+import { useAuth } from "@/api/context/AuthContext";
+import { gminaName } from "@/lib/gminy";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
 
@@ -35,6 +38,16 @@ export default function Home() {
   const [selectedProblem, setSelectedProblem] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
   const { openProposal } = useProposal();
+
+  // a JST account sees the border of its own gmina
+  const { user, isJst } = useAuth();
+  const myGminaId = isJst ? user.gminaId : null;
+  const shapes = useGminyShapes({ enabled: !!myGminaId });
+  const gminy = useGminyIndex();
+  const myArea = useMemo(
+    () => (myGminaId ? shapes.data?.find((shape) => shape.properties.id === myGminaId) ?? null : null),
+    [shapes.data, myGminaId]
+  );
 
   useEffect(() => {
     if (isError) showToast(null, "error");
@@ -74,12 +87,19 @@ export default function Home() {
 
       <div className="absolute inset-0 top-12">
         <MapView
+          area={myArea}
           problems={visibleProblems}
           selectedProblemId={selectedProblem?.id}
           onProblemClick={setSelectedProblem}
           onMapClick={() => setSelectedProblem(null)}
         />
       </div>
+
+      {myArea && (
+        <p className="absolute z-[1000] top-14 left-1/2 -translate-x-1/2 rounded-full border bg-background/95 px-3 py-1 text-xs font-medium shadow">
+          Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? "…"}
+        </p>
+      )}
 
       <button
         type="button"
