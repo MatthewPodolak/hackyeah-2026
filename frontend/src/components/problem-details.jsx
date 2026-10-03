@@ -3,7 +3,9 @@
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert02Icon, BulbIcon, Calendar03Icon, Cancel01Icon, Location01Icon } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { useProblem } from "@/api/hooks/useProblemsQuery"
+import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories"
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" })
 
@@ -13,6 +15,8 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
   if (!problem) return null
 
   const imageUrl = details.data?.imageUrl
+  const category = getProblemCategoryOption(problem.category)
+  const targetGroup = getTargetGroupOption(problem.targetGroup)
 
   return (
     <div className="absolute z-[1000] left-4 right-20 bottom-4 sm:right-auto sm:w-120 animate-in fade-in slide-in-from-bottom-4 duration-200">
@@ -38,6 +42,19 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
             </Button>
           </div>
+
+          <ul className="flex flex-wrap gap-1.5" aria-label="Kategorie">
+            <li>
+              <Badge variant="secondary">
+                <span aria-hidden="true">{category.icon}</span> {category.label}
+              </Badge>
+            </li>
+            <li>
+              <Badge variant="outline">
+                <span aria-hidden="true">{targetGroup.icon}</span> {targetGroup.label}
+              </Badge>
+            </li>
+          </ul>
 
           {imageUrl && (
             <img src={imageUrl} alt={problem.title} className="max-h-72 w-full rounded-xl border object-cover" />

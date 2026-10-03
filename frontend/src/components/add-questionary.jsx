@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+import { PROBLEM_CATEGORY_OPTIONS, TARGET_GROUP_OPTIONS } from "@/lib/problemCategories"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
 import { useStreet } from "@/api/hooks/useStreetQuery"
 import { GeocodeService } from "@/api/services/GeocodeService"
@@ -32,7 +34,7 @@ import {
 
 const LocationPicker = dynamic(() => import("@/components/location-picker"), { ssr: false })
 
-const EMPTY = { title: "", description: "", location: null, photo: null }
+const EMPTY = { title: "", description: "", category: "", targetGroup: "", location: null, photo: null }
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024
 
 function readAsDataUrl(file) {
@@ -47,6 +49,8 @@ function readAsDataUrl(file) {
 function validate(form) {
   if (!form.title.trim()) return emptyField("tytuł")
   if (!form.description.trim()) return emptyField("opis")
+  if (!form.category) return "Wybierz kategorię problemu!"
+  if (!form.targetGroup) return "Wybierz, kogo dotyczy problem!"
   if (!form.location) return EMPTY_LOCATION_MSG
   if (form.photo && form.photo.size > MAX_PHOTO_BYTES) return PHOTO_TOO_LARGE_MSG
   return null
@@ -117,6 +121,8 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
         longitude: form.location.lon,
         imageUrl: form.photo ? await readAsDataUrl(form.photo) : null,
         street: street.data ?? null,
+        category: form.category,
+        targetGroup: form.targetGroup,
       })
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
@@ -152,6 +158,38 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     value={form.description}
                     onChange={(e) => set("description")(e.target.value)}
                   />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="q-category">Kategoria</FieldLabel>
+                  <NativeSelect
+                    id="q-category"
+                    className="w-full"
+                    value={form.category}
+                    onChange={(e) => set("category")(e.target.value)}
+                  >
+                    <NativeSelectOption value="" disabled>Wybierz kategorię</NativeSelectOption>
+                    {PROBLEM_CATEGORY_OPTIONS.map((option) => (
+                      <NativeSelectOption key={option.value} value={option.value}>
+                        {option.icon} {option.label}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="q-target-group">Kogo dotyczy</FieldLabel>
+                  <NativeSelect
+                    id="q-target-group"
+                    className="w-full"
+                    value={form.targetGroup}
+                    onChange={(e) => set("targetGroup")(e.target.value)}
+                  >
+                    <NativeSelectOption value="" disabled>Wybierz grupę</NativeSelectOption>
+                    {TARGET_GROUP_OPTIONS.map((option) => (
+                      <NativeSelectOption key={option.value} value={option.value}>
+                        {option.icon} {option.label}
+                      </NativeSelectOption>
+                    ))}
+                  </NativeSelect>
                 </Field>
                 <Field>
                   <FieldLabel htmlFor="q-address">Lokalizacja</FieldLabel>
