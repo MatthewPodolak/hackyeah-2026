@@ -6,3 +6,7 @@
 *.iml
 Thumbs.db
 *.log
+
+backend/test.http
+backend/data/
+data/
