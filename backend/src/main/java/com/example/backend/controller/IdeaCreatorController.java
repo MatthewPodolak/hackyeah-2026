@@ -4,6 +4,8 @@ import com.example.backend.dto.*;
 import com.example.backend.service.IdeaCreatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +21,9 @@ public class IdeaCreatorController {
     public IdeaCardDraft draft(@RequestBody IdeaDraftRequest r) { return service.draftCard(r); }
 
     @PostMapping @ResponseStatus(HttpStatus.CREATED)         // poziom 1, krok 4: wysłanie do Hubu
-    public IdeaResponse submit(@RequestBody IdeaCardRequest r) { return service.submit(r); }
+    public IdeaResponse submit(@RequestBody IdeaCardRequest r, @AuthenticationPrincipal Jwt jwt) {
+        return service.submit(r, jwt == null ? null : Long.valueOf(jwt.getSubject()));
+    }
 
     @GetMapping                                              // galeria zaakceptowanych pomysłów (dobre praktyki)
     public List<PublicIdeaResponse> gallery() { return service.gallery(); }

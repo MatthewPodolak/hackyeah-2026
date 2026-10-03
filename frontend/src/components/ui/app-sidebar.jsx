@@ -3,7 +3,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { useUnseenIdeasCount } from "@/api/hooks/useAdminIdeas"
 
 import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useToast } from "@/helpers/ToastProvider"
@@ -16,11 +17,14 @@ const items = [
   { title: "Mapa problemow", url: "/" },
   { title: "Innowacje", url: "/innovations" },
   { title: "Zaproponuj innowacje", action: "proposal" },
+  { title: "Moje propozycje", url: "/my-ideas" },
+  { title: "Baza wiedzy", url: "/knowledge" },
 ]
 
 const institutionItems = [
   { title: "Zgłoszone problemy", url: "/reported-problems" },
-  { title: "Zgłoszone innowacje", url: "/reported-innovations" },
+  { title: "Zgłoszone innowacje", url: "/reported-innovations", badge: "unseenIdeas" },
+  { title: "Nabory grantowe", url: "/grant-calls" },
 ]
 
 export function AppSidebar() {
@@ -28,6 +32,8 @@ export function AppSidebar() {
   const { isLogged, user, roleLabel, openPanel, logout, hasRole } = useAuth()
   const { showToast } = useToast()
   const { openProposal } = useProposal()
+  const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
+  const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
 
   const handleLogout = async () => {
     await logout()
@@ -62,7 +68,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        {hasRole(ROLES.JST, ROLES.ROPS) && (
+        {isInstitution && (
           <SidebarGroup>
             <SidebarGroupLabel>Panel {roleLabel}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -72,6 +78,11 @@ export function AppSidebar() {
                     <SidebarMenuButton render={<Link href={item.url} />} isActive={pathname.startsWith(item.url)}>
                       <span>{item.title}</span>
                     </SidebarMenuButton>
+                    {item.badge === "unseenIdeas" && unseenIdeas > 0 && (
+                      <SidebarMenuBadge className="bg-emerald-600 text-white peer-hover/menu-button:text-white peer-data-active/menu-button:text-white">
+                        {unseenIdeas}
+                      </SidebarMenuBadge>
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>

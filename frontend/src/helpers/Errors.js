@@ -25,3 +25,4 @@ export const EMAIL_TAKEN_MSG = "Konto z tym adresem email już istnieje!";
 export const LOGGED_IN_MSG = "Zalogowano :)";
 export const REGISTERED_MSG = "Konto zostało utworzone :)";
 export const LOGGED_OUT_MSG = "Wylogowano";
+export const IDEA_ADDED_MSG = "Propozycja została wysłana :)";
