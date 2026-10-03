@@ -2,12 +2,15 @@ package com.example.backend.service;
 
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemResponse;
+import com.example.backend.dto.ProblemSummaryResponse;
 import com.example.backend.mapper.ProblemMapper;
 import com.example.backend.model.Problem;
 import com.example.backend.repository.AppUserRepository;
 import com.example.backend.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +27,9 @@ public class ProblemService {
         }
         Problem savedProblem = problemRepository.save(problem);
         return problemMapper.toResponse(savedProblem);
+    }
+
+    public List<ProblemSummaryResponse> getProblems() {
+        return problemRepository.findAllSummaries();
     }
 }
