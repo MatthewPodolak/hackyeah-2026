@@ -11,7 +11,9 @@ public class ConversationDTOs {
     public record NewConversationRequest(
             @NotBlank @Size(max = 200) String subject,
             @NotBlank @Pattern(regexp = "QUESTION|MENTORING|PARTNERSHIP") String type,
-            @NotBlank @Size(max = 4000) String content
+            @NotBlank @Size(max = 4000) String content,
+            @Pattern(regexp = "ROPS|JST") String recipient,
+            @Size(max = 100) String gminaId
     ) {}
 
     public record MessageRequest(
@@ -25,7 +27,10 @@ public class ConversationDTOs {
             String status,
             Long ownerId,
             String ownerName,
-            LocalDateTime createdAt
+            LocalDateTime createdAt,
+            String recipientType,
+            String recipientGminaId,
+            String recipientLabel
     ) {}
 
     public record MessageItem(

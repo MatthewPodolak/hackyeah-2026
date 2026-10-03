@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.config.CreatorReferenceData;
 import com.example.backend.dto.ConversationDTOs.*;
 import com.example.backend.model.*;
 import com.example.backend.repository.AppUserRepository;
@@ -22,17 +23,35 @@ public class CommunicationService {
     private final ConversationMessageRepository messages;
     private final PartnershipPostRepository partnershipPosts;
     private final AppUserRepository users;
+    private final CreatorReferenceData ref;
 
     @Transactional
     public Long createConversation(NewConversationRequest r, Long userId) {
         AppUser user = users.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Nieznany użytkownik"));
 
+        String recipient = r.recipient() == null ? "ROPS" : r.recipient();
+        String recipientGmina = null;
+        if (user.getRole() == Role.ROPS) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ROPS odpowiada na wiadomości, ale nie rozpoczyna rozmów");
+        }
+        if (user.getRole() == Role.JST && !"ROPS".equals(recipient)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Samorząd może pisać tylko do ROPS");
+        }
+        if ("JST".equals(recipient)) {
+            if (!ref.gminaExists(r.gminaId())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wybierz gminę, do której piszesz");
+            }
+            recipientGmina = r.gminaId();
+        }
+
         Conversation c = Conversation.builder()
                 .subject(r.subject().trim())
                 .type(r.type().toUpperCase())
                 .owner(user)
                 .status("OPEN")
+                .recipientType(recipient)
+                .recipientGminaId(recipientGmina)
                 .build();
 
         Conversation saved = conversations.save(c);
@@ -52,12 +71,9 @@ public class CommunicationService {
         AppUser u = users.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Nieprawidłowy identyfikator użytkownika"));
 
-        boolean isStaff = isStaff(u);
-
-        // Personel ROPS i eksperci widzą wszystkie wątki; mieszkaniec widzi tylko swoje
-        List<Conversation> list = isStaff
-                ? conversations.findAllByOrderByCreatedAtDesc()
-                : conversations.findByOwnerIdOrderByCreatedAtDesc(userId);
+        List<Conversation> list = conversations.findAllByOrderByCreatedAtDesc().stream()
+                .filter(c -> canAccess(u, c))
+                .toList();
 
         return list.stream().map(this::toConversationItem).toList();
     }
@@ -149,15 +165,27 @@ public class CommunicationService {
         AppUser u = users.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.FORBIDDEN, "Nieznany użytkownik"));
 
-        if (!isStaff(u) && !c.getOwner().getId().equals(userId)) {
+        if (!canAccess(u, c)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Brak uprawnień do tego wątku rozmowy");
         }
 
         return c;
     }
 
-    private static boolean isStaff(AppUser u) {
-        return u.getRole() == Role.ADMIN || u.getRole() == Role.EXPERT || u.isApprovedInstitution();
+    private static boolean canAccess(AppUser u, Conversation c) {
+        if (c.getOwner().getId().equals(u.getId()) || u.getRole() == Role.ADMIN) return true;
+        if ("JST".equals(c.effectiveRecipientType())) {
+            return u.getRole() == Role.JST && u.isApprovedInstitution()
+                    && u.getGminaId() != null && u.getGminaId().equals(c.getRecipientGminaId());
+        }
+        return u.getRole() == Role.EXPERT || (u.getRole() == Role.ROPS && u.isApprovedInstitution());
+    }
+
+    private String recipientLabel(Conversation c) {
+        if (!"JST".equals(c.effectiveRecipientType())) return "ROPS Kraków";
+        return ref.findGmina(c.getRecipientGminaId())
+                .map(g -> "Samorząd: " + g.gmina().label())
+                .orElse("Samorząd gminy");
     }
 
     private ConversationItem toConversationItem(Conversation c) {
@@ -168,7 +196,10 @@ public class CommunicationService {
                 c.getStatus(),
                 c.getOwner().getId(),
                 c.getOwner().getName() != null ? c.getOwner().getName() : c.getOwner().getEmail(),
-                c.getCreatedAt()
+                c.getCreatedAt(),
+                c.effectiveRecipientType(),
+                c.getRecipientGminaId(),
+                recipientLabel(c)
         );
     }
 }
