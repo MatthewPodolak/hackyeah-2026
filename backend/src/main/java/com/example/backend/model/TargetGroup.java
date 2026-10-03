@@ -1,0 +1,14 @@
+package com.example.backend.model;
+
+public enum TargetGroup {
+    OLDER_PEOPLE,
+    CHILDREN_YOUTH,
+    FAMILIES_CAREGIVERS,
+    PEOPLE_WITH_DISABILITY,
+    AUTISM_SPECTRUM,
+    PEOPLE_FROM_ABROAD,
+    HOMELESS,
+    FINANCIAL_DIFFICULTY,
+    ALL_RESIDENTS,
+    OTHER
+}

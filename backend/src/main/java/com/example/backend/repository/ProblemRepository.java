@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street) from Problem p")
+    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup) from Problem p")
     List<ProblemSummaryResponse> findAllSummaries();
 }
