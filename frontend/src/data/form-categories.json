@@ -1,0 +1,127 @@
+{
+  "whoCategories": {
+    "OLDER_PEOPLE": {
+      "label": "Osoby starsze",
+      "icon": "👵"
+    },
+    "CHILDREN_YOUTH": {
+      "label": "Dzieci i młodzież",
+      "icon": "🧒"
+    },
+    "FAMILIES_CAREGIVERS": {
+      "label": "Rodziny i opiekunowie",
+      "icon": "👨‍👩‍👧"
+    },
+    "PEOPLE_WITH_DISABILITY": {
+      "label": "Osoby z niepełnosprawnością",
+      "icon": "♿"
+    },
+    "AUTISM_SPECTRUM": {
+      "label": "Osoby w spektrum autyzmu",
+      "icon": "🧩"
+    },
+    "PEOPLE_FROM_ABROAD": {
+      "label": "Osoby z innych krajów",
+      "icon": "🌍"
+    },
+    "HOMELESS": {
+      "label": "Osoby w kryzysie bezdomności",
+      "icon": "🏚️"
+    },
+    "FINANCIAL_DIFFICULTY": {
+      "label": "Osoby w trudnej sytuacji finansowej",
+      "icon": "💸"
+    },
+    "ALL_RESIDENTS": {
+      "label": "Wszyscy mieszkańcy / nie wiem",
+      "icon": "🏘️"
+    }
+  },
+  "disabilityTypes": {
+    "MOBILITY": "ruchowa",
+    "SIGHT": "wzroku",
+    "HEARING": "słuchu",
+    "INTELLECTUAL": "intelektualna"
+  },
+  "problemCategories": {
+    "LONELINESS_WELLBEING": {
+      "label": "Samotność i samopoczucie",
+      "icon": "😔",
+      "example": "nie ma z kim porozmawiać, smutek, stres",
+      "tags": [
+        "LONELINESS",
+        "MENTAL_HEALTH"
+      ]
+    },
+    "HEALTH_REHAB": {
+      "label": "Zdrowie i rehabilitacja",
+      "icon": "🏥",
+      "example": "trudno o lekarza, terapię, problemy z pamięcią",
+      "tags": [
+        "HEALTHCARE_ACCESS",
+        "REHABILITATION",
+        "HEALTHY_LIFESTYLE",
+        "DEMENTIA_MEMORY"
+      ]
+    },
+    "MOBILITY_BARRIERS": {
+      "label": "Poruszanie się i bariery",
+      "icon": "🚶",
+      "example": "schody, brak transportu, ryzyko upadku",
+      "tags": [
+        "MOBILITY",
+        "SAFETY"
+      ]
+    },
+    "DAILY_LIFE_CARE": {
+      "label": "Codzienne sprawy i opieka",
+      "icon": "🏠",
+      "example": "zakupy, sprzątanie, potrzeba opiekuna",
+      "tags": [
+        "DAILY_INDEPENDENCE",
+        "CARE_ACCESS",
+        "CAREGIVER_SUPPORT"
+      ]
+    },
+    "INFO_DIGITAL_OFFICES": {
+      "label": "Informacja, internet i urzędy",
+      "icon": "💬",
+      "example": "trudny telefon lub komputer, sprawy w urzędzie",
+      "tags": [
+        "COMMUNICATION",
+        "DIGITAL_EXCLUSION",
+        "PUBLIC_SERVICES"
+      ]
+    },
+    "FAMILY_UPBRINGING": {
+      "label": "Rodzina i wychowanie",
+      "icon": "👨‍👩‍👧",
+      "example": "trudności w rodzinie, szkoła, przemoc",
+      "tags": [
+        "FAMILY_SUPPORT",
+        "EDUCATION",
+        "VIOLENCE"
+      ]
+    },
+    "WORK_MONEY": {
+      "label": "Praca i pieniądze",
+      "icon": "💼",
+      "example": "brak pracy, brak pieniędzy na podstawowe potrzeby",
+      "tags": [
+        "EMPLOYMENT",
+        "POVERTY",
+        "HOMELESSNESS"
+      ]
+    },
+    "FREE_TIME_INTEGRATION": {
+      "label": "Czas wolny i integracja",
+      "icon": "🎭",
+      "example": "brak zajęć, kultury, poczucie wykluczenia",
+      "tags": [
+        "CULTURE_LEISURE",
+        "SOCIAL_INCLUSION",
+        "MIGRANT_INTEGRATION"
+      ]
+    }
+  }
+}
