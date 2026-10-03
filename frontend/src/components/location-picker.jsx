@@ -3,8 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
-const KRAKOW = [50.0614, 19.9366];
+import { KRAKOW, KRAKOW_BOUNDS, lockToKrakow } from "@/lib/map";
 
 export default function LocationPicker({ value, onChange }) {
   const containerRef = useRef(null);
@@ -15,10 +14,12 @@ export default function LocationPicker({ value, onChange }) {
 
   useEffect(() => {
     if (mapRef.current) return;
-    const map = L.map(containerRef.current).setView(KRAKOW, 13);
+    const map = L.map(containerRef.current, { maxBoundsViscosity: 1 }).setView(KRAKOW, 13);
+    lockToKrakow(map);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors",
+      bounds: KRAKOW_BOUNDS,
     }).addTo(map);
     map.on("click", (e) => onChangeRef.current?.({ lat: e.latlng.lat, lon: e.latlng.lng }));
     mapRef.current = map;
@@ -44,6 +45,9 @@ export default function LocationPicker({ value, onChange }) {
       fillColor: "#3b82f6",
       fillOpacity: 0.8,
     }).addTo(map);
+    if (!map.getBounds().contains(markerRef.current.getLatLng())) {
+      map.setView(markerRef.current.getLatLng(), 16);
+    }
   }, [value]);
 
   return <div ref={containerRef} className="relative z-0 isolate w-full h-full" />;

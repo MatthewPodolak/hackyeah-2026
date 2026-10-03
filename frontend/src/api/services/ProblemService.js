@@ -28,5 +28,17 @@ export const ProblemService = {
       { ct, timeoutMs });
 
     return res;
+  },
+
+  async getById(id, { ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.getById;
+
+    const res = await apiJson(url(id),
+      {
+        method: method
+      },
+      { ct, timeoutMs });
+
+    return res;
   }
 };
