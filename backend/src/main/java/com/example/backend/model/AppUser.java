@@ -1,6 +1,8 @@
 package com.example.backend.model;
 
 import jakarta.persistence.*;
+
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,4 +34,17 @@ public class AppUser {
 
     // JST only: the gmina this account works for (id from malopolska-units.json)
     private String gminaId;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private AccountStatus accountStatus;
+
+    private Instant createdAt;
+
+    public AccountStatus effectiveStatus() {
+        return accountStatus == null ? AccountStatus.ACTIVE : accountStatus;
+    }
+
+    public boolean isApprovedInstitution() {
+        return (role == Role.JST || role == Role.ROPS) && effectiveStatus() == AccountStatus.ACTIVE;
+    }
 }

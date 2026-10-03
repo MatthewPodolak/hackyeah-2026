@@ -8,6 +8,7 @@ import com.example.backend.model.Readiness;
 import com.example.backend.repository.IdeaRepository;
 import com.example.backend.service.IdeaCreatorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,9 @@ public class AdminIdeaController {
 
     @GetMapping("/{id}")
     public IdeaDetailsResponse one(@PathVariable Long id) { return service.adminView(id); }
+
+    @GetMapping("/{id}/visualization")
+    public ResponseEntity<byte[]> visualization(@PathVariable Long id) { return ImageResponses.from(service.visualizationById(id)); }
 
     @PatchMapping("/{id}/review")                             // zmiana statusu + odpowiedź do autora
     public IdeaResponse review(@PathVariable Long id, @RequestBody IdeaReviewRequest r) { return service.review(id, r); }

@@ -14,5 +14,6 @@ public interface ProblemMapper {
     @Mapping(target = "powiatId", ignore = true)
     Problem toEntity(ProblemRequest request);
 
+    @Mapping(target = "status", expression = "java(problem.effectiveStatus())")
     ProblemResponse toResponse(Problem problem);
 }

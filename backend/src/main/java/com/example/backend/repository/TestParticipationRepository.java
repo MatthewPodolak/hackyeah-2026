@@ -11,5 +11,6 @@ public interface TestParticipationRepository extends JpaRepository<TestParticipa
     List<TestParticipation> findByInnovationIdOrderByCreatedAtDesc(String innovationId);
     List<TestParticipation> findByStatusOrderByCreatedAtDesc(String status);
     List<TestParticipation> findAllByOrderByCreatedAtDesc();
+    List<TestParticipation> findByUserIdOrderByCreatedAtDesc(Long userId);
     long countByStatus(String status);
 }

@@ -53,5 +53,17 @@ export const ProblemService = {
       { ct, timeoutMs });
 
     return res;
+  },
+
+  async byToken(token, { ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.byToken;
+
+    return apiJson(url(token), { method: method }, { ct, timeoutMs });
+  },
+
+  async mine({ ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.mine;
+
+    return apiJson(url, { method: method }, { ct, timeoutMs });
   }
 };

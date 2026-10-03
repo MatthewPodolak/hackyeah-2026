@@ -160,6 +160,37 @@ public class IdeaCreatorService {
         return f;
     }
 
+    public VisualizeResponse visualize(String token, VisualizeRequest request) {
+        Idea i = byToken(token);
+        String extra = request == null || request.description() == null ? "" : clip(request.description().trim(), 600);
+        String prompt = """
+                Koncepcyjna, przyjazna ilustracja w stylu płaskiej grafiki wektorowej, ciepłe kolory, bez żadnego tekstu
+                ani napisów na obrazie. Przedstaw pomysł na innowację społeczną w Małopolsce: %s. %s
+                Kto z niego korzysta: %s. %s
+                Pokaż ludzi różnych pokoleń i sprawności w codziennej sytuacji, w której rozwiązanie pomaga.
+                """.formatted(i.getTitle(), Objects.toString(clip(i.getEssence(), 500), ""), ref.whoLabels(i.getWhoCategories()), extra);
+        String image;
+        try {
+            image = openAi.generateImage(prompt);
+        } catch (Exception e) {
+            log.warn("Visualization failed", e);
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Generator obrazów jest chwilowo niedostępny. Spróbuj ponownie za chwilę.");
+        }
+        String alt = "Ilustracja wygenerowana przez AI do pomysłu „" + i.getTitle() + "”" + (extra.isEmpty() ? "" : ": " + extra);
+        i.setVisualization(image);
+        i.setVisualizationAlt(alt);
+        ideas.save(i);
+        return new VisualizeResponse("/api/v1/ideas/by-token/" + token + "/visualization?v=" + System.currentTimeMillis(), alt);
+    }
+
+    public Optional<String> visualizationByToken(String token) {
+        return Optional.ofNullable(byToken(token).getVisualization());
+    }
+
+    public Optional<String> visualizationById(Long id) {
+        return ideas.findById(id).map(Idea::getVisualization);
+    }
+
     public List<InnovationMatchResponse> similar(String token) {
         Idea i = byToken(token);
         return matchmaking.findMatches(i.getTitle() + "\n" + i.getEssence() + "\n" + i.getProblemDescription());
@@ -187,7 +218,8 @@ public class IdeaCreatorService {
         return new IdeaResponse(i.getId(), withToken ? i.getTrackingToken() : null, i.getTitle(), i.getEssence(),
                 i.getProblemDescription(), i.getWhoCategories(), i.getDisabilityTypes(), i.getReadiness(),
                 i.getGminaId(), i.getSourceProblemId(), i.getStatus(), i.getAdminReply(),
-                i.getCanvasJson() != null, i.getAiFeedbackJson() != null, i.isPublishConsent(), i.getCreatedAt(), i.getUpdatedAt());
+                i.getCanvasJson() != null, i.getAiFeedbackJson() != null, i.isPublishConsent(),
+                i.getVisualization() != null, i.getVisualizationAlt(), i.getCreatedAt(), i.getUpdatedAt());
     }
 
     @SuppressWarnings("unchecked")

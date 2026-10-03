@@ -31,7 +31,7 @@ public class InnovationTestingService {
     }
 
     @Transactional
-    public ParticipationResponse submitParticipation(String innovationId, ParticipationRequest r) {
+    public ParticipationResponse submitParticipation(String innovationId, ParticipationRequest r, Long userId) {
         validateInnovationExists(innovationId);
 
         TestParticipation p = TestParticipation.builder()
@@ -43,8 +43,8 @@ public class InnovationTestingService {
                 .status("PENDING")
                 .build();
 
-        if (r.userId() != null) {
-            users.findById(r.userId()).ifPresent(user -> {
+        if (userId != null) {
+            users.findById(userId).ifPresent(user -> {
                 p.setUser(user);
                 if (r.contactEmail() == null) {
                     p.setContactEmail(user.getEmail());
@@ -57,7 +57,7 @@ public class InnovationTestingService {
     }
 
     @Transactional
-    public void submitReview(String innovationId, ReviewRequest r) {
+    public void submitReview(String innovationId, ReviewRequest r, Long userId) {
         validateInnovationExists(innovationId);
 
         if (r.rating() < 1 || r.rating() > 5) {
@@ -72,8 +72,8 @@ public class InnovationTestingService {
                 .reviewerName(r.reviewerName() != null && !r.reviewerName().isBlank() ? r.reviewerName().trim() : "Anonimowy tester")
                 .build();
 
-        if (r.userId() != null) {
-            users.findById(r.userId()).ifPresent(rv::setUser);
+        if (userId != null) {
+            users.findById(userId).ifPresent(rv::setUser);
         }
 
         reviews.save(rv);
@@ -110,6 +110,13 @@ public class InnovationTestingService {
         validateInnovationExists(innovationId);
         return participations.findByInnovationIdOrderByCreatedAtDesc(innovationId)
                 .stream()
+                .map(this::mapToParticipationResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ParticipationResponse> getUserParticipations(Long userId) {
+        return participations.findByUserIdOrderByCreatedAtDesc(userId).stream()
                 .map(this::mapToParticipationResponse)
                 .toList();
     }

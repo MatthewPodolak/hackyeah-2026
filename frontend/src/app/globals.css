@@ -75,6 +75,8 @@
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
   --focus: oklch(0.45 0.2 262);
+  --chart-bar: #2a78d6;
+  --chart-grid: #e5e5e5;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -118,6 +120,8 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --focus: oklch(0.82 0.12 250);
+  --chart-bar: #3987e5;
+  --chart-grid: #333333;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -150,6 +154,81 @@
   .leaflet-container:focus-visible {
     outline-offset: -3px !important;
   }
+}
+
+.hc,
+.hc.dark {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #000000;
+  --card-foreground: #ffffff;
+  --popover: #000000;
+  --popover-foreground: #ffffff;
+  --primary: #ffff00;
+  --primary-foreground: #000000;
+  --secondary: #000000;
+  --secondary-foreground: #ffffff;
+  --muted: #000000;
+  --muted-foreground: #ffffff;
+  --accent: #333333;
+  --accent-foreground: #ffffff;
+  --destructive: #ff8080;
+  --border: #ffffff;
+  --input: #ffffff;
+  --ring: #ffff00;
+  --focus: #ffff00;
+  --sidebar: #000000;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffff00;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #333333;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #ffffff;
+  --sidebar-ring: #ffff00;
+  --danger: #000000;
+  --danger-foreground: #ffffff;
+  --info: #000000;
+  --info-foreground: #ffffff;
+  --success: #000000;
+  --success-foreground: #ffffff;
+  --chart-bar: #ffff00;
+  --chart-grid: #ffffff;
+}
+
+.hc a {
+  text-decoration: underline;
+}
+
+.hc [class*="text-emerald-"],
+.hc [class*="text-red-"],
+.hc [class*="text-amber-"],
+.hc [class*="text-sky-"],
+.hc [class*="text-violet-"],
+.hc [class*="text-blue-"] {
+  color: #ffff00 !important;
+}
+
+.hc [class*="bg-emerald-"],
+.hc [class*="bg-red-"],
+.hc [class*="bg-amber-"],
+.hc [class*="bg-sky-"],
+.hc [class*="bg-violet-"],
+.hc [class*="bg-blue-"] {
+  background-color: #000000 !important;
+  color: #ffffff;
+  outline: 1px solid #ffffff;
+}
+
+.hc [class*="border-emerald-"],
+.hc [class*="border-blue-"],
+.hc [class*="border-neutral-"],
+.hc [class*="ring-emerald-"] {
+  border-color: #ffff00 !important;
+  --tw-ring-color: #ffff00 !important;
+}
+
+.hc [data-sonner-toast] {
+  border: 2px solid #ffffff !important;
 }
 
 .problem-pin-wrapper {

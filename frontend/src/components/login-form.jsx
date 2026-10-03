@@ -155,7 +155,12 @@ export function LoginForm({
         password: registerData.password,
         role: selectedUserType,
       });
-      showToast(REGISTERED_MSG, "success");
+      showToast(
+        selectedUserType === ROLES.CITIZEN
+          ? REGISTERED_MSG
+          : "Konto zostało utworzone. Panel instytucji będzie dostępny po akceptacji przez pracownika ROPS.",
+        "success"
+      );
       setRegisterData(EMPTY_REGISTER);
       onSuccess?.();
     } catch (err) {
@@ -273,6 +278,11 @@ export function LoginForm({
                         )
                       })}
                     </div>
+                    {selectedUserType !== ROLES.CITIZEN && (
+                      <p role="status" className="rounded-lg bg-muted p-3 text-sm">
+                        Konta JST i ROPS wymagają akceptacji przez pracownika ROPS. Do tego czasu możesz korzystać z platformy jak mieszkaniec.
+                      </p>
+                    )}
                   </div>
                   <Field>
                     <FieldLabel htmlFor="register-name">

@@ -32,6 +32,9 @@ export function AuthProvider({ children }) {
 
   const user = me.data ?? null;
   const role = user?.role ?? null;
+  const accountStatus = user?.accountStatus ?? null;
+  const isPendingInstitution = !!user && (role === ROLES.JST || role === ROLES.ROPS) && accountStatus !== "ACTIVE";
+  const effectiveRole = isPendingInstitution ? null : role;
 
   const openPanel = useCallback((mode = "login") => setPanelMode(mode === "register" ? "register" : "login"), []);
   const closePanel = useCallback(() => setPanelMode(null), []);
@@ -64,7 +67,7 @@ export function AuthProvider({ children }) {
     return data ?? null;
   }, [refetchMe]);
 
-  const hasRole = useCallback((...roles) => !!role && roles.flat().includes(role), [role]);
+  const hasRole = useCallback((...roles) => !!effectiveRole && roles.flat().includes(effectiveRole), [effectiveRole]);
 
   const value = useMemo(
     () => ({
@@ -74,9 +77,11 @@ export function AuthProvider({ children }) {
       isLoading: me.isPending,
       isLogged: !!user,
       isAuthed: !!user,
+      accountStatus,
+      isPendingInstitution,
       isCitizen: role === ROLES.CITIZEN,
-      isJst: role === ROLES.JST,
-      isRops: role === ROLES.ROPS,
+      isJst: effectiveRole === ROLES.JST,
+      isRops: effectiveRole === ROLES.ROPS,
       hasRole,
       login,
       register,
@@ -87,7 +92,7 @@ export function AuthProvider({ children }) {
       openPanel,
       closePanel,
     }),
-    [user, role, me.isPending, hasRole, login, register, logout, refresh, panelMode, openPanel, closePanel]
+    [user, role, accountStatus, isPendingInstitution, effectiveRole, me.isPending, hasRole, login, register, logout, refresh, panelMode, openPanel, closePanel]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

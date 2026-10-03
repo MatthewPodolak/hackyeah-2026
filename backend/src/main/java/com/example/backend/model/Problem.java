@@ -47,4 +47,21 @@ public class Problem {
 
     // no exact place: the report concerns the whole gmina and sits at its centre
     private Boolean wholeGmina;
+    @Column(unique = true, updatable = false)
+    private String trackingToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ProblemStatus status;
+
+    @Column(columnDefinition = "TEXT")
+    private String adminReply;
+
+    private Boolean adminSeen;
+
+    private Instant updatedAt;
+
+    public ProblemStatus effectiveStatus() {
+        return status == null ? ProblemStatus.SUBMITTED : status;
+    }
 }

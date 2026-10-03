@@ -98,5 +98,18 @@ export const IdeaService = {
     const { method, url } = API.idea.feedback;
 
     return apiJson(url(token), { method: method }, { ct, timeoutMs });
+  },
+
+  async visualize(token, description, { ct, timeoutMs = 120000 } = {}) {
+    const { method, url } = API.idea.visualize;
+
+    const res = await apiJson(url(token),
+      {
+        method: method,
+        body: JSON.stringify({ description })
+      },
+      { ct, timeoutMs });
+
+    return res;
   }
 };

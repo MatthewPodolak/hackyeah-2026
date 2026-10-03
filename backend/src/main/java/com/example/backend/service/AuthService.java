@@ -4,6 +4,7 @@ import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.dto.UserResponse;
+import com.example.backend.model.AccountStatus;
 import com.example.backend.model.AppUser;
 import com.example.backend.model.Role;
 import com.example.backend.repository.AppUserRepository;
@@ -52,6 +53,8 @@ public class AuthService {
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setRole(request.role());
+        user.setAccountStatus(request.role() == Role.CITIZEN ? AccountStatus.ACTIVE : AccountStatus.PENDING);
+        user.setCreatedAt(Instant.now());
 
         return issueToken(appUserRepository.save(user));
     }
@@ -87,6 +90,6 @@ public class AuthService {
     }
 
     private static UserResponse toResponse(AppUser user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getGminaId());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.effectiveStatus(), user.getGminaId());
     }
 }

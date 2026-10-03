@@ -8,13 +8,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina) from Problem p")
+    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina, coalesce(p.status, com.example.backend.model.ProblemStatus.SUBMITTED)) from Problem p")
     List<ProblemSummaryResponse> findAllSummaries();
 
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina) from Problem p where p.gminaId = :gminaId")
+    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina, coalesce(p.status, com.example.backend.model.ProblemStatus.SUBMITTED)) from Problem p where p.gminaId = :gminaId")
     List<ProblemSummaryResponse> findSummariesByGminaId(@Param("gminaId") String gminaId);
+
+    Optional<Problem> findByTrackingToken(String trackingToken);
+
+    List<Problem> findByAuthorIdOrderByLocalDateDesc(Long authorId);
+
+    List<Problem> findAllByOrderByLocalDateDesc();
+
+    long countByAdminSeen(Boolean adminSeen);
 }

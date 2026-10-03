@@ -19,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AiRateLimitFilter extends OncePerRequestFilter {
     private static final List<String> AI_PATHS = List.of(
             "/api/v1/ideas/draft", "/canvas/suggest", "/feedback", "/api/v1/assistant/",
-            "/application", "/api/v1/middleman", "/api/v1/matchmaking", "/api/v1/problems");
+            "/application", "/api/v1/middleman", "/api/v1/matchmaking", "/api/v1/problems",
+            "/api/v1/admin/stats/insights", "/visualize");
 
     @Value("${ai.rate-limit-per-minute:20}")
     private int maxPerMinute;

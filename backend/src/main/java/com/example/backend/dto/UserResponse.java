@@ -1,5 +1,6 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.AccountStatus;
 import com.example.backend.model.Role;
 
 public record UserResponse(
@@ -7,5 +8,6 @@ public record UserResponse(
         String name,
         String email,
         Role role,
+        AccountStatus accountStatus,
         String gminaId
 ) {}
