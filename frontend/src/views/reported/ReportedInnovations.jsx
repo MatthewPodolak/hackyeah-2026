@@ -24,6 +24,8 @@ import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES } from "@/api/context/AuthContext";
 import { useAdminIdea, useAdminIdeas, useReviewIdea } from "@/api/hooks/useAdminIdeas";
 import { useProblem } from "@/api/hooks/useProblemsQuery";
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery";
+import { problemPlace } from "@/lib/gminy";
 import { useToast } from "@/helpers/ToastProvider";
 import { IDEA_STATUS, READINESS } from "@/lib/ideas";
 import { getTargetGroupOption } from "@/lib/problemCategories";
@@ -85,6 +87,7 @@ function FilterChip({ active, label, count, onClick }) {
 
 function SourceProblem({ id }) {
   const problem = useProblem(id);
+  const gminy = useGminyIndex();
   if (!problem.data) return null;
 
   return (
@@ -93,12 +96,10 @@ function SourceProblem({ id }) {
       <div className="min-w-0">
         <p className="text-xs font-medium uppercase tracking-wide text-red-600 dark:text-red-400">Odpowiada na problem</p>
         <p className="font-medium break-words">{problem.data.title}</p>
-        {problem.data.street && (
-          <p className="flex items-center gap-1 text-xs text-muted-foreground">
-            <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-3.5" />
-            {problem.data.street}
-          </p>
-        )}
+        <p className="flex items-center gap-1 text-xs text-muted-foreground">
+          <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-3.5" />
+          {problemPlace(problem.data, gminy)}
+        </p>
       </div>
     </div>
   );

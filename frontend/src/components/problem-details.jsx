@@ -5,12 +5,15 @@ import { Alert02Icon, BulbIcon, Calendar03Icon, Cancel01Icon, Location01Icon } f
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useProblem } from "@/api/hooks/useProblemsQuery"
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery"
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories"
+import { problemPlace } from "@/lib/gminy"
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" })
 
 export default function ProblemDetails({ problem, onClose, onProposeSolution }) {
   const details = useProblem(problem?.id)
+  const gminy = useGminyIndex()
 
   if (!problem) return null
 
@@ -70,7 +73,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
             <span className="flex min-w-0 items-center gap-1.5">
               <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" />
               <span className="truncate">
-                {problem.street ?? `${problem.latitude.toFixed(5)}, ${problem.longitude.toFixed(5)}`}
+                {problemPlace(problem, gminy)}
               </span>
             </span>
             {problem.localDate && (

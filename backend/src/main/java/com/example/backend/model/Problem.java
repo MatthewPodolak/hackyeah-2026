@@ -40,4 +40,11 @@ public class Problem {
 
     @Enumerated(EnumType.STRING)
     private TargetGroup targetGroup;
+
+    // ids from malopolska-units.json; powiat is derived from the gmina
+    private String gminaId;
+    private String powiatId;
+
+    // no exact place: the report concerns the whole gmina and sits at its centre
+    private Boolean wholeGmina;
 }

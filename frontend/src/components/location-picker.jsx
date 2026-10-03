@@ -3,9 +3,9 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { KRAKOW, KRAKOW_BOUNDS, lockToKrakow } from "@/lib/map";
+import { KRAKOW, MALOPOLSKA_BOUNDS, lockToMalopolska } from "@/lib/map";
 
-export default function LocationPicker({ value, onChange }) {
+export default function LocationPicker({ value, focus, onChange }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
@@ -15,11 +15,11 @@ export default function LocationPicker({ value, onChange }) {
   useEffect(() => {
     if (mapRef.current) return;
     const map = L.map(containerRef.current, { maxBoundsViscosity: 1 }).setView(KRAKOW, 13);
-    lockToKrakow(map);
+    lockToMalopolska(map);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors",
-      bounds: KRAKOW_BOUNDS,
+      bounds: MALOPOLSKA_BOUNDS,
     }).addTo(map);
     map.on("click", (e) => onChangeRef.current?.({ lat: e.latlng.lat, lon: e.latlng.lng }));
     mapRef.current = map;
@@ -49,6 +49,12 @@ export default function LocationPicker({ value, onChange }) {
       map.setView(markerRef.current.getLatLng(), 16);
     }
   }, [value]);
+
+  // show a gmina chosen from the list (no pin)
+  useEffect(() => {
+    if (!focus || !mapRef.current) return;
+    mapRef.current.setView([focus.lat, focus.lon], 11);
+  }, [focus]);
 
   return <div ref={containerRef} className="relative z-0 isolate w-full h-full" />;
 }

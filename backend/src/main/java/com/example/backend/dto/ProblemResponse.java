@@ -16,6 +16,8 @@ public record ProblemResponse(
         Instant localDate,
         String street,
         ProblemCategory category,
-        TargetGroup targetGroup
+        TargetGroup targetGroup,
+        String gminaId,
+        Boolean wholeGmina
 
 ) {}

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.config.CreatorReferenceData;
 import com.example.backend.dto.InnovationMatchResponse;
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemResponse;
@@ -26,6 +27,7 @@ public class ProblemService {
     private final ProblemMapper problemMapper;
     private final AppUserRepository appUserRepository;
     private final MatchmakingService matchmakingService;
+    private final CreatorReferenceData referenceData;
 
 
     public ProblemWithMatchesResponse reportProblem(ProblemRequest request) {
@@ -40,6 +42,14 @@ public class ProblemService {
         }
         if (problem.getTargetGroup() == null) {
             problem.setTargetGroup(TargetGroup.OTHER);
+        }
+        if (!referenceData.gminaExists(request.gminaId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Wybierz gminę w Małopolsce");
+        }
+        problem.setPowiatId(referenceData.powiatOf(request.gminaId()));
+        problem.setWholeGmina(Boolean.TRUE.equals(request.wholeGmina()));
+        if (problem.getWholeGmina()) {
+            problem.setStreet(null);
         }
         Problem saved = problemRepository.save(problem);
 

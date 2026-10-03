@@ -18,6 +18,7 @@ export const API = {
   },
   config: {
     canvas: { method: "GET", url: "/api/v1/config/canvas" },
+    regions: { method: "GET", url: "/api/v1/config/regions" },
   },
   knowledge: {
     resources: { method: "GET", url: "/api/v1/knowledge/resources" },

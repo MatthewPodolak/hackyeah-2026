@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { KRAKOW, KRAKOW_BOUNDS, lockToKrakow } from "@/lib/map";
+import { KRAKOW, MALOPOLSKA_BOUNDS, lockToMalopolska } from "@/lib/map";
 
 const PIN_STYLE = { radius: 8, weight: 2, color: "#dc2626", fillColor: "#ef4444", fillOpacity: 0.8 };
 const PIN_SELECTED_STYLE = { radius: 12, weight: 3, color: "#7f1d1d", fillColor: "#dc2626", fillOpacity: 1 };
@@ -24,11 +24,11 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
   useEffect(() => {
     if (mapRef.current) return;
     const map = L.map(containerRef.current, { maxBoundsViscosity: 1 }).setView(KRAKOW, 15);
-    lockToKrakow(map);
+    lockToMalopolska(map);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors",
-      bounds: KRAKOW_BOUNDS,
+      bounds: MALOPOLSKA_BOUNDS,
     }).addTo(map);
     problemsLayerRef.current = L.layerGroup().addTo(map);
     map.on("click", () => onMapClickRef.current?.());

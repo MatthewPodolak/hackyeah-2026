@@ -10,7 +10,9 @@ import { useProblems } from "@/api/hooks/useProblemsQuery";
 import RoleGuard from "@/views/reported/RoleGuard";
 import { ROLES } from "@/api/context/AuthContext";
 import { Badge } from "@/components/ui/badge";
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
+import { problemPlace } from "@/lib/gminy";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 
@@ -20,6 +22,7 @@ function normalize(text) {
 
 function ProblemsList() {
   const { data: problems, isPending } = useProblems();
+  const gminy = useGminyIndex();
   const [query, setQuery] = useState("");
 
   const sorted = useMemo(
@@ -29,7 +32,7 @@ function ProblemsList() {
 
   const words = normalize(query).split(/\s+/).filter(Boolean);
   const visible = sorted.filter((problem) => {
-    const text = normalize([problem.title, problem.description, problem.street, getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
+    const text = normalize([problem.title, problem.description, problemPlace(problem, gminy), getProblemCategoryOption(problem.category).label, getTargetGroupOption(problem.targetGroup).label].join(" "));
     return words.every((word) => text.includes(word));
   });
 
@@ -91,7 +94,7 @@ function ProblemsList() {
                     <span className="flex min-w-0 items-center gap-1.5">
                       <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" />
                       <span className="truncate">
-                        {problem.street ?? `${problem.latitude?.toFixed(5)}, ${problem.longitude?.toFixed(5)}`}
+                        {problemPlace(problem, gminy)}
                       </span>
                     </span>
                     {problem.localDate && (

@@ -14,5 +14,7 @@ public record ProblemRequest(
         Long authorId,
         String street,
         ProblemCategory category,
-        TargetGroup targetGroup
+        TargetGroup targetGroup,
+        String gminaId,
+        Boolean wholeGmina
 ) {}

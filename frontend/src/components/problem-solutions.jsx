@@ -15,6 +15,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import innovations from "@/data/innovations.json"
 import { InnovationCover } from "@/components/innovation-card"
+import { useGminyIndex } from "@/api/hooks/useRegionsQuery"
+import { problemPlace } from "@/lib/gminy"
 
 const innovationsById = new Map(innovations.map((innovation) => [innovation.id, innovation]))
 
@@ -83,6 +85,7 @@ export function MatchItem({ match, rank }) {
 }
 
 export default function ProblemSolutions({ result, onClose }) {
+  const gminy = useGminyIndex()
   if (!result) return null
 
   const { problem, matches = [] } = result
@@ -102,10 +105,10 @@ export default function ProblemSolutions({ result, onClose }) {
                   Problem zgłoszony
                 </p>
                 <h2 className="text-base font-semibold leading-snug break-words">{problem?.title}</h2>
-                {problem?.street && (
+                {problem && (
                   <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                     <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-3.5 shrink-0" />
-                    <span className="truncate">{problem.street}</span>
+                    <span className="truncate">{problemPlace(problem, gminy)}</span>
                   </p>
                 )}
               </div>
