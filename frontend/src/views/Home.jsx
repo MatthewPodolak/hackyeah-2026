@@ -39,7 +39,7 @@ export default function Home() {
   const [submitResult, setSubmitResult] = useState(null);
   const { openProposal } = useProposal();
 
-  // a JST account sees the border of its own gmina
+  // a JST account sees only its own gmina: its border and its reports
   const { user, isJst } = useAuth();
   const myGminaId = isJst ? user.gminaId : null;
   const shapes = useGminyShapes({ enabled: !!myGminaId });
@@ -55,12 +55,13 @@ export default function Home() {
 
   const visibleProblems = useMemo(() => {
     const words = normalize(query).split(/\s+/).filter(Boolean);
-    if (!words.length) return problems ?? NO_PROBLEMS;
-    return (problems ?? NO_PROBLEMS).filter((problem) => {
+    const mine = myGminaId ? (problems ?? NO_PROBLEMS).filter((problem) => problem.gminaId === myGminaId) : problems ?? NO_PROBLEMS;
+    if (!words.length) return mine;
+    return mine.filter((problem) => {
       const text = normalize([problem.title, problem.description, problem.street].join(" "));
       return words.every((word) => text.includes(word));
     });
-  }, [problems, query]);
+  }, [problems, query, myGminaId]);
 
   return (
     <div className="flex flex-col flex-1 font-sans bg-background h-screen w-full relative">
