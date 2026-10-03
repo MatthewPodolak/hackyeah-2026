@@ -20,7 +20,6 @@ const publicItems = [
   { title: "Biblioteka innowacji", url: "/innovations" },
   { title: "Zaproponuj innowację", action: "proposal" },
   { title: "Partnerstwa", url: "/partnerships" },
-  { title: "Baza wiedzy", url: "/knowledge" },
 ]
 
 const myItems = [
