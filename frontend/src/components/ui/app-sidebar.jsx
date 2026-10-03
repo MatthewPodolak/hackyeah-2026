@@ -14,9 +14,9 @@ import { Logout01Icon } from "@hugeicons/core-free-icons"
 import { useProposal } from "@/api/context/ProposalContext"
 
 const items = [
-  { title: "Mapa problemow", url: "/" },
-  { title: "Innowacje", url: "/innovations" },
-  { title: "Zaproponuj innowacje", action: "proposal" },
+  { title: "Mapa problemów", url: "/" },
+  { title: "Biblioteka innowacji", url: "/innovations" },
+  { title: "Zaproponuj innowację", action: "proposal" },
   { title: "Moje propozycje", url: "/my-ideas" },
   { title: "Baza wiedzy", url: "/knowledge" },
 ]
@@ -35,6 +35,8 @@ export function AppSidebar() {
   const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
   const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
 
+  const isActive = (url) => (url === "/" ? pathname === "/" : pathname.startsWith(url))
+
   const handleLogout = async () => {
     await logout()
     showToast(LOGGED_OUT_MSG, "info")
@@ -42,10 +44,13 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="font-semibold px-4">Malopolska HUBMI</SidebarHeader>
+      <SidebarHeader className="font-semibold px-4">
+        <Link href="/" className="rounded-sm">Małopolska HUBMI</Link>
+      </SidebarHeader>
       <SidebarContent>
+        <nav aria-label="Menu główne">
         <SidebarGroup>
-          <SidebarGroupLabel>H2 TITLE CONTENT</SidebarGroupLabel>
+          <SidebarGroupLabel>Nawigacja</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -58,7 +63,8 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       render={<Link href={item.url} />}
                       // sub-pages (e.g. /innovations/bawita) keep their section highlighted
-                      isActive={item.url === "/" ? pathname === "/" : pathname.startsWith(item.url)}
+                      isActive={isActive(item.url)}
+                      aria-current={isActive(item.url) ? "page" : undefined}
                     >
                       <span>{item.title}</span>
                     </SidebarMenuButton>
@@ -75,11 +81,18 @@ export function AppSidebar() {
               <SidebarMenu>
                 {institutionItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton render={<Link href={item.url} />} isActive={pathname.startsWith(item.url)}>
+                    <SidebarMenuButton
+                      render={<Link href={item.url} />}
+                      isActive={isActive(item.url)}
+                      aria-current={isActive(item.url) ? "page" : undefined}
+                    >
                       <span>{item.title}</span>
+                      {item.badge === "unseenIdeas" && unseenIdeas > 0 && (
+                        <span className="sr-only">, nowe: {unseenIdeas}</span>
+                      )}
                     </SidebarMenuButton>
                     {item.badge === "unseenIdeas" && unseenIdeas > 0 && (
-                      <SidebarMenuBadge className="bg-emerald-600 text-white peer-hover/menu-button:text-white peer-data-active/menu-button:text-white">
+                      <SidebarMenuBadge aria-hidden="true" className="bg-emerald-700 text-white peer-hover/menu-button:text-white peer-data-active/menu-button:text-white">
                         {unseenIdeas}
                       </SidebarMenuBadge>
                     )}
@@ -89,28 +102,30 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
+        </nav>
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             {isLogged ? (
               <div className="flex items-center gap-1">
-                <SidebarMenuButton size="lg" className="flex-1">
-                  <Avatar className="size-8 rounded-lg">
+                <div className="flex min-w-0 flex-1 items-center gap-2 p-2">
+                  <Avatar className="size-8 rounded-lg" aria-hidden="true">
                     <AvatarFallback className="rounded-lg">{user.name?.[0]?.toUpperCase()}</AvatarFallback>
                   </Avatar>
-                  <div className="grid text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="truncate text-xs text-muted-foreground">{roleLabel} · {user.email}</span>
+                  <div className="grid min-w-0 text-left text-sm leading-tight">
+                    <span className="sr-only">Zalogowano jako </span>
+                    <span className="font-medium break-words">{user.name}</span>
+                    <span className="text-xs text-muted-foreground break-all">{roleLabel} · {user.email}</span>
                   </div>
-                </SidebarMenuButton>
+                </div>
                 <Button variant="ghost" size="icon-sm" className="cursor-pointer" onClick={handleLogout} aria-label="Wyloguj" title="Wyloguj">
-                  <HugeiconsIcon icon={Logout01Icon} strokeWidth={2} />
+                  <HugeiconsIcon icon={Logout01Icon} strokeWidth={2} aria-hidden="true" />
                 </Button>
               </div>
             ):(
               <SidebarMenuButton size="lg" className={"cursor-pointer"} onClick={() => openPanel("login")} tooltip="Zaloguj się">
-                <div className="flex size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
+                <div aria-hidden="true" className="flex size-8 items-center justify-center rounded-lg bg-sidebar-accent text-sidebar-accent-foreground">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true" className="size-7">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                   </svg>

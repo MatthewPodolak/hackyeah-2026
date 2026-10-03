@@ -1,9 +1,9 @@
 export const IDEA_STATUS = {
   DRAFT: { label: "Szkic", className: "bg-muted text-muted-foreground" },
-  SUBMITTED: { label: "Wysłana", className: "bg-sky-500/15 text-sky-700 dark:text-sky-300" },
-  IN_REVIEW: { label: "W weryfikacji", className: "bg-amber-500/15 text-amber-700 dark:text-amber-300" },
-  FEEDBACK_GIVEN: { label: "Z odpowiedzią", className: "bg-violet-500/15 text-violet-700 dark:text-violet-300" },
-  ACCEPTED: { label: "Zaakceptowana", className: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" },
+  SUBMITTED: { label: "Wysłana", className: "bg-sky-500/15 text-sky-800 dark:text-sky-300" },
+  IN_REVIEW: { label: "W weryfikacji", className: "bg-amber-500/15 text-amber-800 dark:text-amber-300" },
+  FEEDBACK_GIVEN: { label: "Z odpowiedzią", className: "bg-violet-500/15 text-violet-800 dark:text-violet-300" },
+  ACCEPTED: { label: "Zaakceptowana", className: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" },
   NOT_NOW: { label: "Nie teraz", className: "bg-red-500/10 text-red-700 dark:text-red-300" },
 };
 

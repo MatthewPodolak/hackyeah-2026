@@ -3,14 +3,22 @@
 import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { KRAKOW, KRAKOW_BOUNDS, lockToKrakow } from "@/lib/map";
-
-const PIN_STYLE = { radius: 8, weight: 2, color: "#dc2626", fillColor: "#ef4444", fillOpacity: 0.8 };
-const PIN_SELECTED_STYLE = { radius: 12, weight: 3, color: "#7f1d1d", fillColor: "#dc2626", fillOpacity: 1 };
+import { createAccessibleMap, onActivateKey } from "@/lib/map";
 
 const NO_PROBLEMS = [];
 
-export default function MapView({ target, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick }) {
+function pinIcon(problem, selected) {
+  const pin = document.createElement("span");
+  pin.className = selected ? "problem-pin problem-pin--selected" : "problem-pin";
+  const label = document.createElement("span");
+  label.className = "sr-only";
+  label.textContent = `Problem: ${problem.title}${problem.street ? `, ${problem.street}` : ""}`;
+  pin.appendChild(label);
+  const size = selected ? 26 : 18;
+  return L.divIcon({ html: pin, className: "problem-pin-wrapper", iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+}
+
+export default function MapView({ target, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = "Mapa zgłoszonych problemów" }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
@@ -18,18 +26,15 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
   const pinsRef = useRef(new Map());
   const onProblemClickRef = useRef(onProblemClick);
   const onMapClickRef = useRef(onMapClick);
-  onProblemClickRef.current = onProblemClick;
-  onMapClickRef.current = onMapClick;
+
+  useEffect(() => {
+    onProblemClickRef.current = onProblemClick;
+    onMapClickRef.current = onMapClick;
+  });
 
   useEffect(() => {
     if (mapRef.current) return;
-    const map = L.map(containerRef.current, { maxBoundsViscosity: 1 }).setView(KRAKOW, 15);
-    lockToKrakow(map);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors",
-      bounds: KRAKOW_BOUNDS,
-    }).addTo(map);
+    const map = createAccessibleMap(L, containerRef.current, { zoom: 15, label });
     problemsLayerRef.current = L.layerGroup().addTo(map);
     map.on("click", () => onMapClickRef.current?.());
     mapRef.current = map;
@@ -39,7 +44,7 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
       mapRef.current = null;
       problemsLayerRef.current = null;
     };
-  }, []);
+  }, [label]);
 
   useEffect(() => {
     const layer = problemsLayerRef.current;
@@ -48,12 +53,22 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
     pinsRef.current.clear();
     for (const problem of problems) {
       if (problem.latitude == null || problem.longitude == null) continue;
-      const pin = L.circleMarker([problem.latitude, problem.longitude], PIN_STYLE)
+      const pin = L.marker([problem.latitude, problem.longitude], {
+        icon: pinIcon(problem, false),
+        keyboard: true,
+        title: problem.title,
+        riseOnHover: true,
+      })
         .on("click", (e) => {
           L.DomEvent.stopPropagation(e);
           onProblemClickRef.current?.(problem);
         })
+        .on("add", (e) => {
+          const element = e.target.getElement();
+          if (element) onActivateKey(element, () => onProblemClickRef.current?.(problem));
+        })
         .addTo(layer);
+      pin.problem = problem;
       pinsRef.current.set(problem.id, pin);
     }
   }, [problems]);
@@ -62,11 +77,16 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
     const map = mapRef.current;
     for (const [id, pin] of pinsRef.current) {
       const selected = id === selectedProblemId;
-      pin.setStyle(selected ? PIN_SELECTED_STYLE : PIN_STYLE);
-      if (selected) {
-        pin.bringToFront();
-        map?.panTo(pin.getLatLng());
+      const element = pin.getElement();
+      const hadFocus = element && element === document.activeElement;
+      pin.setIcon(pinIcon(pin.problem, selected));
+      pin.setZIndexOffset(selected ? 1000 : 0);
+      const next = pin.getElement();
+      if (next) {
+        next.setAttribute("aria-pressed", selected ? "true" : "false");
+        if (hadFocus) next.focus({ preventScroll: true });
       }
+      if (selected) map?.panTo(pin.getLatLng());
     }
   }, [problems, selectedProblemId]);
 
@@ -76,7 +96,7 @@ export default function MapView({ target, problems = NO_PROBLEMS, selectedProble
     if (markerRef.current) markerRef.current.remove();
     markerRef.current = L.circleMarker([target.lat, target.lon], {
       radius: 9,
-      color: "#2563eb",
+      color: "#1d4ed8",
       fillColor: "#3b82f6",
       fillOpacity: 0.8,
     })

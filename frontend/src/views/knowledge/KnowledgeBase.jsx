@@ -3,6 +3,7 @@
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingStatus from "@/components/loading-status";
 import { useKnowledgeResources } from "@/api/hooks/useCanvas";
 
 const TYPES = {
@@ -28,9 +29,9 @@ export default function KnowledgeBase() {
         </header>
 
         {resources.isPending ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <LoadingStatus label="Wczytywanie materiałów" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, i) => <Skeleton key={i} className="h-32 rounded-2xl" />)}
-          </div>
+          </LoadingStatus>
         ) : (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {(resources.data ?? []).map((resource) => {
@@ -44,11 +45,15 @@ export default function KnowledgeBase() {
                     className="flex h-full flex-col gap-2 rounded-2xl border bg-card p-5 transition-shadow outline-none hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50"
                   >
                     <span aria-hidden="true" className="text-3xl">{type.icon}</span>
-                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{type.label}</span>
                     <span className="font-semibold leading-snug">{resource.title}</span>
+                    <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      <span className="sr-only">, rodzaj: </span>{type.label}
+                    </span>
                     {resource.description && <span className="text-sm text-muted-foreground">{resource.description}</span>}
                     <span className="mt-auto flex items-center gap-1 text-sm font-medium text-primary">
-                      Otwórz <HugeiconsIcon icon={LinkSquare02Icon} strokeWidth={2} className="size-4" />
+                      <span aria-hidden="true">Otwórz</span>
+                      <span className="sr-only">(otwiera się w nowej karcie)</span>
+                      <HugeiconsIcon icon={LinkSquare02Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
                     </span>
                   </a>
                 </li>

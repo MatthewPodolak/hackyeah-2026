@@ -18,6 +18,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingStatus from "@/components/loading-status";
 import { Textarea } from "@/components/ui/textarea";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import RoleGuard from "@/views/reported/RoleGuard";
@@ -28,6 +29,7 @@ import { useToast } from "@/helpers/ToastProvider";
 import { IDEA_STATUS, READINESS } from "@/lib/ideas";
 import { getTargetGroupOption } from "@/lib/problemCategories";
 import AiFeedback from "@/components/ai-feedback";
+import Modal from "@/components/modal";
 import { CanvasSummary } from "@/components/canvas/canvas-fields";
 import { useCanvasSpec } from "@/api/hooks/useCanvas";
 
@@ -71,11 +73,12 @@ function FilterChip({ active, label, count, onClick }) {
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-        active ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+        "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
       )}
     >
       {label}
+      <span className="sr-only">, liczba:</span>
       <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>
         {count}
       </span>
@@ -89,9 +92,9 @@ function SourceProblem({ id }) {
 
   return (
     <div className="flex gap-3 rounded-xl border bg-red-500/5 p-3 text-sm">
-      <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-red-600 dark:text-red-400" />
+      <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-red-700 dark:text-red-400" />
       <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-wide text-red-600 dark:text-red-400">Odpowiada na problem</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">Odpowiada na problem</p>
         <p className="font-medium break-words">{problem.data.title}</p>
         {problem.data.street && (
           <p className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -156,32 +159,29 @@ function IdeaDetails({ id, onClose }) {
   const idea = details.data?.idea;
 
   return (
-    <div onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} className="fixed inset-0 z-[2000] flex overflow-y-auto bg-black/40 p-6">
-      <div className="m-auto w-full max-w-2xl animate-in fade-in zoom-in-95 duration-200">
+    <Modal open onClose={onClose} labelledBy="idea-details-heading" className="max-w-2xl">
         <Card className="pt-0">
-          <div className="h-1.5 bg-emerald-500" />
+          <div aria-hidden="true" className="h-1.5 bg-emerald-500" />
           <CardHeader>
             <div className="flex items-start gap-3">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <div aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                 <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-6" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium uppercase tracking-wide text-emerald-600 dark:text-emerald-400">Propozycja innowacji</p>
-                {idea ? (
-                  <h2 className="text-lg font-semibold leading-snug break-words">{idea.title}</h2>
-                ) : (
-                  <Skeleton className="mt-1 h-6 w-48" />
-                )}
+                <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Propozycja innowacji</p>
+                <h2 id="idea-details-heading" className="text-lg font-semibold leading-snug break-words">
+                  {idea ? idea.title : "Wczytywanie propozycji…"}
+                </h2>
               </div>
-              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij">
-                <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły propozycji">
+                <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
               </Button>
             </div>
           </CardHeader>
 
           <CardContent className="flex flex-col gap-4">
             {!idea ? (
-              <Skeleton className="h-48 w-full rounded-xl" />
+              <LoadingStatus label="Wczytywanie szczegółów propozycji"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
             ) : (
               <>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
@@ -220,8 +220,7 @@ function IdeaDetails({ id, onClose }) {
             )}
           </CardContent>
         </Card>
-      </div>
-    </div>
+    </Modal>
   );
 }
 
@@ -255,10 +254,10 @@ function IdeasList() {
           <p className="text-muted-foreground">Propozycje rozwiązań i innowacji przesłane przez mieszkańców</p>
         </header>
 
-        <div className="mb-6 flex flex-col gap-3">
+        <div role="search" aria-label="Filtry propozycji" className="mb-6 flex flex-col gap-3">
           <InputGroup>
             <InputGroupAddon>
-              <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />
+              <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" />
             </InputGroupAddon>
             <InputGroupInput
               type="search"
@@ -268,7 +267,7 @@ function IdeasList() {
               onChange={(e) => setQuery(e.target.value)}
             />
           </InputGroup>
-          <div className="flex flex-wrap gap-2">
+          <div role="group" aria-label="Status propozycji" className="flex flex-wrap gap-2">
             <FilterChip active={!status} label="Wszystkie" count={all.length} onClick={() => setStatus(null)} />
             {REVIEW_STATUSES.map((key) => (
               <FilterChip
@@ -282,28 +281,39 @@ function IdeasList() {
           </div>
         </div>
 
+        <p aria-live="polite" aria-atomic="true" className="sr-only">
+          {isPending ? "" : `Wyniki: ${visible.length} z ${all.length}`}
+        </p>
+
         {isPending ? (
-          <div className="flex flex-col gap-3">
+          <LoadingStatus label="Wczytywanie propozycji" className="flex flex-col gap-3">
             {Array.from({ length: 4 }, (_, i) => (
               <Skeleton key={i} className="h-28 w-full rounded-xl" />
             ))}
-          </div>
+          </LoadingStatus>
         ) : visible.length > 0 ? (
           <ul className="flex flex-col gap-3">
             {visible.map((idea) => (
-              <li key={idea.id}>
-                <button
-                  type="button"
-                  onClick={() => setOpenId(idea.id)}
-                  className="flex w-full gap-4 rounded-xl border bg-card p-4 text-left transition-shadow outline-none hover:shadow-md focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <li
+                key={idea.id}
+                className="relative flex w-full gap-4 rounded-xl border bg-card p-4 transition-shadow hover:shadow-md has-[button:focus-visible]:ring-3 has-[button:focus-visible]:ring-ring/50"
+              >
+                  <div aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                     <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-5" />
                   </div>
                   <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                     <div className="flex items-start justify-between gap-2">
-                      <h2 className="font-semibold leading-snug break-words">{idea.title}</h2>
-                      <StatusBadge status={idea.status} />
+                      <h2 className="font-semibold leading-snug break-words">
+                        <button
+                          type="button"
+                          onClick={() => setOpenId(idea.id)}
+                          aria-haspopup="dialog"
+                          className="text-left after:absolute after:inset-0 after:rounded-xl"
+                        >
+                          {idea.title}
+                        </button>
+                      </h2>
+                      <p className="shrink-0"><span className="sr-only">Status: </span><StatusBadge status={idea.status} /></p>
                     </div>
                     {(idea.essence || idea.problemDescription) && (
                       <p className="line-clamp-2 text-sm text-muted-foreground break-words">
@@ -312,22 +322,21 @@ function IdeasList() {
                     )}
                     <IdeaBadges idea={idea} />
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-                      {idea.createdAt && <span>{dateFormat.format(new Date(idea.createdAt))}</span>}
+                      {idea.createdAt && <span><span className="sr-only">Wysłano: </span>{dateFormat.format(new Date(idea.createdAt))}</span>}
                       {idea.sourceProblemId != null && (
                         <span className="flex items-center gap-1">
-                          <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-3.5" />
+                          <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-3.5" aria-hidden="true" />
                           Odpowiada na zgłoszony problem
                         </span>
                       )}
                       {idea.adminReply && (
                         <span className="flex items-center gap-1">
-                          <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} className="size-3.5" />
+                          <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} className="size-3.5" aria-hidden="true" />
                           Udzielono odpowiedzi
                         </span>
                       )}
                     </div>
                   </div>
-                </button>
               </li>
             ))}
           </ul>

@@ -14,6 +14,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingStatus from "@/components/loading-status";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -41,6 +42,7 @@ function isFilled(value) {
 
 function StepNav({ steps, current, answers, onSelect }) {
   return (
+    <nav aria-label="Kroki kanwy">
     <ol className="grid gap-2 sm:grid-cols-4">
       {steps.map((step, index) => {
         const filled = step.sections.filter((section) => isFilled(answers[section.id])).length;
@@ -52,13 +54,15 @@ function StepNav({ steps, current, answers, onSelect }) {
               onClick={() => onSelect(index)}
               aria-current={current === index ? "step" : undefined}
               className={cn(
-                "flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-                current === index ? "border-emerald-500 bg-emerald-500/10" : "hover:bg-muted"
+                "flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors",
+                current === index ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
               )}
             >
               <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                 Krok {index + 1}
-                {done && <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-3.5 text-emerald-600" />}
+                {current === index && <span className="sr-only">(bieżący)</span>}
+                {done && <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-3.5 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />}
+                {done && <span className="sr-only">(ukończony)</span>}
               </span>
               <span className="text-sm font-semibold leading-snug">{step.title}</span>
               <span className="text-xs text-muted-foreground tabular-nums">
@@ -69,6 +73,7 @@ function StepNav({ steps, current, answers, onSelect }) {
         );
       })}
     </ol>
+    </nav>
   );
 }
 
@@ -77,13 +82,13 @@ function SuggestionBox({ section, suggestion, reason, onApply }) {
   if (!text) return null;
 
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-dashed border-emerald-500/60 bg-emerald-500/5 p-3 text-sm sm:flex-row sm:items-start">
-      <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
+    <div className="flex flex-col gap-2 rounded-lg border border-dashed border-emerald-700/60 bg-emerald-500/5 p-3 text-sm sm:flex-row sm:items-start">
+      <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <p className="font-medium break-words">{text}</p>
+        <p className="font-medium break-words"><span className="sr-only">Podpowiedź AI: </span>{text}</p>
         {reason && <p className="text-xs text-muted-foreground">{reason}</p>}
       </div>
-      <Button type="button" variant="outline" size="sm" onClick={onApply}>Zastosuj</Button>
+      <Button type="button" variant="outline" size="sm" onClick={onApply} aria-label={`Zastosuj podpowiedź dla: ${section.title}`}>Zastosuj</Button>
     </div>
   );
 }
@@ -112,9 +117,17 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
   };
 
   const go = async (index) => {
-    await onSave(true);
+    try {
+      await onSave(true);
+    } catch {
+      return;
+    }
     setCurrent(index);
-    window.scrollTo?.({ top: 0, behavior: "smooth" });
+    requestAnimationFrame(() => {
+      const heading = document.getElementById("canvas-step-heading");
+      heading?.scrollIntoView({ block: "start" });
+      heading?.focus({ preventScroll: true });
+    });
   };
 
   return (
@@ -123,7 +136,9 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
 
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
         <div>
-          <h2 className="font-semibold">{step.title}</h2>
+          <h2 id="canvas-step-heading" tabIndex={-1} className="font-semibold outline-none">
+            Krok {current + 1} z {spec.steps.length}: {step.title}
+          </h2>
           <p className="text-xs text-muted-foreground">Odpowiedz na tyle pytań, na ile potrafisz — nic nie jest obowiązkowe.</p>
         </div>
         <div className="flex gap-2">
@@ -136,11 +151,18 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
           </Button>
         </div>
       </div>
+      <p role="status" className="sr-only">
+        {suggest.isPending
+          ? "AI przygotowuje podpowiedzi"
+          : stepSuggestion
+            ? `Podpowiedzi AI dla ${Object.keys(stepSuggestion.answers ?? {}).length} sekcji. Przy każdej sekcji jest przycisk Zastosuj.`
+            : ""}
+      </p>
 
       {step.sections.map((section) => (
-        <section key={section.id} className="flex flex-col gap-3 rounded-xl border bg-card p-4">
+        <section key={section.id} aria-labelledby={`canvas-${section.id}`} className="flex flex-col gap-3 rounded-xl border bg-card p-4">
           <div>
-            <h3 className="font-medium">
+            <h3 id={`canvas-${section.id}`} className="font-medium">
               {section.icon && <span aria-hidden="true">{section.icon} </span>}
               {section.title}
             </h3>
@@ -161,7 +183,12 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
               }}
             />
           )}
-          <CanvasField section={section} value={answers[section.id]} onChange={(value) => setAnswer(section.id, value)} />
+          <CanvasField
+            section={section}
+            value={answers[section.id]}
+            labelledBy={`canvas-${section.id}`}
+            onChange={(value) => setAnswer(section.id, value)}
+          />
         </section>
       ))}
 
@@ -204,6 +231,9 @@ function FeedbackTab({ token, feedback, beforeAi }) {
           {askFeedback.isPending ? "AI ocenia..." : feedback ? "Oceń ponownie" : "Poproś o ocenę"}
         </Button>
       </div>
+      <p role="status" className="sr-only">
+        {askFeedback.isPending ? "Trwa ocenianie pomysłu" : askFeedback.data ? "Ocena AI jest gotowa" : ""}
+      </p>
       {askFeedback.data || feedback ? (
         <AiFeedback feedback={askFeedback.data ?? feedback} />
       ) : (
@@ -242,7 +272,7 @@ function GrantTab({ token, beforeAi }) {
     }
   };
 
-  if (calls.isPending) return <Skeleton className="h-40 w-full rounded-xl" />;
+  if (calls.isPending) return <LoadingStatus label="Wczytywanie naborów"><Skeleton className="h-40 w-full rounded-xl" /></LoadingStatus>;
 
   if (!calls.data?.length) {
     return (
@@ -263,7 +293,8 @@ function GrantTab({ token, beforeAi }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="grid gap-3 sm:grid-cols-2">
+      <p id="grant-calls-label" className="text-sm font-medium">Wybierz nabór</p>
+      <div role="radiogroup" aria-labelledby="grant-calls-label" className="grid gap-3 sm:grid-cols-2">
         {calls.data.map((call) => (
           <button
             key={call.id}
@@ -272,10 +303,13 @@ function GrantTab({ token, beforeAi }) {
             aria-checked={callId === call.id}
             onClick={() => setCallId(call.id)}
             className={cn(
-              "flex flex-col items-start gap-1.5 rounded-xl border p-4 text-left transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-              callId === call.id ? "border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500" : "hover:bg-muted"
+              "relative flex flex-col items-start gap-1.5 rounded-xl border p-4 pr-9 text-left transition-colors",
+              callId === call.id ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
             )}
           >
+            {callId === call.id && (
+              <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} aria-hidden="true" className="absolute right-3 top-3 size-5 text-emerald-700 dark:text-emerald-400" />
+            )}
             <span className="font-semibold">{call.name}</span>
             <span className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
               <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" />
@@ -286,10 +320,12 @@ function GrantTab({ token, beforeAi }) {
         ))}
       </div>
 
+      <label htmlFor="grant-extra" className="text-sm font-medium">Dodatkowe informacje do wniosku (opcjonalnie)</label>
       <Textarea
+        id="grant-extra"
         rows={3}
         value={extraInfo}
-        placeholder="Dodatkowe informacje do wniosku (opcjonalnie): budżet, partnerzy, harmonogram…"
+        placeholder="np. budżet, partnerzy, harmonogram…"
         onChange={(e) => setExtraInfo(e.target.value)}
       />
       <Button className="self-start" onClick={generate} disabled={application.isPending}>
@@ -297,6 +333,9 @@ function GrantTab({ token, beforeAi }) {
         {application.isPending ? "AI pisze wniosek..." : "Wygeneruj szkic wniosku"}
       </Button>
 
+      <p role="status" className="sr-only">
+        {application.isPending ? "Trwa generowanie szkicu wniosku" : sections.length ? "Szkic wniosku jest gotowy" : ""}
+      </p>
       {sections.length > 0 && (
         <div className="flex flex-col gap-3 rounded-xl border p-4">
           <div className="flex items-center justify-between gap-2">
@@ -311,8 +350,8 @@ function GrantTab({ token, beforeAi }) {
             <section key={i} className="rounded-lg bg-muted/40 p-3">
               <div className="flex items-start justify-between gap-2">
                 <h4 className="text-sm font-semibold">{section.title}</h4>
-                <Button variant="ghost" size="icon-sm" aria-label="Kopiuj sekcję" onClick={() => copy(`${section.title}\n\n${section.content}`)}>
-                  <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} />
+                <Button variant="ghost" size="icon-sm" aria-label={`Kopiuj sekcję: ${section.title}`} onClick={() => copy(`${section.title}\n\n${section.content}`)}>
+                  <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} aria-hidden="true" />
                 </Button>
               </div>
               <p className="text-sm whitespace-pre-line">{section.content}</p>
@@ -355,7 +394,7 @@ function Workspace({ token, details, spec }) {
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
         <Link href="/my-ideas" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "self-start")}>
-          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} data-icon="inline-start" />
+          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
           Moje propozycje
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-2">
@@ -363,7 +402,9 @@ function Workspace({ token, details, spec }) {
           <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", status.className)}>{status.label}</span>
         </div>
         {idea.essence && <p className="text-muted-foreground whitespace-pre-line">{idea.essence}</p>}
-        {dirty && <p className="text-xs text-amber-600 dark:text-amber-400">Masz niezapisane zmiany w kanwie</p>}
+        <p role="status" className="text-xs text-amber-800 dark:text-amber-300">
+          {dirty ? "Masz niezapisane zmiany w kanwie" : ""}
+        </p>
       </header>
 
       <Tabs defaultValue="canvas" className="gap-4">
@@ -387,7 +428,9 @@ function Workspace({ token, details, spec }) {
         <p className="text-xs text-muted-foreground">
           {spec.attribution}.{" "}
           {spec.sourceUrl && (
-            <a href={spec.sourceUrl} target="_blank" rel="noreferrer" className="underline underline-offset-4">Kanwa w PDF</a>
+            <a href={spec.sourceUrl} target="_blank" rel="noreferrer" className="underline underline-offset-4">
+              Kanwa w PDF<span className="sr-only"> (otwiera się w nowej karcie)</span>
+            </a>
           )}
         </p>
       )}
@@ -412,11 +455,11 @@ export default function IdeaWorkspace({ token }) {
         ) : details.data && spec.data ? (
           <Workspace token={token} details={details.data} spec={spec.data} />
         ) : (
-          <div className="flex flex-col gap-4">
+          <LoadingStatus label="Wczytywanie pomysłu" className="flex flex-col gap-4">
             <Skeleton className="h-10 w-2/3" />
             <Skeleton className="h-24 w-full rounded-xl" />
             <Skeleton className="h-64 w-full rounded-xl" />
-          </div>
+          </LoadingStatus>
         )}
       </div>
     </div>

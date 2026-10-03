@@ -38,12 +38,13 @@ function CategoryChip({ active, icon, label, count, onClick }) {
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-        active ? "border-primary bg-primary text-primary-foreground" : "bg-background hover:bg-muted"
+        "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
       )}
     >
       {icon && <span aria-hidden="true">{icon}</span>}
       {label}
+      <span className="sr-only">, liczba innowacji:</span>
       <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>
         {count}
       </span>
@@ -93,11 +94,11 @@ export default function InnovationsBrowser({ innovations }) {
 
   return (
     <>
-      <div className="sticky top-0 z-10 -mx-4 mb-6 flex flex-col gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
+      <div role="search" aria-label="Filtry innowacji" className="-mx-4 mb-6 flex flex-col gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:sticky md:top-0 md:z-10 md:-mx-8 md:px-8">
         <div className="flex flex-col gap-2 sm:flex-row">
           <InputGroup className="sm:flex-1">
             <InputGroupAddon>
-              <HugeiconsIcon icon={Search01Icon} strokeWidth={2} />
+              <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" />
             </InputGroupAddon>
             <InputGroupInput
               type="search"
@@ -108,8 +109,8 @@ export default function InnovationsBrowser({ innovations }) {
             />
             {query && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Wyczyść" onClick={() => setQuery("")}>
-                  <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+                <InputGroupButton size="icon-xs" aria-label="Wyczyść wyszukiwanie" onClick={() => setQuery("")}>
+                  <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
                 </InputGroupButton>
               </InputGroupAddon>
             )}
@@ -119,13 +120,13 @@ export default function InnovationsBrowser({ innovations }) {
             <NativeSelectOption value="">Dla kogo: wszyscy</NativeSelectOption>
             {WHO_CATEGORIES.map(([key, item]) => (
               <NativeSelectOption key={key} value={key}>
-                {item.icon} {item.label}
+                {item.label}
               </NativeSelectOption>
             ))}
           </NativeSelect>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div role="group" aria-label="Kategoria problemu" className="flex flex-wrap gap-2">
           <CategoryChip
             active={!category}
             label="Wszystkie"
@@ -161,7 +162,8 @@ export default function InnovationsBrowser({ innovations }) {
           )}
         </div>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
-          <span>
+          <span aria-live="polite" aria-atomic="true">
+            <span className="sr-only">Wyniki: </span>
             {visible.length} z {innovations.length}
           </span>
           {hasFilters && (
