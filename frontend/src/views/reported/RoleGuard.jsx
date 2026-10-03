@@ -7,7 +7,7 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { Spinner } from "@/components/ui/spinner";
 import { useAuth } from "@/api/context/AuthContext";
 
-export default function RoleGuard({ roles, children }) {
+export default function RoleGuard({ roles, children, description }) {
   const { isLoading, isLogged, hasRole, openPanel } = useAuth();
 
   if (isLoading) {
@@ -18,17 +18,19 @@ export default function RoleGuard({ roles, children }) {
     );
   }
 
-  if (hasRole(roles)) return children;
+  if (roles ? hasRole(roles) : isLogged) return children;
 
   return (
     <div className="flex flex-1 items-center justify-center p-6">
       <Empty className="max-w-md border border-dashed">
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <HugeiconsIcon icon={LockIcon} strokeWidth={2} />
+            <HugeiconsIcon icon={LockIcon} strokeWidth={2} aria-hidden="true" />
           </EmptyMedia>
-          <EmptyTitle>Brak dostępu</EmptyTitle>
-          <EmptyDescription>Ta sekcja jest dostępna tylko dla kont JST i ROPS.</EmptyDescription>
+          <EmptyTitle>{roles ? "Brak dostępu" : "Zaloguj się"}</EmptyTitle>
+          <EmptyDescription>
+            {description ?? (roles ? "Ta sekcja jest dostępna tylko dla kont JST i ROPS." : "Ta sekcja jest dostępna po zalogowaniu.")}
+          </EmptyDescription>
         </EmptyHeader>
         {!isLogged && (
           <EmptyContent>

@@ -13,5 +13,6 @@ public interface ProblemMapper {
     @Mapping(target = "author", ignore = true) // Autora ustawimy w serwisie
     Problem toEntity(ProblemRequest request);
 
+    @Mapping(target = "status", expression = "java(problem.effectiveStatus())")
     ProblemResponse toResponse(Problem problem);
 }

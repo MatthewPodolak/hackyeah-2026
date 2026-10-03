@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,18 @@ public class CreatorReferenceData {
     public FormCategories forms() { return forms; }
     public RegionsData regions() { return regions; }
     public boolean gminaExists(String id) { return gminaIds.contains(id); }
+
+    public Optional<GminaWithPowiat> findGmina(String id) {
+        if (id == null) return Optional.empty();
+        for (RegionsData.Powiat powiat : regions.powiaty()) {
+            for (RegionsData.Gmina gmina : powiat.gminy()) {
+                if (gmina.id().equals(id)) return Optional.of(new GminaWithPowiat(gmina, powiat));
+            }
+        }
+        return Optional.empty();
+    }
+
+    public record GminaWithPowiat(RegionsData.Gmina gmina, RegionsData.Powiat powiat) {}
     public Set<String> whoKeys() { return forms.whoCategories().keySet(); }
     public Set<String> disabilityKeys() { return forms.disabilityTypes().keySet(); }
 

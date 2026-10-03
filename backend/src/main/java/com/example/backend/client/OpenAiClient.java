@@ -61,7 +61,9 @@ public class OpenAiClient {
         requireKey();
         JsonNode res = imageClient.post().uri("/images/generations")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Map.of("model", imageModel, "prompt", prompt, "size", "1024x1024"))
+                .body(imageModel.startsWith("dall-e")
+                        ? Map.of("model", imageModel, "prompt", prompt, "size", "1024x1024", "response_format", "b64_json")
+                        : Map.of("model", imageModel, "prompt", prompt, "size", "1024x1024"))
                 .retrieve().body(JsonNode.class);
         JsonNode img = res == null ? null : res.path("data").path(0);
         if (img == null) throw new IllegalStateException("Pusta odpowiedź generatora obrazów");

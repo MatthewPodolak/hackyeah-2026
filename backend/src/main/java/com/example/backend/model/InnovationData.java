@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,5 +19,9 @@ public record InnovationData(
         String whoCanImplement,
         String effectiveness,
         String disseminationProgram,
-        Map<String, String> links
+        Map<String, String> links,
+        List<String> whoCategories,
+        List<String> problemCategories,
+        List<String> disabilityTypes,
+        String thumbnailUrl
 ) {}

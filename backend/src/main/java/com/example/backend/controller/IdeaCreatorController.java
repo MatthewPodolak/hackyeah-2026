@@ -4,6 +4,7 @@ import com.example.backend.dto.*;
 import com.example.backend.service.IdeaCreatorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,16 @@ public class IdeaCreatorController {
 
     @PostMapping("/by-token/{token}/feedback")
     public AiFeedback feedback(@PathVariable String token) { return service.feedback(token); }
+
+    @PostMapping("/by-token/{token}/visualize")
+    public VisualizeResponse visualize(@PathVariable String token, @RequestBody(required = false) VisualizeRequest r) {
+        return service.visualize(token, r);
+    }
+
+    @GetMapping("/by-token/{token}/visualization")
+    public ResponseEntity<byte[]> visualization(@PathVariable String token) {
+        return ImageResponses.from(service.visualizationByToken(token));
+    }
 
     @GetMapping("/by-token/{token}/similar")
     public List<InnovationMatchResponse> similar(@PathVariable String token) { return service.similar(token); }

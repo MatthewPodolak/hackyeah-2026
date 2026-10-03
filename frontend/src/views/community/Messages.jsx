@@ -1,0 +1,309 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { cn } from "cn";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Cancel01Icon, Chatting01Icon, SentIcon } from "@hugeicons/core-free-icons";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
+import Modal from "@/components/modal";
+import LoadingStatus from "@/components/loading-status";
+import StatusPill from "@/components/status-pill";
+import RoleGuard from "@/views/reported/RoleGuard";
+import { ROLES, useAuth } from "@/api/context/AuthContext";
+import { useConversationMessages, useConversations, useCreateConversation, useReply, useSetConversationStatus } from "@/api/hooks/useCommunication";
+import { useToast } from "@/helpers/ToastProvider";
+import { useFormErrors } from "@/helpers/useFormErrors";
+import { CONVERSATION_STATUS, CONVERSATION_TYPE } from "@/lib/community";
+
+const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
+const TYPES = Object.entries(CONVERSATION_TYPE);
+
+function NewConversation({ onCreated, onClose }) {
+  const [form, setForm] = useState({ type: "QUESTION", subject: "", content: "" });
+  const create = useCreateConversation();
+  const { showToast } = useToast();
+  const { fail, clear, fieldProps, errorProps } = useFormErrors("conv");
+
+  const set = (key) => (e) => {
+    setForm((f) => ({ ...f, [key]: e.target.value }));
+    clear(key);
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!form.subject.trim()) return fail("subject", "Podaj temat rozmowy");
+    if (!form.content.trim()) return fail("content", "Napisz wiadomość");
+    try {
+      const id = await create.mutateAsync({ type: form.type, subject: form.subject.trim(), content: form.content.trim() });
+      showToast("Rozmowa została rozpoczęta", "success");
+      onCreated(id);
+    } catch (err) {
+      if (err?.status === 400) fail("content", err.body?.message ?? "Sprawdź poprawność danych");
+      else showToast(null, "error");
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-start gap-3">
+          <div className="min-w-0 flex-1">
+            <CardTitle><h2 id="conv-heading" className="text-base font-semibold">Nowa rozmowa</h2></CardTitle>
+            <CardDescription className="mt-1">Twoją wiadomość zobaczą eksperci ROPS i przedstawiciele samorządów.</CardDescription>
+          </div>
+          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
+            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={submit} noValidate>
+          <FieldGroup>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-2 text-sm font-medium">Rodzaj rozmowy</legend>
+              {TYPES.map(([value, meta]) => (
+                <label key={value} className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3", form.type === value ? "border-primary bg-muted/60" : "border-foreground/45")}>
+                  <input type="radio" name="conv-type" value={value} checked={form.type === value} onChange={set("type")} className="mt-1 size-4 accent-[var(--primary)]" />
+                  <span>
+                    <span className="block text-sm font-medium">{meta.label}</span>
+                    <span className="block text-xs text-muted-foreground">{meta.hint}</span>
+                  </span>
+                </label>
+              ))}
+            </fieldset>
+            <Field>
+              <FieldLabel htmlFor="conv-subject">Temat (wymagane)</FieldLabel>
+              <Input {...fieldProps("subject")} required maxLength={200} value={form.subject} onChange={set("subject")} />
+              <FieldError {...errorProps("subject")} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="conv-content">Wiadomość (wymagane)</FieldLabel>
+              <Textarea {...fieldProps("content")} required rows={5} maxLength={4000} value={form.content} onChange={set("content")} />
+              <FieldError {...errorProps("content")} />
+            </Field>
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <Button type="button" variant="ghost" onClick={onClose}>Anuluj</Button>
+              <Button type="submit" disabled={create.isPending}>{create.isPending ? "Wysyłanie..." : "Rozpocznij rozmowę"}</Button>
+            </div>
+          </FieldGroup>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Thread({ conversation, headingRef }) {
+  const { user } = useAuth();
+  const messages = useConversationMessages(conversation.id);
+  const reply = useReply(conversation.id);
+  const setStatus = useSetConversationStatus();
+  const { showToast } = useToast();
+  const [content, setContent] = useState("");
+  const { fail, clear, fieldProps, errorProps } = useFormErrors(`reply-${conversation.id}`);
+  const closed = conversation.status === "CLOSED";
+  const list = messages.data ?? [];
+  const last = list[list.length - 1];
+
+  const send = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return fail("content", "Napisz wiadomość");
+    try {
+      await reply.mutateAsync(content.trim());
+      setContent("");
+    } catch (err) {
+      if (err?.status === 400) fail("content", err.body?.message ?? "Nie udało się wysłać");
+      else showToast(null, "error");
+    }
+  };
+
+  const toggle = async () => {
+    try {
+      await setStatus.mutateAsync({ id: conversation.id, status: closed ? "OPEN" : "CLOSED" });
+      showToast(closed ? "Rozmowa została ponownie otwarta" : "Rozmowa została zamknięta", "success");
+    } catch {
+      showToast(null, "error");
+    }
+  };
+
+  return (
+    <section aria-labelledby="thread-heading" className="flex min-h-0 flex-col gap-4 rounded-xl border bg-card p-4">
+      <header className="flex flex-wrap items-start justify-between gap-2 border-b pb-3">
+        <div className="min-w-0">
+          <h2 id="thread-heading" ref={headingRef} tabIndex={-1} className="font-semibold break-words outline-none">{conversation.subject}</h2>
+          <p className="text-xs text-muted-foreground">
+            {CONVERSATION_TYPE[conversation.type]?.label ?? conversation.type} · rozpoczęta przez {conversation.ownerName}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <StatusPill meta={CONVERSATION_STATUS[conversation.status]} />
+          <Button variant="outline" size="sm" onClick={toggle} disabled={setStatus.isPending}>
+            {closed ? "Otwórz ponownie" : "Zamknij rozmowę"}
+          </Button>
+        </div>
+      </header>
+
+      {messages.isPending ? (
+        <LoadingStatus label="Wczytywanie wiadomości"><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
+      ) : (
+        <ol aria-label="Wiadomości" className="flex flex-col gap-3">
+          {list.map((m) => {
+            const mine = m.senderId === user?.id;
+            return (
+              <li key={m.id} className={cn("max-w-[85%] rounded-xl p-3 text-sm", mine ? "self-end bg-primary text-primary-foreground" : "self-start bg-muted")}>
+                <p className="mb-1 text-xs font-medium">
+                  {mine ? "Ty" : m.senderName}
+                  {m.sentAt && (
+                    <>
+                      {" · "}
+                      <time dateTime={m.sentAt} className={mine ? "opacity-90" : "text-muted-foreground"}>{dateFormat.format(new Date(m.sentAt))}</time>
+                    </>
+                  )}
+                </p>
+                <p className="whitespace-pre-line break-words">{m.content}</p>
+              </li>
+            );
+          })}
+        </ol>
+      )}
+      <p aria-live="polite" className="sr-only">
+        {last && last.senderId !== user?.id ? `Ostatnia wiadomość od ${last.senderName}` : ""}
+      </p>
+
+      {closed ? (
+        <p className="rounded-lg bg-muted p-3 text-sm text-muted-foreground">Ta rozmowa jest zamknięta. Otwórz ją ponownie, aby odpowiedzieć.</p>
+      ) : (
+        <form onSubmit={send} noValidate className="flex flex-col gap-2 border-t pt-3">
+          <FieldLabel htmlFor={`reply-${conversation.id}-content`}>Twoja odpowiedź</FieldLabel>
+          <Textarea
+            {...fieldProps("content")}
+            rows={3}
+            maxLength={4000}
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+              clear("content");
+            }}
+          />
+          <FieldError {...errorProps("content")} />
+          <Button type="submit" className="self-end" disabled={reply.isPending}>
+            <HugeiconsIcon icon={SentIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            {reply.isPending ? "Wysyłanie..." : "Wyślij"}
+          </Button>
+        </form>
+      )}
+    </section>
+  );
+}
+
+function MessagesView() {
+  const { hasRole } = useAuth();
+  const isStaff = hasRole(ROLES.JST, ROLES.ROPS);
+  const conversations = useConversations();
+  const [selectedId, setSelectedId] = useState(null);
+  const [creating, setCreating] = useState(false);
+  const headingRef = useRef(null);
+  const focusThread = useRef(false);
+  const list = conversations.data ?? [];
+  const selected = list.find((c) => c.id === selectedId) ?? null;
+
+  useEffect(() => {
+    if (selected && focusThread.current) {
+      focusThread.current = false;
+      headingRef.current?.focus();
+    }
+  }, [selected]);
+
+  const open = (id) => {
+    focusThread.current = true;
+    setSelectedId(id);
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-14 pb-10 md:px-8">
+        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h1 className="font-heading text-2xl font-semibold">Wiadomości</h1>
+            <p className="text-muted-foreground">
+              {isStaff ? "Pytania i prośby o wsparcie od mieszkańców i organizacji" : "Rozmowy z ekspertami ROPS i samorządem"}
+            </p>
+          </div>
+          <Button onClick={() => setCreating(true)}>
+            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            Nowa rozmowa
+          </Button>
+        </header>
+
+        {conversations.isPending ? (
+          <LoadingStatus label="Wczytywanie rozmów"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
+        ) : !list.length ? (
+          <Empty className="border border-dashed">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <HugeiconsIcon icon={Chatting01Icon} strokeWidth={2} aria-hidden="true" />
+              </EmptyMedia>
+              <EmptyTitle>Brak rozmów</EmptyTitle>
+              <EmptyDescription>{isStaff ? "Gdy ktoś napisze, rozmowa pojawi się tutaj." : "Zadaj pytanie albo poproś o mentoring, klikając „Nowa rozmowa”."}</EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-[18rem_1fr]">
+            <nav aria-label="Lista rozmów">
+              <ul className="flex flex-col gap-2">
+                {list.map((c) => (
+                  <li key={c.id}>
+                    <button
+                      type="button"
+                      onClick={() => open(c.id)}
+                      aria-current={c.id === selectedId ? "true" : undefined}
+                      className={cn(
+                        "flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors",
+                        c.id === selectedId ? "border-primary bg-muted" : "border-foreground/45 hover:bg-muted"
+                      )}
+                    >
+                      <span className="font-medium break-words">{c.subject}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {CONVERSATION_TYPE[c.type]?.label ?? c.type}
+                        {isStaff && ` · ${c.ownerName}`}
+                      </span>
+                      <StatusPill meta={CONVERSATION_STATUS[c.status]} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            {selected ? (
+              <Thread key={selected.id} conversation={selected} headingRef={headingRef} />
+            ) : (
+              <p className="rounded-xl border border-dashed p-6 text-sm text-muted-foreground">Wybierz rozmowę z listy, aby zobaczyć wiadomości.</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      <Modal open={creating} onClose={() => setCreating(false)} labelledBy="conv-heading" className="max-w-lg">
+        <NewConversation
+          onClose={() => setCreating(false)}
+          onCreated={(id) => {
+            setCreating(false);
+            open(id);
+          }}
+        />
+      </Modal>
+    </div>
+  );
+}
+
+export default function Messages() {
+  return (
+    <RoleGuard description="Zaloguj się, aby rozmawiać z ekspertami ROPS i samorządem.">
+      <MessagesView />
+    </RoleGuard>
+  );
+}

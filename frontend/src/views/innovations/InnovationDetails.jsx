@@ -5,6 +5,7 @@ import { ArrowLeft01Icon, Download04Icon, File02Icon, LinkSquare02Icon, Pdf01Ico
 import { buttonVariants } from "@/components/ui/button";
 import { InnovationBadges, InnovationCover } from "@/components/innovation-card";
 import { getDisabilityType, getYoutubeEmbedUrl } from "@/lib/innovations";
+import InnovationTesting from "@/components/innovation-testing";
 
 // Fields come straight from the ROPS innovation pages (sections 1–5); empty ones are skipped
 const SECTIONS = [
@@ -34,7 +35,7 @@ export default function InnovationDetails({ innovation }) {
           href="/innovations"
           className={buttonVariants({ variant: "ghost", size: "sm", className: "mb-4 -ml-3" })}
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} /> Wróć do listy
+          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} aria-hidden="true" /> Wróć do listy
         </Link>
 
         <div className="mb-6 overflow-hidden rounded-2xl ring-1 ring-foreground/10">
@@ -96,7 +97,7 @@ export default function InnovationDetails({ innovation }) {
                     rel="noopener noreferrer"
                     className={buttonVariants({ variant: "outline" })}
                   >
-                    <HugeiconsIcon icon={icon} strokeWidth={2} />
+                    <HugeiconsIcon icon={icon} strokeWidth={2} aria-hidden="true" />
                     {label}
                     <span className="sr-only"> (otwiera się w nowej karcie)</span>
                   </a>
@@ -105,6 +106,8 @@ export default function InnovationDetails({ innovation }) {
             </ul>
           </section>
         )}
+
+        <InnovationTesting innovationId={innovation.id} innovationName={innovation.name} />
 
         <p className="mt-10 border-t pt-4 text-sm text-muted-foreground">
           Źródło: Biblioteka Innowacji Społecznych ROPS Kraków. Pytania o wdrożenie:{" "}

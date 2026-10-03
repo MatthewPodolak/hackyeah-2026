@@ -6,6 +6,8 @@ import com.example.backend.service.CommunicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public class PartnershipController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createPost(@Valid @RequestBody PartnershipRequest request) {
-        communicationService.createPartnershipPost(request);
+    public void createPost(@Valid @RequestBody PartnershipRequest request, @AuthenticationPrincipal Jwt jwt) {
+        communicationService.createPartnershipPost(request, Long.valueOf(jwt.getSubject()));
     }
 }

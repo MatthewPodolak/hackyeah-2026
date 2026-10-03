@@ -73,6 +73,12 @@ public class Idea {
 
     private boolean publishConsent;
 
+    @Column(columnDefinition = "TEXT")
+    private String visualization;
+
+    @Column(columnDefinition = "TEXT")
+    private String visualizationAlt;
+
     @PrePersist void onCreate() {
         createdAt = updatedAt = LocalDateTime.now();
     }

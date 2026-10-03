@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import Modal from "@/components/modal"
+import { problemTokens } from "@/lib/problems"
 import { PROBLEM_CATEGORY_OPTIONS, TARGET_GROUP_OPTIONS } from "@/lib/problemCategories"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
 import { useStreet } from "@/api/hooks/useStreetQuery"
@@ -125,6 +126,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
         category: form.category,
         targetGroup: form.targetGroup,
       })
+      if (result?.trackingToken) problemTokens.remember(result.trackingToken)
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
       onSubmitted?.(result)

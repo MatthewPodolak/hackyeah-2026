@@ -4,6 +4,7 @@ import java.util.List;
 
 public record ProblemWithMatchesResponse(
         ProblemResponse problem,
-        List<InnovationMatchResponse> matches
+        List<InnovationMatchResponse> matches,
+        String trackingToken
 ) {
 }

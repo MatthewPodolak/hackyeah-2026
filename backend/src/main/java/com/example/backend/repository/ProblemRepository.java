@@ -7,10 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup) from Problem p")
+    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, coalesce(p.status, com.example.backend.model.ProblemStatus.SUBMITTED)) from Problem p")
     List<ProblemSummaryResponse> findAllSummaries();
+
+    Optional<Problem> findByTrackingToken(String trackingToken);
+
+    List<Problem> findByAuthorIdOrderByLocalDateDesc(Long authorId);
+
+    List<Problem> findAllByOrderByLocalDateDesc();
+
+    long countByAdminSeen(Boolean adminSeen);
 }
