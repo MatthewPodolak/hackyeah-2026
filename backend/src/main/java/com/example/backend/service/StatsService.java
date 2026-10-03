@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.client.OpenAiClient;
+import com.example.backend.config.CreatorReferenceData;
 import com.example.backend.dto.AdminStatsResponse;
 import com.example.backend.dto.AdminStatsResponse.Bucket;
 import com.example.backend.dto.AdminStatsResponse.TestedInnovation;
@@ -39,13 +40,35 @@ public class StatsService {
     private final InnovationCatalog catalog;
     private final OpenAiClient openAi;
     private final ObjectMapper mapper;
+    private final CreatorReferenceData ref;
 
     @Transactional(readOnly = true)
-    public AdminStatsResponse stats() {
-        List<Problem> allProblems = problems.findAll();
-        List<Idea> allIdeas = ideas.findAll();
-        List<TestParticipation> allParticipations = participations.findAll();
-        List<InnovationReview> allReviews = reviews.findAll();
+    public String resolveScope(Long userId, String requestedGminaId) {
+        AppUser user = userId == null ? null : users.findById(userId).orElse(null);
+        if (user != null && user.getRole() == Role.JST) {
+            if (user.getGminaId() == null) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Konto JST nie ma przypisanej gminy");
+            }
+            return user.getGminaId();
+        }
+        if (requestedGminaId == null || requestedGminaId.isBlank()) return null;
+        if (!ref.gminaExists(requestedGminaId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Nieznana gmina");
+        }
+        return requestedGminaId;
+    }
+
+    @Transactional(readOnly = true)
+    public AdminStatsResponse stats(String gminaId) {
+        boolean region = gminaId == null;
+        List<Problem> everyProblem = problems.findAll();
+        List<Problem> allProblems = region ? everyProblem
+                : everyProblem.stream().filter(p -> gminaId.equals(p.getGminaId())).toList();
+        Set<Long> scopedProblemIds = allProblems.stream().map(Problem::getId).collect(Collectors.toSet());
+        List<Idea> allIdeas = region ? ideas.findAll()
+                : ideas.findAll().stream()
+                        .filter(i -> gminaId.equals(i.getGminaId()) || (i.getSourceProblemId() != null && scopedProblemIds.contains(i.getSourceProblemId())))
+                        .toList();
 
         Map<String, Long> totals = new LinkedHashMap<>();
         totals.put("problems", (long) allProblems.size());
@@ -53,12 +76,41 @@ public class StatsService {
         totals.put("problemsOpen", allProblems.stream().filter(p -> p.effectiveStatus() != ProblemStatus.RESOLVED && p.effectiveStatus() != ProblemStatus.REJECTED).count());
         totals.put("ideas", (long) allIdeas.size());
         totals.put("ideasUnseen", allIdeas.stream().filter(i -> !i.isAdminSeen()).count());
-        totals.put("testParticipations", (long) allParticipations.size());
-        totals.put("testParticipationsPending", allParticipations.stream().filter(p -> "PENDING".equals(p.getStatus())).count());
-        totals.put("reviews", (long) allReviews.size());
-        totals.put("conversationsOpen", conversations.findAll().stream().filter(c -> "OPEN".equals(c.getStatus())).count());
-        totals.put("partnerships", partnerships.findAll().stream().filter(PartnershipPost::isActive).count());
-        totals.put("pendingAccounts", users.findAll().stream().filter(u -> (u.getRole() == Role.JST || u.getRole() == Role.ROPS) && u.effectiveStatus() == AccountStatus.PENDING).count());
+
+        List<TestedInnovation> tested = List.of();
+        List<Bucket> byGmina = List.of();
+        if (region) {
+            List<TestParticipation> allParticipations = participations.findAll();
+            List<InnovationReview> allReviews = reviews.findAll();
+            totals.put("testParticipations", (long) allParticipations.size());
+            totals.put("testParticipationsPending", allParticipations.stream().filter(p -> "PENDING".equals(p.getStatus())).count());
+            totals.put("reviews", (long) allReviews.size());
+            totals.put("conversationsOpen", conversations.findAll().stream().filter(c -> "OPEN".equals(c.getStatus())).count());
+            totals.put("partnerships", partnerships.findAll().stream().filter(PartnershipPost::isActive).count());
+            totals.put("pendingAccounts", users.findAll().stream().filter(u -> (u.getRole() == Role.JST || u.getRole() == Role.ROPS) && u.effectiveStatus() == AccountStatus.PENDING).count());
+
+            Map<String, Long> wanted = allParticipations.stream().collect(Collectors.groupingBy(TestParticipation::getInnovationId, Collectors.counting()));
+            Map<String, List<InnovationReview>> reviewsBy = allReviews.stream().collect(Collectors.groupingBy(InnovationReview::getInnovationId));
+            Set<String> testedIds = new HashSet<>(wanted.keySet());
+            testedIds.addAll(reviewsBy.keySet());
+            tested = testedIds.stream().map(id -> {
+                        List<InnovationReview> rs = reviewsBy.getOrDefault(id, List.of());
+                        double avg = rs.stream().mapToInt(InnovationReview::getRating).average().orElse(0);
+                        String name = catalog.find(id).map(InnovationData::name).orElse(id);
+                        return new TestedInnovation(id, name, wanted.getOrDefault(id, 0L), rs.size(), Math.round(avg * 10) / 10.0);
+                    })
+                    .sorted(Comparator.comparingLong(TestedInnovation::participations).thenComparingLong(TestedInnovation::reviews).reversed())
+                    .limit(8)
+                    .toList();
+
+            byGmina = allProblems.stream().filter(p -> p.getGminaId() != null)
+                    .collect(Collectors.groupingBy(Problem::getGminaId, Collectors.counting()))
+                    .entrySet().stream()
+                    .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                    .limit(10)
+                    .map(e -> new Bucket(e.getKey(), e.getValue()))
+                    .toList();
+        }
 
         YearMonth now = YearMonth.now(ZONE);
         Map<YearMonth, Long> perMonth = allProblems.stream().filter(p -> p.getLocalDate() != null)
@@ -72,26 +124,18 @@ public class StatsService {
         Map<String, Long> whoCounts = new HashMap<>();
         allIdeas.forEach(i -> i.getWhoCategories().forEach(w -> whoCounts.merge(w, 1L, Long::sum)));
 
-        Map<String, Long> wanted = allParticipations.stream().collect(Collectors.groupingBy(TestParticipation::getInnovationId, Collectors.counting()));
-        Map<String, List<InnovationReview>> reviewsBy = allReviews.stream().collect(Collectors.groupingBy(InnovationReview::getInnovationId));
-        Set<String> testedIds = new HashSet<>(wanted.keySet());
-        testedIds.addAll(reviewsBy.keySet());
-        List<TestedInnovation> tested = testedIds.stream().map(id -> {
-                    List<InnovationReview> rs = reviewsBy.getOrDefault(id, List.of());
-                    double avg = rs.stream().mapToInt(InnovationReview::getRating).average().orElse(0);
-                    String name = catalog.find(id).map(InnovationData::name).orElse(id);
-                    return new TestedInnovation(id, name, wanted.getOrDefault(id, 0L), rs.size(), Math.round(avg * 10) / 10.0);
-                })
-                .sorted(Comparator.comparingLong(TestedInnovation::participations).thenComparingLong(TestedInnovation::reviews).reversed())
-                .limit(8)
-                .toList();
+        AdminStatsResponse.Scope scope = region ? null : ref.findGmina(gminaId)
+                .map(g -> new AdminStatsResponse.Scope(gminaId, g.gmina().label(), g.powiat().label(), g.gmina().population()))
+                .orElse(new AdminStatsResponse.Scope(gminaId, gminaId, null, null));
 
         return new AdminStatsResponse(
+                scope,
                 totals,
                 count(allProblems, p -> p.getCategory() == null ? ProblemCategory.OTHER : p.getCategory(), ProblemCategory.values()),
                 count(allProblems, p -> p.getTargetGroup() == null ? TargetGroup.OTHER : p.getTargetGroup(), TargetGroup.values()),
                 count(allProblems, Problem::effectiveStatus, ProblemStatus.values()),
                 byMonth,
+                byGmina,
                 count(allIdeas, Idea::getStatus, IdeaStatus.values()),
                 count(allIdeas, Idea::getReadiness, Readiness.values()),
                 whoCounts.entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed())
@@ -99,16 +143,19 @@ public class StatsService {
                 tested);
     }
 
-    public StatsInsights insights() {
-        AdminStatsResponse stats = stats();
+    public StatsInsights insights(String gminaId) {
+        AdminStatsResponse stats = stats(gminaId);
+        String audience = stats.scope() == null
+                ? "dla ROPS i samorządów z całego województwa"
+                : "dla samorządu gminy " + stats.scope().label() + " (dane dotyczą tylko tej gminy)";
         String system = """
                 Jesteś analitykiem Regionalnego Ośrodka Polityki Społecznej w Krakowie. Na podstawie zagregowanych
                 danych z platformy (zgłoszone problemy mieszkańców, pomysły na innowacje, zgłoszenia do testów)
-                opisz najważniejsze trendy i zaproponuj działania dla ROPS i samorządów.
+                opisz najważniejsze trendy i zaproponuj działania %s.
                 Opieraj się wyłącznie na liczbach z danych, nie wymyślaj nowych. Przy małej liczbie zgłoszeń zaznacz,
                 że wnioski są wstępne. Pisz prostym językiem po polsku.
                 Zwróć WYŁĄCZNIE JSON: {"summary":"2-3 zdania","trends":["..."],"recommendations":["..."]}
-                """;
+                """.formatted(audience);
         try {
             return mapper.readValue(openAi.chatJson(system, "DANE (JSON):\n" + mapper.writeValueAsString(stats)), StatsInsights.class);
         } catch (Exception e) {

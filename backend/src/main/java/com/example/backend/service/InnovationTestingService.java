@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.model.Role;
 import com.example.backend.dto.*;
 import com.example.backend.model.AppUser;
 import com.example.backend.model.InnovationReview;
@@ -32,6 +33,7 @@ public class InnovationTestingService {
 
     @Transactional
     public ParticipationResponse submitParticipation(String innovationId, ParticipationRequest r, Long userId) {
+        rejectMunicipality(userId);
         validateInnovationExists(innovationId);
 
         TestParticipation p = TestParticipation.builder()
@@ -58,6 +60,7 @@ public class InnovationTestingService {
 
     @Transactional
     public void submitReview(String innovationId, ReviewRequest r, Long userId) {
+        rejectMunicipality(userId);
         validateInnovationExists(innovationId);
 
         if (r.rating() < 1 || r.rating() > 5) {
@@ -137,6 +140,12 @@ public class InnovationTestingService {
 
         p.setStatus(status.toUpperCase());
         return mapToParticipationResponse(participations.save(p));
+    }
+
+    private void rejectMunicipality(Long userId) {
+        if (userId != null && users.findById(userId).map(u -> u.getRole() == Role.JST).orElse(false)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Konta samorządów nie biorą udziału w testach innowacji");
+        }
     }
 
     private ParticipationResponse mapToParticipationResponse(TestParticipation p) {

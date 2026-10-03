@@ -12,6 +12,10 @@ function send(endpoint, url, body, opts = {}) {
     opts);
 }
 
+function withGmina(url, gminaId) {
+  return gminaId ? `${url}?gminaId=${encodeURIComponent(gminaId)}` : url;
+}
+
 export const AdminService = {
   problems: (status, { ct } = {}) => send(API.adminProblem.list, status ? `${API.adminProblem.list.url}?status=${status}` : API.adminProblem.list.url, undefined, { ct }),
   problem: (id, { ct } = {}) => send(API.adminProblem.get, API.adminProblem.get.url(id), undefined, { ct }),
@@ -29,8 +33,8 @@ export const AdminService = {
   updateResource: (id, model) => send(API.adminCatalog.updateResource, API.adminCatalog.updateResource.url(id), model),
   removeResource: (id) => send(API.adminCatalog.removeResource, API.adminCatalog.removeResource.url(id)),
 
-  stats: ({ ct } = {}) => send(API.stats.get, API.stats.get.url, undefined, { ct }),
-  insights: () => send(API.stats.insights, API.stats.insights.url, undefined, { timeoutMs: AI_TIMEOUT }),
+  stats: (gminaId, { ct } = {}) => send(API.stats.get, withGmina(API.stats.get.url, gminaId), undefined, { ct }),
+  insights: (gminaId) => send(API.stats.insights, withGmina(API.stats.insights.url, gminaId), undefined, { timeoutMs: AI_TIMEOUT }),
 };
 
 export const CatalogService = {
