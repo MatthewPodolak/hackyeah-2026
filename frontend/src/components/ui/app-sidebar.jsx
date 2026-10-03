@@ -8,6 +8,7 @@ import { useAuth } from "@/api/context/AuthContext"
 
 const items = [
   { title: "Home", url: "/" },
+  { title: "Innowacje", url: "/innovations" },
   { title: "Inbox", url: "/inbox" },
   { title: "Settings", url: "/settings" },
 ]
@@ -26,7 +27,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton render={<Link href={item.url} />} isActive={pathname === item.url}>
+                  <SidebarMenuButton
+                    render={<Link href={item.url} />}
+                    // sub-pages (e.g. /innovations/bawita) keep their section highlighted
+                    isActive={item.url === "/" ? pathname === "/" : pathname.startsWith(item.url)}
+                  >
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
