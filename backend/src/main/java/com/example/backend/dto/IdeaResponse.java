@@ -1,9 +1,26 @@
 package com.example.backend.dto;
 
+import com.example.backend.mapper.IdeaStatus;
+import com.example.backend.model.Readiness;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 public record IdeaResponse(
         Long id,
+        String trackingToken,
         String title,
+        String essence,
         String problemDescription,
-        String targetGroup,
-        String status
+        List<String> whoCategories,
+        List<String> disabilityTypes,
+        Readiness readiness,
+        String gminaId,
+        Long sourceProblemId,
+        IdeaStatus status,
+        String adminReply,
+        boolean hasCanvas,
+        boolean hasFeedback,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {}

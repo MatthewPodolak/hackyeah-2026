@@ -1,0 +1,276 @@
+{
+  "source": "INNO AGH – Social Innovation Canvas, wersja 1.0 (5 maja 2026)",
+  "sourceUrl": "https://rops.krakow.pl/mpliki/IS/Moj_folder/INNO_AGH_-_SOCIAL_CANVAS.pdf",
+  "attribution": "Na podstawie Social Innovation Canvas (The New Global School, https://theglobal.school/social-innovation-canvas/) w opracowaniu INNO AGH",
+  "notes": "Labels and descriptions copied from the canvas (plural 'Wy' form, as on paper). UI copy may adapt them to singular, plain language.",
+  "steps": [
+    {
+      "id": "PROBLEM_SOLUTION",
+      "title": "Problem i rozwiązanie",
+      "canvasPage": 1,
+      "sections": [
+        {
+          "id": "problemIntensity",
+          "title": "Intensywność problemu",
+          "question": "Jak bardzo źle jest bez Waszego rozwiązania?",
+          "type": "single",
+          "options": [
+            { "value": "MILD", "icon": "🙂", "label": "Lekko przeszkadza", "description": "Da się żyć, problem raczej irytuje niż blokuje." },
+            { "value": "HINDERS", "icon": "😐", "label": "Utrudnia działanie", "description": "Trzeba szukać alternatyw, traci się czas lub energię." },
+            { "value": "DISRUPTS", "icon": "😟", "label": "Mocno przeszkadza", "description": "Problem regularnie blokuje ważne działania." },
+            { "value": "SEVERE", "icon": "🔥", "label": "Bardzo poważny problem", "description": "Powoduje stres, wykluczenie albo realną krzywdę." }
+          ]
+        },
+        {
+          "id": "problemFrequency",
+          "title": "Częstotliwość",
+          "question": "Jak często występuje problem, na który odpowiada Wasze rozwiązanie?",
+          "type": "single",
+          "options": [
+            { "value": "RARELY", "label": "Rzadko", "description": "Raz na jakiś czas – raz w roku lub rzadziej." },
+            { "value": "SOMETIMES", "label": "Czasami", "description": "Kilka razy w roku lub miesiącu." },
+            { "value": "OFTEN", "label": "Często", "description": "Co tydzień lub regularnie." },
+            { "value": "VERY_OFTEN", "label": "Bardzo często", "description": "Codziennie albo prawie codziennie." }
+          ]
+        },
+        {
+          "id": "problemScale",
+          "title": "Skala problemu",
+          "question": "Ilu ludzi dotyka problem?",
+          "type": "single",
+          "options": [
+            { "value": "INDIVIDUALS", "label": "Pojedyncze osoby", "description": "Dotyczy kilku osób lub małej grupy." },
+            { "value": "NARROW_GROUP", "label": "Wąska grupa", "description": "Dotyczy konkretnej społeczności, np. uczniów jednej szkoły, ludzi z jednej okolicy, załogi konkretnej instytucji." },
+            { "value": "LARGE_GROUP", "label": "Duża grupa", "description": "Dotyczy wielu osób w mieście, regionie, branży lub większej społeczności." },
+            { "value": "VERY_WIDE", "label": "Bardzo szeroka grupa", "description": "Dotyczy dużej części społeczeństwa albo wielu podobnych grup w różnych miejscach." }
+          ]
+        },
+        {
+          "id": "changeSupporters",
+          "title": "Aktorzy zmiany – wspierają zmianę",
+          "icon": "🟢",
+          "question": "Osoby, grupy lub instytucje, które widzą potrzebę zmiany, wspierają Wasz pomysł albo mogą pomóc go wdrożyć.",
+          "type": "textList",
+          "hints": [
+            "Kto najbardziej potrzebuje tej zmiany?",
+            "Kto może zyskać na rozwiązaniu?",
+            "Kto już mówi, że problem trzeba rozwiązać?",
+            "Kto może Was poprzeć, polecić albo otworzyć drzwi?",
+            "Kto ma energię, wpływ lub zasoby, żeby pomóc?"
+          ]
+        },
+        {
+          "id": "changeBlockers",
+          "title": "Aktorzy zmiany – utrudniają zmianę",
+          "icon": "🔴",
+          "question": "Osoby, grupy lub instytucje, które mogą nie chcieć zmiany, bać się jej, tracić na niej albo utrudniać wdrożenie.",
+          "type": "textList",
+          "hints": [
+            "Kto może nie rozumieć potrzeby zmiany?",
+            "Kto może bać się dodatkowej pracy, kosztów lub ryzyka?",
+            "Kto może tracić wpływ, kontrolę albo dotychczasową rolę?",
+            "Kto może powiedzieć „to się nie uda”?",
+            "Kto może zablokować decyzję, finansowanie albo dostęp do odbiorców?"
+          ]
+        },
+        {
+          "id": "valueVsCost",
+          "title": "Przystępność i wartość rozwiązania",
+          "type": "single",
+          "options": [
+            { "value": "COST_EXCEEDS", "label": "Koszt jest większy niż korzyść", "description": "Rozwiązanie pochłania dużo pieniędzy, czasu lub wysiłku, a efekt jest mało widoczny." },
+            { "value": "SIMILAR", "label": "Korzyść i koszt są podobne", "description": "Rozwiązanie może pomagać, ale nie jest jasne, czy opłaca się z niego korzystać." },
+            { "value": "BENEFIT_EXCEEDS", "label": "Korzyść jest większa niż koszt", "description": "Rozwiązanie oferuje zauważalną wartość za rozsądną cenę." },
+            { "value": "HIGH_VALUE_LOW_COST", "label": "Bardzo duża wartość przy małym koszcie", "description": "Rozwiązanie skutecznie pomaga, a bariera wejścia jest niska (niskie koszty, oszczędność czasu, łatwość użycia)." }
+          ]
+        },
+        {
+          "id": "readiness",
+          "title": "Gotowość do wdrożenia",
+          "question": "Na jakim etapie jest Wasze rozwiązanie?",
+          "type": "single",
+          "options": [
+            { "value": "IDEA", "label": "Pomysł", "description": "Mamy koncepcję, ale rozwiązanie nie zostało jeszcze sprawdzone z odbiorcami." },
+            { "value": "PROTOTYPE", "label": "Prototyp", "description": "Mamy pierwszą wersję rozwiązania, jednak wciąż wymaga ona testów i dopracowania." },
+            { "value": "TESTED", "label": "Przetestowane rozwiązanie", "description": "Rozwiązanie zostało sprawdzone z realnymi użytkownikami i wiemy, co trzeba poprawić." },
+            { "value": "READY", "label": "Gotowe do wdrożenia", "description": "Rozwiązanie można uruchomić w rzeczywistym miejscu, z prawdziwymi odbiorcami i znanymi zasobami." }
+          ]
+        },
+        {
+          "id": "clarity",
+          "title": "Prostota i zrozumiałość",
+          "question": "Czy osoba, która pierwszy raz widzi Wasze rozwiązanie, szybko rozumie: dla kogo jest, jak działa i co daje?",
+          "type": "single",
+          "options": [
+            { "value": "UNCLEAR", "icon": "❓", "label": "Rozwiązanie jest niejasne", "description": "Trzeba długo tłumaczyć, o co chodzi. Ludzie często zadają podstawowe pytania." },
+            { "value": "PARTLY_CLEAR", "icon": "🧩", "label": "Rozwiązanie jest częściowo jasne", "description": "Ludzie rozumieją ogólny pomysł, ale jeszcze nie wiedzą dokładnie, jak z niego skorzystać." },
+            { "value": "CLEAR", "icon": "✅", "label": "Rozwiązanie jest jasne", "description": "Większość osób szybko rozumie, jaki problem rozwiązujemy, jak działa rozwiązanie i co trzeba zrobić, żeby z niego skorzystać." },
+            { "value": "SELF_EXPLAINING", "icon": "🗣️", "label": "Ludzie potrafią wyjaśnić sami", "description": "Osoba z grupy docelowej potrafi wyjaśnić rozwiązanie własnymi słowami po krótkim kontakcie z nim / korzystaniu." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "USERS_VALUE",
+      "title": "Odbiorcy i wartość",
+      "canvasPage": 2,
+      "sections": [
+        {
+          "id": "mainUser",
+          "title": "Główny użytkownik",
+          "question": "Komu to rozwiązanie ma realnie pomóc?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["dzieci", "młodzież", "rodzice", "seniorzy", "osoby z niepełnosprawnościami", "nauczyciele", "pracownicy instytucji", "osoby w kryzysie", "organizacje społeczne", "mieszkańcy konkretnego miejsca"]
+        },
+        {
+          "id": "payer",
+          "title": "Klient / płatnik",
+          "question": "Kto wyciąga portfel albo uruchamia budżet, żeby Wasze rozwiązanie działało?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["sam użytkownik", "rodzic / opiekun", "szkoła", "firma", "urząd miasta / gmina", "fundacja / organizacja społeczna", "grantodawca", "sponsor", "NFZ / instytucja publiczna", "pracodawca"]
+        },
+        {
+          "id": "decisionMaker",
+          "title": "Autorytet / instytucja / decydent",
+          "question": "Czyja zgoda, rekomendacja albo decyzja jest potrzebna, żeby rozwiązanie zostało użyte?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["dyrektor szkoły", "nauczyciel", "lekarz", "terapeuta", "pracownik socjalny", "urząd", "lider lokalny", "organizacja społeczna", "rodzic", "opiekun", "menedżer", "ekspert", "instytucja finansująca"]
+        },
+        {
+          "id": "emotionalValue",
+          "title": "Propozycja wartości – emocjonalna",
+          "question": "Co odbiorcy poczują dzięki rozwiązaniu?",
+          "type": "multi",
+          "maxSelected": 3,
+          "allowOther": true,
+          "options": ["Bezpieczeństwo", "Spokój", "Pewność", "Zmniejszenie samotności", "Większa sprawczość", "Poprawa stanu zdrowia", "Niezależność", "Motywacja", "Włączenie społeczne", "Poczucie bycia widzianym", "Poprawa nastroju", "Większe zadowolenie z życia"]
+        },
+        {
+          "id": "functionalValue",
+          "title": "Propozycja wartości – funkcjonalna",
+          "question": "Co rozwiązanie konkretnie poprawia?",
+          "type": "multi",
+          "maxSelected": 3,
+          "allowOther": true,
+          "options": ["Obniża koszty", "Oszczędza czas", "Zwiększa skuteczność", "Poprawia jakość", "Upraszcza proces", "Zwiększa dostępność", "Zwiększa zasięg pomocy", "Zmniejsza obciążenie", "Poprawia bezpieczeństwo", "Zwiększa wpływ społeczny", "Ogranicza negatywny wpływ na środowisko", "Pomaga w podejmowaniu lepszych decyzji"]
+        }
+      ]
+    },
+    {
+      "id": "REACH_PARTNERS",
+      "title": "Kanały, partnerzy i wpływ",
+      "canvasPage": 3,
+      "sections": [
+        {
+          "id": "directChannels",
+          "title": "Kanały bezpośrednie",
+          "question": "Jak ludzie trafiają do Was bezpośrednio?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["własna strona internetowa", "własny formularz zgłoszeniowy", "własny sklep / system zakupu", "kontakt telefoniczny lub mailowy", "spotkania bezpośrednie", "własne warsztaty", "własne media społecznościowe", "własna aplikacja", "newsletter", "wydarzenia organizowane samodzielnie"]
+        },
+        {
+          "id": "reachHelpers",
+          "title": "Kto pomoże dotrzeć do odbiorców",
+          "question": "Kto może pomóc Wam dotrzeć do odbiorców?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["szkoła", "urząd / gmina", "organizacja społeczna", "ekspert", "lekarz / terapeuta", "nauczyciel", "pracownik socjalny", "lider lokalny", "firma", "partner", "ambasador", "handlowiec"]
+        },
+        {
+          "id": "additionalChannels",
+          "title": "Kanały dodatkowe",
+          "question": "Jakie kanały dodatkowe możecie wykorzystać?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["kampania online", "webinary", "platforma cyfrowa", "lokalne wydarzenia", "program ambasadorski", "materiały edukacyjne", "rekomendacje ekspertów", "współpraca z instytucjami", "newsletter", "społeczność online"]
+        },
+        {
+          "id": "partners",
+          "title": "Konstelacja partnerów",
+          "question": "Kto jest partnerem lub może nim zostać? Jak dokładnie pomaga? Jeden partner może pomagać na kilka sposobów naraz.",
+          "type": "partnerList",
+          "roles": [
+            { "value": "CHEAPER", "icon": "💸", "label": "Jak robić to taniej?", "description": "Jacy partnerzy mogą obniżać koszty rozwiązania? W jaki sposób?" },
+            { "value": "REACH", "icon": "📣", "label": "Jak dotrzeć do odbiorców?", "description": "Jacy partnerzy mogą wspierać komunikację i dystrybucję rozwiązania? Jakimi kanałami?" },
+            { "value": "VALUE", "icon": "✨", "label": "Jak dawać lepszą wartość?", "description": "Jacy partnerzy mogą wzmacniać propozycję wartości rozwiązania? W jaki sposób?" }
+          ],
+          "statuses": [
+            { "value": "CONFIRMED", "label": "Potwierdzony partner" },
+            { "value": "IN_TALKS", "label": "Partner, z którym rozmawiacie" },
+            { "value": "POTENTIAL", "label": "Potencjalny partner" }
+          ]
+        },
+        {
+          "id": "impact",
+          "title": "Wpływ",
+          "question": "Co zmienia Twoje rozwiązanie – dla osoby, społeczności i świata wokół?",
+          "type": "impactMatrix",
+          "dimensions": [
+            { "value": "PERSON", "icon": "👤", "label": "Osoba", "description": "Jak zmienia życie użytkownika? Co staje się łatwiejsze, bezpieczniejsze, spokojniejsze albo bardziej dostępne?" },
+            { "value": "COMMUNITY", "icon": "🤝", "label": "Społeczność", "description": "Jak pomaga większej grupie? Czy zwiększa dostęp, zmniejsza wykluczenie, wzmacnia współpracę albo poprawia jakość wsparcia?" },
+            { "value": "ENVIRONMENT", "icon": "🌱", "label": "Środowisko", "description": "Jak zmienia świat wokół? Czy ogranicza odpady, zużycie zasobów, transport, energię albo inne szkody dla środowiska?" }
+          ],
+          "levels": [
+            { "value": "SMALL", "label": "Mały wpływ", "description": "Zmiana jest niewielka lub jeszcze niejasna." },
+            { "value": "POSSIBLE", "label": "Możliwy wpływ", "description": "Widzimy potencjał zmiany, ale nie mamy jeszcze potwierdzenia." },
+            { "value": "CLEAR", "label": "Wyraźny wpływ", "description": "Rozwiązanie daje konkretną, zauważalną zmianę." },
+            { "value": "STRONG", "label": "Silny wpływ", "description": "Zmiana jest duża, ważna i potwierdzona przez użytkowników, społeczność lub dane." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "COSTS_FUNDING",
+      "title": "Koszty i finansowanie",
+      "canvasPage": "1–2",
+      "sections": [
+        {
+          "id": "fixedCosts",
+          "title": "Stałe koszty",
+          "question": "Ponosicie je niezależnie od liczby użytkowników. Jakie koszty ponosicie lub powinniście ponosić, żeby rozwiązanie mogło działać?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["wynagrodzenie zespołu", "czynsz / przestrzeń", "utrzymanie aplikacji lub strony", "abonamenty narzędzi", "koordynacja projektu", "księgowość / administracja", "promocja podstawowa", "sprzęt potrzebny na start"]
+        },
+        {
+          "id": "variableCosts",
+          "title": "Zmienne koszty",
+          "question": "Rosną, gdy korzysta więcej osób. Co kosztuje za każdym razem, gdy pomagacie kolejnej osobie, grupie lub organizujecie kolejne działanie?",
+          "type": "multi",
+          "allowOther": true,
+          "options": ["materiały dla uczestników", "czas specjalisty na jedną osobę", "dojazdy", "catering", "wydruk materiałów", "wsparcie techniczne dla kolejnej osoby"]
+        },
+        {
+          "id": "mainIncome",
+          "title": "Główny dochód",
+          "question": "Co jest podstawowym źródłem pieniędzy? Za co klienci będą najpewniej płacić w pierwszej kolejności?",
+          "type": "single",
+          "withText": "Jeśli macie propozycję / pomysł na główne źródło finansowania, wypiszcie je",
+          "options": [
+            { "value": "UNKNOWN", "label": "Nie wiemy jeszcze", "description": "Nie mamy jasnego pomysłu, kto i za co miałby płacić." },
+            { "value": "IDEA", "label": "Mamy pomysł", "description": "Wiemy, co mogłoby być źródłem dochodu, ale nie sprawdziliśmy tego z potencjalnym klientem." },
+            { "value": "CONCRETE", "label": "Mamy konkretną propozycję", "description": "Wiemy, co oferujemy, komu i dlaczego ktoś miałby za to zapłacić lub zainwestować w utrzymanie rozwiązania." },
+            { "value": "CONFIRMED", "label": "Mamy potwierdzenie", "description": "Ktoś już nam zapłacił, zadeklarował nam gotowość do wspierania finansowego naszego rozwiązania." }
+          ]
+        },
+        {
+          "id": "incomeScaling",
+          "title": "Skalowanie dochodu",
+          "question": "Jakie dodatkowe rzeczy możecie sprzedawać lub finansować w przyszłości?",
+          "type": "single",
+          "withText": "Jeśli macie propozycję / pomysł na główne źródło dodatkowego dochodu, wypiszcie je",
+          "options": [
+            { "value": "NONE", "label": "Brak jasnych dodatkowych źródeł", "description": "Na razie widzimy tylko jedno źródło finansowania (to główne) i nie wiemy, jak dochód mógłby rosnąć." },
+            { "value": "SOME", "label": "Są szanse na dodatkowe pieniądze", "description": "Mamy kilka pomysłów na dodatkowe źródła dochodu, ale są jeszcze niesprawdzone." },
+            { "value": "PATHS", "label": "Widzimy realne ścieżki rozwoju", "description": "Wiemy, jakie dodatkowe usługi, pakiety lub wdrożenia można sprzedawać po pierwszym sukcesie." },
+            { "value": "REPLICABLE", "label": "Nasz model działania można powielać", "description": "Rozwiązanie można sprzedawać lub finansować w wielu miejscach, dla wielu grup albo przez wiele kanałów." }
+          ]
+        }
+      ]
+    }
+  ]
+}
