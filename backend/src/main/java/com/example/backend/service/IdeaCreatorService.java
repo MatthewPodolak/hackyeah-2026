@@ -75,13 +75,13 @@ public class IdeaCreatorService {
                 parseReadiness(d.readiness()));
     }
 
-    public IdeaResponse submit(IdeaCardRequest r) {
+    public IdeaResponse submit(IdeaCardRequest r, Long authorId) {
         validate(r);
         Idea i = new Idea();
         i.setTrackingToken(newToken());
         apply(i, r);
         i.setStatus(IdeaStatus.SUBMITTED);
-        if (r.authorId() != null) users.findById(r.authorId()).ifPresent(i::setAuthor);
+        if (authorId != null) users.findById(authorId).ifPresent(i::setAuthor);
         return toResponse(ideas.save(i), true);
     }
 
@@ -96,6 +96,7 @@ public class IdeaCreatorService {
 
     public List<PublicIdeaResponse> gallery() {
         return ideas.findByStatus(IdeaStatus.ACCEPTED).stream()
+                .filter(Idea::isPublishConsent)
                 .map(i -> new PublicIdeaResponse(i.getId(), i.getTitle(), i.getEssence(),
                         i.getProblemDescription(), i.getWhoCategories(), i.getReadiness())).toList();
     }
@@ -186,7 +187,7 @@ public class IdeaCreatorService {
         return new IdeaResponse(i.getId(), withToken ? i.getTrackingToken() : null, i.getTitle(), i.getEssence(),
                 i.getProblemDescription(), i.getWhoCategories(), i.getDisabilityTypes(), i.getReadiness(),
                 i.getGminaId(), i.getSourceProblemId(), i.getStatus(), i.getAdminReply(),
-                i.getCanvasJson() != null, i.getAiFeedbackJson() != null, i.getCreatedAt(), i.getUpdatedAt());
+                i.getCanvasJson() != null, i.getAiFeedbackJson() != null, i.isPublishConsent(), i.getCreatedAt(), i.getUpdatedAt());
     }
 
     @SuppressWarnings("unchecked")

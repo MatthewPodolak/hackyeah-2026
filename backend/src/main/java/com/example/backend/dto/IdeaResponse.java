@@ -21,6 +21,7 @@ public record IdeaResponse(
         String adminReply,
         boolean hasCanvas,
         boolean hasFeedback,
+        boolean publishConsent,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}

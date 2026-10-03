@@ -24,7 +24,7 @@ function scoreTone(score) {
   return { label: "Częściowe dopasowanie", bar: "bg-muted-foreground", text: "text-muted-foreground" }
 }
 
-function MatchItem({ match, rank }) {
+export function MatchItem({ match, rank }) {
   const innovation = innovationsById.get(match.id)
   const tone = scoreTone(match.score)
 

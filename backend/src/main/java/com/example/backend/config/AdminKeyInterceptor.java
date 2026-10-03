@@ -3,6 +3,9 @@ package com.example.backend.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,6 +22,7 @@ public class AdminKeyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest req, HttpServletResponse res, Object handler) throws IOException {
         if ("OPTIONS".equals(req.getMethod())) return true;          // preflight CORS
+        if (hasInstitutionRole()) return true;
         String given = req.getHeader("X-Admin-Key");
         if (!adminKey.isBlank() && given != null
                 && MessageDigest.isEqual(adminKey.getBytes(StandardCharsets.UTF_8),
@@ -27,5 +31,12 @@ public class AdminKeyInterceptor implements HandlerInterceptor {
         }
         res.sendError(HttpServletResponse.SC_FORBIDDEN);
         return false;
+    }
+
+    private static boolean hasInstitutionRole() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth != null && auth.isAuthenticated() && auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(a -> a.equals("ROLE_JST") || a.equals("ROLE_ROPS"));
     }
 }
