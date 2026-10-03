@@ -7,3 +7,12 @@ export function useProblems() {
     queryFn: ({ signal }) => ProblemService.get({ ct: signal }),
   });
 }
+
+export function useProblem(id) {
+  return useQuery({
+    queryKey: ["problems", id],
+    queryFn: ({ signal }) => ProblemService.getById(id, { ct: signal }),
+    enabled: id != null,
+    staleTime: 60_000,
+  });
+}

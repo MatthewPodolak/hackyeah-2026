@@ -15,6 +15,7 @@ export const EMPTY_RATING_MSG = "Najpierw oceń zabawkę!";
 export const EMPTY_FORM_MSG = "Proszę wypełnij wszystkie pola!";
 
 export const INVALID_EMAIL_ERROR_MSG = "Wprowadź poprawny adres e-mail!";
+export const STREET_NOT_FOUND_MSG = "Nie znaleziono takiego adresu!";
 export const EMPTY_LOCATION_MSG = "Wybierz lokalizację na mapie!";
 export const PHOTO_TOO_LARGE_MSG = "Zdjęcie może mieć maksymalnie 5 MB!";
 export const PROBLEM_ADDED_MSG = "Problem został zgłoszony :)";

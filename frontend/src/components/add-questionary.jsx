@@ -20,11 +20,13 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
 import { useStreet } from "@/api/hooks/useStreetQuery"
+import { GeocodeService } from "@/api/services/GeocodeService"
 import { useToast } from "@/helpers/ToastProvider"
 import {
   EMPTY_LOCATION_MSG,
   PHOTO_TOO_LARGE_MSG,
   PROBLEM_ADDED_MSG,
+  STREET_NOT_FOUND_MSG,
   emptyField,
 } from "@/helpers/Errors"
 
@@ -50,12 +52,14 @@ function validate(form) {
   return null
 }
 
-export default function AddQuestionary({ open, onClose }) {
+export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const [form, setForm] = useState(EMPTY)
   const { showToast } = useToast()
   const addProblem = useAddProblem()
   const street = useStreet(form.location)
   const [photoPreview, setPhotoPreview] = useState(null)
+  const [address, setAddress] = useState("")
+  const [searching, setSearching] = useState(false)
 
   useEffect(() => {
     if (!form.photo) {
@@ -73,7 +77,27 @@ export default function AddQuestionary({ open, onClose }) {
 
   const close = () => {
     setForm(EMPTY)
+    setAddress("")
     onClose?.()
+  }
+
+  const searchAddress = async () => {
+    const query = address.trim()
+    if (!query) {
+      showToast(emptyField("adres"), "error")
+      return
+    }
+
+    setSearching(true)
+    try {
+      const location = await GeocodeService.search(query)
+      if (location) set("location")(location)
+      else showToast(STREET_NOT_FOUND_MSG, "error")
+    } catch {
+      showToast(null, "error")
+    } finally {
+      setSearching(false)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -86,7 +110,7 @@ export default function AddQuestionary({ open, onClose }) {
     }
 
     try {
-      await addProblem.mutateAsync({
+      const result = await addProblem.mutateAsync({
         title: form.title.trim(),
         description: form.description.trim(),
         latitude: form.location.lat,
@@ -96,6 +120,7 @@ export default function AddQuestionary({ open, onClose }) {
       })
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
+      onSubmitted?.(result)
     } catch {
       showToast(null, "error")
     }
@@ -129,13 +154,29 @@ export default function AddQuestionary({ open, onClose }) {
                   />
                 </Field>
                 <Field>
-                  <FieldLabel>Lokalizacja</FieldLabel>
+                  <FieldLabel htmlFor="q-address">Lokalizacja</FieldLabel>
+                  <div className="flex gap-2">
+                    <Input
+                      id="q-address"
+                      value={address}
+                      placeholder="Wpisz ulicę, np. Floriańska 15"
+                      onChange={(e) => setAddress(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "Enter") return
+                        e.preventDefault()
+                        searchAddress()
+                      }}
+                    />
+                    <Button type="button" variant="outline" onClick={searchAddress} disabled={searching}>
+                      {searching ? "Szukam..." : "Szukaj"}
+                    </Button>
+                  </div>
                   <div className="h-56 w-full overflow-hidden rounded-md border">
                     <LocationPicker value={form.location} onChange={set("location")} />
                   </div>
                   <FieldDescription>
                     {!form.location
-                      ? "Kliknij na mapie, aby wybrać miejsce"
+                      ? "Wpisz adres lub kliknij na mapie, aby wybrać miejsce"
                       : street.isFetching
                         ? "Szukam adresu..."
                         : street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`}
@@ -154,8 +195,8 @@ export default function AddQuestionary({ open, onClose }) {
                   )}
                 </Field>
                 <Field>
-                  <Button type="submit" disabled={addProblem.isPending || street.isFetching}>
-                    {addProblem.isPending ? "Wysyłanie..." : "Dodaj"}
+                  <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching}>
+                    {addProblem.isPending ? "Szukam rozwiązań..." : "Dodaj"}
                   </Button>
                 </Field>
               </FieldGroup>

@@ -1,4 +1,7 @@
+import { KRAKOW_BOUNDS } from "@/lib/map";
+
 const NOMINATIM_REVERSE = "https://nominatim.openstreetmap.org/reverse";
+const NOMINATIM_SEARCH = "https://nominatim.openstreetmap.org/search";
 
 function formatStreet(address) {
   if (!address) return null;
@@ -26,5 +29,22 @@ export const GeocodeService = {
 
     const body = await res.json();
     return formatStreet(body.address) ?? body.display_name ?? null;
+  },
+  async search(query, { ct } = {}) {
+    const params = new URLSearchParams({
+      format: "jsonv2",
+      q: query,
+      countrycodes: "pl",
+      viewbox: [KRAKOW_BOUNDS[0][1], KRAKOW_BOUNDS[1][0], KRAKOW_BOUNDS[1][1], KRAKOW_BOUNDS[0][0]].join(","),
+      bounded: "1",
+      limit: "1",
+      "accept-language": "pl",
+    });
+
+    const res = await fetch(`${NOMINATIM_SEARCH}?${params}`, { signal: ct });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const [first] = await res.json();
+    return first ? { lat: Number(first.lat), lon: Number(first.lon) } : null;
   },
 };

@@ -7,6 +7,7 @@ import { useToast } from "@/helpers/ToastProvider";
 import ThemeToggler from "@/components/theme-toggler";
 import AddQuestionary from "@/components/add-questionary";
 import ProblemDetails from "@/components/problem-details";
+import ProblemSolutions from "@/components/problem-solutions";
 import { useProblems } from "@/api/hooks/useProblemsQuery";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
@@ -17,6 +18,7 @@ export default function Home() {
   const { showToast } = useToast();
   const { data: problems, isError } = useProblems();
   const [selectedProblem, setSelectedProblem] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
 
   useEffect(() => {
     if (isError) showToast(null, "error");
@@ -60,7 +62,9 @@ export default function Home() {
 
     <ProblemDetails problem={selectedProblem} onClose={() => setSelectedProblem(null)} />
 
-    <AddQuestionary open={questOpen} onClose={() => setQuestOpen(false)} />
+    <AddQuestionary open={questOpen} onClose={() => setQuestOpen(false)} onSubmitted={setSubmitResult} />
+
+    <ProblemSolutions result={submitResult} onClose={() => setSubmitResult(null)} />
 
     </div>
   );

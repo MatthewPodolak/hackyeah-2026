@@ -5,7 +5,7 @@ export function useAddProblem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (model) => ProblemService.add(model),
+    mutationFn: (model) => ProblemService.add(model, { timeoutMs: 60000 }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["problems"] }),
   });
 }
