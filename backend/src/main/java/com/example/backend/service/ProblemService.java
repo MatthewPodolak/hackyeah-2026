@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.dto.InnovationMatchResponse;
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemResponse;
+import com.example.backend.dto.ProblemSummaryResponse;
 import com.example.backend.dto.ProblemWithMatchesResponse;
 import com.example.backend.mapper.ProblemMapper;
 import com.example.backend.model.Problem;

@@ -14,8 +14,19 @@ export const ProblemService = {
       },
       { ct, timeoutMs });
 
-    console.log("resp " + JSON.stringify(res));
     return res;
   },
 
+
+  async get({ ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.get;
+
+    const res = await apiJson(url,
+      {
+        method: method
+      },
+      { ct, timeoutMs });
+
+    return res;
+  }
 };

@@ -6,25 +6,68 @@ import "leaflet/dist/leaflet.css";
 
 const KRAKOW = [50.0614, 19.9366];
 
-export default function MapView({ target }) {
+const PIN_STYLE = { radius: 8, weight: 2, color: "#dc2626", fillColor: "#ef4444", fillOpacity: 0.8 };
+const PIN_SELECTED_STYLE = { radius: 12, weight: 3, color: "#7f1d1d", fillColor: "#dc2626", fillOpacity: 1 };
+
+const NO_PROBLEMS = [];
+
+export default function MapView({ target, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const problemsLayerRef = useRef(null);
+  const pinsRef = useRef(new Map());
+  const onProblemClickRef = useRef(onProblemClick);
+  const onMapClickRef = useRef(onMapClick);
+  onProblemClickRef.current = onProblemClick;
+  onMapClickRef.current = onMapClick;
 
   useEffect(() => {
     if (mapRef.current) return;
-    const map = L.map(containerRef.current).setView(KRAKOW, 13);
+    const map = L.map(containerRef.current).setView(KRAKOW, 15);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
+    problemsLayerRef.current = L.layerGroup().addTo(map);
+    map.on("click", () => onMapClickRef.current?.());
     mapRef.current = map;
 
     return () => {
       map.remove();
       mapRef.current = null;
+      problemsLayerRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const layer = problemsLayerRef.current;
+    if (!layer) return;
+    layer.clearLayers();
+    pinsRef.current.clear();
+    for (const problem of problems) {
+      if (problem.latitude == null || problem.longitude == null) continue;
+      const pin = L.circleMarker([problem.latitude, problem.longitude], PIN_STYLE)
+        .on("click", (e) => {
+          L.DomEvent.stopPropagation(e);
+          onProblemClickRef.current?.(problem);
+        })
+        .addTo(layer);
+      pinsRef.current.set(problem.id, pin);
+    }
+  }, [problems]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    for (const [id, pin] of pinsRef.current) {
+      const selected = id === selectedProblemId;
+      pin.setStyle(selected ? PIN_SELECTED_STYLE : PIN_STYLE);
+      if (selected) {
+        pin.bringToFront();
+        map?.panTo(pin.getLatLng());
+      }
+    }
+  }, [problems, selectedProblemId]);
 
   useEffect(() => {
     const map = mapRef.current;

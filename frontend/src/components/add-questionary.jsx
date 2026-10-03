@@ -19,6 +19,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
+import { useStreet } from "@/api/hooks/useStreetQuery"
 import { useToast } from "@/helpers/ToastProvider"
 import {
   EMPTY_LOCATION_MSG,
@@ -53,6 +54,7 @@ export default function AddQuestionary({ open, onClose }) {
   const [form, setForm] = useState(EMPTY)
   const { showToast } = useToast()
   const addProblem = useAddProblem()
+  const street = useStreet(form.location)
   const [photoPreview, setPhotoPreview] = useState(null)
 
   useEffect(() => {
@@ -90,6 +92,7 @@ export default function AddQuestionary({ open, onClose }) {
         latitude: form.location.lat,
         longitude: form.location.lon,
         imageUrl: form.photo ? await readAsDataUrl(form.photo) : null,
+        street: street.data ?? null,
       })
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
@@ -131,9 +134,11 @@ export default function AddQuestionary({ open, onClose }) {
                     <LocationPicker value={form.location} onChange={set("location")} />
                   </div>
                   <FieldDescription>
-                    {form.location
-                      ? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`
-                      : "Kliknij na mapie, aby wybrać miejsce"}
+                    {!form.location
+                      ? "Kliknij na mapie, aby wybrać miejsce"
+                      : street.isFetching
+                        ? "Szukam adresu..."
+                        : street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`}
                   </FieldDescription>
                 </Field>
                 <Field>
@@ -149,7 +154,7 @@ export default function AddQuestionary({ open, onClose }) {
                   )}
                 </Field>
                 <Field>
-                  <Button type="submit" disabled={addProblem.isPending}>
+                  <Button type="submit" disabled={addProblem.isPending || street.isFetching}>
                     {addProblem.isPending ? "Wysyłanie..." : "Dodaj"}
                   </Button>
                 </Field>
