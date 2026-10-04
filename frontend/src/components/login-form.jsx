@@ -3,6 +3,7 @@ import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
 import { DialogPanel } from "@/components/dialog-parts"
+import BrandMark from "@/components/brand-mark"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Cancel01Icon, Login03Icon, UserAdd01Icon, UserGroupIcon, UserIcon } from "@hugeicons/core-free-icons"
 import {
@@ -183,14 +184,14 @@ export function LoginForm({
     <DialogPanel className={className} {...props}>
       <div className="flex shrink-0 flex-col gap-5 px-6 pt-6">
         <div className="flex items-start gap-4">
-          <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-elevation-1">H</span>
+          <BrandMark className="size-11 shadow-elevation-1 rounded-2xl" />
           <div className="min-w-0 flex-1">
             <Heading id="auth-heading" tabIndex={-1} className="font-heading text-xl font-bold tracking-tight outline-none">
               {isLogin ? t("Zaloguj się") : t("Utwórz konto")}
             </Heading>
             <p id="auth-description" className="mt-1 text-sm text-muted-foreground">
               {isLogin
-                ? t("Witaj ponownie w Małopolskim Hubie Innowacji.")
+                ? t("Witaj ponownie w aplikacji Bez Barier.")
                 : t("Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator.")}
             </p>
           </div>

@@ -15,6 +15,7 @@ import { LOGGED_OUT_MSG } from "@/helpers/Errors"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { AlertDiamondIcon, Analytics01Icon, BulbIcon, Chatting01Icon, Coins01Icon, Database01Icon, HandshakeIcon, Idea01Icon, InboxIcon, LibraryIcon, Logout01Icon, MapsIcon, Megaphone01Icon, Route01Icon, TestTube01Icon, UserCheck01Icon } from "@hugeicons/core-free-icons"
 import { useProposal } from "@/api/context/ProposalContext"
+import BrandMark from "@/components/brand-mark"
 import { localize, t } from "@/lib/i18n";
 
 const publicItems = localize([
@@ -108,9 +109,9 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="px-3 pt-4 pb-2">
         <Link href="/" className="flex items-center gap-3 rounded-xl p-1.5">
-          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-base font-extrabold text-primary-foreground shadow-elevation-1">H</span>
+          <BrandMark className="shadow-elevation-1 rounded-xl" />
           <span className="grid min-w-0 leading-tight">
-            <span className="font-heading text-base font-extrabold tracking-tight">{t("Małopolska HubMI")}</span>
+            <span className="font-heading text-base font-extrabold tracking-tight">Bez Barier</span>
             <span className="text-xs text-muted-foreground">{t("Hub Innowacji Społecznych")}</span>
           </span>
         </Link>

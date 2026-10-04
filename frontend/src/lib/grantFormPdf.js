@@ -219,7 +219,7 @@ export async function buildFilledForm(call, draftSections, applicant = null) {
       const ngo = applicant.role === "NGO";
       const who = (ngo ? profile.representative?.name : null) || applicant.name || "";
       const date = new Intl.DateTimeFormat("pl-PL", { dateStyle: "long" }).format(applicant.statementsConfirmedAt);
-      writeField(layout.statements[ngo ? "entity" : "person"], `Potwierdzono w HubMI: ${who}, ${date}`);
+      writeField(layout.statements[ngo ? "entity" : "person"], `Potwierdzono w aplikacji Bez Barier: ${who}, ${date}`);
       if (ngo) writeField(layout.statements.person, na);
     }
   }
@@ -240,7 +240,7 @@ export async function buildFilledForm(call, draftSections, applicant = null) {
   }
 
   for (const p of out.getPages()) {
-    p.drawText("Szkic przygotowany w HubMI – sprawdź i uzupełnij przed złożeniem w formularzu elektronicznym ROPS.", {
+    p.drawText("Szkic przygotowany w aplikacji Bez Barier – sprawdź i uzupełnij przed złożeniem w formularzu elektronicznym ROPS.", {
       x: 40, y: 12, size: 7.5, font, color: rgb(...WARN),
     });
   }

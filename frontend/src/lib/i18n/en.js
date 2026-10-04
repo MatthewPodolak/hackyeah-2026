@@ -598,7 +598,6 @@ const en = {
   "Pokaż mi": "Show me",
   "Jak korzystać z mapy – przewodnik": "How to use the map – guide",
   "Jak korzystać z mapy": "How to use the map",
-  "Witaj w Małopolskim HubMI": "Welcome to Małopolska HubMI",
   "To miejsce, w którym mieszkańcy zgłaszają problemy swojej okolicy, a ROPS i gminy dopasowują do nich sprawdzone rozwiązania. Pokażemy Ci w minutę, jak z niego korzystać.": "This is where residents report problems in their area, and ROPS and municipalities match proven solutions to them. We'll show you how to use it in a minute.",
   "Szukaj ulicy lub zgłoszenia": "Search for a street or report",
   "Wpisz nazwę ulicy, miejsca albo problemu. Wybierz podpowiedź, a mapa sama przybliży to miejsce.": "Type the name of a street, place or problem. Choose a suggestion and the map will zoom in on that place.",
@@ -673,7 +672,6 @@ const en = {
   "Hasło musi mieć co najmniej 8 znaków": "The password must be at least 8 characters long",
   "Hasła nie są takie same": "The passwords don't match",
   "Utwórz konto": "Create an account",
-  "Witaj ponownie w Małopolskim Hubie Innowacji.": "Welcome back to the Małopolska Social Innovation Hub.",
   "Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator.": "An account for a resident or an NGO. Local government and ROPS accounts are created by the administrator.",
   "Rodzaj formularza": "Form type",
   "Email": "E-mail",
@@ -863,8 +861,6 @@ const en = {
   "Pokaż hasło": "Show password",
   "Nawigacja serwisu": "Site navigation",
   "Pokaż lub ukryj menu": "Show or hide the menu",
-  "Małopolska HubMI": "Małopolska HubMI",
-  "Hub Innowacji Społecznych": "Social Innovation Hub",
   "Menu główne": "Main menu",
   "Nawigacja": "Navigation",
   "Moje sprawy": "My matters",
@@ -1250,7 +1246,10 @@ const en = {
   "Osoby fizyczne": "Individuals",
   "Grupy nieformalne": "Informal groups",
   "Podmioty publiczne": "Public entities",
-  "Firmy": "Companies"
+  "Firmy": "Companies",
+  "Witaj ponownie w aplikacji Bez Barier.": "Welcome back to Bez Barier.",
+  "Witaj w aplikacji Bez Barier": "Welcome to Bez Barier",
+  "Hub Innowacji Społecznych": "Social Innovation Hub"
 };
 
 export default en;
