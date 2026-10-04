@@ -9,5 +9,6 @@ public record UserResponse(
         String email,
         Role role,
         AccountStatus accountStatus,
-        String gminaId
+        String gminaId,
+        String nip
 ) {}

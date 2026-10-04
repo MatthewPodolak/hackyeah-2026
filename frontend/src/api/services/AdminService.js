@@ -22,9 +22,6 @@ export const AdminService = {
   reviewProblem: (id, model) => send(API.adminProblem.review, API.adminProblem.review.url(id), model),
   unseenProblems: async ({ ct } = {}) => (await send(API.adminProblem.unseen, API.adminProblem.unseen.url, undefined, { ct }))?.unseen ?? 0,
 
-  users: (status, { ct } = {}) => send(API.adminUser.list, status ? `${API.adminUser.list.url}?status=${status}` : API.adminUser.list.url, undefined, { ct }),
-  pendingUsers: async ({ ct } = {}) => (await send(API.adminUser.pending, API.adminUser.pending.url, undefined, { ct }))?.pending ?? 0,
-  setUserStatus: (id, status) => send(API.adminUser.status, API.adminUser.status.url(id), { status }),
 
   createInnovation: (model) => send(API.adminCatalog.create, API.adminCatalog.create.url, model),
   updateInnovation: (id, model) => send(API.adminCatalog.update, API.adminCatalog.update.url(id), model),

@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import com.example.backend.model.AccountStatus;
 import com.example.backend.model.AppUser;
 import com.example.backend.model.Role;
 import com.example.backend.repository.AppUserRepository;
@@ -11,6 +12,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +31,8 @@ public class JstAccountSeeder {
 
     // .test is reserved, so these can never be real mailboxes
     public static final String DOMAIN = "@hubmi.test";
-    public static final String ROPS_EMAIL = "rops" + DOMAIN;
+    public static final String ROPS_EMAIL = "rops@gmail.com";
+    public static final String ROPS_PASSWORD = "rops";
 
     private final AppUserRepository userRepository;
     private final CreatorReferenceData referenceData;
@@ -50,9 +53,7 @@ public class JstAccountSeeder {
         String hash = passwordEncoder.encode(password);
         List<AppUser> missing = new ArrayList<>();
 
-        if (!existing.contains(ROPS_EMAIL)) {
-            missing.add(account("ROPS Kraków", ROPS_EMAIL, Role.ROPS, null, hash));
-        }
+        ensureSingleRopsAccount();
         referenceData.regions().powiaty().forEach(powiat -> powiat.gminy().forEach(gmina -> {
             String email = gmina.id() + DOMAIN;
             if (!existing.contains(email)) {
@@ -63,6 +64,30 @@ public class JstAccountSeeder {
         if (!missing.isEmpty()) {
             userRepository.saveAll(missing);
             log.info("Utworzono {} kont demo (JST dla gmin i ROPS)", missing.size());
+        }
+    }
+
+    private void ensureSingleRopsAccount() {
+        AppUser rops = userRepository.findByEmailIgnoreCase(ROPS_EMAIL).orElseGet(() -> {
+            AppUser created = account("ROPS Kraków", ROPS_EMAIL, Role.ROPS, null, null);
+            created.setCreatedAt(Instant.now());
+            return created;
+        });
+        if (rops.getPassword() == null || !passwordEncoder.matches(ROPS_PASSWORD, rops.getPassword())) {
+            rops.setPassword(passwordEncoder.encode(ROPS_PASSWORD));
+        }
+        rops.setRole(Role.ROPS);
+        rops.setAccountStatus(AccountStatus.ACTIVE);
+        userRepository.save(rops);
+
+        List<AppUser> others = userRepository.findAll().stream()
+                .filter(u -> u.getRole() == Role.ROPS && !u.getId().equals(rops.getId()))
+                .filter(u -> u.effectiveStatus() != AccountStatus.REJECTED)
+                .toList();
+        others.forEach(u -> u.setAccountStatus(AccountStatus.REJECTED));
+        if (!others.isEmpty()) {
+            userRepository.saveAll(others);
+            log.info("Wyłączono {} dodatkowych kont ROPS – jedynym kontem ROPS jest {}", others.size(), ROPS_EMAIL);
         }
     }
 

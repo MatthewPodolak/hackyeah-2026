@@ -5,12 +5,14 @@ import { AuthService } from "@/api/services/AuthService";
 
 export const ROLES = {
   CITIZEN: "CITIZEN",
+  NGO: "NGO",
   JST: "JST",
   ROPS: "ROPS",
 };
 
 export const ROLE_LABELS = {
   CITIZEN: "Obywatel",
+  NGO: "Organizacja pozarządowa",
   JST: "JST",
   ROPS: "ROPS",
 };

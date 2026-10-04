@@ -65,11 +65,6 @@ export const API = {
     review: { method: "PATCH", url: (id) => `/api/v1/admin/problems/${id}/review` },
     unseen: { method: "GET", url: "/api/v1/admin/problems/unseen-count" },
   },
-  adminUser: {
-    list: { method: "GET", url: "/api/v1/admin/users" },
-    pending: { method: "GET", url: "/api/v1/admin/users/pending-count" },
-    status: { method: "PATCH", url: (id) => `/api/v1/admin/users/${id}/status` },
-  },
   adminCatalog: {
     create: { method: "POST", url: "/api/v1/admin/catalog/innovations" },
     update: { method: "PUT", url: (id) => `/api/v1/admin/catalog/innovations/${encodeURIComponent(id)}` },

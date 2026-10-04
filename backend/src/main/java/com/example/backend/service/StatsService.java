@@ -87,7 +87,6 @@ public class StatsService {
             totals.put("reviews", (long) allReviews.size());
             totals.put("conversationsOpen", conversations.findAll().stream().filter(c -> "OPEN".equals(c.getStatus())).count());
             totals.put("partnerships", partnerships.findAll().stream().filter(PartnershipPost::isActive).count());
-            totals.put("pendingAccounts", users.findAll().stream().filter(u -> (u.getRole() == Role.JST || u.getRole() == Role.ROPS) && u.effectiveStatus() == AccountStatus.PENDING).count());
 
             Map<String, Long> wanted = allParticipations.stream().collect(Collectors.groupingBy(TestParticipation::getInnovationId, Collectors.counting()));
             Map<String, List<InnovationReview>> reviewsBy = allReviews.stream().collect(Collectors.groupingBy(InnovationReview::getInnovationId));

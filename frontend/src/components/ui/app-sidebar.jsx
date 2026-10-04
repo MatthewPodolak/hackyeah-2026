@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useUnseenIdeasCount } from "@/api/hooks/useAdminIdeas"
-import { usePendingAccounts, useUnseenProblems } from "@/api/hooks/useAdmin"
+import { useUnseenProblems } from "@/api/hooks/useAdmin"
 import AccessibilityControls from "@/components/accessibility-controls"
 
 import { ROLES, useAuth } from "@/api/context/AuthContext"
@@ -38,7 +38,6 @@ const institutionItems = [
 ]
 
 const ropsItems = [
-  { title: "Konta instytucji", url: "/admin/accounts", badge: "pendingAccounts", badgeLabel: "czeka na akceptację" },
   { title: "Zgłoszenia do testów", url: "/test-participations" },
   { title: "Katalog wiedzy", url: "/admin/catalog" },
 ]
@@ -83,14 +82,13 @@ function NavGroup({ label, items, isActive, badges = {}, onAction }) {
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { isLogged, user, role, roleLabel, openPanel, logout, hasRole, isPendingInstitution, accountStatus } = useAuth()
+  const { isLogged, user, role, roleLabel, openPanel, logout, hasRole, isPendingInstitution } = useAuth()
   const { showToast } = useToast()
   const { openProposal } = useProposal()
   const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
   const isRops = hasRole(ROLES.ROPS)
   const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
   const { data: unseenProblems } = useUnseenProblems(isRops)
-  const { data: pendingAccounts } = usePendingAccounts(isRops)
 
   const isActive = (url) => (url === "/" ? pathname === "/" : pathname.startsWith(url))
 
@@ -111,7 +109,7 @@ export function AppSidebar() {
           {isInstitution && (
             <NavGroup label={`Panel ${roleLabel}`} items={institutionItems} isActive={isActive} badges={{ unseenIdeas, unseenProblems }} />
           )}
-          {isRops && <NavGroup label="Administracja ROPS" items={ropsItems} isActive={isActive} badges={{ pendingAccounts }} />}
+          {isRops && <NavGroup label="Administracja ROPS" items={ropsItems} isActive={isActive} />}
         </nav>
         <SidebarGroup>
           <SidebarGroupLabel>Ułatwienia dostępu</SidebarGroupLabel>
@@ -135,7 +133,7 @@ export function AppSidebar() {
                     <span className="text-xs text-muted-foreground break-all">{roleLabel} · {user.email}</span>
                     {isPendingInstitution && (
                       <span className="mt-1 text-xs font-medium">
-                        {accountStatus === "REJECTED" ? "Wniosek o konto instytucji został odrzucony" : "Konto czeka na akceptację ROPS"}
+                        Konto instytucji jest nieaktywne
                       </span>
                     )}
                   </div>

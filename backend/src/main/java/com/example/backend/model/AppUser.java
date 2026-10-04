@@ -34,6 +34,10 @@ public class AppUser {
 
     // JST only: the gmina this account works for (id from malopolska-units.json)
     private String gminaId;
+
+    // NGO only: 10-digit tax id, digits only
+    @Column(length = 10)
+    private String nip;
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     private AccountStatus accountStatus;
