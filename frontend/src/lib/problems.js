@@ -10,6 +10,19 @@ export const PROBLEM_STATUS = {
   REJECTED: { label: "Odrzucone", className: "bg-red-500/10 text-red-700 dark:text-red-300" },
 };
 
+export const PIN_TONES = [
+  { key: "open", label: "Nowe i analizowane" },
+  { key: "progress", label: "W realizacji" },
+  { key: "resolved", label: "Rozwiązane" },
+];
+
+export function pinTone(status) {
+  if (status === "IN_PROGRESS") return "progress";
+  if (status === "RESOLVED") return "resolved";
+  if (status === "REJECTED" || status === "GMINA_REJECTED") return "closed";
+  return "open";
+}
+
 export function problemStatus(status) {
   return PROBLEM_STATUS[status] ?? PROBLEM_STATUS.SUBMITTED;
 }
