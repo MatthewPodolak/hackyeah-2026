@@ -1,3 +1,5 @@
+import { t } from "@/lib/i18n";
+
 // Gminy of Małopolska: borders from public/geo/malopolska-gminy.geojson (PRG, GUGiK),
 // names from GET /api/v1/config/regions. Ids are the same in both.
 
@@ -69,7 +71,7 @@ export function indexGminy(regions) {
 // one line for where a report is: "Cała gmina: …", or the street (or coordinates) with its gmina
 export function problemPlace(problem, gminy) {
   const gmina = gminaName(gminy.get(problem.gminaId));
-  if (problem.wholeGmina) return `Cała gmina: ${gmina ?? "…"}`;
+  if (problem.wholeGmina) return t("Cała gmina: {gmina}", { gmina: gmina ?? "…" });
   const spot = problem.street ?? (problem.latitude != null ? `${problem.latitude.toFixed(5)}, ${problem.longitude.toFixed(5)}` : null);
   return [spot, gmina].filter(Boolean).join(" · ");
 }

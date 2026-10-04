@@ -12,8 +12,9 @@ import StatusPill from "@/components/status-pill"
 import { problemStatus } from "@/lib/problems"
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories"
 import { problemPlace } from "@/lib/gminy"
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" })
+const dateFormat = localDateFormat({ dateStyle: "medium", timeStyle: "short" })
 
 export default function ProblemDetails({ problem, onClose, onProposeSolution }) {
   const details = useProblem(problem?.id)
@@ -61,19 +62,19 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
 
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                Zgłoszony problem
+                {t("Zgłoszony problem")}
               </p>
               <h2 id="problem-details-heading" ref={headingRef} tabIndex={-1} className="font-heading text-xl font-bold tracking-tight leading-snug break-words outline-none">
                 {problem.title}
               </h2>
             </div>
 
-            <Button variant="ghost" size="icon" className="-mt-1 -mr-2" onClick={onClose} aria-label="Zamknij szczegóły problemu">
+            <Button variant="ghost" size="icon" className="-mt-1 -mr-2" onClick={onClose} aria-label={t("Zamknij szczegóły problemu")}>
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
             </Button>
           </div>
 
-          <ul className="flex flex-wrap items-center gap-1.5" aria-label="Status i kategorie">
+          <ul className="flex flex-wrap items-center gap-1.5" aria-label={t("Status i kategorie")}>
             <li>
               <StatusPill meta={problemStatus(problem.status)} />
             </li>
@@ -102,7 +103,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-muted/70 px-4 py-3 text-sm text-muted-foreground">
             <span className="flex min-w-0 items-center gap-1.5">
               <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
-              <span className="sr-only">Miejsce: </span>
+              <span className="sr-only">{t("Miejsce:")}{" "}</span>
               <span className="break-words">
                 {problemPlace(problem, gminy)}
               </span>
@@ -110,7 +111,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
             {problem.localDate && (
               <span className="flex shrink-0 items-center gap-1.5 tabular-nums">
                 <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
-                <span className="sr-only">Zgłoszono: </span>
+                <span className="sr-only">{t("Zgłoszono:")}{" "}</span>
                 <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time>
               </span>
             )}
@@ -123,7 +124,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
             className="w-full bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-700 dark:hover:bg-emerald-800"
             onClick={() => onProposeSolution?.(problem)}
           >
-            Zaproponuj rozwiązanie
+            {t("Zaproponuj rozwiązanie")}
           </Button>
         </div>
       </div>

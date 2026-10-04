@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UnfoldMoreIcon, PlusSignIcon } from "@hugeicons/core-free-icons"
+import { t } from "@/lib/i18n";
 
 export function TeamSwitcher({
   teams
@@ -58,7 +59,7 @@ export function TeamSwitcher({
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className="text-xs text-muted-foreground">
-                Teams
+                {t("Teams")}
               </DropdownMenuLabel>
               {teams.map((team, index) => (
                 <DropdownMenuItem
@@ -81,7 +82,7 @@ export function TeamSwitcher({
                   <HugeiconsIcon icon={PlusSignIcon} strokeWidth={2} className="size-4" />
                 </div>
                 <div className="font-medium text-muted-foreground">
-                  Add team
+                  {t("Add team")}
                 </div>
               </DropdownMenuItem>
             </DropdownMenuGroup>

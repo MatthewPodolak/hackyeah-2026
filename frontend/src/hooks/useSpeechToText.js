@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { intlLocale } from "@/lib/i18n";
 
 export const MIC_BLOCKED_MSG = "Zezwól na dostęp do mikrofonu w przeglądarce, aby dyktować.";
 
@@ -55,7 +56,7 @@ export function useSpeechToText({ onText, onError }) {
     activeRecognition?.stop();
 
     const recognition = new Recognition();
-    recognition.lang = "pl-PL";
+    recognition.lang = intlLocale();
     recognition.continuous = true;
     recognition.interimResults = false;
     recognition.onresult = (e) => {

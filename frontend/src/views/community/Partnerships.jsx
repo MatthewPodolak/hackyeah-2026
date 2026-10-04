@@ -17,8 +17,9 @@ import { useToast } from "@/helpers/ToastProvider";
 import { useFormErrors } from "@/helpers/useFormErrors";
 import { PageHeader } from "@/components/page-header";
 import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
+const dateFormat = localDateFormat({ dateStyle: "medium" });
 
 function NewPartnership({ onClose }) {
   const [form, setForm] = useState({ title: "", lookingFor: "", description: "" });
@@ -33,43 +34,43 @@ function NewPartnership({ onClose }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return fail("title", "Podaj tytuł ogłoszenia");
+    if (!form.title.trim()) return fail("title", t("Podaj tytuł ogłoszenia"));
     if (!form.lookingFor.trim()) return fail("lookingFor", "Napisz, kogo szukasz");
-    if (!form.description.trim()) return fail("description", "Opisz, czego dotyczy współpraca");
+    if (!form.description.trim()) return fail("description", t("Opisz, czego dotyczy współpraca"));
     try {
       await create.mutateAsync({ title: form.title.trim(), lookingFor: form.lookingFor.trim(), description: form.description.trim() });
       showToast("Ogłoszenie zostało opublikowane", "success");
       onClose();
     } catch (err) {
-      if (err?.status === 400) fail("description", err.body?.message ?? "Sprawdź poprawność danych");
+      if (err?.status === 400) fail("description", err.body?.message ?? t("Sprawdź poprawność danych"));
       else showToast(null, "error");
     }
   };
 
   return (
     <DialogPanel>
-      <DialogHeader icon={HandshakeIcon} title="Nowe ogłoszenie o partnerstwo" titleId="pp-heading" description="Ogłoszenie zobaczą wszyscy odwiedzający, wraz z Twoją nazwą." onClose={onClose} />
+      <DialogHeader icon={HandshakeIcon} title={t("Nowe ogłoszenie o partnerstwo")} titleId="pp-heading" description={t("Ogłoszenie zobaczą wszyscy odwiedzający, wraz z Twoją nazwą.")} onClose={onClose} />
       <DialogBody className="pt-1">
         <form onSubmit={submit} noValidate>
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="pp-title">Tytuł (wymagane)</FieldLabel>
+              <FieldLabel htmlFor="pp-title">{t("Tytuł (wymagane)")}</FieldLabel>
               <Input {...fieldProps("title")} required maxLength={200} value={form.title} onChange={set("title")} />
               <FieldError {...errorProps("title")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="pp-lookingFor">Kogo szukasz? (wymagane)</FieldLabel>
+              <FieldLabel htmlFor="pp-lookingFor">{t("Kogo szukasz? (wymagane)")}</FieldLabel>
               <Input {...fieldProps("lookingFor", "pp-lookingFor-hint")} required maxLength={100} value={form.lookingFor} onChange={set("lookingFor")} />
-              <FieldDescription id="pp-lookingFor-hint">Np. organizacja pozarządowa, szkoła, gmina, wolontariusze.</FieldDescription>
+              <FieldDescription id="pp-lookingFor-hint">{t("Np. organizacja pozarządowa, szkoła, gmina, wolontariusze.")}</FieldDescription>
               <FieldError {...errorProps("lookingFor")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="pp-description">Opis (wymagane)</FieldLabel>
+              <FieldLabel htmlFor="pp-description">{t("Opis (wymagane)")}</FieldLabel>
               <Textarea {...fieldProps("description")} required rows={5} maxLength={4000} value={form.description} onChange={set("description")} />
               <FieldError {...errorProps("description")} />
             </Field>
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <Button type="button" variant="ghost" onClick={onClose}>Anuluj</Button>
+              <Button type="button" variant="ghost" onClick={onClose}>{t("Anuluj")}</Button>
               <Button type="submit" disabled={create.isPending}>{create.isPending ? "Publikowanie..." : "Opublikuj"}</Button>
             </div>
           </FieldGroup>
@@ -89,18 +90,18 @@ export default function Partnerships() {
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={HandshakeIcon}
-          title="Partnerstwa"
-          description="Ogłoszenia osób i instytucji, które szukają partnerów do wdrożenia innowacji"
+          title={t("Partnerstwa")}
+          description={t("Ogłoszenia osób i instytucji, które szukają partnerów do wdrożenia innowacji")}
           actions={
             <Button onClick={() => (isLogged ? setCreating(true) : openPanel("login"))}>
               <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-              {isLogged ? "Dodaj ogłoszenie" : "Zaloguj się, aby dodać ogłoszenie"}
+              {isLogged ? t("Dodaj ogłoszenie") : t("Zaloguj się, aby dodać ogłoszenie")}
             </Button>
           }
         />
 
         {posts.isPending ? (
-          <LoadingStatus label="Wczytywanie ogłoszeń" className="grid gap-4 sm:grid-cols-2">
+          <LoadingStatus label={t("Wczytywanie ogłoszeń")} className="grid gap-4 sm:grid-cols-2">
             <Skeleton className="h-40 rounded-xl" />
             <Skeleton className="h-40 rounded-xl" />
           </LoadingStatus>
@@ -111,7 +112,7 @@ export default function Partnerships() {
                 <article aria-labelledby={`pp-${post.id}`} className="flex h-full flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-5">
                   <h2 id={`pp-${post.id}`} className="font-semibold break-words">{post.title}</h2>
                   <p className="text-sm">
-                    <span className="font-medium">Szukamy: </span>{post.lookingFor}
+                    <span className="font-medium">{t("Szukamy:")}{" "}</span>{post.lookingFor}
                   </p>
                   <p className="text-sm text-muted-foreground whitespace-pre-line break-words">{post.description}</p>
                   <p className="mt-auto pt-2 text-xs text-muted-foreground">
@@ -133,8 +134,8 @@ export default function Partnerships() {
               <EmptyMedia variant="icon">
                 <HugeiconsIcon icon={HandshakeIcon} strokeWidth={2} aria-hidden="true" />
               </EmptyMedia>
-              <EmptyTitle>Brak ogłoszeń</EmptyTitle>
-              <EmptyDescription>Szukasz partnera do swojego pomysłu? Dodaj pierwsze ogłoszenie.</EmptyDescription>
+              <EmptyTitle>{t("Brak ogłoszeń")}</EmptyTitle>
+              <EmptyDescription>{t("Szukasz partnera do swojego pomysłu? Dodaj pierwsze ogłoszenie.")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

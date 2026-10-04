@@ -32,11 +32,12 @@ import { useAuth } from "@/api/context/AuthContext";
 import { ApplicantPanel, missingApplicantData } from "@/components/applicant-panel";
 import { Checkbox } from "@/components/ui/checkbox";
 import { IDEA_STATUS } from "@/lib/ideas";
+import { localDateFormat, localNumberFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
+const dateFormat = localDateFormat({ dateStyle: "medium" });
 
 function aiErrorMessage(err) {
-  if (err?.status === 429) return "Za dużo zapytań do AI, spróbuj za chwilę";
+  if (err?.status === 429) return t("Za dużo zapytań do AI, spróbuj za chwilę");
   return err?.body?.message ?? null;
 }
 
@@ -49,7 +50,7 @@ function isFilled(value) {
 
 function StepNav({ steps, current, answers, onSelect }) {
   return (
-    <nav aria-label="Kroki kanwy">
+    <nav aria-label={t("Kroki kanwy")}>
     <ol className="grid gap-2 sm:grid-cols-4">
       {steps.map((step, index) => {
         const filled = step.sections.filter((section) => isFilled(answers[section.id])).length;
@@ -67,9 +68,9 @@ function StepNav({ steps, current, answers, onSelect }) {
             >
               <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
                 Krok {index + 1}
-                {current === index && <span className="sr-only">(bieżący)</span>}
+                {current === index && <span className="sr-only">{t("(bieżący)")}</span>}
                 {done && <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-3.5 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />}
-                {done && <span className="sr-only">(ukończony)</span>}
+                {done && <span className="sr-only">{t("(ukończony)")}</span>}
               </span>
               <span className="text-sm font-semibold leading-snug">{step.title}</span>
               <span className="text-xs text-muted-foreground tabular-nums">
@@ -92,10 +93,10 @@ function SuggestionBox({ section, suggestion, reason, onApply }) {
     <div className="flex flex-col gap-2 rounded-lg border border-dashed border-emerald-700/60 bg-emerald-500/5 p-3 text-sm sm:flex-row sm:items-start">
       <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
       <div className="min-w-0 flex-1">
-        <p className="font-medium break-words"><span className="sr-only">Podpowiedź AI: </span>{text}</p>
+        <p className="font-medium break-words"><span className="sr-only">{t("Podpowiedź AI:")}{" "}</span>{text}</p>
         {reason && <p className="text-xs text-muted-foreground">{reason}</p>}
       </div>
-      <Button type="button" variant="outline" size="sm" onClick={onApply} aria-label={`Zastosuj podpowiedź dla: ${section.title}`}>Zastosuj</Button>
+      <Button type="button" variant="outline" size="sm" onClick={onApply} aria-label={t("Zastosuj podpowiedź dla: {title}", { title: section.title })}>{t("Zastosuj")}</Button>
     </div>
   );
 }
@@ -144,25 +145,25 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/50 p-3">
         <div>
           <h2 id="canvas-step-heading" tabIndex={-1} className="font-semibold outline-none">
-            Krok {current + 1} z {spec.steps.length}: {step.title}
+            {t("Krok {step} z {total}: {title}", { step: current + 1, total: spec.steps.length, title: step.title })}
           </h2>
-          <p className="text-xs text-muted-foreground">Odpowiedz na tyle pytań, na ile potrafisz — nic nie jest obowiązkowe.</p>
+          <p className="text-xs text-muted-foreground">{t("Odpowiedz na tyle pytań, na ile potrafisz — nic nie jest obowiązkowe.")}</p>
         </div>
         <div className="flex gap-2">
           {stepSuggestion && Object.keys(stepSuggestion.answers ?? {}).length > 0 && (
-            <Button type="button" variant="outline" size="sm" onClick={applyAll}>Zastosuj wszystkie</Button>
+            <Button type="button" variant="outline" size="sm" onClick={applyAll}>{t("Zastosuj wszystkie")}</Button>
           )}
           <Button type="button" variant="outline" size="sm" onClick={askAi} disabled={suggest.isPending}>
             {suggest.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" />}
-            {suggest.isPending ? "AI myśli..." : "Podpowiedz AI"}
+            {suggest.isPending ? t("AI myśli...") : "Podpowiedz AI"}
           </Button>
         </div>
       </div>
       <p role="status" className="sr-only">
         {suggest.isPending
-          ? "AI przygotowuje podpowiedzi"
+          ? t("AI przygotowuje podpowiedzi")
           : stepSuggestion
-            ? `Podpowiedzi AI dla ${Object.keys(stepSuggestion.answers ?? {}).length} sekcji. Przy każdej sekcji jest przycisk Zastosuj.`
+            ? t("Podpowiedzi AI dla sekcji: {count}. Przy każdej sekcji jest przycisk Zastosuj.", { count: Object.keys(stepSuggestion.answers ?? {}).length })
             : ""}
       </p>
 
@@ -200,13 +201,13 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
       ))}
 
       <div className="sticky bottom-0 -mx-4 flex items-center justify-between gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur md:-mx-8 md:px-8">
-        <Button type="button" variant="ghost" disabled={current === 0} onClick={() => go(current - 1)}>Wstecz</Button>
+        <Button type="button" variant="ghost" disabled={current === 0} onClick={() => go(current - 1)}>{t("Wstecz")}</Button>
         <div className="flex gap-2">
           <Button type="button" variant="outline" onClick={() => onSave(false)} disabled={saving}>
-            {saving ? "Zapisywanie..." : "Zapisz"}
+            {saving ? "Zapisywanie..." : t("Zapisz")}
           </Button>
           {current < spec.steps.length - 1 && (
-            <Button type="button" onClick={() => go(current + 1)} disabled={saving}>Dalej</Button>
+            <Button type="button" onClick={() => go(current + 1)} disabled={saving}>{t("Dalej")}</Button>
           )}
         </div>
       </div>
@@ -231,20 +232,20 @@ function FeedbackTab({ token, feedback, beforeAi }) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/50 p-4">
         <p className="text-sm text-muted-foreground">
-          AI oceni Twój pomysł na podstawie fiszki i kanwy: mocne strony, co poprawić i jaki zrobić następny krok.
+          {t("AI oceni Twój pomysł na podstawie fiszki i kanwy: mocne strony, co poprawić i jaki zrobić następny krok.")}
         </p>
         <Button onClick={run} disabled={askFeedback.isPending}>
           {askFeedback.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" />}
-          {askFeedback.isPending ? "AI ocenia..." : feedback ? "Oceń ponownie" : "Poproś o ocenę"}
+          {askFeedback.isPending ? "AI ocenia..." : feedback ? t("Oceń ponownie") : t("Poproś o ocenę")}
         </Button>
       </div>
       <p role="status" className="sr-only">
-        {askFeedback.isPending ? "Trwa ocenianie pomysłu" : askFeedback.data ? "Ocena AI jest gotowa" : ""}
+        {askFeedback.isPending ? t("Trwa ocenianie pomysłu") : askFeedback.data ? t("Ocena AI jest gotowa") : ""}
       </p>
       {askFeedback.data || feedback ? (
         <AiFeedback feedback={askFeedback.data ?? feedback} />
       ) : (
-        <p className="text-sm text-muted-foreground">Nie masz jeszcze oceny. Najlepiej poproś o nią po wypełnieniu kanwy.</p>
+        <p className="text-sm text-muted-foreground">{t("Nie masz jeszcze oceny. Najlepiej poproś o nią po wypełnieniu kanwy.")}</p>
       )}
     </div>
   );
@@ -285,7 +286,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
     }
   };
 
-  if (calls.isPending) return <LoadingStatus label="Wczytywanie naborów"><Skeleton className="h-40 w-full rounded-xl" /></LoadingStatus>;
+  if (calls.isPending) return <LoadingStatus label={t("Wczytywanie naborów")}><Skeleton className="h-40 w-full rounded-xl" /></LoadingStatus>;
 
   if (!calls.data?.length) {
     return (
@@ -294,8 +295,8 @@ function GrantTab({ token, beforeAi, initialCallId }) {
           <EmptyMedia variant="icon">
             <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} />
           </EmptyMedia>
-          <EmptyTitle>Brak aktywnych naborów</EmptyTitle>
-          <EmptyDescription>Gdy JST lub ROPS ogłoszą nabór, przygotujesz tu szkic wniosku na podstawie swojego pomysłu.</EmptyDescription>
+          <EmptyTitle>{t("Brak aktywnych naborów")}</EmptyTitle>
+          <EmptyDescription>{t("Gdy JST lub ROPS ogłoszą nabór, przygotujesz tu szkic wniosku na podstawie swojego pomysłu.")}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     );
@@ -329,7 +330,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <p id="grant-calls-label" className="text-sm font-medium">Wybierz nabór</p>
+      <p id="grant-calls-label" className="text-sm font-medium">{t("Wybierz nabór")}</p>
       <div role="radiogroup" aria-labelledby="grant-calls-label" className="grid gap-3 sm:grid-cols-2">
         {calls.data.map((call) => (
           <button
@@ -347,7 +348,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
               <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} aria-hidden="true" className="absolute right-3 top-3 size-5 text-emerald-700 dark:text-emerald-400" />
             )}
             <span className="font-semibold">{call.name}</span>
-            {call.demo && <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-300">Nabór przykładowy (demo)</span>}
+            {call.demo && <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-300">{t("Nabór przykładowy (demo)")}</span>}
             <span className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
               <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" />
               {dateFormat.format(new Date(call.openFrom))} – {dateFormat.format(new Date(call.openTo))}
@@ -361,73 +362,73 @@ function GrantTab({ token, beforeAi, initialCallId }) {
 
       {savedTeam.length > 0 && (
         <fieldset className="flex flex-col gap-2 rounded-xl border p-4">
-          <legend className="px-1 text-sm font-medium">Zespół tego projektu</legend>
-          <p className="text-xs text-muted-foreground">AI opisze zespół w punkcie 11 na podstawie ról i doświadczenia zaznaczonych osób.</p>
+          <legend className="px-1 text-sm font-medium">{t("Zespół tego projektu")}</legend>
+          <p className="text-xs text-muted-foreground">{t("AI opisze zespół w punkcie 11 na podstawie ról i doświadczenia zaznaczonych osób.")}</p>
           {savedTeam.map((member, i) => (
             <label key={i} className="flex items-center gap-2 text-sm">
               <Checkbox
                 checked={teamIndexes.includes(i)}
                 onCheckedChange={(checked) => setTeamIndexes((list) => (checked ? [...list, i] : list.filter((x) => x !== i)))}
               />
-              {member.name || "Bez imienia"}{member.role ? ` – ${member.role}` : ""}
+              {member.name || t("Bez imienia")}{member.role ? ` – ${member.role}` : ""}
             </label>
           ))}
         </fieldset>
       )}
 
-      <label htmlFor="grant-extra" className="text-sm font-medium">Dodatkowe informacje do wniosku (opcjonalnie)</label>
+      <label htmlFor="grant-extra" className="text-sm font-medium">{t("Dodatkowe informacje do wniosku (opcjonalnie)")}</label>
       <Textarea
         id="grant-extra"
         rows={3}
         value={extraInfo}
-        placeholder="np. budżet, partnerzy, harmonogram…"
+        placeholder={t("np. budżet, partnerzy, harmonogram…")}
         onChange={(e) => setExtraInfo(e.target.value)}
       />
       <Button className="self-start" onClick={generate} disabled={application.isPending}>
         {application.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={FileEditIcon} strokeWidth={2} data-icon="inline-start" />}
-        {application.isPending ? "AI pisze wniosek..." : "Wygeneruj szkic wniosku"}
+        {application.isPending ? "AI pisze wniosek..." : t("Wygeneruj szkic wniosku")}
       </Button>
 
       <p role="status" className="sr-only">
-        {application.isPending ? "Trwa generowanie szkicu wniosku" : sections.length ? "Szkic wniosku jest gotowy" : ""}
+        {application.isPending ? t("Trwa generowanie szkicu wniosku") : sections.length ? t("Szkic wniosku jest gotowy") : ""}
       </p>
       {sections.length > 0 && (
         <div className="flex flex-col gap-3 rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between gap-2">
-            <h3 className="font-semibold">Szkic wniosku</h3>
+            <h3 className="font-semibold">{t("Szkic wniosku")}</h3>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm" onClick={() => copy(fullText)}>
                 <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" />
-                Kopiuj całość
+                {t("Kopiuj całość")}
               </Button>
             </div>
           </div>
           {formTemplateFor(draftCall) && (
             <div className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-3 text-sm">
-              <p className="font-medium">Wypełniony formularz aplikacyjny ROPS (PDF)</p>
+              <p className="font-medium">{t("Wypełniony formularz aplikacyjny ROPS (PDF)")}</p>
               <p className="text-muted-foreground">
                 {pdfMissing.length
-                  ? `Formularz będzie niepełny – brakuje: ${pdfMissing.join(", ")}. Uzupełnij „Twoje dane do wniosku” wyżej.`
-                  : "Wszystkie dane pomysłodawcy są uzupełnione."}
+                  ? t("Formularz będzie niepełny – brakuje: {missing}. Uzupełnij „Twoje dane do wniosku” wyżej.", { missing: pdfMissing.join(", ") })
+                  : t("Wszystkie dane pomysłodawcy są uzupełnione.")}
               </p>
               {total > 0 && (
                 <p className={overLimit ? "font-medium text-destructive" : "text-muted-foreground"}>
-                  Wnioskowana kwota z planu: {new Intl.NumberFormat("pl-PL").format(total)} zł
-                  {overLimit ? ` – więcej niż maksymalny grant (${new Intl.NumberFormat("pl-PL").format(draftCall.maxGrantPLN)} zł). Popraw koszty w planie.` : ""}
+                  {t("Wnioskowana kwota z planu: {amount} zł", { amount: localNumberFormat().format(total) })}
+                  {overLimit ? ` – ${t("więcej niż maksymalny grant ({amount} zł). Popraw koszty w planie.", { amount: localNumberFormat().format(draftCall.maxGrantPLN) })}` : ""}
                 </p>
               )}
               <label className="flex items-start gap-2">
                 <Checkbox className="mt-0.5" checked={statementsOk} onCheckedChange={(checked) => setStatementsOk(!!checked)} />
-                <span>Potwierdzam, że zapoznałem/am się z oświadczeniami w punkcie 12 formularza i są one zgodne z prawdą.</span>
+                <span>{t("Potwierdzam, że zapoznałem/am się z oświadczeniami w punkcie 12 formularza i są one zgodne z prawdą.")}</span>
               </label>
               <Button variant="outline" size="sm" className="self-start" onClick={downloadForm} disabled={buildingPdf}>
                 {buildingPdf ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={FileDownloadIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
-                {buildingPdf ? "Przygotowuję PDF..." : "Pobierz wypełniony wzór (PDF)"}
+                {buildingPdf ? t("Przygotowuję PDF...") : t("Pobierz wypełniony wzór (PDF)")}
               </Button>
-              <p className="text-xs text-muted-foreground">Wniosek składa się w formularzu elektronicznym ROPS – PDF to szkic do sprawdzenia.</p>
+              <p className="text-xs text-muted-foreground">{t("Wniosek składa się w formularzu elektronicznym ROPS – PDF to szkic do sprawdzenia.")}</p>
             </div>
           )}
-          <p className="text-xs text-muted-foreground">Fragmenty oznaczone „[do uzupełnienia]” wymagają Twoich danych. „AI szkic” sprawdź, „Do zatwierdzenia” potwierdź, „Uzupełniasz Ty” wypełnij sam.</p>
+          <p className="text-xs text-muted-foreground">{t("Fragmenty oznaczone „[do uzupełnienia]” wymagają Twoich danych. „AI szkic” sprawdź, „Do zatwierdzenia” potwierdź, „Uzupełniasz Ty” wypełnij sam.")}</p>
           {sections.map((section, i) => (
             <section key={i} className="rounded-lg bg-muted/40 p-3">
               <div className="flex items-start justify-between gap-2">
@@ -437,7 +438,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
                     <span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", FILL_BY[section.fillBy].className)}>{FILL_BY[section.fillBy].label}</span>
                   )}
                 </h4>
-                <Button variant="ghost" size="icon-sm" aria-label={`Kopiuj sekcję: ${section.title}`} onClick={() => copy(`${section.title}\n\n${section.content}`)}>
+                <Button variant="ghost" size="icon-sm" aria-label={t("Kopiuj sekcję: {title}", { title: section.title })} onClick={() => copy(`${section.title}\n\n${section.content}`)}>
                   <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} aria-hidden="true" />
                 </Button>
               </div>
@@ -464,7 +465,7 @@ function VisualizationTab({ token, idea }) {
       setAlt(res.alt);
       setVersion(String(Date.now()));
     } catch (err) {
-      showToast(err?.status === 429 ? "Za dużo zapytań do AI, spróbuj za chwilę" : err?.body?.message ?? null, "error");
+      showToast(err?.status === 429 ? t("Za dużo zapytań do AI, spróbuj za chwilę") : err?.body?.message ?? null, "error");
     }
   };
 
@@ -472,21 +473,21 @@ function VisualizationTab({ token, idea }) {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2 rounded-xl bg-muted/50 p-4">
         <p className="text-sm text-muted-foreground">
-          AI narysuje ilustrację Twojego pomysłu na podstawie fiszki. Możesz dopisać, co ma się na niej znaleźć, np. wygląd przedmiotu albo miejsce.
+          {t("AI narysuje ilustrację Twojego pomysłu na podstawie fiszki. Możesz dopisać, co ma się na niej znaleźć, np. wygląd przedmiotu albo miejsce.")}
         </p>
-        <label htmlFor="viz-description" className="text-sm font-medium">Co ma pokazywać ilustracja? (opcjonalnie)</label>
+        <label htmlFor="viz-description" className="text-sm font-medium">{t("Co ma pokazywać ilustracja? (opcjonalnie)")}</label>
         <Textarea id="viz-description" rows={2} maxLength={600} value={description} onChange={(e) => setDescription(e.target.value)} />
         <Button className="self-start" onClick={run} disabled={visualize.isPending}>
           {visualize.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
-          {visualize.isPending ? "AI rysuje… (do minuty)" : hasImage ? "Wygeneruj nową wizualizację" : "Wygeneruj wizualizację"}
+          {visualize.isPending ? "AI rysuje… (do minuty)" : hasImage ? t("Wygeneruj nową wizualizację") : t("Wygeneruj wizualizację")}
         </Button>
       </div>
-      <p role="status" className="sr-only">{visualize.isPending ? "Trwa generowanie ilustracji" : visualize.data ? "Ilustracja jest gotowa" : ""}</p>
+      <p role="status" className="sr-only">{visualize.isPending ? t("Trwa generowanie ilustracji") : visualize.data ? t("Ilustracja jest gotowa") : ""}</p>
       {hasImage && (
         <figure className="flex flex-col gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element -- image served by backend */}
-          <img src={`${API.idea.visualization(token)}?v=${encodeURIComponent(version)}`} alt={alt || `Ilustracja pomysłu ${idea.title}`} className="w-full max-w-xl rounded-xl border" />
-          <figcaption className="text-xs text-muted-foreground">Ilustracja wygenerowana przez AI. Może nie oddawać wszystkich szczegółów pomysłu.</figcaption>
+          <img src={`${API.idea.visualization(token)}?v=${encodeURIComponent(version)}`} alt={alt || t("Ilustracja pomysłu {title}", { title: idea.title })} className="w-full max-w-xl rounded-xl border" />
+          <figcaption className="text-xs text-muted-foreground">{t("Ilustracja wygenerowana przez AI. Może nie oddawać wszystkich szczegółów pomysłu.")}</figcaption>
         </figure>
       )}
     </div>
@@ -525,7 +526,7 @@ function Workspace({ token, details, spec, initialTab, initialCallId }) {
       <header className="flex flex-col gap-2">
         <Link href="/my-ideas" className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "self-start")}>
           <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-          Moje propozycje
+          {t("Moje propozycje")}
         </Link>
         <div className="flex flex-wrap items-start justify-between gap-2">
           <h1 className="font-heading text-3xl font-bold tracking-tight break-words">{idea.title}</h1>
@@ -533,16 +534,16 @@ function Workspace({ token, details, spec, initialTab, initialCallId }) {
         </div>
         {idea.essence && <p className="text-muted-foreground whitespace-pre-line">{idea.essence}</p>}
         <p role="status" className="text-xs text-amber-800 dark:text-amber-300">
-          {dirty ? "Masz niezapisane zmiany w kanwie" : ""}
+          {dirty ? t("Masz niezapisane zmiany w kanwie") : ""}
         </p>
       </header>
 
       <Tabs defaultValue={initialTab ?? "canvas"} className="gap-4">
         <TabsList className="h-auto! flex-wrap">
-          <TabsTrigger value="canvas">Kanwa innowacji</TabsTrigger>
-          <TabsTrigger value="feedback">Ocena AI</TabsTrigger>
-          <TabsTrigger value="visual">Wizualizacja</TabsTrigger>
-          <TabsTrigger value="grant">Wniosek grantowy</TabsTrigger>
+          <TabsTrigger value="canvas">{t("Kanwa innowacji")}</TabsTrigger>
+          <TabsTrigger value="feedback">{t("Ocena AI")}</TabsTrigger>
+          <TabsTrigger value="visual">{t("Wizualizacja")}</TabsTrigger>
+          <TabsTrigger value="grant">{t("Wniosek grantowy")}</TabsTrigger>
         </TabsList>
         <TabsContent value="canvas">
           <CanvasEditor spec={spec} answers={answers} setAnswer={setAnswer} onSave={persist} saving={save.isPending} token={token} />
@@ -563,7 +564,7 @@ function Workspace({ token, details, spec, initialTab, initialCallId }) {
           {spec.attribution}.{" "}
           {spec.sourceUrl && (
             <a href={spec.sourceUrl} target="_blank" rel="noreferrer" className="underline underline-offset-4">
-              Kanwa w PDF<span className="sr-only"> (otwiera się w nowej karcie)</span>
+              Kanwa w PDF<span className="sr-only">{" "}{t("(otwiera się w nowej karcie)")}</span>
             </a>
           )}
         </p>
@@ -582,14 +583,14 @@ export default function IdeaWorkspace({ token, initialTab, initialCallId = null 
         {details.isError ? (
           <Empty className="border border-dashed">
             <EmptyHeader>
-              <EmptyTitle>Nie znaleziono propozycji</EmptyTitle>
-              <EmptyDescription>Sprawdź, czy kod jest poprawny.</EmptyDescription>
+              <EmptyTitle>{t("Nie znaleziono propozycji")}</EmptyTitle>
+              <EmptyDescription>{t("Sprawdź, czy kod jest poprawny.")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         ) : details.data && spec.data ? (
           <Workspace token={token} details={details.data} spec={spec.data} initialTab={initialTab} initialCallId={initialCallId} />
         ) : (
-          <LoadingStatus label="Wczytywanie pomysłu" className="flex flex-col gap-4">
+          <LoadingStatus label={t("Wczytywanie pomysłu")} className="flex flex-col gap-4">
             <Skeleton className="h-10 w-2/3" />
             <Skeleton className="h-24 w-full rounded-xl" />
             <Skeleton className="h-64 w-full rounded-xl" />

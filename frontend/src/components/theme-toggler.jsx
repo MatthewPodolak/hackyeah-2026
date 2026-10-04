@@ -2,6 +2,7 @@
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export default function ThemeToggler({ className }){
     const { resolvedTheme, setTheme } = useTheme();
@@ -10,8 +11,8 @@ export default function ThemeToggler({ className }){
     <Button
         className={cn("size-11 cursor-pointer border border-border bg-card text-foreground shadow-elevation-2 hover:bg-muted", className)}
         variant="ghost"
-        aria-label="Przełącz motyw jasny lub ciemny"
-        title="Przełącz motyw jasny lub ciemny"
+        aria-label={t("Przełącz motyw jasny lub ciemny")}
+        title={t("Przełącz motyw jasny lub ciemny")}
         onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true" className="size-5 dark:hidden">

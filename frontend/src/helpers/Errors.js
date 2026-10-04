@@ -1,3 +1,4 @@
+import { t } from "@/lib/i18n";
 
 export const ERROR_MSG = "Upss... Coś poszło nie tak :(";
 export const CONNECTION_FAIL_MSG = "Nie możemy nawiązać połączenia z serwerem :(";
@@ -9,7 +10,7 @@ export const CHECK_EMAIL_MSG = "Sprawdź swoją skrzynkę pocztową :)";
 
 
 export function emptyField(field){
-    return `Wpisz ${field}!`;
+    return t("Wpisz {field}!", { field: t(field) });
 };
 export const EMPTY_RATING_MSG = "Najpierw oceń zabawkę!";
 export const EMPTY_FORM_MSG = "Proszę wypełnij wszystkie pola!";

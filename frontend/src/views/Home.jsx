@@ -17,8 +17,10 @@ import MapSearch, { normalize } from "@/components/map-search";
 import { PIN_TONES, pinTone } from "@/lib/problems";
 import NeedsSurvey from "@/components/needs-survey";
 import OnboardingTour from "@/components/onboarding-tour";
+import LanguageSwitcher from "@/components/language-switcher";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LibraryIcon, Megaphone01Icon } from "@hugeicons/core-free-icons";
+import { t, tp } from "@/lib/i18n";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
 
@@ -39,11 +41,7 @@ function featureBounds(feature) {
 }
 
 function problemsLabel(count) {
-  if (count === 1) return "1 zgłoszenie";
-  const lastDigit = count % 10;
-  const lastTwo = count % 100;
-  if (lastDigit >= 2 && lastDigit <= 4 && (lastTwo < 12 || lastTwo > 14)) return `${count} zgłoszenia`;
-  return `${count} zgłoszeń`;
+  return tp(count, "{n} zgłoszenie", "{n} zgłoszenia", "{n} zgłoszeń");
 }
 
 export default function Home() {
@@ -101,7 +99,7 @@ export default function Home() {
 
   return (
     <div className="relative flex h-screen w-full flex-1 flex-col bg-background">
-      <h1 className="sr-only">Mapa zgłoszonych problemów</h1>
+      <h1 className="sr-only">{t("Mapa zgłoszonych problemów")}</h1>
 
       <div className="absolute inset-0">
         <MapView
@@ -114,7 +112,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-3 z-[1000] flex flex-col items-center gap-2 px-17 sm:px-[124px]">
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-[1000] flex flex-col items-center gap-2 px-17 sm:px-[212px]">
         <MapSearch
           data-tour="search"
           className="pointer-events-auto max-w-xl"
@@ -141,20 +139,23 @@ export default function Home() {
           }}
         />
         <p id="map-search-status" aria-live="polite" className="sr-only">
-          {isPending ? "" : filter ? `Znaleziono ${problemsLabel(visibleProblems.length)}` : `Na mapie: ${problemsLabel(visibleProblems.length)}`}
+          {isPending ? "" : filter ? t("Znaleziono: {count}", { count: problemsLabel(visibleProblems.length) }) : t("Na mapie: {count}", { count: problemsLabel(visibleProblems.length) })}
         </p>
         {!isPending && (
           <p aria-hidden="true" className="pointer-events-auto rounded-full border border-border bg-card/95 px-3 py-1 text-xs font-medium text-muted-foreground shadow-elevation-1 backdrop-blur">
-            {myArea ? <>Twoja gmina: <span className="text-foreground">{gminaName(gminy.get(myGminaId)) ?? "…"}</span> · </> : null}
-            {filter ? `Znaleziono ${problemsLabel(visibleProblems.length)}` : `Na mapie: ${problemsLabel(visibleProblems.length)}`}
+            {myArea ? <>{t("Twoja gmina:")}{" "}<span className="text-foreground">{gminaName(gminy.get(myGminaId)) ?? "…"}</span> · </> : null}
+            {filter ? t("Znaleziono: {count}", { count: problemsLabel(visibleProblems.length) }) : t("Na mapie: {count}", { count: problemsLabel(visibleProblems.length) })}
           </p>
         )}
       </div>
 
-      {myArea && <p className="sr-only">Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? ""}</p>}
+      {myArea && <p className="sr-only">{t("Twoja gmina: {gmina}", { gmina: gminaName(gminy.get(myGminaId)) ?? "" })}</p>}
 
-      <ThemeToggler className="absolute top-3 right-3 z-[1000]" />
-      <OnboardingTour className="absolute top-[68px] right-3 z-[1000] sm:top-3 sm:right-[68px]" />
+      <div className="absolute top-3 right-3 z-[1000] flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+        <ThemeToggler className="sm:order-3" />
+        <OnboardingTour className="sm:order-2" />
+        <LanguageSwitcher className="sm:order-1" />
+      </div>
 
       <div className="absolute bottom-[128px] left-4 z-[1000]">
         <NeedsSurvey />
@@ -162,7 +163,7 @@ export default function Home() {
 
       <ul
         data-tour="legend"
-        aria-label="Legenda kolorów pinezek"
+        aria-label={t("Legenda kolorów pinezek")}
         className="absolute bottom-6 left-[76px] z-[1000] hidden max-w-[calc(100%-340px)] flex-wrap items-center gap-x-4 gap-y-1.5 rounded-2xl border border-border bg-card/95 px-4 py-2.5 text-xs font-medium shadow-elevation-2 backdrop-blur sm:flex"
       >
         {PIN_TONES.map((tone) => (
@@ -181,7 +182,7 @@ export default function Home() {
           className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-4 text-sm font-semibold text-foreground shadow-elevation-2 transition-shadow hover:bg-muted hover:shadow-elevation-3"
         >
           <HugeiconsIcon icon={LibraryIcon} strokeWidth={1.8} aria-hidden="true" className="size-5" />
-          Biblioteka innowacji
+          {t("Biblioteka innowacji")}
         </Link>
         <button
           type="button"
@@ -190,7 +191,7 @@ export default function Home() {
           className="flex h-14 cursor-pointer items-center gap-3 rounded-2xl bg-primary px-5 text-base font-semibold text-primary-foreground shadow-elevation-3 transition-[box-shadow,background-color] hover:bg-primary/90 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
         >
           <HugeiconsIcon icon={Megaphone01Icon} strokeWidth={2} aria-hidden="true" className="size-6" />
-          Zgłoś problem
+          {t("Zgłoś problem")}
         </button>
       </div>
 

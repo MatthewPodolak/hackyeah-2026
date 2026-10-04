@@ -1,6 +1,7 @@
 package com.example.backend.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
@@ -10,6 +11,7 @@ import tools.jackson.databind.JsonNode;
 
 import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +80,7 @@ public class OpenAiClient {
         requireKey();
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("model", model);
-        body.put("messages", messages);
+        body.put("messages", withLanguage(messages));
         if (json) body.put("response_format", Map.of("type", "json_object"));
 
         JsonNode res = chatClient.post().uri("/chat/completions")
@@ -89,6 +91,18 @@ public class OpenAiClient {
         String content = res == null ? "" : res.path("choices").path(0).path("message").path("content").asText("");
         if (content.isBlank()) throw new IllegalStateException("Pusta odpowiedź modelu");
         return content;
+    }
+
+    private static List<Map<String, String>> withLanguage(List<Map<String, String>> messages) {
+        String instruction = switch (LocaleContextHolder.getLocale().getLanguage()) {
+            case "en" -> "Write every text value meant for the user in English (keep JSON keys and ids unchanged).";
+            case "uk" -> "Усі тексти для користувача пиши українською мовою (ключі JSON та ідентифікатори не змінюй).";
+            default -> null;
+        };
+        if (instruction == null) return messages;
+        List<Map<String, String>> result = new ArrayList<>(messages);
+        result.add(Map.of("role", "system", "content", instruction));
+        return result;
     }
 
     private void requireKey() {

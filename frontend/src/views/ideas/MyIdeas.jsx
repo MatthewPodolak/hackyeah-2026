@@ -28,8 +28,9 @@ import {
 } from "@/lib/ideas";
 import { useGrantCalls } from "@/api/hooks/useGrantCalls";
 import { PageHeader } from "@/components/page-header";
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
+const dateFormat = localDateFormat({ dateStyle: "medium" });
 
 function StatusBadge({ status }) {
   const meta = IDEA_STATUS[status] ?? IDEA_STATUS.SUBMITTED;
@@ -54,7 +55,7 @@ function EditForm({ token, idea, onDone }) {
   const save = async (e) => {
     e.preventDefault();
     if (draft.title.trim().length < 3) {
-      fail("title", "Tytuł musi mieć co najmniej 3 znaki!");
+      fail("title", t("Tytuł musi mieć co najmniej 3 znaki!"));
       return;
     }
     try {
@@ -75,25 +76,25 @@ function EditForm({ token, idea, onDone }) {
   };
 
   return (
-    <form onSubmit={save} noValidate aria-label={`Edycja propozycji: ${idea.title}`} className="border-t pt-4">
+    <form onSubmit={save} noValidate aria-label={t("Edycja propozycji: {title}", { title: idea.title })} className="border-t pt-4">
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor={`edit-${token}-title`}>Tytuł</FieldLabel>
+          <FieldLabel htmlFor={`edit-${token}-title`}>{t("Tytuł")}</FieldLabel>
           <Input {...fieldProps("title")} required value={draft.title} maxLength={150} onChange={set("title")} />
           <FieldError {...errorProps("title")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`edit-${token}-problemDescription`}>Krótki opis</FieldLabel>
+          <FieldLabel htmlFor={`edit-${token}-problemDescription`}>{t("Krótki opis")}</FieldLabel>
           <Textarea id={`edit-${token}-problemDescription`} rows={3} value={draft.problemDescription} onChange={set("problemDescription")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor={`edit-${token}-essence`}>Istota</FieldLabel>
+          <FieldLabel htmlFor={`edit-${token}-essence`}>{t("Istota")}</FieldLabel>
           <Textarea id={`edit-${token}-essence`} rows={4} value={draft.essence} onChange={set("essence")} />
         </Field>
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
+          <Button type="button" variant="ghost" onClick={onDone}>{t("Anuluj")}</Button>
           <Button type="submit" disabled={updateIdea.isPending}>
-            {updateIdea.isPending ? "Zapisywanie..." : "Zapisz"}
+            {updateIdea.isPending ? "Zapisywanie..." : t("Zapisz")}
           </Button>
         </div>
       </FieldGroup>
@@ -107,11 +108,11 @@ function GrantCallHint({ callId, hasIdeas }) {
   const call = calls.data?.find((c) => c.id === callId);
   return (
     <div role="status" className="mb-6 rounded-xl border border-emerald-700 bg-emerald-500/10 p-4 text-sm dark:border-emerald-400">
-      <p className="font-medium">Wniosek grantowy{call ? `: ${call.name}` : ""}</p>
+      <p className="font-medium">{t("Wniosek grantowy")}{call ? `: ${call.name}` : ""}</p>
       <p className="text-muted-foreground">
         {hasIdeas
-          ? "Wybierz pomysł i kliknij „Przygotuj wniosek”. AI napisze szkic według sekcji tego naboru."
-          : "Najpierw dodaj swój pomysł przyciskiem „Nowa propozycja”. Potem przygotujesz do niego wniosek."}
+          ? t("Wybierz pomysł i kliknij „Przygotuj wniosek”. AI napisze szkic według sekcji tego naboru.")
+          : t("Najpierw dodaj swój pomysł przyciskiem „Nowa propozycja”. Potem przygotujesz do niego wniosek.")}
       </p>
     </div>
   );
@@ -123,7 +124,7 @@ function IdeaCard({ token, query, onForget, callId }) {
   if (query.isPending) {
     return (
       <div role="status">
-        <span className="sr-only">Wczytywanie propozycji</span>
+        <span className="sr-only">{t("Wczytywanie propozycji")}</span>
         <Skeleton aria-hidden="true" className="h-40 w-full rounded-xl" />
       </div>
     );
@@ -133,10 +134,10 @@ function IdeaCard({ token, query, onForget, callId }) {
     return (
       <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-outline p-4 text-sm">
         <span className="min-w-0 text-muted-foreground">
-          {query.error?.status === 404 ? "Nie znaleziono propozycji o kodzie" : "Nie udało się wczytać propozycji"}{" "}
+          {query.error?.status === 404 ? t("Nie znaleziono propozycji o kodzie") : t("Nie udało się wczytać propozycji")}{" "}
           <code className="break-all font-mono text-foreground">{token}</code>
         </span>
-        {onForget && <Button variant="ghost" size="sm" onClick={() => onForget(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>}
+        {onForget && <Button variant="ghost" size="sm" onClick={() => onForget(token)} aria-label={t("Usuń z listy kod {token}", { token })}>{t("Usuń")}</Button>}
       </div>
     );
   }
@@ -150,11 +151,11 @@ function IdeaCard({ token, query, onForget, callId }) {
         <div className="min-w-0">
           <h2 id={`idea-${token}`} className="text-base font-semibold leading-snug break-words">{idea.title}</h2>
           <p className="text-xs text-muted-foreground">
-            Wysłano {idea.createdAt ? dateFormat.format(new Date(idea.createdAt)) : "—"} · kod{" "}
+            {t("Wysłano {date}", { date: idea.createdAt ? dateFormat.format(new Date(idea.createdAt)) : "—" })} · {t("kod")}{" "}
             <code className="font-mono">{token}</code>
           </p>
         </div>
-        <p className="shrink-0"><span className="sr-only">Status: </span><StatusBadge status={idea.status} /></p>
+        <p className="shrink-0"><span className="sr-only">{t("Status:")}{" "}</span><StatusBadge status={idea.status} /></p>
       </div>
 
       {idea.problemDescription && (
@@ -182,7 +183,7 @@ function IdeaCard({ token, query, onForget, callId }) {
         <div className="flex gap-2 rounded-xl bg-violet-500/10 p-3 text-sm">
           <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-violet-700 dark:text-violet-300" />
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-violet-800 dark:text-violet-300">Odpowiedź Hubu</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-violet-800 dark:text-violet-300">{t("Odpowiedź Hubu")}</p>
             <p className="whitespace-pre-line">{idea.adminReply}</p>
           </div>
         </div>
@@ -195,18 +196,18 @@ function IdeaCard({ token, query, onForget, callId }) {
           {onForget && (
             <Button variant="ghost" size="sm" onClick={() => onForget(token)}>
               <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-              Usuń z listy<span className="sr-only">: {idea.title}</span>
+              {t("Usuń z listy")}<span className="sr-only">: {idea.title}</span>
             </Button>
           )}
           <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
             <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Edytuj<span className="sr-only">: {idea.title}</span>
+            {t("Edytuj")}<span className="sr-only">: {idea.title}</span>
           </Button>
           <Link
             href={callId ? `/my-ideas/${encodeURIComponent(token)}?tab=grant&call=${callId}` : `/my-ideas/${encodeURIComponent(token)}`}
             className={buttonVariants({ size: "sm" })}
           >
-            {callId ? "Przygotuj wniosek" : "Rozwiń pomysł"}<span className="sr-only">: {idea.title}</span>
+            {callId ? t("Przygotuj wniosek") : t("Rozwiń pomysł")}<span className="sr-only">: {idea.title}</span>
             <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" aria-hidden="true" />
           </Link>
         </div>
@@ -239,12 +240,12 @@ export default function MyIdeas({ callId = null }) {
       <div className="mx-auto w-full max-w-3xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={Idea01Icon}
-          title="Moje propozycje"
-          description="Status i odpowiedzi Hubu na Twoje pomysły"
+          title={t("Moje propozycje")}
+          description={t("Status i odpowiedzi Hubu na Twoje pomysły")}
           actions={
             <Button onClick={() => openProposal()}>
               <HugeiconsIcon icon={BulbIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-              Nowa propozycja
+              {t("Nowa propozycja")}
             </Button>
           }
         />
@@ -252,22 +253,22 @@ export default function MyIdeas({ callId = null }) {
         {callId && <GrantCallHint callId={callId} hasIdeas={tokens.length > 0} />}
 
         <form onSubmit={addCode} className="mb-8 flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-elevation-1">
-          <label htmlFor="idea-code" className="text-sm font-medium">Masz kod propozycji z innego urządzenia?</label>
+          <label htmlFor="idea-code" className="text-sm font-medium">{t("Masz kod propozycji z innego urządzenia?")}</label>
           <div className="flex gap-2">
           <Input
             id="idea-code"
             value={code}
             autoComplete="off"
-            placeholder="Wklej kod propozycji"
+            placeholder={t("Wklej kod propozycji")}
             onChange={(e) => setCode(e.target.value)}
           />
-          <Button type="submit" variant="outline">Dodaj</Button>
+          <Button type="submit" variant="outline">{t("Dodaj")}</Button>
           </div>
         </form>
 
         {isLogged && mine.isPending && !tokens.length ? (
           <div role="status">
-            <span className="sr-only">Wczytywanie propozycji</span>
+            <span className="sr-only">{t("Wczytywanie propozycji")}</span>
             <Skeleton aria-hidden="true" className="h-40 w-full rounded-xl" />
           </div>
         ) : tokens.length ? (
@@ -282,11 +283,11 @@ export default function MyIdeas({ callId = null }) {
               <EmptyMedia variant="icon">
                 <HugeiconsIcon icon={BulbIcon} strokeWidth={2} />
               </EmptyMedia>
-              <EmptyTitle>Nie masz jeszcze propozycji</EmptyTitle>
-              <EmptyDescription>{isLogged ? "Propozycje wysłane z tego konta pojawią się tutaj automatycznie." : "Propozycje wysłane z tej przeglądarki pojawią się tutaj automatycznie."}</EmptyDescription>
+              <EmptyTitle>{t("Nie masz jeszcze propozycji")}</EmptyTitle>
+              <EmptyDescription>{isLogged ? t("Propozycje wysłane z tego konta pojawią się tutaj automatycznie.") : t("Propozycje wysłane z tej przeglądarki pojawią się tutaj automatycznie.")}</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Button onClick={() => openProposal()}>Zaproponuj innowację</Button>
+              <Button onClick={() => openProposal()}>{t("Zaproponuj innowację")}</Button>
             </EmptyContent>
           </Empty>
         )}

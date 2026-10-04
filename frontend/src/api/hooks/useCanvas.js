@@ -1,12 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ConfigService } from "@/api/services/ConfigService";
 import { IdeaService } from "@/api/services/IdeaService";
+import { localize } from "@/lib/i18n";
 
 export function useCanvasSpec() {
   return useQuery({
     queryKey: ["config", "canvas"],
     queryFn: ({ signal }) => ConfigService.canvas({ ct: signal }),
     staleTime: Infinity,
+    select: localize,
   });
 }
 

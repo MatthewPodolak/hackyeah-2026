@@ -7,8 +7,9 @@ import { HelpCircleIcon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { isOnboardingDone, markOnboardingDone, onboardingServerSnapshot, subscribeOnboarding } from "@/lib/onboarding";
+import { localize, t } from "@/lib/i18n";
 
-const STEPS = [
+const STEPS = localize([
   {
     targets: [],
     title: "Witaj w Małopolskim HubMI",
@@ -49,7 +50,7 @@ const STEPS = [
     title: "Gotowe!",
     text: "Ten przewodnik możesz włączyć ponownie w każdej chwili tym przyciskiem.",
   },
-];
+]);
 
 const PAD = 8;
 const EDGE = 4;
@@ -181,7 +182,7 @@ function Tour({ onFinish }) {
         style={{ top: position.top, left: position.left, width: position.width }}
       >
         <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-          Jak korzystać · krok {step + 1} z {STEPS.length}
+          {t("Jak korzystać · krok {step} z {total}", { step: step + 1, total: STEPS.length })}
         </p>
         <h2 id="tour-title" ref={headingRef} tabIndex={-1} className="mt-1 font-heading text-lg font-bold tracking-tight outline-none">
           {current.title}
@@ -195,16 +196,16 @@ function Tour({ onFinish }) {
         <div className="mt-5 flex items-center gap-2">
           {!last && (
             <Button variant="ghost" size="sm" className="-ml-2 mr-auto" onClick={onFinish}>
-              Pomiń przewodnik
+              {t("Pomiń przewodnik")}
             </Button>
           )}
           {step > 0 && (
             <Button variant="outline" size="sm" className={cn(last && "mr-auto")} onClick={() => setStep(step - 1)}>
-              Wstecz
+              {t("Wstecz")}
             </Button>
           )}
           <Button size="sm" onClick={() => (last ? onFinish() : setStep(step + 1))}>
-            {step === 0 ? "Pokaż mi" : last ? "Zaczynamy" : "Dalej"}
+            {step === 0 ? t("Pokaż mi") : last ? "Zaczynamy" : t("Dalej")}
           </Button>
         </div>
       </div>
@@ -244,8 +245,8 @@ export default function OnboardingTour({ className }) {
         variant="ghost"
         data-tour="help"
         className={cn("size-11 cursor-pointer border border-border bg-card p-0 text-foreground shadow-elevation-2 hover:bg-muted", className)}
-        aria-label="Jak korzystać z mapy – przewodnik"
-        title="Jak korzystać z mapy"
+        aria-label={t("Jak korzystać z mapy – przewodnik")}
+        title={t("Jak korzystać z mapy")}
         onClick={() => setOpen(true)}
       >
         <HugeiconsIcon icon={HelpCircleIcon} strokeWidth={1.8} aria-hidden="true" className="size-5" />

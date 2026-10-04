@@ -10,6 +10,7 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { InnovationCard } from "@/components/innovation-card";
 import formCategories from "@/data/form-categories.json";
+import { t } from "@/lib/i18n";
 
 const PROBLEM_CATEGORIES = Object.entries(formCategories.problemCategories);
 const WHO_CATEGORIES = Object.entries(formCategories.whoCategories);
@@ -44,7 +45,7 @@ function CategoryChip({ active, icon, label, count, onClick }) {
     >
       {icon && <span aria-hidden="true">{icon}</span>}
       {label}
-      <span className="sr-only">, liczba innowacji:</span>
+      <span className="sr-only">{t(", liczba innowacji:")}</span>
       <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>
         {count}
       </span>
@@ -94,7 +95,7 @@ export default function InnovationsBrowser({ innovations }) {
 
   return (
     <>
-      <div role="search" aria-label="Filtry innowacji" className="-mx-4 mb-6 flex flex-col gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:sticky md:top-0 md:z-10 md:-mx-8 md:px-8">
+      <div role="search" aria-label={t("Filtry innowacji")} className="-mx-4 mb-6 flex flex-col gap-3 border-b bg-background/95 px-4 py-3 backdrop-blur md:sticky md:top-0 md:z-10 md:-mx-8 md:px-8">
         <div className="flex flex-col gap-2 sm:flex-row">
           <InputGroup className="sm:flex-1">
             <InputGroupAddon>
@@ -103,21 +104,21 @@ export default function InnovationsBrowser({ innovations }) {
             <InputGroupInput
               type="search"
               value={query}
-              placeholder="Szukaj innowacji, np. seniorzy, samotność, transport..."
-              aria-label="Szukaj innowacji"
+              placeholder={t("Szukaj innowacji, np. seniorzy, samotność, transport...")}
+              aria-label={t("Szukaj innowacji")}
               onChange={(e) => setQuery(e.target.value)}
             />
             {query && (
               <InputGroupAddon align="inline-end">
-                <InputGroupButton size="icon-xs" aria-label="Wyczyść wyszukiwanie" onClick={() => setQuery("")}>
+                <InputGroupButton size="icon-xs" aria-label={t("Wyczyść wyszukiwanie")} onClick={() => setQuery("")}>
                   <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
                 </InputGroupButton>
               </InputGroupAddon>
             )}
           </InputGroup>
 
-          <NativeSelect className="sm:w-64" value={who} onChange={(e) => setWho(e.target.value)} aria-label="Dla kogo">
-            <NativeSelectOption value="">Dla kogo: wszyscy</NativeSelectOption>
+          <NativeSelect className="sm:w-64" value={who} onChange={(e) => setWho(e.target.value)} aria-label={t("Dla kogo")}>
+            <NativeSelectOption value="">{t("Dla kogo: wszyscy")}</NativeSelectOption>
             {WHO_CATEGORIES.map(([key, item]) => (
               <NativeSelectOption key={key} value={key}>
                 {item.label}
@@ -126,10 +127,10 @@ export default function InnovationsBrowser({ innovations }) {
           </NativeSelect>
         </div>
 
-        <div role="group" aria-label="Kategoria problemu" className="flex flex-wrap gap-2">
+        <div role="group" aria-label={t("Kategoria problemu")} className="flex flex-wrap gap-2">
           <CategoryChip
             active={!category}
-            label="Wszystkie"
+            label={t("Wszystkie")}
             count={matchingSearchAndWho.length}
             onClick={() => setCategory(null)}
           />
@@ -154,7 +155,7 @@ export default function InnovationsBrowser({ innovations }) {
                 <span aria-hidden="true">{activeCategory.icon}</span> {activeCategory.label}
               </>
             ) : (
-              "Wszystkie innowacje"
+              t("Wszystkie innowacje")
             )}
           </h2>
           {activeCategory && (
@@ -163,12 +164,12 @@ export default function InnovationsBrowser({ innovations }) {
         </div>
         <div className="flex items-center gap-3 text-sm text-muted-foreground">
           <span aria-live="polite" aria-atomic="true">
-            <span className="sr-only">Wyniki: </span>
+            <span className="sr-only">{t("Wyniki:")}{" "}</span>
             {visible.length} z {innovations.length}
           </span>
           {hasFilters && (
             <Button variant="ghost" size="sm" onClick={reset}>
-              Wyczyść filtry
+              {t("Wyczyść filtry")}
             </Button>
           )}
         </div>
@@ -188,12 +189,12 @@ export default function InnovationsBrowser({ innovations }) {
             <EmptyMedia variant="icon">
               <HugeiconsIcon icon={SearchRemoveIcon} strokeWidth={2} />
             </EmptyMedia>
-            <EmptyTitle>Brak wyników</EmptyTitle>
-            <EmptyDescription>Nie znaleźliśmy innowacji pasujących do wybranych filtrów.</EmptyDescription>
+            <EmptyTitle>{t("Brak wyników")}</EmptyTitle>
+            <EmptyDescription>{t("Nie znaleźliśmy innowacji pasujących do wybranych filtrów.")}</EmptyDescription>
           </EmptyHeader>
           <EmptyContent>
             <Button variant="outline" onClick={reset}>
-              Wyczyść filtry
+              {t("Wyczyść filtry")}
             </Button>
           </EmptyContent>
         </Empty>

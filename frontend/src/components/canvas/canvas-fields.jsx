@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
+import { t } from "@/lib/i18n";
 
 export function optionValue(option) {
   return typeof option === "string" ? option : option.value
 }
 
 export function optionLabel(option) {
-  return typeof option === "string" ? option : option.label
+  return typeof option === "string" ? t(option) : option.label
 }
 
 function findOption(options, value) {
@@ -112,7 +113,7 @@ function MultiField({ section, value, onChange, labelledBy }) {
           )
         })}
         {custom.map((item) => (
-          <Chip key={item} active onClick={() => toggle(item)} aria-label={`${item} (własny wpis, kliknij, aby usunąć)`}>
+          <Chip key={item} active onClick={() => toggle(item)} aria-label={t("{item} (własny wpis, kliknij, aby usunąć)", { item })}>
             {item}
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-3" aria-hidden="true" />
           </Chip>
@@ -123,8 +124,8 @@ function MultiField({ section, value, onChange, labelledBy }) {
           <Input
             value={other}
             disabled={full}
-            aria-label={`Inna odpowiedź: ${section.title}`}
-            placeholder="Inne — wpisz własne"
+            aria-label={t("Inna odpowiedź: {title}", { title: section.title })}
+            placeholder={t("Inne — wpisz własne")}
             onChange={(e) => setOther(e.target.value)}
             onKeyDown={(e) => {
               if (e.key !== "Enter") return
@@ -133,7 +134,7 @@ function MultiField({ section, value, onChange, labelledBy }) {
             }}
           />
           <Button type="button" variant="outline" onClick={addOther} disabled={full || !other.trim()}>
-            Dodaj
+            {t("Dodaj")}
           </Button>
         </div>
       )}
@@ -159,17 +160,17 @@ function TextListField({ section, value, onChange, labelledBy }) {
           <Input
             value={item}
             aria-label={`${section.title}, pozycja ${index + 1}`}
-            placeholder="Wpisz osobę, grupę lub instytucję"
+            placeholder={t("Wpisz osobę, grupę lub instytucję")}
             onChange={(e) => update(index, e.target.value)}
           />
-          <Button type="button" variant="ghost" size="icon" aria-label={`Usuń pozycję ${index + 1}`} onClick={() => remove(index)}>
+          <Button type="button" variant="ghost" size="icon" aria-label={t("Usuń pozycję {n}", { n: index + 1 })} onClick={() => remove(index)}>
             <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} aria-hidden="true" />
           </Button>
         </div>
       ))}
       <Button type="button" variant="outline" size="sm" className="self-start" onClick={() => onChange([...items, ""])} disabled={items.length >= 20}>
         <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-        Dodaj pozycję
+        {t("Dodaj pozycję")}
       </Button>
     </div>
   )
@@ -197,12 +198,12 @@ function PartnerListField({ section, value, onChange }) {
         <fieldset key={index} className="flex flex-col gap-2 rounded-2xl border border-border p-3">
           <legend className="sr-only">Partner {index + 1}{partner.name ? `: ${partner.name}` : ""}</legend>
           <div className="flex gap-2">
-            <Input value={partner.name ?? ""} aria-label={`Nazwa partnera ${index + 1}`} placeholder="Nazwa partnera" onChange={(e) => update(index, { name: e.target.value })} />
-            <Button type="button" variant="ghost" size="icon" aria-label={`Usuń partnera ${index + 1}`} onClick={() => remove(index)}>
+            <Input value={partner.name ?? ""} aria-label={t("Nazwa partnera {n}", { n: index + 1 })} placeholder={t("Nazwa partnera")} onChange={(e) => update(index, { name: e.target.value })} />
+            <Button type="button" variant="ghost" size="icon" aria-label={t("Usuń partnera {n}", { n: index + 1 })} onClick={() => remove(index)}>
               <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} aria-hidden="true" />
             </Button>
           </div>
-          <div role="group" aria-label="Jak pomaga" className="flex flex-wrap gap-2">
+          <div role="group" aria-label={t("Jak pomaga")} className="flex flex-wrap gap-2">
             {section.roles.map((role) => {
               const roles = partner.roles ?? []
               const active = roles.includes(role.value)
@@ -218,18 +219,18 @@ function PartnerListField({ section, value, onChange }) {
             })}
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <NativeSelect className="sm:w-64" value={partner.status ?? "POTENTIAL"} onChange={(e) => update(index, { status: e.target.value })} aria-label={`Status partnera ${index + 1}`}>
+            <NativeSelect className="sm:w-64" value={partner.status ?? "POTENTIAL"} onChange={(e) => update(index, { status: e.target.value })} aria-label={t("Status partnera {n}", { n: index + 1 })}>
               {section.statuses.map((status) => (
                 <NativeSelectOption key={status.value} value={status.value}>{status.label}</NativeSelectOption>
               ))}
             </NativeSelect>
-            <Input value={partner.note ?? ""} aria-label={`Notatka o partnerze ${index + 1}`} placeholder="Jak pomaga? (opcjonalnie)" onChange={(e) => update(index, { note: e.target.value })} />
+            <Input value={partner.note ?? ""} aria-label={`Notatka o partnerze ${index + 1}`} placeholder={t("Jak pomaga? (opcjonalnie)")} onChange={(e) => update(index, { note: e.target.value })} />
           </div>
         </fieldset>
       ))}
       <Button type="button" variant="outline" size="sm" className="self-start" onClick={add} disabled={partners.length >= 20}>
         <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-        Dodaj partnera
+        {t("Dodaj partnera")}
       </Button>
     </div>
   )
@@ -288,7 +289,7 @@ export function formatCanvasValue(section, value) {
     }
     case "multi":
     case "textList":
-      return Array.isArray(value) && value.length ? value.filter(Boolean).join(", ") : null
+      return Array.isArray(value) && value.length ? value.filter(Boolean).map((item) => t(item)).join(", ") : null
     case "partnerList":
       return Array.isArray(value) && value.length
         ? value.map((p) => {

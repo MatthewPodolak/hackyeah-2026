@@ -24,25 +24,26 @@ import { useFormErrors } from "@/helpers/useFormErrors";
 import formCategories from "@/data/form-categories.json";
 import { PageHeader } from "@/components/page-header";
 import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
+import { localize, localizeValues, t } from "@/lib/i18n";
 
-const WHO = Object.entries(formCategories.whoCategories);
-const PROBLEMS = Object.entries(formCategories.problemCategories);
-const LINKS = [
+const WHO = Object.entries(localize(formCategories.whoCategories));
+const PROBLEMS = Object.entries(localize(formCategories.problemCategories));
+const LINKS = localize([
   { key: "video", label: "Film (YouTube)" },
   { key: "details", label: "Strona innowacji w ROPS" },
   { key: "leaflet", label: "Ulotka (PDF)" },
   { key: "materials", label: "Materiały do pobrania" },
   { key: "usageRules", label: "Zasady wykorzystania" },
-];
-const TEXTS = [
+]);
+const TEXTS = localize([
   { key: "shortDescription", label: "Krótki opis", rows: 2 },
   { key: "description", label: "Na czym polega?", rows: 5 },
   { key: "problem", label: "Jaki problem rozwiązuje?", rows: 4 },
   { key: "targetGroupDescription", label: "Dla kogo?", rows: 3 },
   { key: "whoCanImplement", label: "Kto może wdrożyć?", rows: 3 },
   { key: "effectiveness", label: "Czy to działa?", rows: 3 },
-];
-const RESOURCE_TYPES = {
+]);
+const RESOURCE_TYPES = localizeValues({
   LIBRARY: "Biblioteka",
   REPORT: "Raport",
   PUBLICATION: "Publikacje",
@@ -51,7 +52,7 @@ const RESOURCE_TYPES = {
   TOOL: "Narzędzie",
   VIDEO: "Wideo",
   OTHER: "Inne",
-};
+});
 
 function normalize(text) {
   return (text ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l");
@@ -108,12 +109,12 @@ function InnovationForm({ initial, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name.trim()) return fail("name", "Podaj nazwę innowacji");
+    if (!form.name.trim()) return fail("name", t("Podaj nazwę innowacji"));
     for (const { key } of LINKS) {
       const v = form.links[key]?.trim();
-      if (v && !/^https?:\/\//i.test(v)) return fail(`link-${key}`, "Adres musi zaczynać się od http:// lub https://");
+      if (v && !/^https?:\/\//i.test(v)) return fail(`link-${key}`, t("Adres musi zaczynać się od http:// lub https://"));
     }
-    if (form.thumbnailUrl.trim() && !/^https?:\/\//i.test(form.thumbnailUrl.trim())) return fail("thumbnailUrl", "Adres musi zaczynać się od http:// lub https://");
+    if (form.thumbnailUrl.trim() && !/^https?:\/\//i.test(form.thumbnailUrl.trim())) return fail("thumbnailUrl", t("Adres musi zaczynać się od http:// lub https://"));
     const model = {
       ...(initial ?? {}),
       ...form,
@@ -122,11 +123,11 @@ function InnovationForm({ initial, onDone }) {
     };
     try {
       const saved = await save.mutateAsync({ id: initial?.id, model });
-      showToast(editing ? "Zapisano zmiany w innowacji" : `Dodano innowację „${saved.name}”`, "success");
+      showToast(editing ? t("Zapisano zmiany w innowacji") : t("Dodano innowację „{name}”", { name: saved.name }), "success");
       onDone();
     } catch (err) {
-      if (err?.status === 409) fail("name", "Innowacja o takiej nazwie już istnieje");
-      else if (err?.status === 400) fail("name", err.body?.message ?? "Sprawdź poprawność danych");
+      if (err?.status === 409) fail("name", t("Innowacja o takiej nazwie już istnieje"));
+      else if (err?.status === 400) fail("name", err.body?.message ?? t("Sprawdź poprawność danych"));
       else showToast(null, "error");
     }
   };
@@ -135,7 +136,7 @@ function InnovationForm({ initial, onDone }) {
     <form onSubmit={submit} noValidate>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="cat-name">Nazwa (wymagane)</FieldLabel>
+          <FieldLabel htmlFor="cat-name">{t("Nazwa (wymagane)")}</FieldLabel>
           <Input {...fieldProps("name")} required maxLength={200} value={form.name} onChange={set("name")} />
           <FieldError {...errorProps("name")} />
         </Field>
@@ -145,27 +146,27 @@ function InnovationForm({ initial, onDone }) {
             <Textarea id={`cat-${key}`} rows={rows} value={form[key]} onChange={set(key)} />
           </Field>
         ))}
-        <ChipGroup id="cat-who" label="Dla kogo" options={WHO} value={form.whoCategories} onChange={(v) => setForm((f) => ({ ...f, whoCategories: v }))} />
-        <ChipGroup id="cat-problems" label="Kategorie problemów" options={PROBLEMS} value={form.problemCategories} onChange={(v) => setForm((f) => ({ ...f, problemCategories: v }))} />
+        <ChipGroup id="cat-who" label={t("Dla kogo")} options={WHO} value={form.whoCategories} onChange={(v) => setForm((f) => ({ ...f, whoCategories: v }))} />
+        <ChipGroup id="cat-problems" label={t("Kategorie problemów")} options={PROBLEMS} value={form.problemCategories} onChange={(v) => setForm((f) => ({ ...f, problemCategories: v }))} />
         <fieldset className="flex flex-col gap-3">
-          <legend className="mb-1 text-sm font-medium">Linki</legend>
+          <legend className="mb-1 text-sm font-medium">{t("Linki")}</legend>
           {LINKS.map(({ key, label }) => (
             <Field key={key}>
               <FieldLabel htmlFor={`cat-link-${key}`}>{label}</FieldLabel>
-              <Input {...fieldProps(`link-${key}`)} type="url" inputMode="url" placeholder="https://…" value={form.links[key] ?? ""} onChange={setLink(key)} />
+              <Input {...fieldProps(`link-${key}`)} type="url" inputMode="url" placeholder={t("https://…")} value={form.links[key] ?? ""} onChange={setLink(key)} />
               <FieldError {...errorProps(`link-${key}`)} />
             </Field>
           ))}
           <Field>
-            <FieldLabel htmlFor="cat-thumbnailUrl">Miniatura (adres obrazka)</FieldLabel>
-            <Input {...fieldProps("thumbnailUrl", "cat-thumb-hint")} type="url" inputMode="url" placeholder="https://…" value={form.thumbnailUrl} onChange={set("thumbnailUrl")} />
-            <FieldDescription id="cat-thumb-hint">Bez miniatury karta pokaże ikonę kategorii.</FieldDescription>
+            <FieldLabel htmlFor="cat-thumbnailUrl">{t("Miniatura (adres obrazka)")}</FieldLabel>
+            <Input {...fieldProps("thumbnailUrl", "cat-thumb-hint")} type="url" inputMode="url" placeholder={t("https://…")} value={form.thumbnailUrl} onChange={set("thumbnailUrl")} />
+            <FieldDescription id="cat-thumb-hint">{t("Bez miniatury karta pokaże ikonę kategorii.")}</FieldDescription>
             <FieldError {...errorProps("thumbnailUrl")} />
           </Field>
         </fieldset>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
-          <Button type="submit" disabled={save.isPending}>{save.isPending ? "Zapisywanie..." : editing ? "Zapisz zmiany" : "Dodaj innowację"}</Button>
+          <Button type="button" variant="ghost" onClick={onDone}>{t("Anuluj")}</Button>
+          <Button type="submit" disabled={save.isPending}>{save.isPending ? "Zapisywanie..." : editing ? t("Zapisz zmiany") : t("Dodaj innowację")}</Button>
         </div>
       </FieldGroup>
     </form>
@@ -190,14 +191,14 @@ function ResourceForm({ initial, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim()) return fail("title", "Podaj tytuł materiału");
-    if (!/^https?:\/\//i.test(form.url.trim())) return fail("url", "Podaj adres zaczynający się od http:// lub https://");
+    if (!form.title.trim()) return fail("title", t("Podaj tytuł materiału"));
+    if (!/^https?:\/\//i.test(form.url.trim())) return fail("url", t("Podaj adres zaczynający się od http:// lub https://"));
     try {
       await save.mutateAsync({ id: initial?.id, model: { ...form, title: form.title.trim(), url: form.url.trim() } });
-      showToast(initial?.id ? "Zapisano materiał" : "Dodano materiał", "success");
+      showToast(initial?.id ? t("Zapisano materiał") : t("Dodano materiał"), "success");
       onDone();
     } catch (err) {
-      if (err?.status === 400) fail("title", err.body?.message ?? "Sprawdź poprawność danych");
+      if (err?.status === 400) fail("title", err.body?.message ?? t("Sprawdź poprawność danych"));
       else showToast(null, "error");
     }
   };
@@ -206,28 +207,28 @@ function ResourceForm({ initial, onDone }) {
     <form onSubmit={submit} noValidate>
       <FieldGroup>
         <Field>
-          <FieldLabel htmlFor="res-title">Tytuł (wymagane)</FieldLabel>
+          <FieldLabel htmlFor="res-title">{t("Tytuł (wymagane)")}</FieldLabel>
           <Input {...fieldProps("title")} required maxLength={200} value={form.title} onChange={set("title")} />
           <FieldError {...errorProps("title")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="res-type">Rodzaj</FieldLabel>
+          <FieldLabel htmlFor="res-type">{t("Rodzaj")}</FieldLabel>
           <NativeSelect id="res-type" className="w-full" value={form.type} onChange={set("type")}>
             {Object.entries(RESOURCE_TYPES).map(([key, label]) => <NativeSelectOption key={key} value={key}>{label}</NativeSelectOption>)}
           </NativeSelect>
         </Field>
         <Field>
-          <FieldLabel htmlFor="res-url">Adres (wymagane)</FieldLabel>
-          <Input {...fieldProps("url")} required type="url" inputMode="url" placeholder="https://…" value={form.url} onChange={set("url")} />
+          <FieldLabel htmlFor="res-url">{t("Adres (wymagane)")}</FieldLabel>
+          <Input {...fieldProps("url")} required type="url" inputMode="url" placeholder={t("https://…")} value={form.url} onChange={set("url")} />
           <FieldError {...errorProps("url")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="res-description">Opis</FieldLabel>
+          <FieldLabel htmlFor="res-description">{t("Opis")}</FieldLabel>
           <Textarea id="res-description" rows={3} value={form.description} onChange={set("description")} />
         </Field>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
-          <Button type="submit" disabled={save.isPending}>{save.isPending ? "Zapisywanie..." : "Zapisz"}</Button>
+          <Button type="button" variant="ghost" onClick={onDone}>{t("Anuluj")}</Button>
+          <Button type="submit" disabled={save.isPending}>{save.isPending ? "Zapisywanie..." : t("Zapisz")}</Button>
         </div>
       </FieldGroup>
     </form>
@@ -245,10 +246,10 @@ function InnovationsTab() {
   const visible = all.filter((i) => words.every((w) => normalize(`${i.name} ${i.shortDescription}`).includes(w)));
 
   const del = async (innovation) => {
-    if (!window.confirm(`Usunąć innowację „${innovation.name}” z Biblioteki? Tej operacji nie można cofnąć.`)) return;
+    if (!window.confirm(t("Usunąć innowację „{name}” z Biblioteki? Tej operacji nie można cofnąć.", { name: innovation.name }))) return;
     try {
       await remove.mutateAsync(innovation.id);
-      showToast(`Usunięto „${innovation.name}”`, "success");
+      showToast(t("Usunięto „{name}”", { name: innovation.name }), "success");
     } catch {
       showToast(null, "error");
     }
@@ -259,16 +260,16 @@ function InnovationsTab() {
       <div className="flex flex-col gap-2 sm:flex-row">
         <InputGroup className="sm:flex-1">
           <InputGroupAddon><HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" /></InputGroupAddon>
-          <InputGroupInput type="search" value={query} aria-label="Szukaj innowacji w katalogu" placeholder="Szukaj innowacji…" onChange={(e) => setQuery(e.target.value)} />
+          <InputGroupInput type="search" value={query} aria-label={t("Szukaj innowacji w katalogu")} placeholder={t("Szukaj innowacji…")} onChange={(e) => setQuery(e.target.value)} />
         </InputGroup>
         <Button onClick={() => setEditing({})}>
           <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-          Dodaj innowację
+          {t("Dodaj innowację")}
         </Button>
       </div>
       <p aria-live="polite" aria-atomic="true" className="text-sm text-muted-foreground">{catalog.isPending ? "" : `${visible.length} z ${all.length} innowacji`}</p>
       {catalog.isPending ? (
-        <LoadingStatus label="Wczytywanie katalogu"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
+        <LoadingStatus label={t("Wczytywanie katalogu")}><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
       ) : (
         <ul className="flex flex-col gap-2">
           {visible.map((innovation) => (
@@ -280,11 +281,11 @@ function InnovationsTab() {
               <div className="flex shrink-0 gap-2">
                 <Button variant="outline" size="sm" onClick={() => setEditing(innovation)}>
                   <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                  Edytuj<span className="sr-only">: {innovation.name}</span>
+                  {t("Edytuj")}<span className="sr-only">: {innovation.name}</span>
                 </Button>
                 <Button variant="ghost" size="sm" disabled={remove.isPending} onClick={() => del(innovation)}>
                   <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                  Usuń<span className="sr-only">: {innovation.name}</span>
+                  {t("Usuń")}<span className="sr-only">: {innovation.name}</span>
                 </Button>
               </div>
             </li>
@@ -292,7 +293,7 @@ function InnovationsTab() {
         </ul>
       )}
       <Modal open={editing !== null} onClose={() => setEditing(null)} labelledBy="cat-heading" className="max-w-2xl">
-        <DialogCard headingId="cat-heading" title={editing?.id ? `Edycja: ${editing.name}` : "Nowa innowacja"} onClose={() => setEditing(null)}>
+        <DialogCard headingId="cat-heading" title={editing?.id ? `Edycja: ${editing.name}` : t("Nowa innowacja")} onClose={() => setEditing(null)}>
           {editing !== null && <InnovationForm key={editing.id ?? "new"} initial={editing.id ? editing : null} onDone={() => setEditing(null)} />}
         </DialogCard>
       </Modal>
@@ -307,10 +308,10 @@ function ResourcesTab() {
   const [editing, setEditing] = useState(null);
 
   const del = async (resource) => {
-    if (!window.confirm(`Usunąć materiał „${resource.title}”?`)) return;
+    if (!window.confirm(t("Usunąć materiał „{name}”?", { name: resource.title }))) return;
     try {
       await remove.mutateAsync(resource.id);
-      showToast(`Usunięto „${resource.title}”`, "success");
+      showToast(t("Usunięto „{name}”", { name: resource.title }), "success");
     } catch {
       showToast(null, "error");
     }
@@ -320,28 +321,28 @@ function ResourcesTab() {
     <div className="flex flex-col gap-4">
       <Button className="self-start" onClick={() => setEditing({})}>
         <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-        Dodaj materiał
+        {t("Dodaj materiał")}
       </Button>
       {resources.isPending ? (
-        <LoadingStatus label="Wczytywanie materiałów"><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
+        <LoadingStatus label={t("Wczytywanie materiałów")}><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
       ) : (
         <ul className="flex flex-col gap-2">
           {(resources.data ?? []).map((resource) => (
             <li key={resource.id} className="flex flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <a href={resource.url} target="_blank" rel="noreferrer" className="font-medium underline-offset-4 hover:underline">
-                  {resource.title}<span className="sr-only"> (otwiera się w nowej karcie)</span>
+                  {resource.title}<span className="sr-only">{" "}{t("(otwiera się w nowej karcie)")}</span>
                 </a>
                 <p className="text-xs text-muted-foreground">{RESOURCE_TYPES[resource.type] ?? resource.type}</p>
               </div>
               <div className="flex shrink-0 gap-2">
                 <Button variant="outline" size="sm" onClick={() => setEditing(resource)}>
                   <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                  Edytuj<span className="sr-only">: {resource.title}</span>
+                  {t("Edytuj")}<span className="sr-only">: {resource.title}</span>
                 </Button>
                 <Button variant="ghost" size="sm" disabled={remove.isPending} onClick={() => del(resource)}>
                   <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                  Usuń<span className="sr-only">: {resource.title}</span>
+                  {t("Usuń")}<span className="sr-only">: {resource.title}</span>
                 </Button>
               </div>
             </li>
@@ -349,7 +350,7 @@ function ResourcesTab() {
         </ul>
       )}
       <Modal open={editing !== null} onClose={() => setEditing(null)} labelledBy="res-heading" className="max-w-lg">
-        <DialogCard headingId="res-heading" title={editing?.id ? `Edycja: ${editing.title}` : "Nowy materiał"} onClose={() => setEditing(null)}>
+        <DialogCard headingId="res-heading" title={editing?.id ? `Edycja: ${editing.title}` : t("Nowy materiał")} onClose={() => setEditing(null)}>
           {editing !== null && <ResourceForm key={editing.id ?? "new"} initial={editing.id ? editing : null} onDone={() => setEditing(null)} />}
         </DialogCard>
       </Modal>
@@ -363,13 +364,13 @@ function CatalogPanel() {
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={Database01Icon}
-          title="Katalog wiedzy"
-          description="Edytuj Bibliotekę Innowacji i materiały bazy wiedzy. Zmiany są widoczne od razu."
+          title={t("Katalog wiedzy")}
+          description={t("Edytuj Bibliotekę Innowacji i materiały bazy wiedzy. Zmiany są widoczne od razu.")}
         />
         <Tabs defaultValue="innovations" className="gap-4">
           <TabsList>
-            <TabsTrigger value="innovations">Innowacje</TabsTrigger>
-            <TabsTrigger value="resources">Materiały</TabsTrigger>
+            <TabsTrigger value="innovations">{t("Innowacje")}</TabsTrigger>
+            <TabsTrigger value="resources">{t("Materiały")}</TabsTrigger>
           </TabsList>
           <TabsContent value="innovations"><InnovationsTab /></TabsContent>
           <TabsContent value="resources"><ResourcesTab /></TabsContent>
@@ -381,7 +382,7 @@ function CatalogPanel() {
 
 export default function CatalogAdmin() {
   return (
-    <RoleGuard roles={[ROLES.ROPS]} description="Edycja katalogu jest dostępna tylko dla pracowników ROPS.">
+    <RoleGuard roles={[ROLES.ROPS]} description={t("Edycja katalogu jest dostępna tylko dla pracowników ROPS.")}>
       <CatalogPanel />
     </RoleGuard>
   );

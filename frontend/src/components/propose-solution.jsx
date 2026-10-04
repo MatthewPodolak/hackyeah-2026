@@ -24,15 +24,16 @@ import { MatchItem } from "@/components/problem-solutions"
 import { Spinner } from "@/components/ui/spinner"
 import Link from "next/link"
 import formCategories from "@/data/form-categories.json"
+import { localize, t } from "@/lib/i18n";
 
-const STAGES = [
+const STAGES = localize([
   { key: "IDEA", icon: "💡", label: "Tylko pomysł", hint: "Jeszcze nie sprawdzony w praktyce" },
   { key: "PROTOTYPE", icon: "🛠️", label: "Prototyp", hint: "Jest pierwsza wersja rozwiązania" },
   { key: "PILOT", icon: "🧪", label: "Testowane w małej skali", hint: "Sprawdzane na małej grupie" },
   { key: "RUNNING", icon: "🚀", label: "Działa", hint: "Rozwiązanie jest już wdrożone" },
-]
+])
 
-const WHO = Object.entries(formCategories.whoCategories)
+const WHO = Object.entries(localize(formCategories.whoCategories))
 
 const EMPTY = { title: "", summary: "", essence: "", who: [], whoOther: "", stage: null, publishConsent: false }
 
@@ -45,10 +46,10 @@ function buildProblemDescription(form) {
 }
 
 function validate(form) {
-  if (form.title.trim().length < 3) return ["title", "Tytuł musi mieć co najmniej 3 znaki!"]
-  if (!form.summary.trim()) return ["summary", emptyField("krótki opis")]
-  if (!form.essence.trim()) return ["essence", emptyField("istotę rozwiązania")]
-  if (!form.who.length && !form.whoOther.trim()) return ["who", "Wybierz, dla kogo jest rozwiązanie, albo wpisz inną grupę!"]
+  if (form.title.trim().length < 3) return ["title", t("Tytuł musi mieć co najmniej 3 znaki!")]
+  if (!form.summary.trim()) return ["summary", emptyField(t("krótki opis"))]
+  if (!form.essence.trim()) return ["essence", emptyField(t("istotę rozwiązania"))]
+  if (!form.who.length && !form.whoOther.trim()) return ["who", t("Wybierz, dla kogo jest rozwiązanie, albo wpisz inną grupę!")]
   return null
 }
 
@@ -116,7 +117,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
 
   const fillWithAi = async () => {
     if (aiText.trim().length < 10) {
-      fail("ai", "Opisz pomysł w kilku zdaniach, żeby AI miało z czego skorzystać!")
+      fail("ai", t("Opisz pomysł w kilku zdaniach, żeby AI miało z czego skorzystać!"))
       return
     }
     clear("ai")
@@ -132,7 +133,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
       }))
       showToast("Uzupełniono fiszkę, sprawdź i popraw w razie potrzeby", "success")
     } catch (err) {
-      showToast(err?.status === 429 ? "Za dużo zapytań do AI, spróbuj za chwilę" : err?.body?.message ?? null, "error")
+      showToast(err?.status === 429 ? t("Za dużo zapytań do AI, spróbuj za chwilę") : err?.body?.message ?? null, "error")
     }
   }
 
@@ -150,12 +151,12 @@ export default function ProposeSolution({ open, problem, onClose }) {
       <DialogPanel>
         <DialogHeader
           icon={BulbIcon}
-          title={problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}
+          title={problem ? t("Zaproponuj rozwiązanie") : t("Zaproponuj innowację")}
           titleId="s-heading"
           description={problem ? (
-            <>Problem: <span className="font-medium text-foreground">{problem.title}</span></>
+            <>{t("Problem:")}{" "}<span className="font-medium text-foreground">{problem.title}</span></>
           ) : (
-            "Podziel się pomysłem na innowację społeczną. Wymagane: tytuł, opis, istota i dla kogo."
+            t("Podziel się pomysłem na innowację społeczną. Wymagane: tytuł, opis, istota i dla kogo.")
           )}
           descriptionId="s-subheading"
           onClose={close}
@@ -167,30 +168,30 @@ export default function ProposeSolution({ open, problem, onClose }) {
               <div className="flex flex-col items-center gap-5 text-center">
                 <IconTile icon={CheckmarkCircle02Icon} tone="success" size="lg" />
                 <div>
-                  <h3 ref={successRef} tabIndex={-1} className="font-heading text-lg font-bold tracking-tight outline-none">Dziękujemy za propozycję!</h3>
+                  <h3 ref={successRef} tabIndex={-1} className="font-heading text-lg font-bold tracking-tight outline-none">{t("Dziękujemy za propozycję!")}</h3>
                   <p className="text-sm text-muted-foreground">
-                    „{submitted.title}” trafiła do Hubu i czeka na weryfikację.
+                    {t("„{title}” trafiła do Hubu i czeka na weryfikację.", { title: submitted.title })}
                   </p>
                 </div>
                 <div className="w-full rounded-2xl bg-muted/70 p-4 text-left">
-                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Kod Twojej propozycji</p>
+                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{t("Kod Twojej propozycji")}</p>
                   <div className="mt-1.5 flex items-center gap-2">
                     <code className="min-w-0 flex-1 break-all font-mono text-sm">{submitted.trackingToken}</code>
-                    <Button type="button" variant="outline" size="sm" onClick={copyToken} aria-label="Kopiuj kod propozycji">
+                    <Button type="button" variant="outline" size="sm" onClick={copyToken} aria-label={t("Kopiuj kod propozycji")}>
                       <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                      Kopiuj
+                      {t("Kopiuj")}
                     </Button>
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground">Zachowaj go, by później sprawdzić status lub edytować propozycję.</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{t("Zachowaj go, by później sprawdzić status lub edytować propozycję.")}</p>
                 </div>
                 <SimilarInnovations token={submitted.trackingToken} />
               </div>
             </DialogBody>
             <DialogFooter>
               <Link href="/my-ideas" onClick={close} className={buttonVariants({ variant: "outline" })}>
-                Moje propozycje
+                {t("Moje propozycje")}
               </Link>
-              <Button onClick={close}>Zamknij</Button>
+              <Button onClick={close}>{t("Zamknij")}</Button>
             </DialogFooter>
           </>
         ) : (
@@ -200,68 +201,68 @@ export default function ProposeSolution({ open, problem, onClose }) {
                 <div className="flex flex-col gap-3 rounded-2xl bg-secondary/50 p-4 dark:bg-secondary/30">
                   <label htmlFor="s-ai" className="flex items-center gap-2 text-sm font-semibold">
                     <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-5 text-primary" aria-hidden="true" />
-                    Pomóż mi opisać
-                    <span className="font-normal text-muted-foreground">(opcjonalnie)</span>
+                    {t("Pomóż mi opisać")}
+                    <span className="font-normal text-muted-foreground">{t("(opcjonalnie)")}</span>
                   </label>
                   <Textarea
                     {...fieldProps("ai")}
                     rows={2}
                     value={aiText}
-                    placeholder="Opisz pomysł własnymi słowami, a AI wypełni pola poniżej"
+                    placeholder={t("Opisz pomysł własnymi słowami, a AI wypełni pola poniżej")}
                     onChange={(e) => setAiText(e.target.value)}
                   />
                   <FieldError {...errorProps("ai")} />
                   <Button type="button" variant="outline" size="sm" className="self-end" onClick={fillWithAi} disabled={draftIdea.isPending}>
                     {draftIdea.isPending ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} data-icon="inline-start" />}
-                    {draftIdea.isPending ? "AI pisze..." : "Uzupełnij z AI"}
+                    {draftIdea.isPending ? "AI pisze..." : t("Uzupełnij z AI")}
                   </Button>
                 </div>
 
-                <FormStep number={1} title="Pomysł">
+                <FormStep number={1} title={t("Pomysł")}>
                   <Field>
-                    <FieldLabel htmlFor="s-title">Tytuł</FieldLabel>
+                    <FieldLabel htmlFor="s-title">{t("Tytuł")}</FieldLabel>
                     <Input
                       {...fieldProps("title")}
                       required
                       value={form.title}
                       maxLength={150}
-                      placeholder="Krótka nazwa Twojego pomysłu"
+                      placeholder={t("Krótka nazwa Twojego pomysłu")}
                       onChange={(e) => set("title")(e.target.value)}
                     />
                     <FieldError {...errorProps("title")} />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="s-summary">Krótki opis</FieldLabel>
+                    <FieldLabel htmlFor="s-summary">{t("Krótki opis")}</FieldLabel>
                     <Textarea
                       {...fieldProps("summary")}
                       required
                       rows={3}
                       value={form.summary}
-                      placeholder="Co to jest? Opisz w 2–3 zdaniach."
+                      placeholder={t("Co to jest? Opisz w 2–3 zdaniach.")}
                       onChange={(e) => set("summary")(e.target.value)}
                     />
                     <FieldError {...errorProps("summary")} />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="s-essence">Istota</FieldLabel>
+                    <FieldLabel htmlFor="s-essence">{t("Istota")}</FieldLabel>
                     <Textarea
                       {...fieldProps("essence")}
                       required
                       rows={4}
                       value={form.essence}
-                      placeholder="Na czym polega rozwiązanie i co jest w nim nowego?"
+                      placeholder={t("Na czym polega rozwiązanie i co jest w nim nowego?")}
                       onChange={(e) => set("essence")(e.target.value)}
                     />
                     <FieldError {...errorProps("essence")} />
                   </Field>
                 </FormStep>
 
-                <FormStep number={2} title="Dla kogo?" description="Wybierz jedną lub kilka grup.">
+                <FormStep number={2} title={t("Dla kogo?")} description={t("Wybierz jedną lub kilka grup.")}>
                   <Field>
                     <div
                       {...fieldProps("who", "s-who-hint")}
                       role="group"
-                      aria-label="Dla kogo"
+                      aria-label={t("Dla kogo")}
                       className="flex flex-wrap gap-2"
                     >
                       {WHO.map(([key, category]) => (
@@ -271,20 +272,20 @@ export default function ProposeSolution({ open, problem, onClose }) {
                         </SelectChip>
                       ))}
                     </div>
-                    <span id="s-who-hint" className="sr-only">Wybierz jedną lub kilka grup docelowych</span>
-                    <FieldLabel htmlFor="s-whoOther" className="sr-only">Inna grupa lub doprecyzowanie</FieldLabel>
+                    <span id="s-who-hint" className="sr-only">{t("Wybierz jedną lub kilka grup docelowych")}</span>
+                    <FieldLabel htmlFor="s-whoOther" className="sr-only">{t("Inna grupa lub doprecyzowanie")}</FieldLabel>
                     <Input
                       id="s-whoOther"
                       value={form.whoOther}
-                      placeholder="Inna grupa lub doprecyzowanie (opcjonalnie)"
+                      placeholder={t("Inna grupa lub doprecyzowanie (opcjonalnie)")}
                       onChange={(e) => set("whoOther")(e.target.value)}
                     />
                     <FieldError {...errorProps("who")} />
                   </Field>
                 </FormStep>
 
-                <FormStep number={3} title="Etap realizacji" description="Opcjonalnie – na jakim etapie jest pomysł?">
-                  <div role="radiogroup" aria-label="Etap realizacji" className="grid gap-2 sm:grid-cols-2">
+                <FormStep number={3} title={t("Etap realizacji")} description={t("Opcjonalnie – na jakim etapie jest pomysł?")}>
+                  <div role="radiogroup" aria-label={t("Etap realizacji")} className="grid gap-2 sm:grid-cols-2">
                     {STAGES.map((stage) => {
                       const checked = form.stage === stage.key
                       return (
@@ -320,16 +321,16 @@ export default function ProposeSolution({ open, problem, onClose }) {
                       onCheckedChange={(checked) => set("publishConsent")(checked === true)}
                     />
                     <FieldLabel htmlFor="s-publish" className="font-normal">
-                      Zgadzam się na publikację propozycji w galerii pomysłów mieszkańców, jeśli zostanie zaakceptowana
+                      {t("Zgadzam się na publikację propozycji w galerii pomysłów mieszkańców, jeśli zostanie zaakceptowana")}
                     </FieldLabel>
                   </Field>
                 </FormStep>
               </FieldGroup>
             </DialogBody>
             <DialogFooter>
-              <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
+              <Button type="button" variant="ghost" onClick={close}>{t("Anuluj")}</Button>
               <Button type="submit" disabled={addIdea.isPending}>
-                {addIdea.isPending ? "Wysyłanie..." : "Wyślij propozycję"}
+                {addIdea.isPending ? t("Wysyłanie...") : t("Wyślij propozycję")}
               </Button>
             </DialogFooter>
           </form>
@@ -346,10 +347,10 @@ function SimilarInnovations({ token }) {
 
   return (
     <div className="w-full text-left">
-      <h4 className="mb-2 text-sm font-semibold">Podobne istniejące innowacje</h4>
+      <h4 className="mb-2 text-sm font-semibold">{t("Podobne istniejące innowacje")}</h4>
       {similar.isPending ? (
         <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Spinner aria-hidden="true" /> Szukam podobnych rozwiązań...
+          <Spinner aria-hidden="true" /> {t("Szukam podobnych rozwiązań...")}
         </p>
       ) : similar.data?.length ? (
         <ol className="flex flex-col gap-3">
@@ -358,7 +359,7 @@ function SimilarInnovations({ token }) {
           ))}
         </ol>
       ) : (
-        <p className="text-xs text-muted-foreground">Nie znaleźliśmy podobnych innowacji w katalogu — może to coś nowego!</p>
+        <p className="text-xs text-muted-foreground">{t("Nie znaleźliśmy podobnych innowacji w katalogu — może to coś nowego!")}</p>
       )}
     </div>
   )

@@ -5,6 +5,7 @@ import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons"
 import { Input } from "@/components/ui/input"
+import { t } from "@/lib/i18n";
 
 export function PasswordInput({ className, ...props }) {
   const [visible, setVisible] = useState(false)
@@ -19,7 +20,7 @@ export function PasswordInput({ className, ...props }) {
       <button
         type="button"
         onClick={() => setVisible((v) => !v)}
-        aria-label={visible ? "Ukryj hasło" : "Pokaż hasło"}
+        aria-label={visible ? t("Ukryj hasło") : t("Pokaż hasło")}
         aria-pressed={visible}
         className="absolute inset-y-0 right-0 flex w-10 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >

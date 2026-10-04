@@ -8,6 +8,7 @@ import { GeocodeService } from "@/api/services/GeocodeService";
 import { usePlaceSuggestions } from "@/api/hooks/useStreetQuery";
 import { SpeechButton } from "@/components/speech-button";
 import { useSpeechSupported } from "@/hooks/useSpeechToText";
+import { t, tp } from "@/lib/i18n";
 
 const KIND_ICON = {
   Ulica: Location01Icon,
@@ -75,7 +76,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
       setMessage(`Pokazano na mapie: ${placeLabel(option.place)}`);
     } else {
       onPickProblem(option.problem);
-      setMessage(`Pokazano zgłoszenie: ${option.problem.title}`);
+      setMessage(t("Pokazano zgłoszenie: {title}", { title: option.problem.title }));
     }
   };
 
@@ -104,7 +105,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
     else if (problemMatches[0]) pick({ type: "problem", problem: problemMatches[0] });
     else {
       close();
-      setMessage(`Nie znaleziono ulicy, miejsca ani zgłoszenia „${query}”.`);
+      setMessage(t("Nie znaleziono ulicy, miejsca ani zgłoszenia „{query}”.", { query }));
     }
   };
 
@@ -133,18 +134,18 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
 
   const busy = searching || (places.isFetching && query.length >= 3);
   const suggestionsStatus = expanded
-    ? `${options.length} ${options.length === 1 ? "podpowiedź" : "podpowiedzi"}. Użyj strzałek, aby wybrać.`
+    ? `${tp(options.length, "{n} podpowiedź", "{n} podpowiedzi", "{n} podpowiedzi")}. ${t("Użyj strzałek, aby wybrać.")}`
     : "";
 
   const placesGroup = placeItems.length > 0 && (
           <div role="group" aria-labelledby={`${uid}-places`}>
-            <div id={`${uid}-places`} role="presentation" className="border-t border-border px-5 pt-3 pb-1 text-xs font-semibold text-muted-foreground">Ulice i miejsca</div>
+            <div id={`${uid}-places`} role="presentation" className="border-t border-border px-5 pt-3 pb-1 text-xs font-semibold text-muted-foreground">{t("Ulice i miejsca")}</div>
             {placeItems.map((option) => (
               <Option key={option.id} option={option} active={option === activeOption} onPick={pick} onHover={() => setActive(options.indexOf(option))}>
                 <HugeiconsIcon icon={KIND_ICON[option.place.kind] ?? Building03Icon} strokeWidth={1.8} aria-hidden="true" className="size-5 shrink-0 text-muted-foreground" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-medium">{option.place.name}</span>
-                  <span className="block truncate text-xs text-muted-foreground">{[option.place.kind, option.place.place].filter(Boolean).join(" · ")}</span>
+                  <span className="block truncate text-xs text-muted-foreground">{[t(option.place.kind), option.place.place].filter(Boolean).join(" · ")}</span>
                 </span>
               </Option>
             ))}
@@ -152,13 +153,13 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
         );
   const problemsGroup = problemItems.length > 0 && (
           <div role="group" aria-labelledby={`${uid}-problems`}>
-            <div id={`${uid}-problems`} role="presentation" className="border-t border-border px-5 pt-3 pb-1 text-xs font-semibold text-muted-foreground">Zgłoszenia</div>
+            <div id={`${uid}-problems`} role="presentation" className="border-t border-border px-5 pt-3 pb-1 text-xs font-semibold text-muted-foreground">{t("Zgłoszenia")}</div>
             {problemItems.map((option) => (
               <Option key={option.id} option={option} active={option === activeOption} onPick={pick} onHover={() => setActive(options.indexOf(option))}>
                 <HugeiconsIcon icon={AlertDiamondIcon} strokeWidth={1.8} aria-hidden="true" className="size-5 shrink-0 text-destructive" />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-medium">{option.problem.title}</span>
-                  <span className="block truncate text-xs text-muted-foreground">{["Zgłoszenie", option.problem.street].filter(Boolean).join(" · ")}</span>
+                  <span className="block truncate text-xs text-muted-foreground">{[t("Zgłoszenie"), option.problem.street].filter(Boolean).join(" · ")}</span>
                 </span>
               </Option>
             ))}
@@ -167,7 +168,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
 
   return (
     <div role="search" className={cn("relative z-10 w-full", className)} {...props}>
-      <label htmlFor={`${uid}-input`} className="sr-only">Szukaj ulicy, miejsca lub zgłoszenia</label>
+      <label htmlFor={`${uid}-input`} className="sr-only">{t("Szukaj ulicy, miejsca lub zgłoszenia")}</label>
       <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" className="pointer-events-none absolute top-[22px] left-4 size-5 -translate-y-1/2 text-muted-foreground" />
       <input
         id={`${uid}-input`}
@@ -191,7 +192,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
         onFocus={() => setOpen(true)}
         onBlur={close}
         onKeyDown={onKeyDown}
-        placeholder="Szukaj ulicy, miejsca lub zgłoszenia…"
+        placeholder={t("Szukaj ulicy, miejsca lub zgłoszenia…")}
         className={cn(
           "h-11 w-full rounded-full border border-border bg-card pl-12 text-sm text-foreground shadow-elevation-2 outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/40",
           // room for the clear button, and the microphone where the browser can dictate
@@ -199,7 +200,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
           expanded && "rounded-b-none rounded-t-[22px] border-b-transparent"
         )}
       />
-      <span id={`${uid}-hint`} className="sr-only">Wpisz albo podyktuj nazwę ulicy lub zgłoszenia i naciśnij Enter, aby przybliżyć mapę. Tekst filtruje też zgłoszenia na mapie.</span>
+      <span id={`${uid}-hint`} className="sr-only">{t("Wpisz albo podyktuj nazwę ulicy lub zgłoszenia i naciśnij Enter, aby przybliżyć mapę. Tekst filtruje też zgłoszenia na mapie.")}</span>
       <div className="absolute top-0 right-1 flex h-11 items-center">
         {busy && <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} aria-hidden="true" className="mr-1 size-4 animate-spin text-muted-foreground" />}
         {value && (
@@ -211,7 +212,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
               setMessage("");
               close();
             }}
-            aria-label="Wyczyść wyszukiwanie"
+            aria-label={t("Wyczyść wyszukiwanie")}
             className="flex size-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
           >
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" className="size-4" />
@@ -223,7 +224,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
       <div
         id={listId}
         role="listbox"
-        aria-label="Podpowiedzi wyszukiwania"
+        aria-label={t("Podpowiedzi wyszukiwania")}
         hidden={!expanded}
         className="absolute inset-x-0 top-full max-h-[min(60vh,420px)] overflow-y-auto rounded-b-[22px] border border-t-0 border-border bg-card pb-2 shadow-elevation-3"
       >

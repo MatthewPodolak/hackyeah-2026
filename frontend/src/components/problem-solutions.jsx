@@ -19,6 +19,7 @@ import { problemPlace } from "@/lib/gminy"
 import { useToast } from "@/helpers/ToastProvider"
 import { Copy01Icon } from "@hugeicons/core-free-icons"
 import { DialogBody, DialogFooter, DialogHeader, DialogPanel } from "@/components/dialog-parts"
+import { t } from "@/lib/i18n";
 
 function TrackingCode({ token }) {
   const { showToast } = useToast()
@@ -34,17 +35,17 @@ function TrackingCode({ token }) {
 
   return (
     <div className="rounded-xl border bg-muted/50 p-3 text-sm">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Kod Twojego zgłoszenia</p>
+      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("Kod Twojego zgłoszenia")}</p>
       <div className="mt-1 flex items-center gap-2">
         <code className="min-w-0 flex-1 break-all font-mono">{token}</code>
-        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label="Kopiuj kod zgłoszenia">
+        <Button type="button" variant="outline" size="sm" onClick={copy} aria-label={t("Kopiuj kod zgłoszenia")}>
           <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-          Kopiuj
+          {t("Kopiuj")}
         </Button>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        Pod tym kodem sprawdzisz status i odpowiedź ROPS w zakładce{" "}
-        <Link href="/my-reports" className="font-medium text-foreground underline underline-offset-4">Moje zgłoszenia</Link>.
+        {t("Pod tym kodem sprawdzisz status i odpowiedź ROPS w zakładce")}{" "}
+        <Link href="/my-reports" className="font-medium text-foreground underline underline-offset-4">{t("Moje zgłoszenia")}</Link>.
       </p>
     </div>
   )
@@ -53,9 +54,9 @@ function TrackingCode({ token }) {
 const innovationsById = new Map(innovations.map((innovation) => [innovation.id, innovation]))
 
 function scoreTone(score) {
-  if (score >= 75) return { label: "Bardzo dobre dopasowanie", bar: "bg-emerald-500", text: "text-emerald-700 dark:text-emerald-400" }
-  if (score >= 50) return { label: "Dobre dopasowanie", bar: "bg-amber-500", text: "text-amber-700 dark:text-amber-400" }
-  return { label: "Częściowe dopasowanie", bar: "bg-muted-foreground", text: "text-muted-foreground" }
+  if (score >= 75) return { label: t("Bardzo dobre dopasowanie"), bar: "bg-emerald-500", text: "text-emerald-700 dark:text-emerald-400" }
+  if (score >= 50) return { label: t("Dobre dopasowanie"), bar: "bg-amber-500", text: "text-amber-700 dark:text-amber-400" }
+  return { label: t("Częściowe dopasowanie"), bar: "bg-muted-foreground", text: "text-muted-foreground" }
 }
 
 export function MatchItem({ match, rank, headingLevel = 3 }) {
@@ -91,7 +92,7 @@ export function MatchItem({ match, rank, headingLevel = 3 }) {
             <div aria-hidden="true" className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
               <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${match.score}%` }} />
             </div>
-            <span className={`shrink-0 text-xs font-semibold tabular-nums ${tone.text}`}><span className="sr-only">Dopasowanie: </span>{match.score}%</span>
+            <span className={`shrink-0 text-xs font-semibold tabular-nums ${tone.text}`}><span className="sr-only">{t("Dopasowanie:")}{" "}</span>{match.score}%</span>
           </div>
           <span className={`text-[11px] font-medium uppercase tracking-wide ${tone.text}`}>{tone.label}</span>
         </div>
@@ -101,17 +102,17 @@ export function MatchItem({ match, rank, headingLevel = 3 }) {
         {match.reason && (
           <p className="flex gap-2">
             <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden="true" />
-            <span className="leading-relaxed"><span className="sr-only">Dlaczego pasuje: </span>{match.reason}</span>
+            <span className="leading-relaxed"><span className="sr-only">{t("Dlaczego pasuje:")}{" "}</span>{match.reason}</span>
           </p>
         )}
         {match.whoCanImplement && (
           <p className="flex gap-2 text-muted-foreground">
             <HugeiconsIcon icon={Building03Icon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-            <span className="leading-relaxed"><span className="sr-only">Kto może wdrożyć: </span>{match.whoCanImplement}</span>
+            <span className="leading-relaxed"><span className="sr-only">{t("Kto może wdrożyć:")}{" "}</span>{match.whoCanImplement}</span>
           </p>
         )}
         <span aria-hidden="true" className="flex items-center gap-1 self-end font-medium text-primary">
-          Szczegóły <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-4" />
+          {t("Szczegóły")} <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-4" />
         </span>
       </div>
     </li>
@@ -130,8 +131,8 @@ export default function ProblemSolutions({ result, onClose }) {
         <DialogHeader
           icon={CheckmarkCircle02Icon}
           tone="success"
-          eyebrow="Problem zgłoszony"
-          title={<><span className="sr-only">Problem zgłoszony: </span>{problem?.title}</>}
+          eyebrow={t("Problem zgłoszony")}
+          title={<><span className="sr-only">{t("Problem zgłoszony:")}{" "}</span>{problem?.title}</>}
           titleId="solutions-heading"
           onClose={onClose}
         >
@@ -147,9 +148,9 @@ export default function ProblemSolutions({ result, onClose }) {
             {matches.length > 0 ? (
               <>
                 <div>
-                  <h3 className="text-sm font-semibold">Możliwe rozwiązania</h3>
+                  <h3 className="text-sm font-semibold">{t("Możliwe rozwiązania")}</h3>
                   <p className="text-xs text-muted-foreground">
-                    Innowacje społeczne z Biblioteki ROPS, które mogą pomóc w tym problemie
+                    {t("Innowacje społeczne z Biblioteki ROPS, które mogą pomóc w tym problemie")}
                   </p>
                 </div>
                 <ol className="flex flex-col gap-3">
@@ -163,16 +164,16 @@ export default function ProblemSolutions({ result, onClose }) {
                 <div aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
                   <HugeiconsIcon icon={SearchRemoveIcon} strokeWidth={2} className="size-5" />
                 </div>
-                <p className="text-sm font-medium">Brak dopasowanych rozwiązań</p>
+                <p className="text-sm font-medium">{t("Brak dopasowanych rozwiązań")}</p>
                 <p className="text-xs text-muted-foreground">
-                  Nie znaleźliśmy jeszcze innowacji pasującej do tego problemu. Zgłoszenie zostało zapisane i jest widoczne na mapie.
+                  {t("Nie znaleźliśmy jeszcze innowacji pasującej do tego problemu. Zgłoszenie zostało zapisane i jest widoczne na mapie.")}
                 </p>
               </div>
             )}
 
         </DialogBody>
         <DialogFooter>
-          <Button onClick={onClose}>Zamknij</Button>
+          <Button onClick={onClose}>{t("Zamknij")}</Button>
         </DialogFooter>
       </DialogPanel>
     </Modal>

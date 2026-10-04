@@ -10,13 +10,14 @@ import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTi
 import { useProposal } from "@/api/context/ProposalContext";
 import { READINESS } from "@/lib/ideas";
 import { getTargetGroupOption } from "@/lib/problemCategories";
+import { t } from "@/lib/i18n";
 
 export default function IdeasGallery({ query }) {
   const { openProposal } = useProposal();
 
   if (query.isPending) {
     return (
-      <LoadingStatus label="Wczytywanie pomysłów mieszkańców" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <LoadingStatus label={t("Wczytywanie pomysłów mieszkańców")} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }, (_, i) => (
           <Skeleton key={i} className="h-56 w-full rounded-2xl" />
         ))}
@@ -33,11 +34,11 @@ export default function IdeasGallery({ query }) {
           <EmptyMedia variant="icon">
             <HugeiconsIcon icon={BulbIcon} strokeWidth={2} />
           </EmptyMedia>
-          <EmptyTitle>Jeszcze nie ma zaakceptowanych pomysłów</EmptyTitle>
-          <EmptyDescription>Masz pomysł na innowację społeczną? Twój może być pierwszy!</EmptyDescription>
+          <EmptyTitle>{t("Jeszcze nie ma zaakceptowanych pomysłów")}</EmptyTitle>
+          <EmptyDescription>{t("Masz pomysł na innowację społeczną? Twój może być pierwszy!")}</EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button onClick={() => openProposal()}>Zaproponuj innowację</Button>
+          <Button onClick={() => openProposal()}>{t("Zaproponuj innowację")}</Button>
         </EmptyContent>
       </Empty>
     );
@@ -55,7 +56,7 @@ export default function IdeasGallery({ query }) {
                   <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-5" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Pomysł mieszkańca</p>
+                  <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">{t("Pomysł mieszkańca")}</p>
                   <h2 className="font-semibold leading-snug break-words">{idea.title}</h2>
                 </div>
               </div>

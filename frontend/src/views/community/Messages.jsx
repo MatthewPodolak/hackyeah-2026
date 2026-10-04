@@ -23,14 +23,15 @@ import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/compon
 import { CONVERSATION_STATUS, CONVERSATION_TYPE } from "@/lib/community";
 import { PageHeader } from "@/components/page-header";
 import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
+import { localDateFormat, localize, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
+const dateFormat = localDateFormat({ dateStyle: "medium", timeStyle: "short" });
 const TYPES = Object.entries(CONVERSATION_TYPE);
 
-const RECIPIENTS = [
+const RECIPIENTS = localize([
   { value: "ROPS", label: "ROPS Kraków", hint: "Pytania o innowacje, mentoring, granty i partnerstwa" },
   { value: "JST", label: "Samorząd gminy", hint: "Lokalne sprawy – wiadomość trafi do urzędu wybranej gminy" },
-];
+]);
 
 function NewConversation({ canChooseRecipient, onCreated, onClose }) {
   const regions = useRegions();
@@ -46,9 +47,9 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (form.recipient === "JST" && !form.gminaId) return fail("gminaId", "Wybierz gminę, do której piszesz");
-    if (!form.subject.trim()) return fail("subject", "Podaj temat rozmowy");
-    if (!form.content.trim()) return fail("content", "Napisz wiadomość");
+    if (form.recipient === "JST" && !form.gminaId) return fail("gminaId", t("Wybierz gminę, do której piszesz"));
+    if (!form.subject.trim()) return fail("subject", t("Podaj temat rozmowy"));
+    if (!form.content.trim()) return fail("content", t("Napisz wiadomość"));
     try {
       const id = await create.mutateAsync({
         type: form.type,
@@ -60,20 +61,20 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
       showToast("Rozmowa została rozpoczęta", "success");
       onCreated(id);
     } catch (err) {
-      if (err?.status === 400) fail("content", err.body?.message ?? "Sprawdź poprawność danych");
+      if (err?.status === 400) fail("content", err.body?.message ?? t("Sprawdź poprawność danych"));
       else showToast(null, "error");
     }
   };
 
   return (
     <DialogPanel>
-      <DialogHeader icon={Chatting01Icon} title="Nowa rozmowa" titleId="conv-heading" description={canChooseRecipient ? "Wybierz, do kogo piszesz: do ROPS albo do samorządu swojej gminy." : "Wiadomość trafi do pracowników ROPS Kraków."} onClose={onClose} />
+      <DialogHeader icon={Chatting01Icon} title={t("Nowa rozmowa")} titleId="conv-heading" description={canChooseRecipient ? t("Wybierz, do kogo piszesz: do ROPS albo do samorządu swojej gminy.") : t("Wiadomość trafi do pracowników ROPS Kraków.")} onClose={onClose} />
       <DialogBody className="pt-1">
         <form onSubmit={submit} noValidate>
           <FieldGroup>
             {canChooseRecipient && (
               <fieldset className="flex flex-col gap-2">
-                <legend className="mb-2 text-sm font-medium">Do kogo piszesz?</legend>
+                <legend className="mb-2 text-sm font-medium">{t("Do kogo piszesz?")}</legend>
                 {RECIPIENTS.map((option) => (
                   <label key={option.value} className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border border-border p-3", form.recipient === option.value ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60")}>
                     <input type="radio" name="conv-recipient" value={option.value} checked={form.recipient === option.value} onChange={set("recipient")} className="mt-1 size-4 accent-[var(--primary)]" />
@@ -85,9 +86,9 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
                 ))}
                 {form.recipient === "JST" && (
                   <Field>
-                    <FieldLabel htmlFor="conv-gminaId">Gmina (wymagane)</FieldLabel>
+                    <FieldLabel htmlFor="conv-gminaId">{t("Gmina (wymagane)")}</FieldLabel>
                     <NativeSelect {...fieldProps("gminaId")} required className="w-full" value={form.gminaId} onChange={set("gminaId")}>
-                      <NativeSelectOption value="" disabled>{regions.isPending ? "Wczytywanie…" : "Wybierz gminę"}</NativeSelectOption>
+                      <NativeSelectOption value="" disabled>{regions.isPending ? "Wczytywanie…" : t("Wybierz gminę")}</NativeSelectOption>
                       {(regions.data?.powiaty ?? []).map((powiat) => (
                         <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
                           {powiat.gminy.map((g) => <NativeSelectOption key={g.id} value={g.id}>{g.label}</NativeSelectOption>)}
@@ -100,7 +101,7 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
               </fieldset>
             )}
             <fieldset className="flex flex-col gap-2">
-              <legend className="mb-2 text-sm font-medium">Rodzaj rozmowy</legend>
+              <legend className="mb-2 text-sm font-medium">{t("Rodzaj rozmowy")}</legend>
               {TYPES.map(([value, meta]) => (
                 <label key={value} className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border border-border p-3", form.type === value ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60")}>
                   <input type="radio" name="conv-type" value={value} checked={form.type === value} onChange={set("type")} className="mt-1 size-4 accent-[var(--primary)]" />
@@ -112,18 +113,18 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
               ))}
             </fieldset>
             <Field>
-              <FieldLabel htmlFor="conv-subject">Temat (wymagane)</FieldLabel>
+              <FieldLabel htmlFor="conv-subject">{t("Temat (wymagane)")}</FieldLabel>
               <Input {...fieldProps("subject")} required maxLength={200} value={form.subject} onChange={set("subject")} />
               <FieldError {...errorProps("subject")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="conv-content">Wiadomość (wymagane)</FieldLabel>
+              <FieldLabel htmlFor="conv-content">{t("Wiadomość (wymagane)")}</FieldLabel>
               <Textarea {...fieldProps("content")} required rows={5} maxLength={4000} value={form.content} onChange={set("content")} />
               <FieldError {...errorProps("content")} />
             </Field>
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <Button type="button" variant="ghost" onClick={onClose}>Anuluj</Button>
-              <Button type="submit" disabled={create.isPending}>{create.isPending ? "Wysyłanie..." : "Rozpocznij rozmowę"}</Button>
+              <Button type="button" variant="ghost" onClick={onClose}>{t("Anuluj")}</Button>
+              <Button type="submit" disabled={create.isPending}>{create.isPending ? t("Wysyłanie...") : t("Rozpocznij rozmowę")}</Button>
             </div>
           </FieldGroup>
         </form>
@@ -146,12 +147,12 @@ function Thread({ conversation, headingRef }) {
 
   const send = async (e) => {
     e.preventDefault();
-    if (!content.trim()) return fail("content", "Napisz wiadomość");
+    if (!content.trim()) return fail("content", t("Napisz wiadomość"));
     try {
       await reply.mutateAsync(content.trim());
       setContent("");
     } catch (err) {
-      if (err?.status === 400) fail("content", err.body?.message ?? "Nie udało się wysłać");
+      if (err?.status === 400) fail("content", err.body?.message ?? t("Nie udało się wysłać"));
       else showToast(null, "error");
     }
   };
@@ -159,7 +160,7 @@ function Thread({ conversation, headingRef }) {
   const toggle = async () => {
     try {
       await setStatus.mutateAsync({ id: conversation.id, status: closed ? "OPEN" : "CLOSED" });
-      showToast(closed ? "Rozmowa została ponownie otwarta" : "Rozmowa została zamknięta", "success");
+      showToast(closed ? t("Rozmowa została ponownie otwarta") : t("Rozmowa została zamknięta"), "success");
     } catch {
       showToast(null, "error");
     }
@@ -177,15 +178,15 @@ function Thread({ conversation, headingRef }) {
         <div className="flex items-center gap-2">
           <StatusPill meta={CONVERSATION_STATUS[conversation.status]} />
           <Button variant="outline" size="sm" onClick={toggle} disabled={setStatus.isPending}>
-            {closed ? "Otwórz ponownie" : "Zamknij rozmowę"}
+            {closed ? t("Otwórz ponownie") : t("Zamknij rozmowę")}
           </Button>
         </div>
       </header>
 
       {messages.isPending ? (
-        <LoadingStatus label="Wczytywanie wiadomości"><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
+        <LoadingStatus label={t("Wczytywanie wiadomości")}><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
       ) : (
-        <ol aria-label="Wiadomości" className="flex flex-col gap-3">
+        <ol aria-label={t("Wiadomości")} className="flex flex-col gap-3">
           {list.map((m) => {
             const mine = m.senderId === user?.id;
             return (
@@ -206,14 +207,14 @@ function Thread({ conversation, headingRef }) {
         </ol>
       )}
       <p aria-live="polite" className="sr-only">
-        {last && last.senderId !== user?.id ? `Ostatnia wiadomość od ${last.senderName}` : ""}
+        {last && last.senderId !== user?.id ? t("Ostatnia wiadomość od {name}", { name: last.senderName }) : ""}
       </p>
 
       {closed ? (
-        <p className="rounded-lg bg-muted p-3 text-sm text-muted-foreground">Ta rozmowa jest zamknięta. Otwórz ją ponownie, aby odpowiedzieć.</p>
+        <p className="rounded-lg bg-muted p-3 text-sm text-muted-foreground">{t("Ta rozmowa jest zamknięta. Otwórz ją ponownie, aby odpowiedzieć.")}</p>
       ) : (
         <form onSubmit={send} noValidate className="flex flex-col gap-2 border-t pt-3">
-          <FieldLabel htmlFor={`reply-${conversation.id}-content`}>Twoja odpowiedź</FieldLabel>
+          <FieldLabel htmlFor={`reply-${conversation.id}-content`}>{t("Twoja odpowiedź")}</FieldLabel>
           <Textarea
             {...fieldProps("content")}
             rows={3}
@@ -227,7 +228,7 @@ function Thread({ conversation, headingRef }) {
           <FieldError {...errorProps("content")} />
           <Button type="submit" className="self-end" disabled={reply.isPending}>
             <HugeiconsIcon icon={SentIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            {reply.isPending ? "Wysyłanie..." : "Wyślij"}
+            {reply.isPending ? t("Wysyłanie...") : t("Wyślij")}
           </Button>
         </form>
       )}
@@ -265,35 +266,35 @@ function MessagesView() {
       <div className="mx-auto w-full max-w-6xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={Chatting01Icon}
-          title="Wiadomości"
+          title={t("Wiadomości")}
           description={role === ROLES.ROPS
-            ? "Wiadomości od mieszkańców, organizacji i samorządów skierowane do ROPS"
+            ? t("Wiadomości od mieszkańców, organizacji i samorządów skierowane do ROPS")
             : role === ROLES.JST
-              ? "Wiadomości od mieszkańców do Twojej gminy i Twoje rozmowy z ROPS"
-              : "Rozmowy z ROPS i samorządem Twojej gminy"}
+              ? t("Wiadomości od mieszkańców do Twojej gminy i Twoje rozmowy z ROPS")
+              : t("Rozmowy z ROPS i samorządem Twojej gminy")}
           actions={canWrite && (
             <Button onClick={() => setCreating(true)}>
               <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-              {role === ROLES.JST ? "Napisz do ROPS" : "Nowa rozmowa"}
+              {role === ROLES.JST ? t("Napisz do ROPS") : t("Nowa rozmowa")}
             </Button>
           )}
         />
 
         {conversations.isPending ? (
-          <LoadingStatus label="Wczytywanie rozmów"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
+          <LoadingStatus label={t("Wczytywanie rozmów")}><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
         ) : !list.length ? (
           <Empty className="border border-dashed">
             <EmptyHeader>
               <EmptyMedia variant="icon">
                 <HugeiconsIcon icon={Chatting01Icon} strokeWidth={2} aria-hidden="true" />
               </EmptyMedia>
-              <EmptyTitle>Brak rozmów</EmptyTitle>
-              <EmptyDescription>{isStaff || !canWrite ? "Gdy ktoś napisze, rozmowa pojawi się tutaj." : "Zadaj pytanie albo poproś o mentoring, klikając „Nowa rozmowa”."}</EmptyDescription>
+              <EmptyTitle>{t("Brak rozmów")}</EmptyTitle>
+              <EmptyDescription>{isStaff || !canWrite ? t("Gdy ktoś napisze, rozmowa pojawi się tutaj.") : t("Zadaj pytanie albo poproś o mentoring, klikając „Nowa rozmowa”.")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         ) : (
           <div className="grid gap-4 md:grid-cols-[18rem_1fr]">
-            <nav aria-label="Lista rozmów">
+            <nav aria-label={t("Lista rozmów")}>
               <ul className="flex flex-col gap-2">
                 {list.map((c) => (
                   <li key={c.id}>
@@ -320,7 +321,7 @@ function MessagesView() {
             {selected ? (
               <Thread key={selected.id} conversation={selected} headingRef={headingRef} />
             ) : (
-              <p className="rounded-2xl border border-dashed border-outline p-6 text-sm text-muted-foreground">Wybierz rozmowę z listy, aby zobaczyć wiadomości.</p>
+              <p className="rounded-2xl border border-dashed border-outline p-6 text-sm text-muted-foreground">{t("Wybierz rozmowę z listy, aby zobaczyć wiadomości.")}</p>
             )}
           </div>
         )}
@@ -342,7 +343,7 @@ function MessagesView() {
 
 export default function Messages() {
   return (
-    <RoleGuard description="Zaloguj się, aby rozmawiać z ekspertami ROPS i samorządem.">
+    <RoleGuard description={t("Zaloguj się, aby rozmawiać z ekspertami ROPS i samorządem.")}>
       <MessagesView />
     </RoleGuard>
   );

@@ -16,8 +16,9 @@ import { getProblemCategoryOption } from "@/lib/problemCategories";
 import { problemStatus, problemTokens } from "@/lib/problems";
 import { useScopedTokens } from "@/hooks/useScopedTokens";
 import { PageHeader } from "@/components/page-header";
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
+const dateFormat = localDateFormat({ dateStyle: "medium" });
 
 function ReportCard({ item, token }) {
   const { problem, adminReply, updatedAt, gminaNote } = item;
@@ -29,8 +30,8 @@ function ReportCard({ item, token }) {
         <div className="min-w-0">
           <h2 id={`report-${problem.id}`} className="font-semibold break-words">{problem.title}</h2>
           <p className="text-xs text-muted-foreground">
-            Zgłoszono {problem.localDate ? <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time> : "—"}
-            {token && <> · kod <code className="font-mono break-all">{token}</code></>}
+            {t("Zgłoszono")} {problem.localDate ? <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time> : "—"}
+            {token && <>{" "}{t("· kod")}{" "}<code className="font-mono break-all">{token}</code></>}
           </p>
         </div>
         <StatusPill meta={problemStatus(problem.status)} />
@@ -41,13 +42,13 @@ function ReportCard({ item, token }) {
         {problem.street && (
           <span className="flex items-center gap-1 text-muted-foreground">
             <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
-            <span className="sr-only">Miejsce: </span>{problem.street}
+            <span className="sr-only">{t("Miejsce:")}{" "}</span>{problem.street}
           </span>
         )}
       </div>
       {problem.status === "GMINA_REJECTED" && gminaNote && (
         <div className="rounded-xl bg-red-500/10 p-3 text-sm">
-          <p className="text-xs font-medium uppercase tracking-wide text-red-800 dark:text-red-300">Gmina odrzuciła zgłoszenie</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-red-800 dark:text-red-300">{t("Gmina odrzuciła zgłoszenie")}</p>
           <p className="whitespace-pre-line">{gminaNote}</p>
         </div>
       )}
@@ -55,15 +56,15 @@ function ReportCard({ item, token }) {
         <div className="flex gap-2 rounded-xl bg-violet-500/10 p-3 text-sm">
           <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-violet-700 dark:text-violet-300" />
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-violet-800 dark:text-violet-300">Odpowiedź ROPS / samorządu</p>
+            <p className="text-xs font-medium uppercase tracking-wide text-violet-800 dark:text-violet-300">{t("Odpowiedź ROPS / samorządu")}</p>
             <p className="whitespace-pre-line">{adminReply}</p>
-            {updatedAt && <p className="mt-1 text-xs text-muted-foreground">Zaktualizowano <time dateTime={updatedAt}>{dateFormat.format(new Date(updatedAt))}</time></p>}
+            {updatedAt && <p className="mt-1 text-xs text-muted-foreground">{t("Zaktualizowano")}{" "}<time dateTime={updatedAt}>{dateFormat.format(new Date(updatedAt))}</time></p>}
           </div>
         </div>
       ) : (
         problem.status !== "GMINA_REJECTED" && (
           <p className="text-sm text-muted-foreground">
-            {problem.status === "SUBMITTED" && problem.gminaId ? "Zgłoszenie czeka na ocenę gminy." : "Zgłoszenie czeka na odpowiedź."}
+            {problem.status === "SUBMITTED" && problem.gminaId ? t("Zgłoszenie czeka na ocenę gminy.") : t("Zgłoszenie czeka na odpowiedź.")}
           </p>
         )
       )}
@@ -108,20 +109,20 @@ export default function MyReports() {
       <div className="mx-auto w-full max-w-3xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={Megaphone01Icon}
-          title="Moje zgłoszenia"
-          description={<>Status i odpowiedzi na zgłoszone przez Ciebie problemy. {isLogged ? "Widzisz zgłoszenia z konta i z tej przeglądarki." : "Bez logowania widzisz zgłoszenia wysłane z tej przeglądarki."}</>}
+          title={t("Moje zgłoszenia")}
+          description={<>{t("Status i odpowiedzi na zgłoszone przez Ciebie problemy.")} {isLogged ? t("Widzisz zgłoszenia z konta i z tej przeglądarki.") : t("Bez logowania widzisz zgłoszenia wysłane z tej przeglądarki.")}</>}
         />
 
         <form onSubmit={addCode} className="mb-8 flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-elevation-1">
-          <label htmlFor="report-code" className="text-sm font-medium">Masz kod zgłoszenia z innego urządzenia?</label>
+          <label htmlFor="report-code" className="text-sm font-medium">{t("Masz kod zgłoszenia z innego urządzenia?")}</label>
           <div className="flex gap-2">
-            <Input id="report-code" value={code} autoComplete="off" placeholder="Wklej kod zgłoszenia" onChange={(e) => setCode(e.target.value)} />
-            <Button type="submit" variant="outline">Dodaj</Button>
+            <Input id="report-code" value={code} autoComplete="off" placeholder={t("Wklej kod zgłoszenia")} onChange={(e) => setCode(e.target.value)} />
+            <Button type="submit" variant="outline">{t("Dodaj")}</Button>
           </div>
         </form>
 
         {loading ? (
-          <LoadingStatus label="Wczytywanie zgłoszeń" className="flex flex-col gap-3">
+          <LoadingStatus label={t("Wczytywanie zgłoszeń")} className="flex flex-col gap-3">
             <Skeleton className="h-40 w-full rounded-xl" />
           </LoadingStatus>
         ) : items.length ? (
@@ -132,9 +133,9 @@ export default function MyReports() {
               return (
                 <div key={key} className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-outline p-4 text-sm">
                   <span className="min-w-0 text-muted-foreground">
-                    Nie znaleziono zgłoszenia o kodzie <code className="break-all font-mono text-foreground">{token}</code>
+                    {t("Nie znaleziono zgłoszenia o kodzie")} <code className="break-all font-mono text-foreground">{token}</code>
                   </span>
-                  <Button variant="ghost" size="sm" onClick={() => forget(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>
+                  <Button variant="ghost" size="sm" onClick={() => forget(token)} aria-label={t("Usuń z listy kod {token}", { token })}>{t("Usuń")}</Button>
                 </div>
               );
             })}
@@ -143,8 +144,8 @@ export default function MyReports() {
           <Empty className="border border-dashed">
             <EmptyHeader>
               <EmptyMedia variant="icon"><HugeiconsIcon icon={Alert02Icon} strokeWidth={2} aria-hidden="true" /></EmptyMedia>
-              <EmptyTitle>Nie masz jeszcze zgłoszeń</EmptyTitle>
-              <EmptyDescription>Zgłoś problem na mapie, a jego status pojawi się tutaj.</EmptyDescription>
+              <EmptyTitle>{t("Nie masz jeszcze zgłoszeń")}</EmptyTitle>
+              <EmptyDescription>{t("Zgłoś problem na mapie, a jego status pojawi się tutaj.")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}

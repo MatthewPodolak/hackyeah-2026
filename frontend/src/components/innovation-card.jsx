@@ -6,6 +6,7 @@ import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { getProblemCategory, getWhoCategory } from "@/lib/innovations"
+import { t } from "@/lib/i18n";
 
 // Video thumbnail when the innovation has one, otherwise the icon of its main problem category
 export function InnovationCover({ innovation, className }) {
@@ -38,7 +39,7 @@ export function InnovationBadges({ innovation, maxWho = Infinity, showProblems =
   const hiddenWho = Math.max(0, who.length - maxWho)
 
   return (
-    <ul className="flex flex-wrap gap-1.5" aria-label="Kategorie">
+    <ul className="flex flex-wrap gap-1.5" aria-label={t("Kategorie")}>
       {who.slice(0, maxWho).map((category) => (
         <li key={category.label}>
           <Badge variant="secondary">
@@ -84,7 +85,7 @@ export function InnovationCard({ innovation }) {
       </CardContent>
       <CardFooter>
         <span aria-hidden="true" className="flex items-center gap-1 text-sm font-medium text-primary">
-          Szczegóły <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-4" />
+          {t("Szczegóły")} <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-4" />
         </span>
       </CardFooter>
     </Card>
