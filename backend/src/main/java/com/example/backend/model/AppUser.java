@@ -44,6 +44,31 @@ public class AppUser {
 
     private Instant createdAt;
 
+    // optional applicant details for grant applications (filled in the grant tab, saved to the account)
+    private String phone;
+    private String street;
+    private String postalCode;
+    private String city;
+    // where the applicant lives or works – separate from gminaId, which is the gmina a JST account manages
+    private String residenceGminaId;
+    private String krs;
+    private String regon;
+
+    // organisations: people and experience reused in every application (never sent to the AI except roles/experience)
+    private String representativeFunction;
+    private String representativeName;
+    private String representativePhone;
+    private String representativeEmail;
+    private String contactFunction;
+    private String contactName;
+    private String contactPhone;
+    private String contactEmail;
+    @Column(columnDefinition = "TEXT")
+    private String experience;
+    // [{name, role, experience}]
+    @Column(columnDefinition = "TEXT")
+    private String teamJson;
+
     public AccountStatus effectiveStatus() {
         return accountStatus == null ? AccountStatus.ACTIVE : accountStatus;
     }

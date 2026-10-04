@@ -3,6 +3,13 @@ import { GrantCallService } from "@/api/services/GrantCallService";
 
 const GRANT_KEY = ["grant-calls"];
 
+export function useGrantCalls() {
+  return useQuery({
+    queryKey: [...GRANT_KEY, "all"],
+    queryFn: ({ signal }) => GrantCallService.all({ ct: signal }),
+  });
+}
+
 export function useActiveGrantCalls() {
   return useQuery({
     queryKey: [...GRANT_KEY, "active"],

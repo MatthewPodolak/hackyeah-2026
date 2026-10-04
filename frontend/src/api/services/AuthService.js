@@ -28,6 +28,18 @@ export const AuthService = {
     return res;
   },
 
+  // optional applicant details for grant applications
+  async updateProfile(model, { ct, timeoutMs } = {}) {
+    const { method, url } = API.auth.updateProfile;
+
+    return apiJson(url,
+      {
+        method: method,
+        body: JSON.stringify(model)
+      },
+      { ct, timeoutMs });
+  },
+
   async logout({ ct, timeoutMs } = {}) {
     const { method, url } = API.auth.logout;
 

@@ -21,6 +21,7 @@ const publicItems = [
   { title: "Biblioteka innowacji", icon: LibraryIcon, url: "/innovations" },
   { title: "Zaproponuj innowację", icon: BulbIcon, action: "proposal" },
   { title: "Partnerstwa", icon: HandshakeIcon, url: "/partnerships" },
+  { title: "Nabory grantowe", icon: Coins01Icon, url: "/grant-calls" },
 ]
 
 const myItems = [
@@ -35,7 +36,6 @@ const institutionItems = [
   { title: "Zgłoszone problemy", icon: AlertDiamondIcon, url: "/reported-problems", badge: "unseenProblems", badgeLabel: "nowe" },
   { title: "Zgłoszone innowacje", icon: InboxIcon, url: "/reported-innovations", badge: "unseenIdeas", badgeLabel: "nowe" },
   { title: "Trendy i potrzeby", icon: Analytics01Icon, url: "/trends" },
-  { title: "Nabory grantowe", icon: Coins01Icon, url: "/grant-calls" },
 ]
 
 const ropsItems = [

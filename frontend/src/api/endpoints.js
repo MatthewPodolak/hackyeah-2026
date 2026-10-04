@@ -4,6 +4,7 @@ export const API = {
     register: { method: "POST", url: "/api/v1/auth/register" },
     logout: { method: "POST", url: "/api/v1/auth/logout" },
     me: { method: "GET", url: "/api/v1/auth/me" },
+    updateProfile: { method: "PATCH", url: "/api/v1/auth/me" },
   },
   idea: {
     add: { method: "POST", url: "/api/v1/ideas" },
@@ -46,6 +47,7 @@ export const API = {
     resources: { method: "GET", url: "/api/v1/knowledge/resources" },
   },
   grantCall: {
+    all: { method: "GET", url: "/api/v1/grant-calls" },
     active: { method: "GET", url: "/api/v1/grant-calls/active" },
     application: { method: "POST", url: (id) => `/api/v1/grant-calls/${id}/application` },
     adminList: { method: "GET", url: "/api/v1/admin/grant-calls" },

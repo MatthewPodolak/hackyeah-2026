@@ -9,4 +9,6 @@ import java.util.List;
 public interface GrantCallRepository extends JpaRepository<GrantCall, Long> {
     List<GrantCall> findByOpenFromLessThanEqualAndOpenToGreaterThanEqual(LocalDate a, LocalDate b);
 
+    boolean existsBySourceKey(String sourceKey);
+
 }
