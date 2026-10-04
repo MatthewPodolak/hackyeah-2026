@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
               <AppSidebar />
               <main id="main-content" tabIndex={-1} className="relative flex flex-1 flex-col min-h-0 outline-none">
                 <AccountScope>{children}</AccountScope>
-                <SidebarTrigger className="absolute top-3 left-3 z-[1001] size-11 border border-border bg-card text-foreground shadow-elevation-2 hover:bg-muted [&_svg]:size-5" />
+                <SidebarTrigger data-tour="menu-trigger" className="absolute top-3 left-3 z-[1001] size-11 border border-border bg-card text-foreground shadow-elevation-2 hover:bg-muted [&_svg]:size-5" />
               </main>
               <Auth />
           </SidebarProvider>

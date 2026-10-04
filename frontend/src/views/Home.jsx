@@ -16,6 +16,7 @@ import { gminaName } from "@/lib/gminy";
 import MapSearch, { normalize } from "@/components/map-search";
 import { PIN_TONES } from "@/lib/problems";
 import NeedsSurvey from "@/components/needs-survey";
+import OnboardingTour from "@/components/onboarding-tour";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LibraryIcon, Megaphone01Icon } from "@hugeicons/core-free-icons";
 
@@ -104,8 +105,9 @@ export default function Home() {
         />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-3 z-[1000] flex flex-col items-center gap-2 pr-17 pl-17">
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-[1000] flex flex-col items-center gap-2 px-17 sm:px-[124px]">
         <MapSearch
+          data-tour="search"
           className="pointer-events-auto max-w-xl"
           value={query}
           onChange={(text) => {
@@ -143,12 +145,14 @@ export default function Home() {
       {myArea && <p className="sr-only">Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? ""}</p>}
 
       <ThemeToggler className="absolute top-3 right-3 z-[1000]" />
+      <OnboardingTour className="absolute top-[68px] right-3 z-[1000] sm:top-3 sm:right-[68px]" />
 
       <div className="absolute bottom-[128px] left-4 z-[1000]">
         <NeedsSurvey />
       </div>
 
       <ul
+        data-tour="legend"
         aria-label="Legenda kolorów pinezek"
         className="absolute bottom-6 left-[76px] z-[1000] hidden items-center gap-4 rounded-2xl border border-border bg-card/95 px-4 py-2.5 text-xs font-medium shadow-elevation-2 backdrop-blur sm:flex"
       >
@@ -163,6 +167,7 @@ export default function Home() {
       <div className="absolute right-4 bottom-6 z-[1000] flex flex-col items-end gap-3">
         <Link
           href="/innovations"
+          data-tour="library"
           className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-4 text-sm font-semibold text-foreground shadow-elevation-2 transition-shadow hover:bg-muted hover:shadow-elevation-3"
         >
           <HugeiconsIcon icon={LibraryIcon} strokeWidth={1.8} aria-hidden="true" className="size-5" />
@@ -170,6 +175,7 @@ export default function Home() {
         </Link>
         <button
           type="button"
+          data-tour="report"
           onClick={() => setQuestOpen(true)}
           className="flex h-14 cursor-pointer items-center gap-3 rounded-2xl bg-primary px-5 text-base font-semibold text-primary-foreground shadow-elevation-3 transition-[box-shadow,background-color] hover:bg-primary/90 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
         >
