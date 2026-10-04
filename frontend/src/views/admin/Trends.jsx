@@ -20,6 +20,8 @@ import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCat
 import { PROBLEM_STATUS } from "@/lib/problems";
 import { IDEA_STATUS, READINESS } from "@/lib/ideas";
 import { PageHeader } from "@/components/page-header";
+import { useSurveySummary } from "@/api/hooks/useSurvey";
+import { SURVEY_ACCESS, SURVEY_AGE, SURVEY_LONELINESS } from "@/lib/survey";
 
 const monthLong = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" });
 const monthShort = new Intl.DateTimeFormat("pl-PL", { month: "short" });
@@ -80,6 +82,65 @@ function Insights({ gminaId }) {
   );
 }
 
+function SurveySection({ gminaId }) {
+  const { data } = useSurveySummary(gminaId);
+  if (!data) return null;
+
+  const priorities = data.priorities.map((b) => {
+    const o = getProblemCategoryOption(b.key);
+    return { key: b.key, label: o.label, icon: o.icon, value: b.count };
+  });
+  const access = data.serviceAccess.map((b) => {
+    const o = SURVEY_ACCESS.find((x) => String(x.value) === b.key);
+    return { key: b.key, label: o?.label ?? b.key, icon: o?.icon, value: b.count };
+  });
+  const loneliness = data.loneliness.map((b) => ({ key: b.key, label: SURVEY_LONELINESS.find((x) => x.value === b.key)?.label ?? b.key, value: b.count }));
+  const ages = data.ageGroups.map((b) => ({ key: b.key, label: SURVEY_AGE.find((x) => x.value === b.key)?.label ?? b.key, value: b.count }));
+  const lonelyShare = data.total ? Math.round(((data.loneliness.find((b) => b.key === "OFTEN")?.count ?? 0) / data.total) * 100) : 0;
+
+  return (
+    <section aria-labelledby="survey-section" className="flex flex-col gap-4">
+      <div>
+        <h2 id="survey-section" className="font-heading text-xl font-bold tracking-tight">Głos mieszkańców</h2>
+        <p className="text-sm text-muted-foreground">Wyniki szybkiej ankiety z mapy problemów: 4 pytania, tylko klikanie, bez logowania.</p>
+      </div>
+      {data.total === 0 ? (
+        <p className="rounded-2xl border border-dashed border-outline p-6 text-sm text-muted-foreground">Nikt jeszcze nie wypełnił ankiety w tym zakresie.</p>
+      ) : (
+        <>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <StatTile label="Odpowiedzi" value={data.total} hint={`${data.last30Days} w ostatnich 30 dniach`} />
+            <div className="rounded-2xl border bg-card p-4">
+              <p className="text-sm text-muted-foreground">Łatwość uzyskania pomocy</p>
+              <p className="text-3xl font-semibold">{data.averageAccess != null ? String(data.averageAccess).replace(".", ",") : "—"}<span className="text-base font-medium text-muted-foreground"> / 5</span></p>
+              <p className="text-xs text-muted-foreground">średnia ocen mieszkańców</p>
+            </div>
+            <div className="rounded-2xl border bg-card p-4">
+              <p className="text-sm text-muted-foreground">Często czuje samotność</p>
+              <p className="text-3xl font-semibold">{lonelyShare}%</p>
+              <p className="text-xs text-muted-foreground">odpowiadający lub ktoś im bliski</p>
+            </div>
+          </div>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <ChartCard title="Co wymaga poprawy" description="Obszary wskazane przez mieszkańców (do 2 na osobę)">
+              <BarList rows={priorities} caption="Obszary wymagające poprawy według ankiety" labelHeader="Obszar" />
+            </ChartCard>
+            <ChartCard title="Jak łatwo uzyskać pomoc" description="Ocena dostępu do wsparcia w okolicy">
+              <BarList rows={access} caption="Ocena łatwości uzyskania pomocy" labelHeader="Ocena" />
+            </ChartCard>
+            <ChartCard title="Samotność" description="Jak często odpowiadający lub ktoś bliski czuje się samotny">
+              <BarList rows={loneliness} caption="Częstotliwość samotności" labelHeader="Odpowiedź" />
+            </ChartCard>
+            <ChartCard title="Wiek odpowiadających" description="Kto wypełnia ankietę">
+              <BarList rows={ages} caption="Wiek odpowiadających" labelHeader="Wiek" />
+            </ChartCard>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 function Dashboard({ gminaId, showUnseen }) {
   const { data, isPending, isPlaceholderData } = useStats(gminaId);
   const gminy = useGminyIndex();
@@ -125,6 +186,8 @@ function Dashboard({ gminaId, showUnseen }) {
       </section>
 
       <Insights key={gminaId ?? "region"} gminaId={gminaId} />
+
+      <SurveySection gminaId={gminaId} />
 
       <ChartCard title="Zgłoszenia w czasie" description="Liczba zgłoszonych problemów w ostatnich 12 miesiącach">
         <ColumnChart rows={toMonthRows(data.problemsByMonth)} caption="Zgłoszenia w ostatnich 12 miesiącach" />

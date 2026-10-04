@@ -76,6 +76,10 @@ export const API = {
     updateResource: { method: "PUT", url: (id) => `/api/v1/admin/knowledge/resources/${id}` },
     removeResource: { method: "DELETE", url: (id) => `/api/v1/admin/knowledge/resources/${id}` },
   },
+  survey: {
+    submit: { method: "POST", url: "/api/v1/surveys/needs" },
+    summary: { method: "GET", url: "/api/v1/admin/surveys/needs" },
+  },
   stats: {
     get: { method: "GET", url: "/api/v1/admin/stats" },
     insights: { method: "POST", url: "/api/v1/admin/stats/insights" },

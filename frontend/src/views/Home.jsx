@@ -15,6 +15,7 @@ import { useAuth } from "@/api/context/AuthContext";
 import { gminaName } from "@/lib/gminy";
 import MapSearch, { normalize } from "@/components/map-search";
 import { PIN_TONES } from "@/lib/problems";
+import NeedsSurvey from "@/components/needs-survey";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LibraryIcon, Megaphone01Icon } from "@hugeicons/core-free-icons";
 
@@ -142,6 +143,10 @@ export default function Home() {
       {myArea && <p className="sr-only">Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? ""}</p>}
 
       <ThemeToggler className="absolute top-3 right-3 z-[1000]" />
+
+      <div className="absolute bottom-[128px] left-4 z-[1000]">
+        <NeedsSurvey />
+      </div>
 
       <ul
         aria-label="Legenda kolorów pinezek"
