@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react"
 import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { BulbIcon, Cancel01Icon, CheckmarkCircle02Icon, Copy01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
+import { BulbIcon, CheckmarkCircle02Icon, Copy01Icon, SparklesIcon } from "@hugeicons/core-free-icons"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { DialogBody, DialogFooter, DialogHeader, DialogPanel, FormStep } from "@/components/dialog-parts"
+import { IconTile } from "@/components/page-header"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import Modal from "@/components/modal"
 import SelectChip from "@/components/select-chip"
 import { useFormErrors } from "@/helpers/useFormErrors"
@@ -145,47 +146,35 @@ export default function ProposeSolution({ open, problem, onClose }) {
   }
 
   return (
-    <Modal open={open} onClose={close} labelledBy="s-heading" describedBy="s-subheading" className="max-w-xl">
-        <Card className="pt-0">
-          <div aria-hidden="true" className="h-1.5 bg-emerald-500" />
-          <CardHeader>
-            <div className="flex items-start gap-3">
-              <div aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-                <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <CardTitle>
-                  <h2 id="s-heading" className="font-heading text-xl font-bold tracking-tight">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
-                </CardTitle>
-                <CardDescription id="s-subheading" className="mt-1">
-                  {problem ? (
-                    <>Problem: <span className="font-medium text-foreground">{problem.title}</span></>
-                  ) : (
-                    "Podziel się pomysłem na innowację społeczną"
-                  )}
-                </CardDescription>
-              </div>
-              <Button variant="ghost" size="icon-sm" onClick={close} aria-label="Zamknij okno">
-                <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
-              </Button>
-            </div>
-          </CardHeader>
+    <Modal open={open} onClose={close} labelledBy="s-heading" describedBy="s-subheading" className="max-w-2xl">
+      <DialogPanel>
+        <DialogHeader
+          icon={BulbIcon}
+          title={problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}
+          titleId="s-heading"
+          description={problem ? (
+            <>Problem: <span className="font-medium text-foreground">{problem.title}</span></>
+          ) : (
+            "Podziel się pomysłem na innowację społeczną. Wymagane: tytuł, opis, istota i dla kogo."
+          )}
+          descriptionId="s-subheading"
+          onClose={close}
+        />
 
-          <CardContent>
-            {submitted ? (
-              <div className="flex flex-col items-center gap-4 py-2 text-center">
-                <div aria-hidden="true" className="flex size-14 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-                  <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-8" />
-                </div>
+        {submitted ? (
+          <>
+            <DialogBody className="pt-2">
+              <div className="flex flex-col items-center gap-5 text-center">
+                <IconTile icon={CheckmarkCircle02Icon} tone="success" size="lg" />
                 <div>
-                  <h3 ref={successRef} tabIndex={-1} className="text-lg font-semibold outline-none">Dziękujemy za propozycję!</h3>
+                  <h3 ref={successRef} tabIndex={-1} className="font-heading text-lg font-bold tracking-tight outline-none">Dziękujemy za propozycję!</h3>
                   <p className="text-sm text-muted-foreground">
                     „{submitted.title}” trafiła do Hubu i czeka na weryfikację.
                   </p>
                 </div>
-                <div className="w-full rounded-xl border bg-muted/50 p-3 text-left">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Kod Twojej propozycji</p>
-                  <div className="mt-1 flex items-center gap-2">
+                <div className="w-full rounded-2xl bg-muted/70 p-4 text-left">
+                  <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Kod Twojej propozycji</p>
+                  <div className="mt-1.5 flex items-center gap-2">
                     <code className="min-w-0 flex-1 break-all font-mono text-sm">{submitted.trackingToken}</code>
                     <Button type="button" variant="outline" size="sm" onClick={copyToken} aria-label="Kopiuj kod propozycji">
                       <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
@@ -195,21 +184,24 @@ export default function ProposeSolution({ open, problem, onClose }) {
                   <p className="mt-2 text-xs text-muted-foreground">Zachowaj go, by później sprawdzić status lub edytować propozycję.</p>
                 </div>
                 <SimilarInnovations token={submitted.trackingToken} />
-                <div className="flex w-full flex-col gap-2 sm:flex-row">
-                  <Link href="/my-ideas" onClick={close} className={cn(buttonVariants({ variant: "outline" }), "flex-1")}>
-                    Moje propozycje
-                  </Link>
-                  <Button className="flex-1" onClick={close}>Zamknij</Button>
-                </div>
               </div>
-            ) : (
-            <form onSubmit={handleSubmit} noValidate>
-              <FieldGroup>
-                <p className="text-sm text-muted-foreground">Pola tytuł, krótki opis, istota i dla kogo są wymagane.</p>
-                <div className="flex flex-col gap-2 rounded-xl border border-dashed border-emerald-700/60 bg-emerald-500/5 p-3">
-                  <label htmlFor="s-ai" className="flex items-center gap-1.5 text-sm font-medium">
-                    <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-4 text-emerald-700 dark:text-emerald-400" aria-hidden="true" />
-                    Pomóż mi opisać (opcjonalnie)
+            </DialogBody>
+            <DialogFooter>
+              <Link href="/my-ideas" onClick={close} className={buttonVariants({ variant: "outline" })}>
+                Moje propozycje
+              </Link>
+              <Button onClick={close}>Zamknij</Button>
+            </DialogFooter>
+          </>
+        ) : (
+          <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+            <DialogBody className="pt-2">
+              <FieldGroup className="gap-6">
+                <div className="flex flex-col gap-3 rounded-2xl bg-secondary/50 p-4 dark:bg-secondary/30">
+                  <label htmlFor="s-ai" className="flex items-center gap-2 text-sm font-semibold">
+                    <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-5 text-primary" aria-hidden="true" />
+                    Pomóż mi opisać
+                    <span className="font-normal text-muted-foreground">(opcjonalnie)</span>
                   </label>
                   <Textarea
                     {...fieldProps("ai")}
@@ -225,97 +217,124 @@ export default function ProposeSolution({ open, problem, onClose }) {
                   </Button>
                 </div>
 
-                <Field>
-                  <FieldLabel htmlFor="s-title">Tytuł</FieldLabel>
-                  <Input
-                    {...fieldProps("title")}
-                    required
-                    value={form.title}
-                    maxLength={150}
-                    placeholder="Krótka nazwa Twojego pomysłu"
-                    onChange={(e) => set("title")(e.target.value)}
-                  />
-                  <FieldError {...errorProps("title")} />
-                </Field>
+                <FormStep number={1} title="Pomysł">
+                  <Field>
+                    <FieldLabel htmlFor="s-title">Tytuł</FieldLabel>
+                    <Input
+                      {...fieldProps("title")}
+                      required
+                      value={form.title}
+                      maxLength={150}
+                      placeholder="Krótka nazwa Twojego pomysłu"
+                      onChange={(e) => set("title")(e.target.value)}
+                    />
+                    <FieldError {...errorProps("title")} />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="s-summary">Krótki opis</FieldLabel>
+                    <Textarea
+                      {...fieldProps("summary")}
+                      required
+                      rows={3}
+                      value={form.summary}
+                      placeholder="Co to jest? Opisz w 2–3 zdaniach."
+                      onChange={(e) => set("summary")(e.target.value)}
+                    />
+                    <FieldError {...errorProps("summary")} />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="s-essence">Istota</FieldLabel>
+                    <Textarea
+                      {...fieldProps("essence")}
+                      required
+                      rows={4}
+                      value={form.essence}
+                      placeholder="Na czym polega rozwiązanie i co jest w nim nowego?"
+                      onChange={(e) => set("essence")(e.target.value)}
+                    />
+                    <FieldError {...errorProps("essence")} />
+                  </Field>
+                </FormStep>
 
-                <Field>
-                  <FieldLabel htmlFor="s-summary">Krótki opis</FieldLabel>
-                  <Textarea
-                    {...fieldProps("summary")}
-                    required
-                    rows={3}
-                    value={form.summary}
-                    placeholder="Co to jest? Opisz w 2–3 zdaniach."
-                    onChange={(e) => set("summary")(e.target.value)}
-                  />
-                  <FieldError {...errorProps("summary")} />
-                </Field>
+                <FormStep number={2} title="Dla kogo?" description="Wybierz jedną lub kilka grup.">
+                  <Field>
+                    <div
+                      {...fieldProps("who", "s-who-hint")}
+                      role="group"
+                      aria-label="Dla kogo"
+                      className="flex flex-wrap gap-2"
+                    >
+                      {WHO.map(([key, category]) => (
+                        <SelectChip key={key} active={form.who.includes(key)} onClick={() => toggleWho(key)}>
+                          <span aria-hidden="true">{category.icon}</span>
+                          {category.label}
+                        </SelectChip>
+                      ))}
+                    </div>
+                    <span id="s-who-hint" className="sr-only">Wybierz jedną lub kilka grup docelowych</span>
+                    <FieldLabel htmlFor="s-whoOther" className="sr-only">Inna grupa lub doprecyzowanie</FieldLabel>
+                    <Input
+                      id="s-whoOther"
+                      value={form.whoOther}
+                      placeholder="Inna grupa lub doprecyzowanie (opcjonalnie)"
+                      onChange={(e) => set("whoOther")(e.target.value)}
+                    />
+                    <FieldError {...errorProps("who")} />
+                  </Field>
+                </FormStep>
 
-                <Field>
-                  <FieldLabel htmlFor="s-essence">Istota</FieldLabel>
-                  <Textarea
-                    {...fieldProps("essence")}
-                    required
-                    rows={4}
-                    value={form.essence}
-                    placeholder="Na czym polega rozwiązanie i co jest w nim nowego?"
-                    onChange={(e) => set("essence")(e.target.value)}
-                  />
-                  <FieldError {...errorProps("essence")} />
-                </Field>
-
-                <Field>
-                  <p id="s-who-label" className="text-sm font-medium">Dla kogo</p>
-                  <FieldDescription id="s-who-hint">Wybierz jedną lub kilka grup docelowych</FieldDescription>
-                  <div
-                    {...fieldProps("who", "s-who-hint")}
-                    role="group"
-                    aria-labelledby="s-who-label"
-                    className="flex flex-wrap gap-2"
-                  >
-                    {WHO.map(([key, category]) => (
-                      <SelectChip key={key} active={form.who.includes(key)} onClick={() => toggleWho(key)}>
-                        <span aria-hidden="true">{category.icon}</span>
-                        {category.label}
-                      </SelectChip>
-                    ))}
+                <FormStep number={3} title="Etap realizacji" description="Opcjonalnie – na jakim etapie jest pomysł?">
+                  <div role="radiogroup" aria-label="Etap realizacji" className="grid gap-2 sm:grid-cols-2">
+                    {STAGES.map((stage) => {
+                      const checked = form.stage === stage.key
+                      return (
+                        <label
+                          key={stage.key}
+                          className={cn(
+                            "relative flex cursor-pointer items-start gap-3 rounded-2xl border p-3.5 transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--focus)]",
+                            checked ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60"
+                          )}
+                        >
+                          <input
+                            type="radio"
+                            name="s-stage"
+                            value={stage.key}
+                            checked={checked}
+                            onChange={() => set("stage")(stage.key)}
+                            onClick={() => checked && set("stage")(null)}
+                            className="sr-only"
+                          />
+                          <span aria-hidden="true" className="text-xl leading-none">{stage.icon}</span>
+                          <span className="min-w-0">
+                            <span className="block text-sm font-semibold">{stage.label}</span>
+                            <span className="block text-xs text-muted-foreground">{stage.hint}</span>
+                          </span>
+                        </label>
+                      )
+                    })}
                   </div>
-                  <FieldLabel htmlFor="s-whoOther" className="sr-only">Inna grupa lub doprecyzowanie</FieldLabel>
-                  <Input
-                    id="s-whoOther"
-                    value={form.whoOther}
-                    placeholder="Inna grupa lub doprecyzowanie (opcjonalnie)"
-                    onChange={(e) => set("whoOther")(e.target.value)}
-                  />
-                  <FieldError {...errorProps("who")} />
-                </Field>
-
-                <Field orientation="horizontal">
-                  <Checkbox
-                    id="s-publish"
-                    checked={form.publishConsent}
-                    onCheckedChange={(checked) => set("publishConsent")(checked === true)}
-                  />
-                  <FieldLabel htmlFor="s-publish" className="font-normal">
-                    Zgadzam się na publikację propozycji w galerii pomysłów mieszkańców, jeśli zostanie zaakceptowana
-                  </FieldLabel>
-                </Field>
-
-                <Field>
-                  <Button
-                    type="submit"
-                    size="lg"
-                    disabled={addIdea.isPending}
-                    className="w-full bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-700 dark:hover:bg-emerald-800"
-                  >
-                    {addIdea.isPending ? "Wysyłanie..." : "Wyślij propozycję"}
-                  </Button>
-                </Field>
+                  <Field orientation="horizontal" className="rounded-xl bg-muted/60 p-3">
+                    <Checkbox
+                      id="s-publish"
+                      checked={form.publishConsent}
+                      onCheckedChange={(checked) => set("publishConsent")(checked === true)}
+                    />
+                    <FieldLabel htmlFor="s-publish" className="font-normal">
+                      Zgadzam się na publikację propozycji w galerii pomysłów mieszkańców, jeśli zostanie zaakceptowana
+                    </FieldLabel>
+                  </Field>
+                </FormStep>
               </FieldGroup>
-            </form>
-            )}
-          </CardContent>
-        </Card>
+            </DialogBody>
+            <DialogFooter>
+              <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
+              <Button type="submit" disabled={addIdea.isPending}>
+                {addIdea.isPending ? "Wysyłanie..." : "Wyślij propozycję"}
+              </Button>
+            </DialogFooter>
+          </form>
+        )}
+      </DialogPanel>
     </Modal>
   )
 }

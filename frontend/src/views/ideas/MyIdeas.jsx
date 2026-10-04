@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowRight01Icon, BulbIcon, Delete02Icon, Edit02Icon, BubbleChatIcon } from "@hugeicons/core-free-icons";
+import { ArrowRight01Icon, BubbleChatIcon, BulbIcon, Delete02Icon, Edit02Icon, Idea01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import {
   ideaTokens,
   toIdeaCardRequest,
 } from "@/lib/ideas";
+import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 
@@ -113,7 +114,7 @@ function IdeaCard({ token, query, onForget }) {
 
   if (query.isError) {
     return (
-      <div className="flex items-center justify-between gap-3 rounded-xl border border-dashed p-4 text-sm">
+      <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-outline p-4 text-sm">
         <span className="min-w-0 text-muted-foreground">
           {query.error?.status === 404 ? "Nie znaleziono propozycji o kodzie" : "Nie udało się wczytać propozycji"}{" "}
           <code className="break-all font-mono text-foreground">{token}</code>
@@ -127,7 +128,7 @@ function IdeaCard({ token, query, onForget }) {
   const readiness = READINESS[idea.readiness];
 
   return (
-    <article aria-labelledby={`idea-${token}`} className="flex flex-col gap-3 rounded-xl border bg-card p-5">
+    <article aria-labelledby={`idea-${token}`} className="flex flex-col gap-3 rounded-2xl border border-border bg-card shadow-elevation-1 p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <h2 id={`idea-${token}`} className="text-base font-semibold leading-snug break-words">{idea.title}</h2>
@@ -215,18 +216,19 @@ export default function MyIdeas() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-3xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Moje propozycje</h1>
-            <p className="text-muted-foreground">Status i odpowiedzi Hubu na Twoje pomysły</p>
-          </div>
-          <Button onClick={() => openProposal()}>
-            <HugeiconsIcon icon={BulbIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Nowa propozycja
-          </Button>
-        </header>
+        <PageHeader
+          icon={Idea01Icon}
+          title="Moje propozycje"
+          description="Status i odpowiedzi Hubu na Twoje pomysły"
+          actions={
+            <Button onClick={() => openProposal()}>
+              <HugeiconsIcon icon={BulbIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              Nowa propozycja
+            </Button>
+          }
+        />
 
-        <form onSubmit={addCode} className="mb-6 flex flex-col gap-2">
+        <form onSubmit={addCode} className="mb-8 flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-elevation-1">
           <label htmlFor="idea-code" className="text-sm font-medium">Masz kod propozycji z innego urządzenia?</label>
           <div className="flex gap-2">
           <Input

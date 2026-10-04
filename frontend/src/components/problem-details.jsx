@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Alert02Icon, BulbIcon, Calendar03Icon, Cancel01Icon, Location01Icon } from "@hugeicons/core-free-icons"
+import { Alert02Icon, Calendar03Icon, Cancel01Icon, Location01Icon } from "@hugeicons/core-free-icons"
+import { IconTile } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { useProblem } from "@/api/hooks/useProblemsQuery"
@@ -52,17 +53,14 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
       aria-labelledby="problem-details-heading"
       className="absolute z-[1000] left-4 right-20 bottom-4 sm:right-auto sm:w-120 animate-in fade-in slide-in-from-bottom-4 duration-200"
     >
-      <div className="flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-2xl border bg-background shadow-2xl">
-        <div aria-hidden="true" className="h-1.5 shrink-0 bg-red-500" />
+      <div className="flex max-h-[calc(100vh-6rem)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-elevation-3">
 
         <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-5">
           <div className="flex items-start gap-3">
-            <div aria-hidden="true" className="shrink-0 size-11 rounded-full bg-red-500/10 text-red-700 dark:text-red-400 flex items-center justify-center">
-              <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-6" />
-            </div>
+            <IconTile icon={Alert02Icon} tone="danger" />
 
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">
+              <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                 Zgłoszony problem
               </p>
               <h2 id="problem-details-heading" ref={headingRef} tabIndex={-1} className="font-heading text-xl font-bold tracking-tight leading-snug break-words outline-none">
@@ -70,7 +68,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
               </h2>
             </div>
 
-            <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły problemu">
+            <Button variant="ghost" size="icon" className="-mt-1 -mr-2" onClick={onClose} aria-label="Zamknij szczegóły problemu">
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
             </Button>
           </div>
@@ -101,7 +99,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
             </p>
           )}
 
-          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl bg-muted/50 px-3 py-2.5 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-2xl bg-muted/70 px-4 py-3 text-sm text-muted-foreground">
             <span className="flex min-w-0 items-center gap-1.5">
               <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
               <span className="sr-only">Miejsce: </span>
@@ -119,7 +117,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
           </div>
         </div>
 
-        <div className="shrink-0 border-t p-4">
+        <div className="shrink-0 border-t border-border px-5 py-4">
           <Button
             size="lg"
             className="w-full bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-700 dark:hover:bg-emerald-800"

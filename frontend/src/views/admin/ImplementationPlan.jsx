@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Copy01Icon, PrinterIcon, SparklesIcon } from "@hugeicons/core-free-icons";
+import { Copy01Icon, PrinterIcon, Route01Icon, SparklesIcon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ import RoleGuard from "@/views/reported/RoleGuard";
 import { useCatalog, useImplementationPlan, useRegions } from "@/api/hooks/useAdmin";
 import { useToast } from "@/helpers/ToastProvider";
 import { useFormErrors } from "@/helpers/useFormErrors";
+import { PageHeader } from "@/components/page-header";
 
 const numberFormat = new Intl.NumberFormat("pl-PL");
 
@@ -86,7 +87,7 @@ function PlanView({ plan, headingRef }) {
         <Section title="Etapy wdrożenia">
           <ol className="flex flex-col gap-3">
             {plan.steps.map((step, i) => (
-              <li key={i} className="rounded-xl border p-4">
+              <li key={i} className="rounded-2xl border border-border p-4">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Etap {i + 1}: {step.phase}</p>
                 <h4 className="font-semibold">{step.title}</h4>
                 <p className="text-sm whitespace-pre-line">{step.description}</p>
@@ -231,12 +232,11 @@ export default function ImplementationPlan() {
     <RoleGuard description="Zaloguj się, aby przygotować plan wdrożenia innowacji w swojej gminie.">
       <div className="flex-1 overflow-y-auto">
         <div className="mx-auto w-full max-w-4xl px-4 pt-18 pb-10 md:px-8">
-          <header className="mb-6 print:hidden">
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Plan wdrożenia innowacji</h1>
-            <p className="text-muted-foreground">
-              Middleman innowacji: wybierz innowację i gminę, a AI zaproponuje, jak wdrożyć ją jako usługę społeczną dopasowaną do danych GUS o gminie.
-            </p>
-          </header>
+          <PageHeader
+            icon={Route01Icon}
+            title="Plan wdrożenia innowacji"
+            description="Middleman innowacji: wybierz innowację i gminę, a AI zaproponuje, jak wdrożyć ją jako usługę społeczną dopasowaną do danych GUS o gminie."
+          />
           <PlanForm />
         </div>
       </div>

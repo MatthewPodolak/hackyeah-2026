@@ -38,7 +38,7 @@ export default function InnovationDetails({ innovation }) {
           <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} aria-hidden="true" /> Wróć do listy
         </Link>
 
-        <div className="mb-6 overflow-hidden rounded-2xl ring-1 ring-foreground/10">
+        <div className="mb-8 overflow-hidden rounded-3xl border border-border shadow-elevation-2">
           {videoUrl ? (
             <iframe
               src={videoUrl}
@@ -54,7 +54,7 @@ export default function InnovationDetails({ innovation }) {
         </div>
 
         <header className="mb-8 space-y-3">
-          <h1 className="font-heading text-3xl font-semibold">{innovation.name}</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-tight md:text-4xl">{innovation.name}</h1>
           {innovation.shortDescription && (
             <p className="text-lg text-muted-foreground">{innovation.shortDescription}</p>
           )}
@@ -72,10 +72,10 @@ export default function InnovationDetails({ innovation }) {
           )}
         </header>
 
-        <div className="space-y-6">
+        <div className="flex flex-col gap-4">
           {SECTIONS.filter(({ field }) => innovation[field]).map(({ field, title }) => (
-            <section key={field} aria-labelledby={`section-${field}`}>
-              <h2 id={`section-${field}`} className="mb-1.5 font-heading text-lg font-semibold">
+            <section key={field} aria-labelledby={`section-${field}`} className="rounded-2xl border border-border bg-card p-5 shadow-elevation-1 sm:p-6">
+              <h2 id={`section-${field}`} className="mb-2 font-heading text-lg font-semibold tracking-tight">
                 {title}
               </h2>
               <p className="leading-relaxed whitespace-pre-line">{innovation[field]}</p>
@@ -85,7 +85,7 @@ export default function InnovationDetails({ innovation }) {
 
         {materials.length > 0 && (
           <section aria-labelledby="section-materials" className="mt-8">
-            <h2 id="section-materials" className="mb-3 font-heading text-lg font-semibold">
+            <h2 id="section-materials" className="mb-3 font-heading text-lg font-semibold tracking-tight">
               Materiały
             </h2>
             <ul className="flex flex-wrap gap-2">
@@ -109,7 +109,7 @@ export default function InnovationDetails({ innovation }) {
 
         <InnovationTesting innovationId={innovation.id} innovationName={innovation.name} />
 
-        <p className="mt-10 border-t pt-4 text-sm text-muted-foreground">
+        <p className="mt-10 border-t border-border pt-4 text-sm text-muted-foreground">
           Źródło: Biblioteka Innowacji Społecznych ROPS Kraków. Pytania o wdrożenie:{" "}
           <a href="mailto:iws@rops.krakow.pl" className="underline underline-offset-4">
             iws@rops.krakow.pl

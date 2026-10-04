@@ -6,13 +6,11 @@ import {
   ArrowRight01Icon,
   BulbIcon,
   Building03Icon,
-  Cancel01Icon,
   CheckmarkCircle02Icon,
   Location01Icon,
   SearchRemoveIcon,
 } from "@hugeicons/core-free-icons"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import innovations from "@/data/innovations.json"
 import { InnovationCover } from "@/components/innovation-card"
 import Modal from "@/components/modal"
@@ -20,6 +18,7 @@ import { useGminyIndex } from "@/api/hooks/useRegionsQuery"
 import { problemPlace } from "@/lib/gminy"
 import { useToast } from "@/helpers/ToastProvider"
 import { Copy01Icon } from "@hugeicons/core-free-icons"
+import { DialogBody, DialogFooter, DialogHeader, DialogPanel } from "@/components/dialog-parts"
 
 function TrackingCode({ token }) {
   const { showToast } = useToast()
@@ -65,7 +64,7 @@ export function MatchItem({ match, rank, headingLevel = 3 }) {
   const tone = scoreTone(match.score)
 
   return (
-    <li className="relative overflow-hidden rounded-xl border bg-background transition-shadow hover:shadow-md has-[a:focus-visible]:ring-3 has-[a:focus-visible]:ring-ring/50">
+    <li className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-elevation-1 transition-shadow hover:shadow-elevation-2 has-[a:focus-visible]:ring-3 has-[a:focus-visible]:ring-ring/50">
       <div className="flex gap-3 p-3">
         <div className="relative w-24 shrink-0 overflow-hidden rounded-lg sm:w-28">
           {innovation ? (
@@ -127,34 +126,23 @@ export default function ProblemSolutions({ result, onClose }) {
 
   return (
     <Modal open onClose={onClose} labelledBy="solutions-heading" className="max-w-lg">
-        <Card className="pt-0">
-          <div aria-hidden="true" className="h-1 bg-emerald-500" />
-          <CardHeader>
-            <div className="flex items-start gap-3">
-              <div aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-                <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} className="size-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
-                  Problem zgłoszony
-                </p>
-                <h2 id="solutions-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">
-                  <span className="sr-only">Problem zgłoszony: </span>{problem?.title}
-                </h2>
-                {problem && (
-                  <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
-                    <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-3.5 shrink-0" aria-hidden="true" />
-                    <span className="break-words">{problemPlace(problem, gminy)}</span>
-                  </p>
-                )}
-              </div>
-              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
-                <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
-              </Button>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-3">
+      <DialogPanel>
+        <DialogHeader
+          icon={CheckmarkCircle02Icon}
+          tone="success"
+          eyebrow="Problem zgłoszony"
+          title={<><span className="sr-only">Problem zgłoszony: </span>{problem?.title}</>}
+          titleId="solutions-heading"
+          onClose={onClose}
+        >
+          {problem && (
+            <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+              <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-3.5 shrink-0" aria-hidden="true" />
+              <span className="break-words">{problemPlace(problem, gminy)}</span>
+            </p>
+          )}
+        </DialogHeader>
+        <DialogBody className="flex flex-col gap-4 pt-1">
             {result.trackingToken && <TrackingCode token={result.trackingToken} />}
             {matches.length > 0 ? (
               <>
@@ -171,7 +159,7 @@ export default function ProblemSolutions({ result, onClose }) {
                 </ol>
               </>
             ) : (
-              <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed px-4 py-8 text-center">
+              <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-outline px-4 py-8 text-center">
                 <div aria-hidden="true" className="flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
                   <HugeiconsIcon icon={SearchRemoveIcon} strokeWidth={2} className="size-5" />
                 </div>
@@ -182,9 +170,11 @@ export default function ProblemSolutions({ result, onClose }) {
               </div>
             )}
 
-            <Button variant="outline" onClick={onClose}>Zamknij</Button>
-          </CardContent>
-        </Card>
+        </DialogBody>
+        <DialogFooter>
+          <Button onClick={onClose}>Zamknij</Button>
+        </DialogFooter>
+      </DialogPanel>
     </Modal>
   )
 }

@@ -3,10 +3,9 @@
 import { useState } from "react"
 import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Cancel01Icon, StarIcon, TestTube01Icon } from "@hugeicons/core-free-icons"
+import { StarIcon, TestTube01Icon } from "@hugeicons/core-free-icons"
 import Link from "next/link"
 import { Button, buttonVariants } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -17,6 +16,7 @@ import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useAddReview, useInnovationReviews, useParticipate } from "@/api/hooks/useTesting"
 import { useToast } from "@/helpers/ToastProvider"
 import { useFormErrors } from "@/helpers/useFormErrors"
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts"
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" })
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -78,22 +78,10 @@ function RatingInput({ value, onChange, error, errorId }) {
 
 function ModalCard({ headingId, title, description, onClose, children }) {
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start gap-3">
-          <div className="min-w-0 flex-1">
-            <CardTitle>
-              <h2 id={headingId} className="text-base font-semibold">{title}</h2>
-            </CardTitle>
-            {description && <CardDescription className="mt-1">{description}</CardDescription>}
-          </div>
-          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <DialogPanel>
+      <DialogHeader icon={TestTube01Icon} title={title} titleId={headingId} description={description} onClose={onClose} />
+      <DialogBody className="pt-1">{children}</DialogBody>
+    </DialogPanel>
   )
 }
 
@@ -243,8 +231,8 @@ export default function InnovationTesting({ innovationId, innovationName }) {
   const data = reviews.data
 
   return (
-    <section aria-labelledby="section-testing" className="mt-10 border-t pt-8">
-      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold">{canTest ? "Przetestuj i oceń" : "Opinie i wdrożenie"}</h2>
+    <section aria-labelledby="section-testing" className="mt-8 rounded-2xl border border-border bg-card p-5 shadow-elevation-1 sm:p-6">
+      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold tracking-tight">{canTest ? "Przetestuj i oceń" : "Opinie i wdrożenie"}</h2>
       <p className="mb-4 text-muted-foreground">
         {canTest
           ? "Chcesz wypróbować tę innowację u siebie? Zgłoś się do testów. Testowałeś ją już? Podziel się opinią."
@@ -282,7 +270,7 @@ export default function InnovationTesting({ innovationId, innovationName }) {
           </p>
           <ul className="flex flex-col gap-3">
             {data.reviews.map((review) => (
-              <li key={review.id} className="rounded-xl border p-4">
+              <li key={review.id} className="rounded-2xl border border-border p-4">
                 <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
                   <span className="font-medium">{review.reviewerName}</span>
                   <Stars value={review.rating} />

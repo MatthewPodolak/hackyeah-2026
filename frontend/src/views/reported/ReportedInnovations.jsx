@@ -3,17 +3,9 @@
 import { useMemo, useState } from "react";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
-import {
-  Alert02Icon,
-  BubbleChatIcon,
-  BulbIcon,
-  Cancel01Icon,
-  Location01Icon,
-  Search01Icon,
-} from "@hugeicons/core-free-icons";
+import { Alert02Icon, BubbleChatIcon, BulbIcon, InboxIcon, Location01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
@@ -35,6 +27,8 @@ import Modal from "@/components/modal";
 import { API } from "@/api/endpoints";
 import { CanvasSummary } from "@/components/canvas/canvas-fields";
 import { useCanvasSpec } from "@/api/hooks/useCanvas";
+import { PageHeader } from "@/components/page-header";
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const REVIEW_STATUSES = ["SUBMITTED", "IN_REVIEW", "FEEDBACK_GIVEN", "ACCEPTED", "NOT_NOW"];
@@ -77,7 +71,7 @@ function FilterChip({ active, label, count, onClick }) {
       onClick={onClick}
       className={cn(
         "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
+        active ? "border-primary bg-primary text-primary-foreground" : "border-outline bg-background hover:bg-muted"
       )}
     >
       {label}
@@ -162,26 +156,16 @@ function IdeaDetails({ id, onClose }) {
 
   return (
     <Modal open onClose={onClose} labelledBy="idea-details-heading" className="max-w-2xl">
-        <Card className="pt-0">
-          <div aria-hidden="true" className="h-1.5 bg-emerald-500" />
-          <CardHeader>
-            <div className="flex items-start gap-3">
-              <div aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
-                <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-6" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Propozycja innowacji</p>
-                <h2 id="idea-details-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">
-                  {idea ? idea.title : "Wczytywanie propozycji…"}
-                </h2>
-              </div>
-              <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły propozycji">
-                <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-              </Button>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-4">
+      <DialogPanel>
+        <DialogHeader
+          icon={BulbIcon}
+          eyebrow="Propozycja innowacji"
+          title={idea ? idea.title : "Wczytywanie propozycji…"}
+          titleId="idea-details-heading"
+          onClose={onClose}
+          closeLabel="Zamknij szczegóły propozycji"
+        />
+        <DialogBody className="flex flex-col gap-4 pt-1">
             {!idea ? (
               <LoadingStatus label="Wczytywanie szczegółów propozycji"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
             ) : (
@@ -217,7 +201,7 @@ function IdeaDetails({ id, onClose }) {
                 )}
 
                 {details.data.canvas && Object.keys(details.data.canvas).length > 0 && (
-                  <section className="rounded-xl border p-4">
+                  <section className="rounded-2xl border border-border p-4">
                     <h3 className="mb-3 text-sm font-semibold">Kanwa innowacji</h3>
                     <CanvasSummary spec={spec.data} answers={details.data.canvas} />
                   </section>
@@ -228,8 +212,8 @@ function IdeaDetails({ id, onClose }) {
                 <ReviewForm key={idea.id + idea.status} idea={idea} onDone={onClose} />
               </>
             )}
-          </CardContent>
-        </Card>
+        </DialogBody>
+      </DialogPanel>
     </Modal>
   );
 }
@@ -259,10 +243,11 @@ function IdeasList() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6">
-          <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszone innowacje</h1>
-          <p className="text-muted-foreground">Propozycje rozwiązań i innowacji przesłane przez mieszkańców</p>
-        </header>
+        <PageHeader
+          icon={InboxIcon}
+          title="Zgłoszone innowacje"
+          description="Propozycje rozwiązań i innowacji przesłane przez mieszkańców"
+        />
 
         <div role="search" aria-label="Filtry propozycji" className="mb-6 flex flex-col gap-3">
           <InputGroup>
@@ -306,7 +291,7 @@ function IdeasList() {
             {visible.map((idea) => (
               <li
                 key={idea.id}
-                className="relative flex w-full gap-4 rounded-xl border bg-card p-4 transition-shadow hover:shadow-md has-[button:focus-visible]:ring-3 has-[button:focus-visible]:ring-ring/50"
+                className="relative flex w-full gap-4 rounded-2xl border border-border bg-card shadow-elevation-1 p-4 transition-shadow hover:shadow-elevation-2 has-[button:focus-visible]:ring-3 has-[button:focus-visible]:ring-ring/50"
               >
                   <div aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
                     <HugeiconsIcon icon={BulbIcon} strokeWidth={2} className="size-5" />

@@ -2,13 +2,9 @@
 import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { DialogPanel } from "@/components/dialog-parts"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Cancel01Icon, Login03Icon, UserAdd01Icon, UserGroupIcon, UserIcon } from "@hugeicons/core-free-icons"
 import {
   Field,
   FieldDescription,
@@ -35,8 +31,8 @@ const EMPTY_LOGIN = {
 }
 
 const ACCOUNT_TYPES = [
-  { value: "CITIZEN", label: "Mieszkaniec", hint: "Konto osoby prywatnej" },
-  { value: "NGO", label: "Organizacja pozarządowa", hint: "Fundacja, stowarzyszenie, KGW – wymagany NIP" },
+  { value: "CITIZEN", label: "Mieszkaniec", hint: "Konto osoby prywatnej", icon: UserIcon },
+  { value: "NGO", label: "Organizacja pozarządowa", hint: "Fundacja, stowarzyszenie, KGW – wymagany NIP", icon: UserGroupIcon },
 ]
 
 const NIP_WEIGHTS = [6, 5, 7, 2, 3, 4, 5, 6, 7]
@@ -62,7 +58,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function LinkButton({ onClick, children }) {
   return (
-    <button type="button" onClick={onClick} className="font-medium text-foreground underline underline-offset-4 hover:no-underline">
+    <button type="button" onClick={onClick} className="cursor-pointer font-semibold text-primary underline underline-offset-4 hover:no-underline">
       {children}
     </button>
   )
@@ -72,6 +68,7 @@ export function LoginForm({
   className,
   initialMode = "login",
   onSuccess,
+  onClose,
   headingLevel = 2,
   ...props
 }) {
@@ -179,178 +176,199 @@ export function LoginForm({
     }
   };
 
+  const isNgo = registerData.accountType === "NGO";
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
+    <DialogPanel className={className} {...props}>
+      <div className="flex shrink-0 flex-col gap-5 px-6 pt-6">
+        <div className="flex items-start gap-4">
+          <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-elevation-1">H</span>
+          <div className="min-w-0 flex-1">
+            <Heading id="auth-heading" tabIndex={-1} className="font-heading text-xl font-bold tracking-tight outline-none">
+              {isLogin ? "Zaloguj się" : "Utwórz konto"}
+            </Heading>
+            <p id="auth-description" className="mt-1 text-sm text-muted-foreground">
+              {isLogin
+                ? "Witaj ponownie w Małopolskim Hubie Innowacji."
+                : "Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator."}
+            </p>
+          </div>
+          {onClose && (
+            <Button variant="ghost" size="icon" className="-mt-1 -mr-2 shrink-0" onClick={onClose} aria-label="Zamknij okno">
+              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-5" />
+            </Button>
+          )}
+        </div>
+        <div role="group" aria-label="Rodzaj formularza" className="grid grid-cols-2 gap-1 rounded-full bg-muted p-1">
+          {[
+            { login: true, label: "Logowanie", icon: Login03Icon },
+            { login: false, label: "Rejestracja", icon: UserAdd01Icon },
+          ].map((tab) => (
+            <button
+              key={tab.label}
+              type="button"
+              aria-pressed={isLogin === tab.login}
+              onClick={() => isLogin !== tab.login && switchMode(tab.login)}
+              className={cn(
+                "flex h-10 cursor-pointer items-center justify-center gap-2 rounded-full text-sm font-semibold transition-colors",
+                isLogin === tab.login ? "bg-card text-foreground shadow-elevation-1 dark:bg-secondary dark:text-secondary-foreground" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <HugeiconsIcon icon={tab.icon} strokeWidth={2} aria-hidden="true" className="size-4" />
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="min-h-0 flex-1 overflow-y-auto px-6 pt-5 pb-6">
         {isLogin ? (
-          <>
-            <CardHeader>
-              <CardTitle>
-                <Heading id="auth-heading" tabIndex={-1} className="text-base font-semibold outline-none">Zaloguj się</Heading>
-              </CardTitle>
-              <CardDescription id="auth-description">
-                Podaj email i hasło, aby zalogować się do konta
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={submitLogin} noValidate>
-                <FieldGroup>
-                  <Field>
-                    <FieldLabel htmlFor="login-email">Email</FieldLabel>
-                    <Input
-                      {...loginErrors.fieldProps("email")}
-                      type="email"
-                      autoComplete="email"
-                      required
-                      placeholder="np. jan@example.com"
-                      value={loginData.email}
-                      onChange={updateLogin("email")}
-                    />
-                    <FieldError {...loginErrors.errorProps("email")} />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="login-password">Hasło</FieldLabel>
-                    <PasswordInput
-                      {...loginErrors.fieldProps("password")}
-                      autoComplete="current-password"
-                      required
-                      value={loginData.password}
-                      onChange={updateLogin("password")}
-                    />
-                    <FieldError {...loginErrors.errorProps("password")} />
-                  </Field>
-                  <Field>
-                    <Button type="submit" disabled={loading}>
-                      {loading ? "Logowanie..." : "Zaloguj"}
-                    </Button>
-                    <FieldDescription className="text-center">
-                      Nie masz konta? <LinkButton onClick={() => switchMode(false)}>Zarejestruj się</LinkButton>
-                    </FieldDescription>
-                  </Field>
-                </FieldGroup>
-              </form>
-            </CardContent>
-          </>
-        ):(
-          <>
-            <CardHeader>
-              <CardTitle>
-                <Heading id="auth-heading" tabIndex={-1} className="text-base font-semibold outline-none">Utwórz konto</Heading>
-              </CardTitle>
-              <CardDescription id="auth-description">
-                Konto mieszkańca albo organizacji pozarządowej. Wszystkie pola są wymagane. Konta samorządów i ROPS zakłada administrator platformy.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={submitRegister} noValidate>
-                <FieldGroup>
-                  <fieldset className="flex flex-col gap-2">
-                    <legend className="mb-2 text-sm font-medium">Typ konta</legend>
-                    {ACCOUNT_TYPES.map((type) => (
+          <form onSubmit={submitLogin} noValidate>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="login-email">Email</FieldLabel>
+                <Input
+                  {...loginErrors.fieldProps("email")}
+                  type="email"
+                  autoComplete="email"
+                  required
+                  placeholder="np. jan@example.com"
+                  value={loginData.email}
+                  onChange={updateLogin("email")}
+                />
+                <FieldError {...loginErrors.errorProps("email")} />
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="login-password">Hasło</FieldLabel>
+                <PasswordInput
+                  {...loginErrors.fieldProps("password")}
+                  autoComplete="current-password"
+                  required
+                  value={loginData.password}
+                  onChange={updateLogin("password")}
+                />
+                <FieldError {...loginErrors.errorProps("password")} />
+              </Field>
+              <Button type="submit" size="lg" className="mt-1 w-full" disabled={loading}>
+                {loading ? "Logowanie..." : "Zaloguj się"}
+              </Button>
+              <p className="text-center text-sm text-muted-foreground">
+                Nie masz konta? <LinkButton onClick={() => switchMode(false)}>Zarejestruj się</LinkButton>
+              </p>
+            </FieldGroup>
+          </form>
+        ) : (
+          <form onSubmit={submitRegister} noValidate>
+            <FieldGroup>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="mb-2 text-sm font-medium">Typ konta</legend>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {ACCOUNT_TYPES.map((type) => {
+                    const checked = registerData.accountType === type.value
+                    return (
                       <label
                         key={type.value}
                         className={cn(
-                          "flex cursor-pointer items-start gap-3 rounded-xl border p-3",
-                          registerData.accountType === type.value ? "border-primary bg-muted/60" : "border-foreground/45"
+                          "relative flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 transition-colors has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--focus)]",
+                          checked ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60"
                         )}
                       >
                         <input
                           type="radio"
                           name="register-account-type"
                           value={type.value}
-                          checked={registerData.accountType === type.value}
+                          checked={checked}
                           onChange={updateRegister("accountType")}
-                          className="mt-1 size-4 accent-[var(--primary)]"
+                          className="absolute top-4 right-4 size-4 accent-[var(--primary)]"
                         />
+                        <HugeiconsIcon icon={type.icon} strokeWidth={1.8} aria-hidden="true" className={cn("size-6", checked ? "text-primary" : "text-muted-foreground")} />
                         <span>
-                          <span className="block text-sm font-medium">{type.label}</span>
+                          <span className="block text-sm font-semibold">{type.label}</span>
                           <span className="block text-xs text-muted-foreground">{type.hint}</span>
                         </span>
                       </label>
-                    ))}
-                  </fieldset>
-                  <Field>
-                    <FieldLabel htmlFor="register-name">
-                      {registerData.accountType === "NGO" ? "Nazwa organizacji" : "Imię i nazwisko"}
-                    </FieldLabel>
-                    <Input
-                      {...registerErrors.fieldProps("name")}
-                      type="text"
-                      required
-                      autoComplete={registerData.accountType === "NGO" ? "organization" : "name"}
-                      placeholder={registerData.accountType === "NGO" ? "np. Fundacja Dobre Sąsiedztwo" : "np. Jan Kowalski"}
-                      value={registerData.name}
-                      onChange={updateRegister("name")}
-                    />
-                    <FieldError {...registerErrors.errorProps("name")} />
-                  </Field>
-                  {registerData.accountType === "NGO" && (
-                    <Field>
-                      <FieldLabel htmlFor="register-nip">NIP organizacji</FieldLabel>
-                      <Input
-                        {...registerErrors.fieldProps("nip", "register-nip-hint")}
-                        type="text"
-                        inputMode="numeric"
-                        required
-                        maxLength={13}
-                        placeholder="np. 1234563218"
-                        value={registerData.nip}
-                        onChange={updateRegister("nip")}
-                      />
-                      <FieldDescription id="register-nip-hint">10 cyfr, możesz wpisać z myślnikami.</FieldDescription>
-                      <FieldError {...registerErrors.errorProps("nip")} />
-                    </Field>
-                  )}
-                  <Field>
-                    <FieldLabel htmlFor="register-email">Email</FieldLabel>
-                    <Input
-                      {...registerErrors.fieldProps("email")}
-                      type="email"
-                      required
-                      autoComplete="email"
-                      placeholder="np. jan@example.com"
-                      value={registerData.email}
-                      onChange={updateRegister("email")}
-                    />
-                    <FieldError {...registerErrors.errorProps("email")} />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="register-password">Hasło</FieldLabel>
-                    <PasswordInput
-                      {...registerErrors.fieldProps("password", "register-password-hint")}
-                      required
-                      autoComplete="new-password"
-                      value={registerData.password}
-                      onChange={updateRegister("password")}
-                    />
-                    <FieldDescription id="register-password-hint">Co najmniej 8 znaków.</FieldDescription>
-                    <FieldError {...registerErrors.errorProps("password")} />
-                  </Field>
-                  <Field>
-                    <FieldLabel htmlFor="register-confirmPassword">Powtórz hasło</FieldLabel>
-                    <PasswordInput
-                      {...registerErrors.fieldProps("confirmPassword")}
-                      required
-                      autoComplete="new-password"
-                      value={registerData.confirmPassword}
-                      onChange={updateRegister("confirmPassword")}
-                    />
-                    <FieldError {...registerErrors.errorProps("confirmPassword")} />
-                  </Field>
-                  <Field>
-                    <Button type="submit" disabled={loading}>
-                      {loading ? "Tworzenie konta..." : "Utwórz konto"}
-                    </Button>
-                    <FieldDescription className="text-center">
-                      Masz już konto? <LinkButton onClick={() => switchMode(true)}>Zaloguj się</LinkButton>
-                    </FieldDescription>
-                  </Field>
-                </FieldGroup>
-              </form>
-            </CardContent>
-          </>
+                    )
+                  })}
+                </div>
+              </fieldset>
+              <Field>
+                <FieldLabel htmlFor="register-name">{isNgo ? "Nazwa organizacji" : "Imię i nazwisko"}</FieldLabel>
+                <Input
+                  {...registerErrors.fieldProps("name")}
+                  type="text"
+                  required
+                  autoComplete={isNgo ? "organization" : "name"}
+                  placeholder={isNgo ? "np. Fundacja Dobre Sąsiedztwo" : "np. Jan Kowalski"}
+                  value={registerData.name}
+                  onChange={updateRegister("name")}
+                />
+                <FieldError {...registerErrors.errorProps("name")} />
+              </Field>
+              {isNgo && (
+                <Field>
+                  <FieldLabel htmlFor="register-nip">NIP organizacji</FieldLabel>
+                  <Input
+                    {...registerErrors.fieldProps("nip", "register-nip-hint")}
+                    type="text"
+                    inputMode="numeric"
+                    required
+                    maxLength={13}
+                    placeholder="np. 1234563218"
+                    value={registerData.nip}
+                    onChange={updateRegister("nip")}
+                  />
+                  <FieldDescription id="register-nip-hint">10 cyfr, możesz wpisać z myślnikami.</FieldDescription>
+                  <FieldError {...registerErrors.errorProps("nip")} />
+                </Field>
+              )}
+              <Field>
+                <FieldLabel htmlFor="register-email">Email</FieldLabel>
+                <Input
+                  {...registerErrors.fieldProps("email")}
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="np. jan@example.com"
+                  value={registerData.email}
+                  onChange={updateRegister("email")}
+                />
+                <FieldError {...registerErrors.errorProps("email")} />
+              </Field>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field>
+                  <FieldLabel htmlFor="register-password">Hasło</FieldLabel>
+                  <PasswordInput
+                    {...registerErrors.fieldProps("password", "register-password-hint")}
+                    required
+                    autoComplete="new-password"
+                    value={registerData.password}
+                    onChange={updateRegister("password")}
+                  />
+                  <FieldDescription id="register-password-hint">Co najmniej 8 znaków.</FieldDescription>
+                  <FieldError {...registerErrors.errorProps("password")} />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="register-confirmPassword">Powtórz hasło</FieldLabel>
+                  <PasswordInput
+                    {...registerErrors.fieldProps("confirmPassword")}
+                    required
+                    autoComplete="new-password"
+                    value={registerData.confirmPassword}
+                    onChange={updateRegister("confirmPassword")}
+                  />
+                  <FieldError {...registerErrors.errorProps("confirmPassword")} />
+                </Field>
+              </div>
+              <Button type="submit" size="lg" className="mt-1 w-full" disabled={loading}>
+                {loading ? "Tworzenie konta..." : "Utwórz konto"}
+              </Button>
+              <p className="text-center text-sm text-muted-foreground">
+                Masz już konto? <LinkButton onClick={() => switchMode(true)}>Zaloguj się</LinkButton>
+              </p>
+            </FieldGroup>
+          </form>
         )}
-      </Card>
-    </div>
+      </div>
+    </DialogPanel>
   )
 }
