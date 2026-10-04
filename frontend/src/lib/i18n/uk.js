@@ -598,7 +598,6 @@ const uk = {
   "Pokaż mi": "Покажіть",
   "Jak korzystać z mapy – przewodnik": "Як користуватися мапою – посібник",
   "Jak korzystać z mapy": "Як користуватися мапою",
-  "Witaj w Małopolskim HubMI": "Вітаємо в Малопольському HubMI",
   "To miejsce, w którym mieszkańcy zgłaszają problemy swojej okolicy, a ROPS i gminy dopasowują do nich sprawdzone rozwiązania. Pokażemy Ci w minutę, jak z niego korzystać.": "Тут мешканці повідомляють про проблеми своєї околиці, а ROPS і ґміни підбирають до них перевірені рішення. За хвилину покажемо, як цим користуватися.",
   "Szukaj ulicy lub zgłoszenia": "Шукайте вулицю або звернення",
   "Wpisz nazwę ulicy, miejsca albo problemu. Wybierz podpowiedź, a mapa sama przybliży to miejsce.": "Введіть назву вулиці, місця або проблеми. Виберіть підказку, і мапа сама наблизить це місце.",
@@ -673,7 +672,6 @@ const uk = {
   "Hasło musi mieć co najmniej 8 znaków": "Пароль має містити щонайменше 8 символів",
   "Hasła nie są takie same": "Паролі не збігаються",
   "Utwórz konto": "Створити обліковий запис",
-  "Witaj ponownie w Małopolskim Hubie Innowacji.": "З поверненням до Малопольського хабу соціальних інновацій.",
   "Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator.": "Обліковий запис для мешканця або громадської організації. Облікові записи самоврядувань і ROPS створює адміністратор.",
   "Rodzaj formularza": "Тип форми",
   "Email": "Ел. пошта",
@@ -863,8 +861,6 @@ const uk = {
   "Pokaż hasło": "Показати пароль",
   "Nawigacja serwisu": "Навігація сайтом",
   "Pokaż lub ukryj menu": "Показати або сховати меню",
-  "Małopolska HubMI": "Малопольський HubMI",
-  "Hub Innowacji Społecznych": "Хаб соціальних інновацій",
   "Menu główne": "Головне меню",
   "Nawigacja": "Навігація",
   "Moje sprawy": "Мої справи",
@@ -1250,7 +1246,10 @@ const uk = {
   "Osoby fizyczne": "Фізичні особи",
   "Grupy nieformalne": "Неформальні групи",
   "Podmioty publiczne": "Публічні суб'єкти",
-  "Firmy": "Компанії"
+  "Firmy": "Компанії",
+  "Witaj ponownie w aplikacji Bez Barier.": "З поверненням до Bez Barier.",
+  "Witaj w aplikacji Bez Barier": "Вітаємо в Bez Barier",
+  "Hub Innowacji Społecznych": "Хаб соціальних інновацій"
 };
 
 export default uk;

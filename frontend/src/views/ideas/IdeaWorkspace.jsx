@@ -320,7 +320,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
     setBuildingPdf(true);
     try {
       const applicant = user ? { ...user, statementsConfirmedAt: new Date() } : null;
-      downloadPdf(await buildFilledForm(draftCall, sections, applicant), "Formularz aplikacyjny - szkic HubMI.pdf");
+      downloadPdf(await buildFilledForm(draftCall, sections, applicant), "Formularz aplikacyjny - szkic Bez Barier.pdf");
     } catch {
       showToast("Nie udało się przygotować PDF. Skopiuj szkic jako tekst.", "error");
     } finally {

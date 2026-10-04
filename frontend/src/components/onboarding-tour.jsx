@@ -12,7 +12,7 @@ import { localize, t } from "@/lib/i18n";
 const STEPS = localize([
   {
     targets: [],
-    title: "Witaj w Małopolskim HubMI",
+    title: "Witaj w aplikacji Bez Barier",
     text: "To miejsce, w którym mieszkańcy zgłaszają problemy swojej okolicy, a ROPS i gminy dopasowują do nich sprawdzone rozwiązania. Pokażemy Ci w minutę, jak z niego korzystać.",
   },
   {

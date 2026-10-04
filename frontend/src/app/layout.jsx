@@ -20,8 +20,8 @@ export async function generateMetadata() {
   const { t } = await getServerT();
   return {
     title: {
-      default: `${t("Mapa problemów")} | Małopolska HUBMI`,
-      template: "%s | Małopolska HUBMI",
+      default: `${t("Mapa problemów")} | Bez Barier`,
+      template: "%s | Bez Barier",
     },
     description: t("Zgłaszaj problemy społeczne w Krakowie, odkrywaj innowacje społeczne i proponuj własne rozwiązania."),
   };
