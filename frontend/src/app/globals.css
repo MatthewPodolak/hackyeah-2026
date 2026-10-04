@@ -226,6 +226,13 @@
   text-decoration: underline;
 }
 
+.hc [data-slot="tabs-trigger"][data-active],
+.hc button[aria-pressed="true"],
+.hc [role="option"][aria-selected="true"] {
+  outline: 2px solid var(--foreground);
+  outline-offset: -2px;
+}
+
 .hc [class*="text-emerald-"],
 .hc [class*="text-red-"],
 .hc [class*="text-amber-"],
@@ -264,23 +271,138 @@
 }
 
 .problem-pin {
+  --pin: oklch(0.5 0.2 272);
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
+  cursor: pointer;
+  transition: transform 150ms ease;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 2px 3px oklch(0.2 0.03 272 / 0.35));
+}
+
+.leaflet-map-pane .problem-pin svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.problem-pin path {
+  fill: var(--pin);
+  stroke: #ffffff;
+  stroke-width: 2;
+}
+
+.problem-pin__area {
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  width: 110%;
+  height: 22%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklch, var(--pin) 35%, transparent), transparent);
+  pointer-events: none;
+}
+
+.problem-pin__dot {
+  position: absolute;
+  z-index: 2;
+  top: 26%;
+  left: 50%;
+  width: 34%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
   border-radius: 9999px;
-  background: #ef4444;
-  border: 2px solid #7f1d1d;
-  box-shadow: 0 0 0 2px #ffffff;
+  background: #ffffff;
+}
+
+.problem-pin__count {
+  position: absolute;
+  z-index: 2;
+  top: 9%;
+  left: 50%;
+  display: flex;
+  min-width: 58%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: oklch(0.3 0.12 272);
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.problem-pin--cluster .problem-pin__area {
+  width: 140%;
+  height: 26%;
+  bottom: -11px;
+}
+
+.problem-pin--open {
+  --pin: oklch(0.5 0.2 272);
+}
+
+.problem-pin--progress {
+  --pin: oklch(0.6 0.16 60);
+}
+
+.problem-pin--resolved {
+  --pin: oklch(0.55 0.14 160);
+}
+
+.problem-pin--closed {
+  --pin: oklch(0.55 0.02 272);
+}
+
+.problem-pin-wrapper:hover .problem-pin,
+.problem-pin-wrapper:focus-visible .problem-pin {
+  transform: translateY(-3px) scale(1.06);
 }
 
 .problem-pin--selected {
-  background: #b91c1c;
-  border: 3px solid #450a0a;
-  box-shadow: 0 0 0 3px #ffffff;
+  filter: drop-shadow(0 4px 8px oklch(0.2 0.03 272 / 0.45));
+}
+
+.problem-pin--selected path {
+  stroke-width: 2.5;
+}
+
+.hc .problem-pin path {
+  fill: #ffff00;
+  stroke: #000000;
+}
+
+.hc .problem-pin--resolved path {
+  fill: #ffffff;
+}
+
+.hc .problem-pin__count {
+  color: #000000;
+}
+
+.hc .problem-pin__area {
+  display: none;
+}
+
+.pin-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: var(--pin);
 }
 
 .problem-pin-wrapper:focus-visible {
-  border-radius: 9999px;
+  border-radius: 9999px 9999px 9999px 9999px / 40%;
 }
 
 @media (prefers-reduced-motion: reduce) {

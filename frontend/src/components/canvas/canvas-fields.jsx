@@ -49,8 +49,8 @@ function SingleField({ section, value, onChange, labelledBy }) {
               aria-checked={active}
               onClick={() => select(optionValue(option))}
               className={cn(
-                "relative flex flex-col items-start gap-1 rounded-xl border p-3 pr-8 text-left transition-colors",
-                active ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
+                "relative flex flex-col items-start gap-1 rounded-2xl border border-border p-3 pr-8 text-left transition-colors",
+                active ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-outline hover:bg-muted"
               )}
             >
               {active && <SelectedMark />}
@@ -194,7 +194,7 @@ function PartnerListField({ section, value, onChange }) {
         ))}
       </ul>
       {partners.map((partner, index) => (
-        <fieldset key={index} className="flex flex-col gap-2 rounded-xl border p-3">
+        <fieldset key={index} className="flex flex-col gap-2 rounded-2xl border border-border p-3">
           <legend className="sr-only">Partner {index + 1}{partner.name ? `: ${partner.name}` : ""}</legend>
           <div className="flex gap-2">
             <Input value={partner.name ?? ""} aria-label={`Nazwa partnera ${index + 1}`} placeholder="Nazwa partnera" onChange={(e) => update(index, { name: e.target.value })} />
@@ -241,7 +241,7 @@ function ImpactField({ section, value, onChange }) {
   return (
     <div className="flex flex-col gap-3">
       {section.dimensions.map((dimension) => (
-        <div key={dimension.value} className="flex flex-col gap-2 rounded-xl border p-3">
+        <div key={dimension.value} className="flex flex-col gap-2 rounded-2xl border border-border p-3">
           <div>
             <p id={`impact-${dimension.value}`} className="text-sm font-medium"><span aria-hidden="true">{dimension.icon} </span>{dimension.label}</p>
             <p id={`impact-${dimension.value}-desc`} className="text-xs text-muted-foreground">{dimension.description}</p>

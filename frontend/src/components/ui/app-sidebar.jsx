@@ -13,7 +13,7 @@ import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useToast } from "@/helpers/ToastProvider"
 import { LOGGED_OUT_MSG } from "@/helpers/Errors"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { AlertDiamondIcon, Analytics01Icon, BookOpen01Icon, BulbIcon, Chatting01Icon, Coins01Icon, Database01Icon, HandshakeIcon, Idea01Icon, InboxIcon, LibraryIcon, Logout01Icon, MapsIcon, Megaphone01Icon, Route01Icon, TestTube01Icon, UserCheck01Icon } from "@hugeicons/core-free-icons"
+import { AlertDiamondIcon, Analytics01Icon, BulbIcon, Chatting01Icon, Coins01Icon, Database01Icon, HandshakeIcon, Idea01Icon, InboxIcon, LibraryIcon, Logout01Icon, MapsIcon, Megaphone01Icon, Route01Icon, TestTube01Icon, UserCheck01Icon } from "@hugeicons/core-free-icons"
 import { useProposal } from "@/api/context/ProposalContext"
 
 const publicItems = [

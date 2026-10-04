@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, Cancel01Icon, HandshakeIcon } from "@hugeicons/core-free-icons";
+import { Add01Icon, HandshakeIcon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,6 +15,8 @@ import { useAuth } from "@/api/context/AuthContext";
 import { useCreatePartnership, usePartnerships } from "@/api/hooks/useCommunication";
 import { useToast } from "@/helpers/ToastProvider";
 import { useFormErrors } from "@/helpers/useFormErrors";
+import { PageHeader } from "@/components/page-header";
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 
@@ -46,19 +47,9 @@ function NewPartnership({ onClose }) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start gap-3">
-          <div className="min-w-0 flex-1">
-            <CardTitle><h2 id="pp-heading" className="text-base font-semibold">Nowe ogłoszenie o partnerstwo</h2></CardTitle>
-            <CardDescription className="mt-1">Ogłoszenie zobaczą wszyscy odwiedzający, wraz z Twoją nazwą.</CardDescription>
-          </div>
-          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <DialogPanel>
+      <DialogHeader icon={HandshakeIcon} title="Nowe ogłoszenie o partnerstwo" titleId="pp-heading" description="Ogłoszenie zobaczą wszyscy odwiedzający, wraz z Twoją nazwą." onClose={onClose} />
+      <DialogBody className="pt-1">
         <form onSubmit={submit} noValidate>
           <FieldGroup>
             <Field>
@@ -83,8 +74,8 @@ function NewPartnership({ onClose }) {
             </div>
           </FieldGroup>
         </form>
-      </CardContent>
-    </Card>
+      </DialogBody>
+    </DialogPanel>
   );
 }
 
@@ -96,16 +87,17 @@ export default function Partnerships() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Partnerstwa</h1>
-            <p className="text-muted-foreground">Ogłoszenia osób i instytucji, które szukają partnerów do wdrożenia innowacji</p>
-          </div>
-          <Button onClick={() => (isLogged ? setCreating(true) : openPanel("login"))}>
-            <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            {isLogged ? "Dodaj ogłoszenie" : "Zaloguj się, aby dodać ogłoszenie"}
-          </Button>
-        </header>
+        <PageHeader
+          icon={HandshakeIcon}
+          title="Partnerstwa"
+          description="Ogłoszenia osób i instytucji, które szukają partnerów do wdrożenia innowacji"
+          actions={
+            <Button onClick={() => (isLogged ? setCreating(true) : openPanel("login"))}>
+              <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              {isLogged ? "Dodaj ogłoszenie" : "Zaloguj się, aby dodać ogłoszenie"}
+            </Button>
+          }
+        />
 
         {posts.isPending ? (
           <LoadingStatus label="Wczytywanie ogłoszeń" className="grid gap-4 sm:grid-cols-2">
@@ -116,7 +108,7 @@ export default function Partnerships() {
           <ul className="grid gap-4 sm:grid-cols-2">
             {posts.data.map((post) => (
               <li key={post.id}>
-                <article aria-labelledby={`pp-${post.id}`} className="flex h-full flex-col gap-2 rounded-xl border bg-card p-5">
+                <article aria-labelledby={`pp-${post.id}`} className="flex h-full flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-5">
                   <h2 id={`pp-${post.id}`} className="font-semibold break-words">{post.title}</h2>
                   <p className="text-sm">
                     <span className="font-medium">Szukamy: </span>{post.lookingFor}

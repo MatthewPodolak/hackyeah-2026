@@ -61,8 +61,8 @@ function StepNav({ steps, current, answers, onSelect }) {
               onClick={() => onSelect(index)}
               aria-current={current === index ? "step" : undefined}
               className={cn(
-                "flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors",
-                current === index ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
+                "flex w-full flex-col items-start gap-1 rounded-2xl border border-border p-3 text-left transition-colors",
+                current === index ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-outline hover:bg-muted"
               )}
             >
               <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
@@ -167,7 +167,7 @@ function CanvasEditor({ spec, answers, setAnswer, onSave, saving, token }) {
       </p>
 
       {step.sections.map((section) => (
-        <section key={section.id} aria-labelledby={`canvas-${section.id}`} className="flex flex-col gap-3 rounded-xl border bg-card p-4">
+        <section key={section.id} aria-labelledby={`canvas-${section.id}`} className="flex flex-col gap-3 rounded-2xl border border-border bg-card shadow-elevation-1 p-4">
           <div>
             <h3 id={`canvas-${section.id}`} className="font-medium">
               {section.icon && <span aria-hidden="true">{section.icon} </span>}
@@ -339,8 +339,8 @@ function GrantTab({ token, beforeAi, initialCallId }) {
             aria-checked={callId === call.id}
             onClick={() => setCallId(call.id)}
             className={cn(
-              "relative flex flex-col items-start gap-1.5 rounded-xl border p-4 pr-9 text-left transition-colors",
-              callId === call.id ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-foreground/45 hover:bg-muted"
+              "relative flex flex-col items-start gap-1.5 rounded-2xl border border-border p-4 pr-9 text-left transition-colors",
+              callId === call.id ? "border-emerald-700 bg-emerald-500/10 ring-1 ring-emerald-700 dark:border-emerald-400 dark:ring-emerald-400" : "border-outline hover:bg-muted"
             )}
           >
             {callId === call.id && (
@@ -392,7 +392,7 @@ function GrantTab({ token, beforeAi, initialCallId }) {
         {application.isPending ? "Trwa generowanie szkicu wniosku" : sections.length ? "Szkic wniosku jest gotowy" : ""}
       </p>
       {sections.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-xl border p-4">
+        <div className="flex flex-col gap-3 rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between gap-2">
             <h3 className="font-semibold">Szkic wniosku</h3>
             <div className="flex flex-wrap gap-2">

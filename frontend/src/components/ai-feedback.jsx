@@ -5,7 +5,7 @@ export default function AiFeedback({ feedback }) {
   if (!feedback) return null
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl border p-4 text-sm">
+    <div className="flex flex-col gap-3 rounded-2xl border border-border p-4 text-sm">
       <p className="flex items-center gap-1.5 font-semibold">
         <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} className="size-4 text-emerald-700 dark:text-emerald-400" />
         Ocena AI

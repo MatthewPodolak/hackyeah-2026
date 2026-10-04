@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, ArrowRight01Icon, Calendar03Icon, Delete02Icon, Edit02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon, ArrowRight01Icon, Calendar03Icon, Coins01Icon, Delete02Icon, Edit02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { cn } from "cn";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { useDeleteGrantCall, useGrantCalls, useSaveGrantCall } from "@/api/hooks/useGrantCalls";
 import { APPLICANT_TYPES, CALL_PHASES, FILL_BY, callCriteria, callPhase, callSections, daysLeft, plnFormat } from "@/lib/grants";
 import { useToast } from "@/helpers/ToastProvider";
+import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 const EMPTY = { name: "", description: "", openFrom: "", openTo: "", requiredSections: "" };
@@ -55,7 +56,7 @@ function GrantForm({ initial, onDone }) {
   };
 
   return (
-    <form onSubmit={submit} noValidate aria-labelledby="g-form-heading" className="rounded-xl border bg-card p-5">
+    <form onSubmit={submit} noValidate aria-labelledby="g-form-heading" className="rounded-2xl border border-border bg-card shadow-elevation-1 p-5">
       <h2 id="g-form-heading" ref={headingRef} tabIndex={-1} className="mb-4 font-semibold outline-none">{initial.id ? `Edycja naboru: ${initial.name}` : "Nowy nabór"}</h2>
       <FieldGroup>
         <Field>
@@ -143,7 +144,7 @@ function CallCard({ call, canManage, onEdit, onDelete, deleting }) {
   const phase = callPhase(call);
   const open = phase === "open";
   return (
-    <li className={cn("flex flex-col gap-3 rounded-xl border bg-card p-5", open && "border-2 border-emerald-700 dark:border-emerald-400")}>
+    <li className={cn("flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-elevation-1", open && "border-2 border-emerald-700 dark:border-emerald-400")}>
       <div className="flex flex-wrap items-center gap-2">
         <Pill meta={CALL_PHASES[phase]}>
           <span className="sr-only">Status: </span>{CALL_PHASES[phase].label}{open ? ` · do ${dateFormat.format(new Date(call.openTo))}` : ""}
@@ -243,18 +244,17 @@ export default function GrantCalls() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-4xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Nabory grantowe</h1>
-            <p className="text-muted-foreground">Granty na innowacje społeczne w Małopolsce. Do otwartego naboru przygotujesz szkic wniosku z AI na podstawie swojego pomysłu.</p>
-          </div>
-          {canManage && !editing && (
+        <PageHeader
+          icon={Coins01Icon}
+          title="Nabory grantowe"
+          description="Granty na innowacje społeczne w Małopolsce. Do otwartego naboru przygotujesz szkic wniosku z AI na podstawie swojego pomysłu."
+          actions={canManage && !editing && (
             <Button onClick={() => setEditing(EMPTY)}>
               <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
               Nowy nabór
             </Button>
           )}
-        </header>
+        />
 
         {editing && (
           <div className="mb-6">

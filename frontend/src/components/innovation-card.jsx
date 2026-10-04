@@ -64,7 +64,7 @@ export function InnovationBadges({ innovation, maxWho = Infinity, showProblems =
 
 export function InnovationCard({ innovation }) {
   return (
-    <Card className="relative h-full pt-0 transition-shadow hover:shadow-md has-[a:focus-visible]:ring-3 has-[a:focus-visible]:ring-ring/50">
+    <Card className="relative h-full pt-0 transition-shadow hover:shadow-elevation-2 has-[a:focus-visible]:ring-3 has-[a:focus-visible]:ring-ring/50">
       <InnovationCover innovation={innovation} />
       <CardHeader>
         <CardTitle>

@@ -1,7 +1,7 @@
 "use client";
 
 import { HugeiconsIcon } from "@hugeicons/react";
-import { SparklesIcon } from "@hugeicons/core-free-icons";
+import { Analytics01Icon, SparklesIcon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +19,7 @@ import { useToast } from "@/helpers/ToastProvider";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
 import { PROBLEM_STATUS } from "@/lib/problems";
 import { IDEA_STATUS, READINESS } from "@/lib/ideas";
+import { PageHeader } from "@/components/page-header";
 
 const monthLong = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" });
 const monthShort = new Intl.DateTimeFormat("pl-PL", { month: "short" });
@@ -216,14 +217,13 @@ function TrendsPanel() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-6xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6">
-          <h1 className="font-heading text-3xl font-bold tracking-tight">Trendy i potrzeby</h1>
-          <p className="text-muted-foreground">
-            {isRops
-              ? "Zagregowane dane o potrzebach mieszkańców Małopolski. Wybierz gminę, aby zobaczyć jej dane."
-              : `Zagregowane dane o potrzebach mieszkańców gminy: ${gminaName(gminy.get(user?.gminaId)) ?? "…"}`}
-          </p>
-        </header>
+        <PageHeader
+          icon={Analytics01Icon}
+          title="Trendy i potrzeby"
+          description={isRops
+            ? "Zagregowane dane o potrzebach mieszkańców Małopolski. Wybierz gminę, aby zobaczyć jej dane."
+            : `Zagregowane dane o potrzebach mieszkańców gminy: ${gminaName(gminy.get(user?.gminaId)) ?? "…"}`}
+        />
         {isRops && <ScopeFilter value={gminaId} onChange={setGminaId} />}
         <Dashboard gminaId={isRops ? gminaId : null} showUnseen={isRops} />
       </div>

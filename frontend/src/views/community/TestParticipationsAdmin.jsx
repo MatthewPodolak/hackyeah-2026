@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { TestTube01Icon } from "@hugeicons/core-free-icons";
+import { TestTube01Icon, UserCheck01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
@@ -16,6 +16,7 @@ import { useAdminParticipations, useSetParticipationStatus } from "@/api/hooks/u
 import { useToast } from "@/helpers/ToastProvider";
 import { PARTICIPATION_STATUS } from "@/lib/community";
 import { useInnovationName } from "@/api/hooks/useAdmin";
+import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const STATUSES = ["PENDING", "ACCEPTED", "REJECTED"];
@@ -28,7 +29,7 @@ function FilterChip({ active, label, count, onClick }) {
       onClick={onClick}
       className={cn(
         "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
+        active ? "border-primary bg-primary text-primary-foreground" : "border-outline bg-background hover:bg-muted"
       )}
     >
       {label}
@@ -65,10 +66,11 @@ function ParticipationsList() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6">
-          <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszenia do testów</h1>
-          <p className="text-muted-foreground">Osoby i organizacje, które chcą przetestować innowacje z biblioteki</p>
-        </header>
+        <PageHeader
+          icon={UserCheck01Icon}
+          title="Zgłoszenia do testów"
+          description="Osoby i organizacje, które chcą przetestować innowacje z biblioteki"
+        />
 
         <div role="group" aria-label="Status zgłoszenia" className="mb-4 flex flex-wrap gap-2">
           <FilterChip active={!filter} label="Wszystkie" count={all.length} onClick={() => setFilter(null)} />
@@ -87,7 +89,7 @@ function ParticipationsList() {
           <ul className="flex flex-col gap-3">
             {visible.map((p) => (
               <li key={p.id}>
-                <article aria-labelledby={`tp-${p.id}`} className="flex flex-col gap-2 rounded-xl border bg-card p-4">
+                <article aria-labelledby={`tp-${p.id}`} className="flex flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-4">
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <div>
                       <h2 id={`tp-${p.id}`} className="font-semibold">{p.contactName ?? "Mieszkaniec"}</h2>

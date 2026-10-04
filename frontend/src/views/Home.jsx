@@ -14,6 +14,7 @@ import { useGminyIndex, useGminyShapes } from "@/api/hooks/useRegionsQuery";
 import { useAuth } from "@/api/context/AuthContext";
 import { gminaName } from "@/lib/gminy";
 import MapSearch, { normalize } from "@/components/map-search";
+import { PIN_TONES } from "@/lib/problems";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { LibraryIcon, Megaphone01Icon } from "@hugeicons/core-free-icons";
 
@@ -141,6 +142,18 @@ export default function Home() {
       {myArea && <p className="sr-only">Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? ""}</p>}
 
       <ThemeToggler className="absolute top-3 right-3 z-[1000]" />
+
+      <ul
+        aria-label="Legenda kolorów pinezek"
+        className="absolute bottom-6 left-[76px] z-[1000] hidden items-center gap-4 rounded-2xl border border-border bg-card/95 px-4 py-2.5 text-xs font-medium shadow-elevation-2 backdrop-blur sm:flex"
+      >
+        {PIN_TONES.map((tone) => (
+          <li key={tone.key} className="flex items-center gap-1.5">
+            <span aria-hidden="true" className={`pin-legend-dot problem-pin--${tone.key}`} />
+            {tone.label}
+          </li>
+        ))}
+      </ul>
 
       <div className="absolute right-4 bottom-6 z-[1000] flex flex-col items-end gap-3">
         <Link

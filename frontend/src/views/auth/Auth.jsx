@@ -8,8 +8,8 @@ export default function Auth() {
   const { isPanelOpen, panelMode, closePanel } = useAuth()
 
   return (
-    <Modal open={isPanelOpen} onClose={closePanel} labelledBy="auth-heading" describedBy="auth-description" className="max-w-md" zIndex="z-[2500]">
-      <LoginForm key={panelMode} initialMode={panelMode} onSuccess={closePanel} />
+    <Modal open={isPanelOpen} onClose={closePanel} labelledBy="auth-heading" describedBy="auth-description" className="max-w-lg" zIndex="z-[2500]">
+      <LoginForm key={panelMode} initialMode={panelMode} onSuccess={closePanel} onClose={closePanel} />
     </Modal>
   )
 }
