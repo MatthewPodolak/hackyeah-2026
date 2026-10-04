@@ -25,7 +25,7 @@ public class OpenAiClient {
 
     public OpenAiClient(@Value("${openai.api-key:}") String apiKey,
                         @Value("${openai.model:gpt-4o-mini}") String model,
-                        @Value("${openai.image-model:dall-e-3}") String imageModel) {
+                        @Value("${openai.image-model:gpt-image-2}") String imageModel) {
         this.model = model;
         this.imageModel = imageModel;
         this.configured = apiKey != null && !apiKey.isBlank();
