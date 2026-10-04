@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DialogBody, DialogFooter, DialogHeader, DialogPanel, FormStep } from "@/components/dialog-parts"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { ImageAdd01Icon, Megaphone01Icon, Search01Icon } from "@hugeicons/core-free-icons"
+import { ImageAdd01Icon, Location01Icon, Megaphone01Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import {
   Field,
   FieldDescription,
@@ -75,6 +76,9 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   const street = useStreet(form.location)
   const [address, setAddress] = useState("")
   const [searching, setSearching] = useState(false)
+  const [locating, setLocating] = useState(false)
+  const [locationFocus, setLocationFocus] = useState(null)
+  const locationRequestRef = useRef(0)
   const titleRef = useRef(null)
   const speechSupported = useSpeechSupported()
   const { fail, clear, reset, fieldProps, errorProps } = useFormErrors("q")
@@ -93,6 +97,10 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     if (photoPreview) URL.revokeObjectURL(photoPreview)
   }, [photoPreview])
 
+  useEffect(() => () => {
+    locationRequestRef.current += 1
+  }, [open])
+
   const set = (key) => (value) => {
     setForm((f) => ({ ...f, [key]: value }))
     clear(key === "location" ? "address" : key)
@@ -103,24 +111,35 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     clear("gmina")
   }
 
+  // Browser location requests cannot be cancelled; ignore callbacks after a new selection or closing.
+  const cancelLocationRequest = () => {
+    locationRequestRef.current += 1
+    setLocating(false)
+    setLocationFocus(null)
+  }
+
   const pickLocation = (location) => {
+    cancelLocationRequest()
     setForm((f) => ({ ...f, location, wholeGmina: false }))
     clearPlaceErrors()
   }
 
   // a gmina from the list replaces a pin that lies in another gmina
   const pickGmina = (id) => {
+    cancelLocationRequest()
     if (id === pinGmina?.properties.id) return
     setForm((f) => ({ ...f, gminaId: id, wholeGmina: true, location: null }))
     clearPlaceErrors()
   }
 
   const setWholeGmina = (checked) => {
+    cancelLocationRequest()
     setForm((f) => (checked ? { ...f, gminaId, wholeGmina: true, location: null } : { ...f, wholeGmina: false }))
     clearPlaceErrors()
   }
 
   const close = () => {
+    cancelLocationRequest()
     setForm(EMPTY)
     setAddress("")
     reset()
@@ -128,6 +147,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   }
 
   const searchAddress = async () => {
+    if (searching || locating) return
     const query = address.trim()
     if (!query) {
       fail("address", emptyField("adres"))
@@ -146,8 +166,49 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     }
   }
 
+  const locateCurrentLocation = () => {
+    if (locating || searching) return
+    clearPlaceErrors()
+    if (!navigator.geolocation) {
+      fail("address", "Ta przeglądarka nie udostępnia lokalizacji. Wpisz adres albo wybierz miejsce na mapie.")
+      return
+    }
+    if (!window.isSecureContext) {
+      fail("address", "Lokalizacja wymaga bezpiecznego połączenia HTTPS. Wpisz adres albo wybierz miejsce na mapie.")
+      return
+    }
+
+    const requestId = ++locationRequestRef.current
+    setLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        if (locationRequestRef.current !== requestId) return
+        const location = { lat: coords.latitude, lon: coords.longitude }
+        setLocating(false)
+        if (shapes.data && !findGmina(shapes.data, location)) {
+          fail("address", OUTSIDE_MALOPOLSKA_MSG)
+          return
+        }
+        pickLocation(location)
+        setLocationFocus(location)
+      },
+      (error) => {
+        if (locationRequestRef.current !== requestId) return
+        setLocating(false)
+        const messages = {
+          1: "Nie udzielono zgody na lokalizację. Zezwól na nią w przeglądarce albo wybierz miejsce na mapie.",
+          2: "Nie udało się ustalić lokalizacji. Wpisz adres albo wybierz miejsce na mapie.",
+          3: "Ustalanie lokalizacji trwało zbyt długo. Spróbuj ponownie albo wybierz miejsce na mapie.",
+        }
+        fail("address", messages[error.code] ?? messages[2])
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+    )
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (locating || searching || addProblem.isPending) return
 
     const point = form.wholeGmina ? gminaFocus : form.location
     const error = validate(form, { gminaId, outside, point })
@@ -178,10 +239,12 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     }
   }
 
-  const locationStatus = form.wholeGmina
+  const locationStatus = locating
+    ? "Ustalam Twoją lokalizację. Jeśli przeglądarka zapyta o zgodę, zezwól na dostęp do lokalizacji."
+    : form.wholeGmina
     ? "Zgłoszenie dotyczy całej gminy. Kliknij na mapie, jeśli chcesz wskazać dokładne miejsce."
     : !form.location
-    ? "Wpisz adres i wybierz Szukaj albo kliknij miejsce na mapie."
+    ? "Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie."
     : street.isFetching
       ? "Szukam adresu..."
       : `Wybrane miejsce: ${street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`}`
@@ -270,7 +333,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                 </div>
               </FormStep>
 
-              <FormStep number={2} title="Gdzie?" description="Wpisz adres albo kliknij miejsce na mapie.">
+              <FormStep number={2} title="Gdzie?" description="Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie.">
                 <Field>
                   <FieldLabel htmlFor="q-address">Adres</FieldLabel>
                   <div className="flex gap-2">
@@ -286,14 +349,27 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                         searchAddress()
                       }}
                     />
-                    <Button type="button" variant="outline" className="h-11" onClick={searchAddress} disabled={searching}>
+                    <Button type="button" variant="outline" className="h-11" onClick={searchAddress} disabled={searching || locating}>
                       <HugeiconsIcon icon={Search01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
                       {searching ? "Szukam..." : "Szukaj"}
                     </Button>
                   </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 w-full sm:w-fit"
+                    onClick={locateCurrentLocation}
+                    disabled={locating || searching || shapes.isPending || addProblem.isPending}
+                    aria-describedby="q-location-status"
+                  >
+                    {locating
+                      ? <Spinner data-icon="inline-start" aria-hidden="true" />
+                      : <HugeiconsIcon icon={Location01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
+                    {locating ? "Ustalam lokalizację..." : "Użyj mojej lokalizacji"}
+                  </Button>
                   <FieldError {...errorProps("address")} />
                   <div className="h-60 w-full overflow-hidden rounded-2xl border border-border">
-                    <LocationPicker value={form.location} focus={gminaFocus} onChange={pickLocation} />
+                    <LocationPicker value={form.location} focus={gminaFocus ?? locationFocus} focusZoom={form.wholeGmina ? 11 : 16} onChange={pickLocation} />
                   </div>
                   <FieldDescription id="q-location-status" aria-live="polite">
                     {locationStatus}
@@ -369,7 +445,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
           </DialogBody>
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
-            <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || shapes.isPending}>
+            <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || locating || shapes.isPending}>
               {addProblem.isPending ? "Szukam rozwiązań..." : "Wyślij zgłoszenie"}
             </Button>
           </DialogFooter>
