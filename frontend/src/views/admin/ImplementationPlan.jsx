@@ -230,9 +230,9 @@ export default function ImplementationPlan() {
   return (
     <RoleGuard description="Zaloguj się, aby przygotować plan wdrożenia innowacji w swojej gminie.">
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto w-full max-w-4xl px-4 pt-14 pb-10 md:px-8">
+        <div className="mx-auto w-full max-w-4xl px-4 pt-18 pb-10 md:px-8">
           <header className="mb-6 print:hidden">
-            <h1 className="font-heading text-2xl font-semibold">Plan wdrożenia innowacji</h1>
+            <h1 className="font-heading text-3xl font-bold tracking-tight">Plan wdrożenia innowacji</h1>
             <p className="text-muted-foreground">
               Middleman innowacji: wybierz innowację i gminę, a AI zaproponuje, jak wdrożyć ją jako usługę społeczną dopasowaną do danych GUS o gminie.
             </p>

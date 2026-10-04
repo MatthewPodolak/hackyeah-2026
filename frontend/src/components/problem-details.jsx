@@ -65,7 +65,7 @@ export default function ProblemDetails({ problem, onClose, onProposeSolution }) 
               <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">
                 Zgłoszony problem
               </p>
-              <h2 id="problem-details-heading" ref={headingRef} tabIndex={-1} className="text-lg font-semibold leading-snug break-words outline-none">
+              <h2 id="problem-details-heading" ref={headingRef} tabIndex={-1} className="font-heading text-xl font-bold tracking-tight leading-snug break-words outline-none">
                 {problem.title}
               </h2>
             </div>

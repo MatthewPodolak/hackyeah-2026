@@ -13,6 +13,8 @@ import { useProblems } from "@/api/hooks/useProblemsQuery";
 import { useGminyIndex, useGminyShapes } from "@/api/hooks/useRegionsQuery";
 import { useAuth } from "@/api/context/AuthContext";
 import { gminaName } from "@/lib/gminy";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LibraryIcon, Megaphone01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 
 const MapView = dynamic(() => import("@/components/mapView"), { ssr: false });
 
@@ -39,7 +41,6 @@ export default function Home() {
   const [submitResult, setSubmitResult] = useState(null);
   const { openProposal } = useProposal();
 
-  // a JST account sees only its own gmina: its border and its reports
   const { user, isJst } = useAuth();
   const myGminaId = isJst ? user.gminaId : null;
   const shapes = useGminyShapes({ enabled: !!myGminaId });
@@ -64,29 +65,10 @@ export default function Home() {
   }, [problems, query, myGminaId]);
 
   return (
-    <div className="flex flex-col flex-1 font-sans bg-background h-screen w-full relative">
+    <div className="relative flex h-screen w-full flex-1 flex-col bg-background">
       <h1 className="sr-only">Mapa zgłoszonych problemów</h1>
 
-      <div role="search" className="w-full min-h-12 bg-background flex flex-row items-center justify-center gap-3 pl-12 pr-16 absolute top-0 z-[1000] border-b">
-        <label htmlFor="map-search" className="sr-only">Szukaj problemów na mapie</label>
-        <input
-          id="map-search"
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Szukaj problemów, np. chodnik, Floriańska…"
-          aria-describedby="map-search-status"
-          className="w-full max-w-xl h-9 rounded-md border border-foreground/45 bg-background px-3 text-sm"
-        />
-        <p id="map-search-status" aria-live="polite" className="sr-only">
-          {isPending ? "" : query ? `Znaleziono ${problemsLabel(visibleProblems.length)}` : `Na mapie: ${problemsLabel(visibleProblems.length)}`}
-        </p>
-        <div className="absolute right-3">
-          <ThemeToggler />
-        </div>
-      </div>
-
-      <div className="absolute inset-0 top-12">
+      <div className="absolute inset-0">
         <MapView
           area={myArea}
           problems={visibleProblems}
@@ -96,34 +78,52 @@ export default function Home() {
         />
       </div>
 
-      {myArea && (
-        <p className="absolute z-[1000] top-14 left-1/2 -translate-x-1/2 rounded-full border bg-background/95 px-3 py-1 text-xs font-medium shadow">
-          Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? "…"}
-        </p>
-      )}
+      <div className="pointer-events-none absolute inset-x-0 top-3 z-[1000] flex flex-col items-center gap-2 pr-17 pl-17">
+        <div role="search" className="pointer-events-auto relative w-full max-w-xl">
+          <label htmlFor="map-search" className="sr-only">Szukaj problemów na mapie</label>
+          <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-muted-foreground" />
+          <input
+            id="map-search"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Szukaj problemów, np. chodnik, Floriańska…"
+            aria-describedby="map-search-status"
+            className="h-11 w-full rounded-full border border-border bg-card pr-4 pl-12 text-sm text-foreground shadow-elevation-2 outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/40"
+          />
+          <p id="map-search-status" aria-live="polite" className="sr-only">
+            {isPending ? "" : query ? `Znaleziono ${problemsLabel(visibleProblems.length)}` : `Na mapie: ${problemsLabel(visibleProblems.length)}`}
+          </p>
+        </div>
+        {!isPending && (
+          <p aria-hidden="true" className="pointer-events-auto rounded-full border border-border bg-card/95 px-3 py-1 text-xs font-medium text-muted-foreground shadow-elevation-1 backdrop-blur">
+            {myArea ? <>Twoja gmina: <span className="text-foreground">{gminaName(gminy.get(myGminaId)) ?? "…"}</span> · </> : null}
+            {query ? `Znaleziono ${problemsLabel(visibleProblems.length)}` : `Na mapie: ${problemsLabel(visibleProblems.length)}`}
+          </p>
+        )}
+      </div>
 
-      <button
-        type="button"
-        onClick={() => setQuestOpen(true)}
-        aria-label="Zgłoś problem"
-        title="Zgłoś problem"
-        className="absolute z-[1000] right-4 bottom-20 w-12 h-12 rounded-full bg-background border border-foreground/45 shadow-lg flex items-center justify-center cursor-pointer hover:bg-muted"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true" className="size-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
-        </svg>
-      </button>
+      {myArea && <p className="sr-only">Twoja gmina: {gminaName(gminy.get(myGminaId)) ?? ""}</p>}
 
-      <Link
-        href="/innovations"
-        aria-label="Biblioteka innowacji"
-        title="Biblioteka innowacji"
-        className="absolute z-[1000] right-4 bottom-4 w-12 h-12 rounded-full bg-background border border-foreground/45 shadow-lg flex items-center justify-center hover:bg-muted"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true" className="size-6">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
-        </svg>
-      </Link>
+      <ThemeToggler className="absolute top-3 right-3 z-[1000]" />
+
+      <div className="absolute right-4 bottom-6 z-[1000] flex flex-col items-end gap-3">
+        <Link
+          href="/innovations"
+          className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-card px-4 text-sm font-semibold text-foreground shadow-elevation-2 transition-shadow hover:bg-muted hover:shadow-elevation-3"
+        >
+          <HugeiconsIcon icon={LibraryIcon} strokeWidth={1.8} aria-hidden="true" className="size-5" />
+          Biblioteka innowacji
+        </Link>
+        <button
+          type="button"
+          onClick={() => setQuestOpen(true)}
+          className="flex h-14 cursor-pointer items-center gap-3 rounded-2xl bg-primary px-5 text-base font-semibold text-primary-foreground shadow-elevation-3 transition-[box-shadow,background-color] hover:bg-primary/90 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+        >
+          <HugeiconsIcon icon={Megaphone01Icon} strokeWidth={2} aria-hidden="true" className="size-6" />
+          Zgłoś problem
+        </button>
+      </div>
 
       <ProblemDetails problem={selectedProblem} onClose={() => setSelectedProblem(null)} onProposeSolution={openProposal} />
 

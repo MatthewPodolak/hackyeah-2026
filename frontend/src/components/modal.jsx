@@ -77,7 +77,7 @@ export default function Modal({ open, onClose, labelledBy, describedBy, initialF
   return (
     <div
       onClick={(e) => { if (e.target === e.currentTarget) onClose?.() }}
-      className={cn("fixed inset-0 flex overflow-y-auto bg-black/50 p-4 sm:p-6", zIndex)}
+      className={cn("fixed inset-0 flex overflow-y-auto bg-black/45 p-4 backdrop-blur-[2px] sm:p-6", zIndex)}
     >
       <div
         ref={dialogRef}

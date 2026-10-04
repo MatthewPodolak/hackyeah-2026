@@ -45,7 +45,7 @@ function CategoryChip({ active, icon, label, count, onClick }) {
       {icon && <span aria-hidden="true">{icon}</span>}
       {label}
       <span className="sr-only">, liczba innowacji:</span>
-      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>
+      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>
         {count}
       </span>
     </button>
