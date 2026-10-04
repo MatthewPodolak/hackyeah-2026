@@ -30,7 +30,7 @@ export default function InnovationDetails({ innovation }) {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <article className="mx-auto w-full max-w-3xl px-4 pt-14 pb-12 md:px-8">
+      <article className="mx-auto w-full max-w-3xl px-4 pt-18 pb-12 md:px-8">
         <Link
           href="/innovations"
           className={buttonVariants({ variant: "ghost", size: "sm", className: "mb-4 -ml-3" })}

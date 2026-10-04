@@ -13,34 +13,34 @@ import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useToast } from "@/helpers/ToastProvider"
 import { LOGGED_OUT_MSG } from "@/helpers/Errors"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Logout01Icon } from "@hugeicons/core-free-icons"
+import { AlertDiamondIcon, Analytics01Icon, BookOpen01Icon, BulbIcon, Chatting01Icon, Coins01Icon, Database01Icon, HandshakeIcon, Idea01Icon, InboxIcon, LibraryIcon, Logout01Icon, MapsIcon, Megaphone01Icon, Route01Icon, TestTube01Icon, UserCheck01Icon } from "@hugeicons/core-free-icons"
 import { useProposal } from "@/api/context/ProposalContext"
 
 const publicItems = [
-  { title: "Mapa problemów", url: "/" },
-  { title: "Biblioteka innowacji", url: "/innovations" },
-  { title: "Zaproponuj innowację", action: "proposal" },
-  { title: "Partnerstwa", url: "/partnerships" },
+  { title: "Mapa problemów", icon: MapsIcon, url: "/" },
+  { title: "Biblioteka innowacji", icon: LibraryIcon, url: "/innovations" },
+  { title: "Zaproponuj innowację", icon: BulbIcon, action: "proposal" },
+  { title: "Partnerstwa", icon: HandshakeIcon, url: "/partnerships" },
 ]
 
 const myItems = [
-  { title: "Moje zgłoszenia", url: "/my-reports" },
-  { title: "Moje propozycje", url: "/my-ideas" },
-  { title: "Wiadomości", url: "/messages", requiresLogin: true },
-  { title: "Moje testy", url: "/my-tests", requiresLogin: true, hiddenFor: ROLES.JST },
-  { title: "Plan wdrożenia innowacji", url: "/implementation-plan", requiresLogin: true },
+  { title: "Moje zgłoszenia", icon: Megaphone01Icon, url: "/my-reports" },
+  { title: "Moje propozycje", icon: Idea01Icon, url: "/my-ideas" },
+  { title: "Wiadomości", icon: Chatting01Icon, url: "/messages", requiresLogin: true },
+  { title: "Moje testy", icon: TestTube01Icon, url: "/my-tests", requiresLogin: true, hiddenFor: ROLES.JST },
+  { title: "Plan wdrożenia innowacji", icon: Route01Icon, url: "/implementation-plan", requiresLogin: true },
 ]
 
 const institutionItems = [
-  { title: "Zgłoszone problemy", url: "/reported-problems", badge: "unseenProblems", badgeLabel: "nowe" },
-  { title: "Zgłoszone innowacje", url: "/reported-innovations", badge: "unseenIdeas", badgeLabel: "nowe" },
-  { title: "Trendy i potrzeby", url: "/trends" },
-  { title: "Nabory grantowe", url: "/grant-calls" },
+  { title: "Zgłoszone problemy", icon: AlertDiamondIcon, url: "/reported-problems", badge: "unseenProblems", badgeLabel: "nowe" },
+  { title: "Zgłoszone innowacje", icon: InboxIcon, url: "/reported-innovations", badge: "unseenIdeas", badgeLabel: "nowe" },
+  { title: "Trendy i potrzeby", icon: Analytics01Icon, url: "/trends" },
+  { title: "Nabory grantowe", icon: Coins01Icon, url: "/grant-calls" },
 ]
 
 const ropsItems = [
-  { title: "Zgłoszenia do testów", url: "/test-participations" },
-  { title: "Katalog wiedzy", url: "/admin/catalog" },
+  { title: "Zgłoszenia do testów", icon: UserCheck01Icon, url: "/test-participations" },
+  { title: "Katalog wiedzy", icon: Database01Icon, url: "/admin/catalog" },
 ]
 
 function NavGroup({ label, items, isActive, badges = {}, onAction }) {
@@ -55,6 +55,7 @@ function NavGroup({ label, items, isActive, badges = {}, onAction }) {
               <SidebarMenuItem key={item.title}>
                 {item.action ? (
                   <SidebarMenuButton className="cursor-pointer" onClick={() => onAction?.(item.action)}>
+                    {item.icon && <HugeiconsIcon icon={item.icon} strokeWidth={1.8} aria-hidden="true" />}
                     <span>{item.title}</span>
                   </SidebarMenuButton>
                 ) : (
@@ -63,6 +64,7 @@ function NavGroup({ label, items, isActive, badges = {}, onAction }) {
                     isActive={isActive(item.url)}
                     aria-current={isActive(item.url) ? "page" : undefined}
                   >
+                    {item.icon && <HugeiconsIcon icon={item.icon} strokeWidth={1.8} aria-hidden="true" />}
                     <span>{item.title}</span>
                     {count > 0 && <span className="sr-only">, {item.badgeLabel}: {count}</span>}
                   </SidebarMenuButton>
@@ -103,8 +105,14 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="font-semibold px-4">
-        <Link href="/" className="rounded-sm">Małopolska HUBMI</Link>
+      <SidebarHeader className="px-3 pt-4 pb-2">
+        <Link href="/" className="flex items-center gap-3 rounded-xl p-1.5">
+          <span aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-base font-extrabold text-primary-foreground shadow-elevation-1">H</span>
+          <span className="grid min-w-0 leading-tight">
+            <span className="font-heading text-base font-extrabold tracking-tight">Małopolska HubMI</span>
+            <span className="text-xs text-muted-foreground">Hub Innowacji Społecznych</span>
+          </span>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <nav aria-label="Menu główne">

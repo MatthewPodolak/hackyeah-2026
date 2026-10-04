@@ -25,6 +25,7 @@ import Modal from "@/components/modal"
 import { SpeechButton } from "@/components/speech-button"
 import { useSpeechSupported } from "@/hooks/useSpeechToText"
 import { problemTokens } from "@/lib/problems"
+import { useScopedTokens } from "@/hooks/useScopedTokens"
 import { PROBLEM_CATEGORY_OPTIONS, TARGET_GROUP_OPTIONS } from "@/lib/problemCategories"
 import { findGmina, gminaCenter } from "@/lib/gminy"
 import { useAddProblem } from "@/api/hooks/useProblemMutation"
@@ -71,6 +72,7 @@ function validate(form, place) {
 }
 
 export default function AddQuestionary({ open, onClose, onSubmitted }) {
+  const { remember: rememberProblemToken } = useScopedTokens(problemTokens)
   const [form, setForm] = useState(EMPTY)
   const { showToast } = useToast()
   const addProblem = useAddProblem()
@@ -171,7 +173,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
         gminaId,
         wholeGmina: form.wholeGmina,
       })
-      if (result?.trackingToken) problemTokens.remember(result.trackingToken)
+      if (result?.trackingToken) rememberProblemToken(result.trackingToken)
       showToast(PROBLEM_ADDED_MSG, "success")
       close()
       onSubmitted?.(result)
@@ -193,7 +195,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
       <Card>
         <CardHeader>
           <CardTitle>
-            <h2 id="q-heading" className="text-base font-semibold">Zgłoś problem</h2>
+            <h2 id="q-heading" className="font-heading text-xl font-bold tracking-tight">Zgłoś problem</h2>
           </CardTitle>
           <CardDescription id="q-intro">
             Uzupełnij dane problemu i wskaż lokalizację. Wszystkie pola poza zdjęciem są wymagane.

@@ -138,7 +138,7 @@ export default function ProblemSolutions({ result, onClose }) {
                 <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
                   Problem zgłoszony
                 </p>
-                <h2 id="solutions-heading" className="text-base font-semibold leading-snug break-words">
+                <h2 id="solutions-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">
                   <span className="sr-only">Problem zgłoszony: </span>{problem?.title}
                 </h2>
                 {problem && (

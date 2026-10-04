@@ -17,7 +17,8 @@ import { useToast } from "@/helpers/ToastProvider"
 import { IDEA_ADDED_MSG, emptyField } from "@/helpers/Errors"
 import { useAddIdea, useDraftIdea } from "@/api/hooks/useIdeaMutation"
 import { useSimilarInnovations } from "@/api/hooks/useIdeasQuery"
-import { rememberIdeaToken } from "@/lib/ideas"
+import { ideaTokens } from "@/lib/ideas"
+import { useScopedTokens } from "@/hooks/useScopedTokens"
 import { MatchItem } from "@/components/problem-solutions"
 import { Spinner } from "@/components/ui/spinner"
 import Link from "next/link"
@@ -51,6 +52,7 @@ function validate(form) {
 }
 
 export default function ProposeSolution({ open, problem, onClose }) {
+  const { remember: rememberIdeaToken } = useScopedTokens(ideaTokens)
   const [form, setForm] = useState(EMPTY)
   const [submitted, setSubmitted] = useState(null)
   const { showToast } = useToast()
@@ -153,7 +155,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
               </div>
               <div className="min-w-0 flex-1">
                 <CardTitle>
-                  <h2 id="s-heading" className="text-base font-semibold">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
+                  <h2 id="s-heading" className="font-heading text-xl font-bold tracking-tight">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
                 </CardTitle>
                 <CardDescription id="s-subheading" className="mt-1">
                   {problem ? (

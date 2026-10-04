@@ -215,9 +215,9 @@ function TrendsPanel() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="mx-auto w-full max-w-6xl px-4 pt-14 pb-10 md:px-8">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-18 pb-10 md:px-8">
         <header className="mb-6">
-          <h1 className="font-heading text-2xl font-semibold">Trendy i potrzeby</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-tight">Trendy i potrzeby</h1>
           <p className="text-muted-foreground">
             {isRops
               ? "Zagregowane dane o potrzebach mieszkańców Małopolski. Wybierz gminę, aby zobaczyć jej dane."

@@ -67,7 +67,7 @@ function FilterChip({ active, label, count, onClick }) {
     >
       {label}
       <span className="sr-only">, liczba:</span>
-      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>{count}</span>
+      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>{count}</span>
     </button>
   );
 }
@@ -268,7 +268,7 @@ function ProblemDialog({ item: listItem, isJst, onClose }) {
           <div className="flex items-start gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">Zgłoszony problem</p>
-              <h2 id="problem-dialog-heading" className="text-lg font-semibold leading-snug break-words">{problem.title}</h2>
+              <h2 id="problem-dialog-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">{problem.title}</h2>
             </div>
             <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły zgłoszenia">
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
@@ -345,10 +345,10 @@ function ProblemsList() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="mx-auto w-full max-w-5xl px-4 pt-14 pb-10 md:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="font-heading text-2xl font-semibold">Zgłoszone problemy</h1>
+            <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszone problemy</h1>
             <p className="text-muted-foreground">
               {isJst
                 ? `Zgłoszenia mieszkańców z gminy: ${gminaName(gminy.get(user.gminaId)) ?? "…"}. Przyjmij je z priorytetem albo odrzuć.`

@@ -11,5 +11,6 @@ public interface IdeaRepository extends JpaRepository<Idea, Long> {
     Optional<Idea> findByTrackingToken(String token);
     List<Idea> findByStatus(IdeaStatus status);
     List<Idea> findAllByOrderByCreatedAtDesc();
+    List<Idea> findByAuthorIdOrderByCreatedAtDesc(Long authorId);
     long countByAdminSeenFalse();
 }

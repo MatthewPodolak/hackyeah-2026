@@ -11,6 +11,14 @@ export function useIdeasByTokens(tokens) {
   });
 }
 
+export function useMyIdeas(enabled) {
+  return useQuery({
+    queryKey: ["ideas", "mine"],
+    queryFn: ({ signal }) => IdeaService.mine({ ct: signal }),
+    enabled,
+  });
+}
+
 export function useSimilarInnovations(token) {
   return useQuery({
     queryKey: ["ideas", "token", token, "similar"],

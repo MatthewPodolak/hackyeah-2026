@@ -19,7 +19,7 @@ export function lockToMalopolska(map) {
 
 export function createAccessibleMap(L, container, { zoom, label }) {
   const map = L.map(container, { maxBoundsViscosity: 1, zoomControl: false }).setView(KRAKOW, zoom);
-  L.control.zoom({ zoomInTitle: "Przybliż mapę", zoomOutTitle: "Oddal mapę" }).addTo(map);
+  L.control.zoom({ position: "bottomleft", zoomInTitle: "Przybliż mapę", zoomOutTitle: "Oddal mapę" }).addTo(map);
   lockToMalopolska(map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,

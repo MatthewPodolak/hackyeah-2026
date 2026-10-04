@@ -94,6 +94,10 @@ public class IdeaCreatorService {
 
     public IdeaDetailsResponse getByToken(String token) { return details(byToken(token), true); }
 
+    public List<IdeaDetailsResponse> getMine(Long authorId) {
+        return ideas.findByAuthorIdOrderByCreatedAtDesc(authorId).stream().map(i -> details(i, true)).toList();
+    }
+
     public List<PublicIdeaResponse> gallery() {
         return ideas.findByStatus(IdeaStatus.ACCEPTED).stream()
                 .filter(Idea::isPublishConsent)

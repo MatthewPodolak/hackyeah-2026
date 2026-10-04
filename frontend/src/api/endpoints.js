@@ -10,6 +10,7 @@ export const API = {
     gallery: { method: "GET", url: "/api/v1/ideas" },
     draft: { method: "POST", url: "/api/v1/ideas/draft" },
     byToken: { method: "GET", url: (token) => `/api/v1/ideas/by-token/${encodeURIComponent(token)}` },
+    mine: { method: "GET", url: "/api/v1/me/ideas" },
     update: { method: "PUT", url: (token) => `/api/v1/ideas/by-token/${encodeURIComponent(token)}` },
     similar: { method: "GET", url: (token) => `/api/v1/ideas/by-token/${encodeURIComponent(token)}/similar` },
     visualize: { method: "POST", url: (token) => `/api/v1/ideas/by-token/${encodeURIComponent(token)}/visualize` },
