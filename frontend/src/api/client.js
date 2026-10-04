@@ -1,4 +1,4 @@
-
+import { getCurrentLocale } from "@/lib/i18n";
 const BASE_URL = process.env.NEXT_PUBLIC_API_ORIGIN ?? "";
 
 const DEFAULT_TIMEOUT = 8000;
@@ -15,8 +15,11 @@ export async function apiFetch(path, init = {}, opts = {}) {
   const abort = makeAbortSignal({ ct: opts.ct, timeoutMs: opts.timeoutMs ?? DEFAULT_TIMEOUT });
 
   try {
+    const headers = new Headers(init.headers);
+    if (!headers.has("Accept-Language")) headers.set("Accept-Language", getCurrentLocale());
     return await fetch(BASE_URL + path, {
       ...init,
+      headers,
       credentials: "include",
       signal: abort?.signal,
     });

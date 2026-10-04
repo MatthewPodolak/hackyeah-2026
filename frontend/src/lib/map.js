@@ -1,3 +1,5 @@
+import { t } from "@/lib/i18n";
+
 export const KRAKOW = [50.0614, 19.9366];
 
 // Małopolska with a small margin (borders: public/geo/malopolska-gminy.geojson)
@@ -19,7 +21,7 @@ export function lockToMalopolska(map) {
 
 export function createAccessibleMap(L, container, { zoom, label }) {
   const map = L.map(container, { maxBoundsViscosity: 1, zoomControl: false }).setView(KRAKOW, zoom);
-  L.control.zoom({ position: "bottomleft", zoomInTitle: "Przybliż mapę", zoomOutTitle: "Oddal mapę" }).addTo(map);
+  L.control.zoom({ position: "bottomleft", zoomInTitle: t("Przybliż mapę"), zoomOutTitle: t("Oddal mapę") }).addTo(map);
   lockToMalopolska(map);
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,

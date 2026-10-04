@@ -2,14 +2,15 @@
 
 import { useState } from "react"
 import { cn } from "cn"
+import { localNumberFormat, t } from "@/lib/i18n";
 
-const numberFormat = new Intl.NumberFormat("pl-PL")
-const percentFormat = new Intl.NumberFormat("pl-PL", { style: "percent", maximumFractionDigits: 0 })
+const numberFormat = localNumberFormat()
+const percentFormat = localNumberFormat({ style: "percent", maximumFractionDigits: 0 })
 
 function DataTable({ caption, rows, labelHeader, valueHeader }) {
   return (
     <details className="mt-3 text-sm">
-      <summary className="cursor-pointer text-muted-foreground underline-offset-4 hover:underline">Pokaż dane w tabeli</summary>
+      <summary className="cursor-pointer text-muted-foreground underline-offset-4 hover:underline">{t("Pokaż dane w tabeli")}</summary>
       <table className="mt-2 w-full text-left">
         <caption className="sr-only">{caption}</caption>
         <thead>
@@ -43,7 +44,7 @@ export function ChartCard({ title, description, children, className }) {
   )
 }
 
-export function BarList({ rows, caption, labelHeader = "Kategoria", valueHeader = "Liczba" }) {
+export function BarList({ rows, caption, labelHeader = t("Kategoria"), valueHeader = t("Liczba") }) {
   const [hovered, setHovered] = useState(null)
   const max = Math.max(1, ...rows.map((r) => r.value))
   const total = rows.reduce((sum, r) => sum + r.value, 0)
@@ -90,7 +91,7 @@ export function BarList({ rows, caption, labelHeader = "Kategoria", valueHeader 
   )
 }
 
-export function ColumnChart({ rows, caption, labelHeader = "Miesiąc", valueHeader = "Liczba" }) {
+export function ColumnChart({ rows, caption, labelHeader = t("Miesiąc"), valueHeader = t("Liczba") }) {
   const [hovered, setHovered] = useState(null)
   const max = Math.max(1, ...rows.map((r) => r.value))
   const maxRow = rows.reduce((best, r) => (r.value > (best?.value ?? -1) ? r : best), null)

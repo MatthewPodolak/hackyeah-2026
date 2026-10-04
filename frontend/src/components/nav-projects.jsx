@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { MoreHorizontalCircle01Icon, FolderIcon, ArrowRightIcon, Delete02Icon } from "@hugeicons/core-free-icons"
+import { t } from "@/lib/i18n";
 
 export function NavProjects({
   projects
@@ -25,7 +26,7 @@ export function NavProjects({
   const { isMobile } = useSidebar()
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("Projects")}</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
@@ -43,7 +44,7 @@ export function NavProjects({
                 }
               >
                 <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
-                <span className="sr-only">More</span>
+                <span className="sr-only">{t("More")}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 className="w-fit"
@@ -52,16 +53,16 @@ export function NavProjects({
               >
                 <DropdownMenuItem>
                   <HugeiconsIcon icon={FolderIcon} strokeWidth={2} />
-                  <span>View Project</span>
+                  <span>{t("View Project")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <HugeiconsIcon icon={ArrowRightIcon} strokeWidth={2} />
-                  <span>Share Project</span>
+                  <span>{t("Share Project")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
                   <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
-                  <span>Delete Project</span>
+                  <span>{t("Delete Project")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -70,7 +71,7 @@ export function NavProjects({
         <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} className="text-sidebar-foreground/70" />
-            <span>More</span>
+            <span>{t("More")}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

@@ -12,6 +12,7 @@ import { ROLES, useAuth } from "@/api/context/AuthContext"
 import { useRegions } from "@/api/hooks/useRegionsQuery"
 import { useToast } from "@/helpers/ToastProvider"
 import { useFormErrors } from "@/helpers/useFormErrors"
+import { t } from "@/lib/i18n";
 
 const PERSON = { function: "", name: "", phone: "", email: "" }
 const EMPTY = { phone: "", street: "", postalCode: "", city: "", gminaId: "", krs: "", regon: "", representative: PERSON, contact: PERSON, experience: "", team: [] }
@@ -36,9 +37,9 @@ export function missingApplicantData(user) {
   if (user.role === ROLES.NGO) {
     if (!p.krs) missing.push("KRS")
     if (!p.regon) missing.push("REGON")
-    if (!p.representative?.name) missing.push("osoba reprezentująca")
-    if (!p.contact?.name) missing.push("osoba do kontaktów")
-    if (!p.experience && !p.team?.length) missing.push("doświadczenie i zespół")
+    if (!p.representative?.name) missing.push(t("osoba reprezentująca"))
+    if (!p.contact?.name) missing.push(t("osoba do kontaktów"))
+    if (!p.experience && !p.team?.length) missing.push(t("doświadczenie i zespół"))
   }
   return missing
 }
@@ -49,19 +50,19 @@ function PersonFields({ prefix, label, value, onChange }) {
     <fieldset className="grid gap-4 rounded-lg border p-3 sm:grid-cols-2">
       <legend className="px-1 text-sm font-medium">{label}</legend>
       <Field>
-        <FieldLabel htmlFor={`${prefix}-function`}>Funkcja</FieldLabel>
-        <Input id={`${prefix}-function`} placeholder="np. Prezes Zarządu" value={value.function} onChange={set("function")} />
+        <FieldLabel htmlFor={`${prefix}-function`}>{t("Funkcja")}</FieldLabel>
+        <Input id={`${prefix}-function`} placeholder={t("np. Prezes Zarządu")} value={value.function} onChange={set("function")} />
       </Field>
       <Field>
-        <FieldLabel htmlFor={`${prefix}-name`}>Imię i nazwisko</FieldLabel>
+        <FieldLabel htmlFor={`${prefix}-name`}>{t("Imię i nazwisko")}</FieldLabel>
         <Input id={`${prefix}-name`} autoComplete="off" value={value.name} onChange={set("name")} />
       </Field>
       <Field>
-        <FieldLabel htmlFor={`${prefix}-phone`}>Telefon</FieldLabel>
+        <FieldLabel htmlFor={`${prefix}-phone`}>{t("Telefon")}</FieldLabel>
         <Input id={`${prefix}-phone`} type="tel" autoComplete="off" value={value.phone} onChange={set("phone")} />
       </Field>
       <Field>
-        <FieldLabel htmlFor={`${prefix}-email`}>E-mail</FieldLabel>
+        <FieldLabel htmlFor={`${prefix}-email`}>{t("E-mail")}</FieldLabel>
         <Input id={`${prefix}-email`} type="email" autoComplete="off" value={value.email} onChange={set("email")} />
       </Field>
     </fieldset>
@@ -82,7 +83,7 @@ export function ApplicantPanel() {
   if (!isLogged) {
     return (
       <p className="rounded-xl border border-dashed p-3 text-sm text-muted-foreground">
-        Zaloguj się, aby Twoje dane (imię i nazwisko lub nazwa organizacji, kontakt, adres) wpisały się do formularza wniosku.
+        {t("Zaloguj się, aby Twoje dane (imię i nazwisko lub nazwa organizacji, kontakt, adres) wpisały się do formularza wniosku.")}
       </p>
     )
   }
@@ -110,47 +111,47 @@ export function ApplicantPanel() {
 
   const save = (e) => {
     e.preventDefault()
-    if (form.postalCode && !/^\d{2}-\d{3}$/.test(form.postalCode.trim())) return fail("postalCode", "Kod pocztowy w formacie 00-000")
-    persist(form, "Zapisano dane do wniosku")
+    if (form.postalCode && !/^\d{2}-\d{3}$/.test(form.postalCode.trim())) return fail("postalCode", t("Kod pocztowy w formacie 00-000"))
+    persist(form, t("Zapisano dane do wniosku"))
   }
 
   const removeAll = () => {
-    if (!window.confirm("Usunąć wszystkie zapisane dane do wniosków?")) return
-    persist(EMPTY, "Usunięto zapisane dane")
+    if (!window.confirm(t("Usunąć wszystkie zapisane dane do wniosków?"))) return
+    persist(EMPTY, t("Usunięto zapisane dane"))
   }
 
   return (
     <details className="rounded-xl border p-4" open={!user?.profile?.city && !user?.profile?.phone}>
-      <summary className="cursor-pointer font-medium">Twoje dane do wniosku (opcjonalne)</summary>
+      <summary className="cursor-pointer font-medium">{t("Twoje dane do wniosku (opcjonalne)")}</summary>
       <p className="mt-1 text-sm text-muted-foreground">
-        Wpisują się do formularza w części „Dane pomysłodawcy”{ngo ? " i „Zespół projektowy”" : ""}. Zapisujesz je raz – kolejne wnioski wypełnią się same.
-        Dane służą tylko do wypełniania Twoich wniosków; AI dostaje wyłącznie gminę{ngo ? ", role i doświadczenie" : ""}, bez telefonów i adresów.
+        {ngo ? t("Wpisują się do formularza w części „Dane pomysłodawcy” i „Zespół projektowy”. Zapisujesz je raz – kolejne wnioski wypełnią się same.") : t("Wpisują się do formularza w części „Dane pomysłodawcy”. Zapisujesz je raz – kolejne wnioski wypełnią się same.")}
+        {ngo ? t("Dane służą tylko do wypełniania Twoich wniosków; AI dostaje wyłącznie gminę, role i doświadczenie, bez telefonów i adresów.") : t("Dane służą tylko do wypełniania Twoich wniosków; AI dostaje wyłącznie gminę, bez telefonów i adresów.")}
       </p>
       <form onSubmit={save} noValidate className="mt-4">
         <FieldGroup>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field>
-              <FieldLabel htmlFor="applicant-phone">Telefon</FieldLabel>
-              <Input {...fieldProps("phone")} type="tel" autoComplete="tel" placeholder="np. 600 100 200" value={form.phone} onChange={set("phone")} />
+              <FieldLabel htmlFor="applicant-phone">{t("Telefon")}</FieldLabel>
+              <Input {...fieldProps("phone")} type="tel" autoComplete="tel" placeholder={t("np. 600 100 200")} value={form.phone} onChange={set("phone")} />
               <FieldError {...errorProps("phone")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="applicant-street">{ngo ? "Adres siedziby (ulica, nr)" : "Adres (ulica, nr)"}</FieldLabel>
-              <Input {...fieldProps("street")} autoComplete="street-address" placeholder="np. ul. Długa 5/2" value={form.street} onChange={set("street")} />
+              <FieldLabel htmlFor="applicant-street">{ngo ? t("Adres siedziby (ulica, nr)") : t("Adres (ulica, nr)")}</FieldLabel>
+              <Input {...fieldProps("street")} autoComplete="street-address" placeholder={t("np. ul. Długa 5/2")} value={form.street} onChange={set("street")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="applicant-postalCode">Kod pocztowy</FieldLabel>
+              <FieldLabel htmlFor="applicant-postalCode">{t("Kod pocztowy")}</FieldLabel>
               <Input {...fieldProps("postalCode")} autoComplete="postal-code" placeholder="00-000" value={form.postalCode} onChange={set("postalCode")} />
               <FieldError {...errorProps("postalCode")} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="applicant-city">Miejscowość</FieldLabel>
-              <Input {...fieldProps("city")} autoComplete="address-level2" placeholder="np. Limanowa" value={form.city} onChange={set("city")} />
+              <FieldLabel htmlFor="applicant-city">{t("Miejscowość")}</FieldLabel>
+              <Input {...fieldProps("city")} autoComplete="address-level2" placeholder={t("np. Limanowa")} value={form.city} onChange={set("city")} />
             </Field>
             <Field className="sm:col-span-2">
-              <FieldLabel htmlFor="applicant-gminaId">Gmina, w której działasz</FieldLabel>
+              <FieldLabel htmlFor="applicant-gminaId">{t("Gmina, w której działasz")}</FieldLabel>
               <NativeSelect {...fieldProps("gminaId", "applicant-gmina-hint")} className="w-full" value={form.gminaId} disabled={!regions.data} onChange={set("gminaId")}>
-                <NativeSelectOption value="">{regions.isPending ? "Wczytuję gminy..." : "Nie wybrano"}</NativeSelectOption>
+                <NativeSelectOption value="">{regions.isPending ? t("Wczytuję gminy...") : t("Nie wybrano")}</NativeSelectOption>
                 {regions.data?.powiaty.map((powiat) => (
                   <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
                     {powiat.gminy.map((gmina) => (
@@ -159,17 +160,17 @@ export function ApplicantPanel() {
                   </NativeSelectOptGroup>
                 ))}
               </NativeSelect>
-              <FieldDescription id="applicant-gmina-hint">AI użyje jej w diagnozie problemu i opisie odbiorców.</FieldDescription>
+              <FieldDescription id="applicant-gmina-hint">{t("AI użyje jej w diagnozie problemu i opisie odbiorców.")}</FieldDescription>
             </Field>
             {ngo && (
               <>
                 <Field>
-                  <FieldLabel htmlFor="applicant-krs">KRS</FieldLabel>
-                  <Input {...fieldProps("krs")} inputMode="numeric" placeholder="10 cyfr" value={form.krs} onChange={set("krs")} />
+                  <FieldLabel htmlFor="applicant-krs">{t("KRS")}</FieldLabel>
+                  <Input {...fieldProps("krs")} inputMode="numeric" placeholder={t("10 cyfr")} value={form.krs} onChange={set("krs")} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="applicant-regon">REGON</FieldLabel>
-                  <Input {...fieldProps("regon")} inputMode="numeric" placeholder="9 albo 14 cyfr" value={form.regon} onChange={set("regon")} />
+                  <FieldLabel htmlFor="applicant-regon">{t("REGON")}</FieldLabel>
+                  <Input {...fieldProps("regon")} inputMode="numeric" placeholder={t("9 albo 14 cyfr")} value={form.regon} onChange={set("regon")} />
                 </Field>
               </>
             )}
@@ -177,30 +178,30 @@ export function ApplicantPanel() {
 
           {ngo && (
             <>
-              <PersonFields prefix="applicant-rep" label="Osoba upoważniona do reprezentowania" value={form.representative} onChange={(v) => setForm((f) => ({ ...f, representative: v }))} />
-              <PersonFields prefix="applicant-contact" label="Osoba do kontaktów roboczych" value={form.contact} onChange={(v) => setForm((f) => ({ ...f, contact: v }))} />
+              <PersonFields prefix="applicant-rep" label={t("Osoba upoważniona do reprezentowania")} value={form.representative} onChange={(v) => setForm((f) => ({ ...f, representative: v }))} />
+              <PersonFields prefix="applicant-contact" label={t("Osoba do kontaktów roboczych")} value={form.contact} onChange={(v) => setForm((f) => ({ ...f, contact: v }))} />
               <fieldset className="flex flex-col gap-4 rounded-lg border p-3">
-                <legend className="px-1 text-sm font-medium">Doświadczenie i zespół</legend>
+                <legend className="px-1 text-sm font-medium">{t("Doświadczenie i zespół")}</legend>
                 <Field>
-                  <FieldLabel htmlFor="applicant-experience">Doświadczenie organizacji</FieldLabel>
-                  <Textarea id="applicant-experience" rows={3} maxLength={3000} placeholder="np. od 2018 r. prowadzimy wolontariat dla seniorów w powiecie limanowskim…" value={form.experience} onChange={set("experience")} />
+                  <FieldLabel htmlFor="applicant-experience">{t("Doświadczenie organizacji")}</FieldLabel>
+                  <Textarea id="applicant-experience" rows={3} maxLength={3000} placeholder={t("np. od 2018 r. prowadzimy wolontariat dla seniorów w powiecie limanowskim…")} value={form.experience} onChange={set("experience")} />
                 </Field>
                 <div className="flex flex-col gap-3">
-                  <p className="text-sm font-medium">Zespół (wybierasz osoby przy każdym wniosku)</p>
+                  <p className="text-sm font-medium">{t("Zespół (wybierasz osoby przy każdym wniosku)")}</p>
                   {form.team.map((member, i) => (
                     <div key={i} className="grid gap-2 rounded-lg bg-muted/40 p-3 sm:grid-cols-[1fr_1fr_auto]">
-                      <Input aria-label={`Osoba ${i + 1}: imię i nazwisko`} placeholder="Imię i nazwisko" value={member.name} onChange={setTeam(i, "name")} />
-                      <Input aria-label={`Osoba ${i + 1}: rola w projekcie`} placeholder="Rola, np. koordynatorka" value={member.role} onChange={setTeam(i, "role")} />
-                      <Button type="button" variant="ghost" size="icon-sm" aria-label={`Usuń osobę ${i + 1}`} onClick={() => setForm((f) => ({ ...f, team: f.team.filter((_, j) => j !== i) }))}>
+                      <Input aria-label={t("Osoba {n}: imię i nazwisko", { n: i + 1 })} placeholder={t("Imię i nazwisko")} value={member.name} onChange={setTeam(i, "name")} />
+                      <Input aria-label={`Osoba ${i + 1}: rola w projekcie`} placeholder={t("Rola, np. koordynatorka")} value={member.role} onChange={setTeam(i, "role")} />
+                      <Button type="button" variant="ghost" size="icon-sm" aria-label={t("Usuń osobę {n}", { n: i + 1 })} onClick={() => setForm((f) => ({ ...f, team: f.team.filter((_, j) => j !== i) }))}>
                         <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} aria-hidden="true" />
                       </Button>
-                      <Textarea className="sm:col-span-3" rows={2} maxLength={600} aria-label={`Osoba ${i + 1}: doświadczenie`} placeholder="Krótko: doświadczenie tej osoby" value={member.experience} onChange={setTeam(i, "experience")} />
+                      <Textarea className="sm:col-span-3" rows={2} maxLength={600} aria-label={t("Osoba {n}: doświadczenie", { n: i + 1 })} placeholder={t("Krótko: doświadczenie tej osoby")} value={member.experience} onChange={setTeam(i, "experience")} />
                     </div>
                   ))}
                   {form.team.length < 10 && (
                     <Button type="button" variant="outline" size="sm" className="self-start" onClick={() => setForm((f) => ({ ...f, team: [...f.team, { name: "", role: "", experience: "" }] }))}>
                       <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                      Dodaj osobę
+                      {t("Dodaj osobę")}
                     </Button>
                   )}
                 </div>
@@ -209,10 +210,10 @@ export function ApplicantPanel() {
           )}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Button type="button" variant="ghost" size="sm" onClick={removeAll} disabled={saving}>Usuń zapisane dane</Button>
+            <Button type="button" variant="ghost" size="sm" onClick={removeAll} disabled={saving}>{t("Usuń zapisane dane")}</Button>
             <div className="flex flex-wrap items-center gap-3">
-              {dirty && <span className="text-sm text-muted-foreground">Masz niezapisane zmiany</span>}
-              <Button type="submit" variant="outline" disabled={saving || !dirty}>{saving ? "Zapisywanie..." : "Zapisz dane"}</Button>
+              {dirty && <span className="text-sm text-muted-foreground">{t("Masz niezapisane zmiany")}</span>}
+              <Button type="submit" variant="outline" disabled={saving || !dirty}>{saving ? "Zapisywanie..." : t("Zapisz dane")}</Button>
             </div>
           </div>
         </FieldGroup>

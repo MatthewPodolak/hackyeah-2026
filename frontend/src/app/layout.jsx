@@ -7,6 +7,7 @@ import { AppSidebar } from "@/components/ui/app-sidebar"
 import Auth from "@/views/auth/Auth";
 import { AccountScope } from "@/api/context/AuthContext";
 import { PREFS_BOOT_SCRIPT } from "@/lib/a11y-prefs";
+import { getServerT } from "@/lib/i18n/server";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
@@ -15,17 +16,21 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
-export const metadata = {
-  title: {
-    default: "Mapa problemów | Małopolska HUBMI",
-    template: "%s | Małopolska HUBMI",
-  },
-  description: "Zgłaszaj problemy społeczne w Krakowie, odkrywaj innowacje społeczne i proponuj własne rozwiązania.",
-};
+export async function generateMetadata() {
+  const { t } = await getServerT();
+  return {
+    title: {
+      default: `${t("Mapa problemów")} | Małopolska HUBMI`,
+      template: "%s | Małopolska HUBMI",
+    },
+    description: t("Zgłaszaj problemy społeczne w Krakowie, odkrywaj innowacje społeczne i proponuj własne rozwiązania."),
+  };
+}
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const { locale, t } = await getServerT();
   return (
-    <html lang="pl" className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
+    <html lang={locale} className={`${jakarta.variable} h-full antialiased`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: PREFS_BOOT_SCRIPT }} />
       </head>
@@ -34,9 +39,9 @@ export default function RootLayout({ children }) {
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[3000] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg"
         >
-          Przejdź do treści
+          {t("Przejdź do treści")}
         </a>
-        <Providers>
+        <Providers locale={locale}>
           <SidebarProvider className="h-svh overflow-hidden">
               <AppSidebar />
               <main id="main-content" tabIndex={-1} className="relative flex flex-1 flex-col min-h-0 outline-none">

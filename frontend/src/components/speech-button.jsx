@@ -5,6 +5,7 @@ import { Mic01Icon, MicOff01Icon } from "@hugeicons/core-free-icons"
 import { cn } from "cn"
 import { useToast } from "@/helpers/ToastProvider"
 import { appendDictation, useSpeechToText } from "@/hooks/useSpeechToText"
+import { t } from "@/lib/i18n";
 
 const TOOLTIP = "Dyktowanie: mowę zamienia na tekst przeglądarka (Google/Microsoft)"
 
@@ -21,13 +22,13 @@ export function SpeechButton({ target, disabled, className }) {
   return (
     <div className={cn("absolute right-1.5 flex items-center gap-1.5", className)}>
       <span aria-live="polite" className={cn("rounded bg-background/90 px-1 text-xs font-medium text-red-700 dark:text-red-400", !speech.listening && "sr-only")}>
-        {speech.listening ? "Słucham…" : speech.status === "ended" ? "Dyktowanie zakończone" : ""}
+        {speech.listening ? t("Słucham…") : speech.status === "ended" ? t("Dyktowanie zakończone") : ""}
       </span>
       <button
         type="button"
         aria-pressed={speech.listening}
-        aria-label={speech.listening ? "Zatrzymaj dyktowanie" : "Dyktuj tekst"}
-        title={TOOLTIP}
+        aria-label={speech.listening ? t("Zatrzymaj dyktowanie") : t("Dyktuj tekst")}
+        title={t(TOOLTIP)}
         disabled={disabled}
         onClick={speech.toggle}
         className={cn(

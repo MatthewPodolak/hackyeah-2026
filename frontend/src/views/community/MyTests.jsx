@@ -14,8 +14,9 @@ import { useMyParticipations } from "@/api/hooks/useTesting";
 import { PARTICIPATION_STATUS } from "@/lib/community";
 import { useInnovationName } from "@/api/hooks/useAdmin";
 import { PageHeader } from "@/components/page-header";
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
+const dateFormat = localDateFormat({ dateStyle: "medium" });
 
 function MyTestsList() {
   const participations = useMyParticipations();
@@ -26,12 +27,12 @@ function MyTestsList() {
       <div className="mx-auto w-full max-w-3xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={TestTube01Icon}
-          title="Moje testy"
-          description="Twoje zgłoszenia do testowania innowacji i ich status"
+          title={t("Moje testy")}
+          description={t("Twoje zgłoszenia do testowania innowacji i ich status")}
         />
 
         {participations.isPending ? (
-          <LoadingStatus label="Wczytywanie zgłoszeń" className="flex flex-col gap-3">
+          <LoadingStatus label={t("Wczytywanie zgłoszeń")} className="flex flex-col gap-3">
             <Skeleton className="h-28 w-full rounded-xl" />
             <Skeleton className="h-28 w-full rounded-xl" />
           </LoadingStatus>
@@ -50,7 +51,7 @@ function MyTestsList() {
                 <p className="text-sm whitespace-pre-line break-words">{p.motivation}</p>
                 {p.createdAt && (
                   <p className="text-xs text-muted-foreground">
-                    Zgłoszono <time dateTime={p.createdAt}>{dateFormat.format(new Date(p.createdAt))}</time>
+                    {t("Zgłoszono")} <time dateTime={p.createdAt}>{dateFormat.format(new Date(p.createdAt))}</time>
                   </p>
                 )}
               </li>
@@ -62,11 +63,11 @@ function MyTestsList() {
               <EmptyMedia variant="icon">
                 <HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} aria-hidden="true" />
               </EmptyMedia>
-              <EmptyTitle>Nie masz zgłoszeń do testów</EmptyTitle>
-              <EmptyDescription>Wybierz innowację z biblioteki i kliknij „Zgłoś się do testów”.</EmptyDescription>
+              <EmptyTitle>{t("Nie masz zgłoszeń do testów")}</EmptyTitle>
+              <EmptyDescription>{t("Wybierz innowację z biblioteki i kliknij „Zgłoś się do testów”.")}</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
-              <Link href="/innovations" className={buttonVariants()}>Przejdź do biblioteki innowacji</Link>
+              <Link href="/innovations" className={buttonVariants()}>{t("Przejdź do biblioteki innowacji")}</Link>
             </EmptyContent>
           </Empty>
         )}
@@ -78,14 +79,14 @@ function MyTestsList() {
 export default function MyTests() {
   const { role } = useAuth();
   return (
-    <RoleGuard description="Zaloguj się, aby zobaczyć swoje zgłoszenia do testów.">
+    <RoleGuard description={t("Zaloguj się, aby zobaczyć swoje zgłoszenia do testów.")}>
       {role === ROLES.JST ? (
         <div className="flex flex-1 items-center justify-center p-6">
           <Empty className="max-w-md border border-dashed">
             <EmptyHeader>
               <EmptyMedia variant="icon"><HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} aria-hidden="true" /></EmptyMedia>
-              <EmptyTitle>Testy są dla mieszkańców i organizacji</EmptyTitle>
-              <EmptyDescription>Konta samorządów nie zgłaszają się do testów. Opinie testerów znajdziesz na stronach innowacji.</EmptyDescription>
+              <EmptyTitle>{t("Testy są dla mieszkańców i organizacji")}</EmptyTitle>
+              <EmptyDescription>{t("Konta samorządów nie zgłaszają się do testów. Opinie testerów znajdziesz na stronach innowacji.")}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         </div>

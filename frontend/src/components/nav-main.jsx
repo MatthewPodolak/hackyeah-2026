@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import { t } from "@/lib/i18n";
 
 export function NavMain({
   items
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("Platform")}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible

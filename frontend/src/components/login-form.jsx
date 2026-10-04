@@ -24,24 +24,25 @@ import {
   LOGGED_IN_MSG,
   REGISTERED_MSG,
 } from "@/helpers/Errors"
+import { localize, t } from "@/lib/i18n";
 
 const EMPTY_LOGIN = {
   email: "",
   password: "",
 }
 
-const ACCOUNT_TYPES = [
+const ACCOUNT_TYPES = localize([
   { value: "CITIZEN", label: "Mieszkaniec", hint: "Konto osoby prywatnej", icon: UserIcon },
   { value: "NGO", label: "Organizacja pozarządowa", hint: "Fundacja, stowarzyszenie, KGW – wymagany NIP", icon: UserGroupIcon },
-]
+])
 
 const NIP_WEIGHTS = [6, 5, 7, 2, 3, 4, 5, 6, 7]
 
 function nipError(raw) {
   const digits = raw.replace(/[\s-]/g, "")
-  if (!/^\d{10}$/.test(digits)) return "NIP musi mieć 10 cyfr, np. 123-456-32-18"
+  if (!/^\d{10}$/.test(digits)) return t("NIP musi mieć 10 cyfr, np. 123-456-32-18")
   const sum = NIP_WEIGHTS.reduce((acc, w, i) => acc + w * Number(digits[i]), 0) % 11
-  if (sum === 10 || sum !== Number(digits[9])) return "Niepoprawny NIP – sprawdź cyfry"
+  if (sum === 10 || sum !== Number(digits[9])) return t("Niepoprawny NIP – sprawdź cyfry")
   return null
 }
 
@@ -102,9 +103,9 @@ export function LoginForm({
   const validateLogin = () => {
     const { email, password } = loginData;
 
-    if (!email.trim()) return ["email", "Podaj adres email"];
+    if (!email.trim()) return ["email", t("Podaj adres email")];
     if (!EMAIL_REGEX.test(email.trim())) return ["email", "Niepoprawny adres email, np. jan@example.com"];
-    if (!password) return ["password", "Podaj hasło"];
+    if (!password) return ["password", t("Podaj hasło")];
     return null;
   };
 
@@ -112,12 +113,12 @@ export function LoginForm({
     const { name, email, password, confirmPassword, accountType, nip } = registerData;
     const ngo = accountType === "NGO";
 
-    if (!name.trim()) return ["name", ngo ? "Podaj nazwę organizacji" : "Podaj imię i nazwisko"];
+    if (!name.trim()) return ["name", ngo ? t("Podaj nazwę organizacji") : t("Podaj imię i nazwisko")];
     if (ngo && nipError(nip)) return ["nip", nipError(nip)];
-    if (!email.trim()) return ["email", "Podaj adres email"];
+    if (!email.trim()) return ["email", t("Podaj adres email")];
     if (!EMAIL_REGEX.test(email.trim())) return ["email", "Niepoprawny adres email, np. jan@example.com"];
-    if (password.length < 8) return ["password", "Hasło musi mieć co najmniej 8 znaków"];
-    if (password !== confirmPassword) return ["confirmPassword", "Hasła nie są takie same"];
+    if (password.length < 8) return ["password", t("Hasło musi mieć co najmniej 8 znaków")];
+    if (password !== confirmPassword) return ["confirmPassword", t("Hasła nie są takie same")];
     return null;
   };
 
@@ -185,21 +186,21 @@ export function LoginForm({
           <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-elevation-1">H</span>
           <div className="min-w-0 flex-1">
             <Heading id="auth-heading" tabIndex={-1} className="font-heading text-xl font-bold tracking-tight outline-none">
-              {isLogin ? "Zaloguj się" : "Utwórz konto"}
+              {isLogin ? t("Zaloguj się") : t("Utwórz konto")}
             </Heading>
             <p id="auth-description" className="mt-1 text-sm text-muted-foreground">
               {isLogin
-                ? "Witaj ponownie w Małopolskim Hubie Innowacji."
-                : "Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator."}
+                ? t("Witaj ponownie w Małopolskim Hubie Innowacji.")
+                : t("Konto mieszkańca albo organizacji pozarządowej. Konta samorządów i ROPS zakłada administrator.")}
             </p>
           </div>
           {onClose && (
-            <Button variant="ghost" size="icon" className="-mt-1 -mr-2 shrink-0" onClick={onClose} aria-label="Zamknij okno">
+            <Button variant="ghost" size="icon" className="-mt-1 -mr-2 shrink-0" onClick={onClose} aria-label={t("Zamknij okno")}>
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-5" />
             </Button>
           )}
         </div>
-        <div role="group" aria-label="Rodzaj formularza" className="grid grid-cols-2 gap-1 rounded-full bg-muted p-1">
+        <div role="group" aria-label={t("Rodzaj formularza")} className="grid grid-cols-2 gap-1 rounded-full bg-muted p-1">
           {[
             { login: true, label: "Logowanie", icon: Login03Icon },
             { login: false, label: "Rejestracja", icon: UserAdd01Icon },
@@ -226,20 +227,20 @@ export function LoginForm({
           <form onSubmit={submitLogin} noValidate>
             <FieldGroup>
               <Field>
-                <FieldLabel htmlFor="login-email">Email</FieldLabel>
+                <FieldLabel htmlFor="login-email">{t("Email")}</FieldLabel>
                 <Input
                   {...loginErrors.fieldProps("email")}
                   type="email"
                   autoComplete="email"
                   required
-                  placeholder="np. jan@example.com"
+                  placeholder={t("np. jan@example.com")}
                   value={loginData.email}
                   onChange={updateLogin("email")}
                 />
                 <FieldError {...loginErrors.errorProps("email")} />
               </Field>
               <Field>
-                <FieldLabel htmlFor="login-password">Hasło</FieldLabel>
+                <FieldLabel htmlFor="login-password">{t("Hasło")}</FieldLabel>
                 <PasswordInput
                   {...loginErrors.fieldProps("password")}
                   autoComplete="current-password"
@@ -250,10 +251,10 @@ export function LoginForm({
                 <FieldError {...loginErrors.errorProps("password")} />
               </Field>
               <Button type="submit" size="lg" className="mt-1 w-full" disabled={loading}>
-                {loading ? "Logowanie..." : "Zaloguj się"}
+                {loading ? "Logowanie..." : t("Zaloguj się")}
               </Button>
               <p className="text-center text-sm text-muted-foreground">
-                Nie masz konta? <LinkButton onClick={() => switchMode(false)}>Zarejestruj się</LinkButton>
+                {t("Nie masz konta?")} <LinkButton onClick={() => switchMode(false)}>{t("Zarejestruj się")}</LinkButton>
               </p>
             </FieldGroup>
           </form>
@@ -261,7 +262,7 @@ export function LoginForm({
           <form onSubmit={submitRegister} noValidate>
             <FieldGroup>
               <fieldset className="flex flex-col gap-2">
-                <legend className="mb-2 text-sm font-medium">Typ konta</legend>
+                <legend className="mb-2 text-sm font-medium">{t("Typ konta")}</legend>
                 <div className="grid gap-2 sm:grid-cols-2">
                   {ACCOUNT_TYPES.map((type) => {
                     const checked = registerData.accountType === type.value
@@ -292,13 +293,13 @@ export function LoginForm({
                 </div>
               </fieldset>
               <Field>
-                <FieldLabel htmlFor="register-name">{isNgo ? "Nazwa organizacji" : "Imię i nazwisko"}</FieldLabel>
+                <FieldLabel htmlFor="register-name">{isNgo ? t("Nazwa organizacji") : t("Imię i nazwisko")}</FieldLabel>
                 <Input
                   {...registerErrors.fieldProps("name")}
                   type="text"
                   required
                   autoComplete={isNgo ? "organization" : "name"}
-                  placeholder={isNgo ? "np. Fundacja Dobre Sąsiedztwo" : "np. Jan Kowalski"}
+                  placeholder={isNgo ? t("np. Fundacja Dobre Sąsiedztwo") : "np. Jan Kowalski"}
                   value={registerData.name}
                   onChange={updateRegister("name")}
                 />
@@ -306,29 +307,29 @@ export function LoginForm({
               </Field>
               {isNgo && (
                 <Field>
-                  <FieldLabel htmlFor="register-nip">NIP organizacji</FieldLabel>
+                  <FieldLabel htmlFor="register-nip">{t("NIP organizacji")}</FieldLabel>
                   <Input
                     {...registerErrors.fieldProps("nip", "register-nip-hint")}
                     type="text"
                     inputMode="numeric"
                     required
                     maxLength={13}
-                    placeholder="np. 1234563218"
+                    placeholder={t("np. 1234563218")}
                     value={registerData.nip}
                     onChange={updateRegister("nip")}
                   />
-                  <FieldDescription id="register-nip-hint">10 cyfr, możesz wpisać z myślnikami.</FieldDescription>
+                  <FieldDescription id="register-nip-hint">{t("10 cyfr, możesz wpisać z myślnikami.")}</FieldDescription>
                   <FieldError {...registerErrors.errorProps("nip")} />
                 </Field>
               )}
               <Field>
-                <FieldLabel htmlFor="register-email">Email</FieldLabel>
+                <FieldLabel htmlFor="register-email">{t("Email")}</FieldLabel>
                 <Input
                   {...registerErrors.fieldProps("email")}
                   type="email"
                   required
                   autoComplete="email"
-                  placeholder="np. jan@example.com"
+                  placeholder={t("np. jan@example.com")}
                   value={registerData.email}
                   onChange={updateRegister("email")}
                 />
@@ -336,7 +337,7 @@ export function LoginForm({
               </Field>
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field>
-                  <FieldLabel htmlFor="register-password">Hasło</FieldLabel>
+                  <FieldLabel htmlFor="register-password">{t("Hasło")}</FieldLabel>
                   <PasswordInput
                     {...registerErrors.fieldProps("password", "register-password-hint")}
                     required
@@ -344,11 +345,11 @@ export function LoginForm({
                     value={registerData.password}
                     onChange={updateRegister("password")}
                   />
-                  <FieldDescription id="register-password-hint">Co najmniej 8 znaków.</FieldDescription>
+                  <FieldDescription id="register-password-hint">{t("Co najmniej 8 znaków.")}</FieldDescription>
                   <FieldError {...registerErrors.errorProps("password")} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="register-confirmPassword">Powtórz hasło</FieldLabel>
+                  <FieldLabel htmlFor="register-confirmPassword">{t("Powtórz hasło")}</FieldLabel>
                   <PasswordInput
                     {...registerErrors.fieldProps("confirmPassword")}
                     required
@@ -360,10 +361,10 @@ export function LoginForm({
                 </Field>
               </div>
               <Button type="submit" size="lg" className="mt-1 w-full" disabled={loading}>
-                {loading ? "Tworzenie konta..." : "Utwórz konto"}
+                {loading ? t("Tworzenie konta...") : t("Utwórz konto")}
               </Button>
               <p className="text-center text-sm text-muted-foreground">
-                Masz już konto? <LinkButton onClick={() => switchMode(true)}>Zaloguj się</LinkButton>
+                {t("Masz już konto?")} <LinkButton onClick={() => switchMode(true)}>{t("Zaloguj się")}</LinkButton>
               </p>
             </FieldGroup>
           </form>

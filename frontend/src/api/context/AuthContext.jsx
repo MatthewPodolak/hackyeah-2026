@@ -2,6 +2,7 @@
 import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthService } from "@/api/services/AuthService";
+import { t } from "@/lib/i18n";
 
 export const ROLES = {
   CITIZEN: "CITIZEN",
@@ -104,7 +105,7 @@ export function AuthProvider({ children }) {
     () => ({
       user,
       role,
-      roleLabel: role ? ROLE_LABELS[role] ?? role : null,
+      roleLabel: role ? t(ROLE_LABELS[role] ?? role) : null,
       isLoading: me.isPending,
       isLogged: !!user,
       isAuthed: !!user,

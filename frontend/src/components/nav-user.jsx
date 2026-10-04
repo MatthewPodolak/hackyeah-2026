@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/sidebar"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { UnfoldMoreIcon, SparklesIcon, CheckmarkBadgeIcon, CreditCardIcon, NotificationIcon, LogoutIcon } from "@hugeicons/core-free-icons"
+import { t } from "@/lib/i18n";
 
 export function NavUser({
   user
@@ -38,7 +39,7 @@ export function NavUser({
           >
             <Avatar>
               <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{t("CN")}</AvatarFallback>
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
               <span className="truncate font-medium">{user.name}</span>
@@ -57,7 +58,7 @@ export function NavUser({
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar>
                     <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>{t("CN")}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">{user.name}</span>
@@ -70,28 +71,28 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={SparklesIcon} strokeWidth={2} />
-                Upgrade to Pro
+                {t("Upgrade to Pro")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={CheckmarkBadgeIcon} strokeWidth={2} />
-                Account
+                {t("Account")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={CreditCardIcon} strokeWidth={2} />
-                Billing
+                {t("Billing")}
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <HugeiconsIcon icon={NotificationIcon} strokeWidth={2} />
-                Notifications
+                {t("Notifications")}
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
-              Log out
+              {t("Log out")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

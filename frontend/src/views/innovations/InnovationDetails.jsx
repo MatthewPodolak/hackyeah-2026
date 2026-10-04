@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowLeft01Icon, Download04Icon, File02Icon, LinkSquare02Icon, Pdf01Icon } from "@hugeicons/core-free-icons";
@@ -6,22 +8,23 @@ import { buttonVariants } from "@/components/ui/button";
 import { InnovationBadges, InnovationCover } from "@/components/innovation-card";
 import { getDisabilityType, getYoutubeEmbedUrl } from "@/lib/innovations";
 import InnovationTesting from "@/components/innovation-testing";
+import { localize, t } from "@/lib/i18n";
 
 // Fields come straight from the ROPS innovation pages (sections 1–5); empty ones are skipped
-const SECTIONS = [
+const SECTIONS = localize([
   { field: "description", title: "Na czym polega?" },
   { field: "problem", title: "Jaki problem rozwiązuje?" },
   { field: "targetGroupDescription", title: "Dla kogo?" },
   { field: "whoCanImplement", title: "Kto może wdrożyć?" },
   { field: "effectiveness", title: "Czy to działa?" },
-];
+]);
 
-const MATERIALS = [
+const MATERIALS = localize([
   { key: "leaflet", label: "Ulotka (PDF)", icon: Pdf01Icon },
   { key: "materials", label: "Materiały do pobrania (ZIP)", icon: Download04Icon },
   { key: "usageRules", label: "Zasady wykorzystania", icon: File02Icon },
   { key: "details", label: "Strona innowacji w ROPS", icon: LinkSquare02Icon },
-];
+]);
 
 export default function InnovationDetails({ innovation }) {
   const videoUrl = getYoutubeEmbedUrl(innovation);
@@ -35,7 +38,7 @@ export default function InnovationDetails({ innovation }) {
           href="/innovations"
           className={buttonVariants({ variant: "ghost", size: "sm", className: "mb-4 -ml-3" })}
         >
-          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} aria-hidden="true" /> Wróć do listy
+          <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} aria-hidden="true" /> {t("Wróć do listy")}
         </Link>
 
         <div className="mb-8 overflow-hidden rounded-3xl border border-border shadow-elevation-2">
@@ -61,13 +64,12 @@ export default function InnovationDetails({ innovation }) {
           <InnovationBadges innovation={innovation} />
           {disabilityTypes.length > 0 && (
             <p className="text-sm text-muted-foreground">
-              Rodzaj niepełnosprawności: {disabilityTypes.join(", ")}
+              {t("Rodzaj niepełnosprawności: {types}", { types: disabilityTypes.join(", ") })}
             </p>
           )}
           {innovation.disseminationProgram && (
             <p className="text-sm">
-              <span aria-hidden="true">⭐</span> Innowacja wybrana do upowszechniania w projekcie „
-              {innovation.disseminationProgram.toLowerCase()}”
+              <span aria-hidden="true">⭐</span> {t("Innowacja wybrana do upowszechniania w projekcie „{program}”", { program: innovation.disseminationProgram.toLowerCase() })}
             </p>
           )}
         </header>
@@ -86,7 +88,7 @@ export default function InnovationDetails({ innovation }) {
         {materials.length > 0 && (
           <section aria-labelledby="section-materials" className="mt-8">
             <h2 id="section-materials" className="mb-3 font-heading text-lg font-semibold tracking-tight">
-              Materiały
+              {t("Materiały")}
             </h2>
             <ul className="flex flex-wrap gap-2">
               {materials.map(({ key, label, icon }) => (
@@ -99,7 +101,7 @@ export default function InnovationDetails({ innovation }) {
                   >
                     <HugeiconsIcon icon={icon} strokeWidth={2} aria-hidden="true" />
                     {label}
-                    <span className="sr-only"> (otwiera się w nowej karcie)</span>
+                    <span className="sr-only">{" "}{t("(otwiera się w nowej karcie)")}</span>
                   </a>
                 </li>
               ))}
@@ -110,9 +112,9 @@ export default function InnovationDetails({ innovation }) {
         <InnovationTesting innovationId={innovation.id} innovationName={innovation.name} />
 
         <p className="mt-10 border-t border-border pt-4 text-sm text-muted-foreground">
-          Źródło: Biblioteka Innowacji Społecznych ROPS Kraków. Pytania o wdrożenie:{" "}
+          {t("Źródło: Biblioteka Innowacji Społecznych ROPS Kraków. Pytania o wdrożenie:")}{" "}
           <a href="mailto:iws@rops.krakow.pl" className="underline underline-offset-4">
-            iws@rops.krakow.pl
+            {t("iws@rops.krakow.pl")}
           </a>
         </p>
       </article>

@@ -40,6 +40,7 @@ import {
   STREET_NOT_FOUND_MSG,
   emptyField,
 } from "@/helpers/Errors"
+import { t } from "@/lib/i18n";
 
 const LocationPicker = dynamic(() => import("@/components/location-picker"), { ssr: false })
 
@@ -57,9 +58,9 @@ function readAsDataUrl(file) {
 }
 
 function validate(form, place) {
-  if (!form.title.trim()) return ["title", emptyField("tytuł")]
+  if (!form.title.trim()) return ["title", emptyField(t("tytuł"))]
   if (!form.description.trim()) return ["description", emptyField("opis")]
-  if (!form.category) return ["category", "Wybierz kategorię problemu!"]
+  if (!form.category) return ["category", t("Wybierz kategorię problemu!")]
   if (!form.targetGroup) return ["targetGroup", "Wybierz, kogo dotyczy problem!"]
   if (!form.wholeGmina && !form.location) return ["address", EMPTY_LOCATION_MSG]
   if (place.outside) return ["address", OUTSIDE_MALOPOLSKA_MSG]
@@ -170,11 +171,11 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
     if (locating || searching) return
     clearPlaceErrors()
     if (!navigator.geolocation) {
-      fail("address", "Ta przeglądarka nie udostępnia lokalizacji. Wpisz adres albo wybierz miejsce na mapie.")
+      fail("address", t("Ta przeglądarka nie udostępnia lokalizacji. Wpisz adres albo wybierz miejsce na mapie."))
       return
     }
     if (!window.isSecureContext) {
-      fail("address", "Lokalizacja wymaga bezpiecznego połączenia HTTPS. Wpisz adres albo wybierz miejsce na mapie.")
+      fail("address", t("Lokalizacja wymaga bezpiecznego połączenia HTTPS. Wpisz adres albo wybierz miejsce na mapie."))
       return
     }
 
@@ -196,9 +197,9 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
         if (locationRequestRef.current !== requestId) return
         setLocating(false)
         const messages = {
-          1: "Nie udzielono zgody na lokalizację. Zezwól na nią w przeglądarce albo wybierz miejsce na mapie.",
-          2: "Nie udało się ustalić lokalizacji. Wpisz adres albo wybierz miejsce na mapie.",
-          3: "Ustalanie lokalizacji trwało zbyt długo. Spróbuj ponownie albo wybierz miejsce na mapie.",
+          1: t("Nie udzielono zgody na lokalizację. Zezwól na nią w przeglądarce albo wybierz miejsce na mapie."),
+          2: t("Nie udało się ustalić lokalizacji. Wpisz adres albo wybierz miejsce na mapie."),
+          3: t("Ustalanie lokalizacji trwało zbyt długo. Spróbuj ponownie albo wybierz miejsce na mapie."),
         }
         fail("address", messages[error.code] ?? messages[2])
       },
@@ -240,14 +241,14 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
   }
 
   const locationStatus = locating
-    ? "Ustalam Twoją lokalizację. Jeśli przeglądarka zapyta o zgodę, zezwól na dostęp do lokalizacji."
+    ? t("Ustalam Twoją lokalizację. Jeśli przeglądarka zapyta o zgodę, zezwól na dostęp do lokalizacji.")
     : form.wholeGmina
-    ? "Zgłoszenie dotyczy całej gminy. Kliknij na mapie, jeśli chcesz wskazać dokładne miejsce."
+    ? t("Zgłoszenie dotyczy całej gminy. Kliknij na mapie, jeśli chcesz wskazać dokładne miejsce.")
     : !form.location
-    ? "Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie."
+    ? t("Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie.")
     : street.isFetching
-      ? "Szukam adresu..."
-      : `Wybrane miejsce: ${street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`}`
+      ? t("Szukam adresu...")
+      : t("Wybrane miejsce: {place}", { place: street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}` })
 
   return (
     <Modal open={open} onClose={close} labelledBy="q-heading" describedBy="q-intro" className="max-w-2xl">
@@ -255,24 +256,24 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
         <DialogHeader
           icon={Megaphone01Icon}
           tone="danger"
-          title="Zgłoś problem"
+          title={t("Zgłoś problem")}
           titleId="q-heading"
-          description="Opisz problem i wskaż miejsce. Wszystkie pola poza zdjęciem są wymagane."
+          description={t("Opisz problem i wskaż miejsce. Wszystkie pola poza zdjęciem są wymagane.")}
           descriptionId="q-intro"
           onClose={close}
         />
         <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
           <DialogBody className="pt-2">
             <FieldGroup className="gap-6">
-              <FormStep number={1} title="Co się dzieje?">
+              <FormStep number={1} title={t("Co się dzieje?")}>
                 <Field>
-                  <FieldLabel htmlFor="q-title">Tytuł</FieldLabel>
+                  <FieldLabel htmlFor="q-title">{t("Tytuł")}</FieldLabel>
                   <div className="relative">
                     <Input
                       {...fieldProps("title")}
                       ref={titleRef}
                       required
-                      placeholder="np. Brak podjazdu dla wózków przy przychodni"
+                      placeholder={t("np. Brak podjazdu dla wózków przy przychodni")}
                       className={speechSupported ? "pr-11" : undefined}
                       value={form.title}
                       onChange={(e) => set("title")(e.target.value)}
@@ -282,20 +283,20 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                   <FieldError {...errorProps("title")} />
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="q-description">Opis</FieldLabel>
+                  <FieldLabel htmlFor="q-description">{t("Opis")}</FieldLabel>
                   <Textarea
                     {...fieldProps("description", "q-description-hint")}
                     required
-                    placeholder="Kogo i jak dotyka ten problem? Od kiedy trwa?"
+                    placeholder={t("Kogo i jak dotyka ten problem? Od kiedy trwa?")}
                     value={form.description}
                     onChange={(e) => set("description")(e.target.value)}
                   />
-                  <FieldDescription id="q-description-hint">Nie podawaj imion, nazwisk ani adresów prywatnych.</FieldDescription>
+                  <FieldDescription id="q-description-hint">{t("Nie podawaj imion, nazwisk ani adresów prywatnych.")}</FieldDescription>
                   <FieldError {...errorProps("description")} />
                 </Field>
                 <div className="grid gap-5 sm:grid-cols-2">
                   <Field>
-                    <FieldLabel htmlFor="q-category">Kategoria</FieldLabel>
+                    <FieldLabel htmlFor="q-category">{t("Kategoria")}</FieldLabel>
                     <NativeSelect
                       {...fieldProps("category")}
                       required
@@ -303,7 +304,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                       value={form.category}
                       onChange={(e) => set("category")(e.target.value)}
                     >
-                      <NativeSelectOption value="" disabled>Wybierz kategorię</NativeSelectOption>
+                      <NativeSelectOption value="" disabled>{t("Wybierz kategorię")}</NativeSelectOption>
                       {PROBLEM_CATEGORY_OPTIONS.map((option) => (
                         <NativeSelectOption key={option.value} value={option.value}>
                           {option.label}
@@ -313,7 +314,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     <FieldError {...errorProps("category")} />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="q-targetGroup">Kogo dotyczy</FieldLabel>
+                    <FieldLabel htmlFor="q-targetGroup">{t("Kogo dotyczy")}</FieldLabel>
                     <NativeSelect
                       {...fieldProps("targetGroup")}
                       required
@@ -321,7 +322,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                       value={form.targetGroup}
                       onChange={(e) => set("targetGroup")(e.target.value)}
                     >
-                      <NativeSelectOption value="" disabled>Wybierz grupę</NativeSelectOption>
+                      <NativeSelectOption value="" disabled>{t("Wybierz grupę")}</NativeSelectOption>
                       {TARGET_GROUP_OPTIONS.map((option) => (
                         <NativeSelectOption key={option.value} value={option.value}>
                           {option.label}
@@ -333,15 +334,15 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                 </div>
               </FormStep>
 
-              <FormStep number={2} title="Gdzie?" description="Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie.">
+              <FormStep number={2} title={t("Gdzie?")} description={t("Wpisz adres, użyj swojej lokalizacji albo kliknij miejsce na mapie.")}>
                 <Field>
-                  <FieldLabel htmlFor="q-address">Adres</FieldLabel>
+                  <FieldLabel htmlFor="q-address">{t("Adres")}</FieldLabel>
                   <div className="flex gap-2">
                     <Input
                       {...fieldProps("address", "q-location-status")}
                       value={address}
                       autoComplete="off"
-                      placeholder="np. Floriańska 15"
+                      placeholder={t("np. Floriańska 15")}
                       onChange={(e) => setAddress(e.target.value)}
                       onKeyDown={(e) => {
                         if (e.key !== "Enter") return
@@ -351,7 +352,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     />
                     <Button type="button" variant="outline" className="h-11" onClick={searchAddress} disabled={searching || locating}>
                       <HugeiconsIcon icon={Search01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                      {searching ? "Szukam..." : "Szukaj"}
+                      {searching ? "Szukam..." : t("Szukaj")}
                     </Button>
                   </div>
                   <Button
@@ -365,7 +366,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     {locating
                       ? <Spinner data-icon="inline-start" aria-hidden="true" />
                       : <HugeiconsIcon icon={Location01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
-                    {locating ? "Ustalam lokalizację..." : "Użyj mojej lokalizacji"}
+                    {locating ? t("Ustalam lokalizację...") : t("Użyj mojej lokalizacji")}
                   </Button>
                   <FieldError {...errorProps("address")} />
                   <div className="h-60 w-full overflow-hidden rounded-2xl border border-border">
@@ -379,7 +380,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                   )}
                 </Field>
                 <Field>
-                  <FieldLabel htmlFor="q-gmina">Gmina</FieldLabel>
+                  <FieldLabel htmlFor="q-gmina">{t("Gmina")}</FieldLabel>
                   <NativeSelect
                     {...fieldProps("gmina", "q-gmina-hint")}
                     required
@@ -389,7 +390,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     onChange={(e) => pickGmina(e.target.value)}
                   >
                     <NativeSelectOption value="" disabled>
-                      {regions.isPending ? "Wczytuję gminy..." : "Wybierz gminę z listy"}
+                      {regions.isPending ? t("Wczytuję gminy...") : t("Wybierz gminę z listy")}
                     </NativeSelectOption>
                     {regions.data?.powiaty.map((powiat) => (
                       <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
@@ -399,7 +400,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                       </NativeSelectOptGroup>
                     ))}
                   </NativeSelect>
-                  <FieldDescription id="q-gmina-hint">Uzupełnia się po wybraniu miejsca na mapie. Możesz też wybrać gminę bez mapy.</FieldDescription>
+                  <FieldDescription id="q-gmina-hint">{t("Uzupełnia się po wybraniu miejsca na mapie. Możesz też wybrać gminę bez mapy.")}</FieldDescription>
                   <FieldError {...errorProps("gmina")} />
                 </Field>
                 <Field orientation="horizontal" className="rounded-xl bg-muted/60 p-3">
@@ -409,11 +410,11 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                     disabled={!gminaId}
                     onCheckedChange={setWholeGmina}
                   />
-                  <FieldLabel htmlFor="q-whole-gmina">Dotyczy całej gminy, bez dokładnego miejsca</FieldLabel>
+                  <FieldLabel htmlFor="q-whole-gmina">{t("Dotyczy całej gminy, bez dokładnego miejsca")}</FieldLabel>
                 </Field>
               </FormStep>
 
-              <FormStep number={3} title="Zdjęcie" description="Opcjonalnie, do 5 MB.">
+              <FormStep number={3} title={t("Zdjęcie")} description={t("Opcjonalnie, do 5 MB.")}>
                 <Field>
                   <label
                     htmlFor="q-photo"
@@ -427,15 +428,15 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
                       onChange={(e) => set("photo")(e.target.files?.[0] ?? null)}
                     />
                     {photoPreview ? (
-                      <img src={photoPreview} alt="Podgląd wybranego zdjęcia" className="size-16 shrink-0 rounded-xl object-cover" />
+                      <img src={photoPreview} alt={t("Podgląd wybranego zdjęcia")} className="size-16 shrink-0 rounded-xl object-cover" />
                     ) : (
                       <span aria-hidden="true" className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
                         <HugeiconsIcon icon={ImageAdd01Icon} strokeWidth={1.8} className="size-7" />
                       </span>
                     )}
                     <span className="min-w-0 text-sm">
-                      <span className="block font-semibold">{form.photo ? form.photo.name : "Dodaj zdjęcie"}</span>
-                      <span className="block text-muted-foreground">{form.photo ? "Kliknij, aby zmienić" : "JPG lub PNG, maks. 5 MB"}</span>
+                      <span className="block font-semibold">{form.photo ? form.photo.name : t("Dodaj zdjęcie")}</span>
+                      <span className="block text-muted-foreground">{form.photo ? t("Kliknij, aby zmienić") : "JPG lub PNG, maks. 5 MB"}</span>
                     </span>
                   </label>
                   <FieldError {...errorProps("photo")} />
@@ -444,9 +445,9 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
             </FieldGroup>
           </DialogBody>
           <DialogFooter>
-            <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
+            <Button type="button" variant="ghost" onClick={close}>{t("Anuluj")}</Button>
             <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || locating || shapes.isPending}>
-              {addProblem.isPending ? "Szukam rozwiązań..." : "Wyślij zgłoszenie"}
+              {addProblem.isPending ? t("Szukam rozwiązań...") : t("Wyślij zgłoszenie")}
             </Button>
           </DialogFooter>
         </form>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { createAccessibleMap } from "@/lib/map";
+import { t } from "@/lib/i18n";
 
 const LABEL = "Mapa wyboru lokalizacji. Kliknij miejsce, aby je zaznaczyć. Z klawiatury: strzałki przesuwają mapę, Enter zaznacza jej środek.";
 
@@ -20,7 +21,7 @@ export default function LocationPicker({ value, focus, focusZoom = 11, onChange 
   useEffect(() => {
     if (mapRef.current) return;
     const container = containerRef.current;
-    const map = createAccessibleMap(L, container, { zoom: 13, label: LABEL });
+    const map = createAccessibleMap(L, container, { zoom: 13, label: t(LABEL) });
     map.on("click", (e) => onChangeRef.current?.({ lat: e.latlng.lat, lon: e.latlng.lng }));
     const onKeyDown = (e) => {
       if (e.key !== "Enter" || e.target !== container) return;

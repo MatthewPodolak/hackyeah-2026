@@ -5,6 +5,7 @@ import { Cancel01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { IconTile } from "@/components/page-header";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 export function DialogPanel({ className, children, ...props }) {
   return (
@@ -17,7 +18,7 @@ export function DialogPanel({ className, children, ...props }) {
   );
 }
 
-export function DialogHeader({ icon, tone = "primary", eyebrow, title, titleId, titleRef, titleTag: Title = "h2", description, descriptionId, onClose, closeLabel = "Zamknij okno", children }) {
+export function DialogHeader({ icon, tone = "primary", eyebrow, title, titleId, titleRef, titleTag: Title = "h2", description, descriptionId, onClose, closeLabel = t("Zamknij okno"), children }) {
   return (
     <div className="flex shrink-0 items-start gap-4 px-6 pt-6 pb-4">
       {icon && <IconTile icon={icon} tone={tone} />}

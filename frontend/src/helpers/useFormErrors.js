@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { t } from "@/lib/i18n";
 
 const FOCUSABLE = "input:not([disabled]),select:not([disabled]),textarea:not([disabled]),button:not([disabled]),[tabindex]:not([tabindex='-1'])";
 
@@ -37,7 +38,7 @@ export function useFormErrors(prefix) {
 
   const errorProps = (field) => ({
     id: `${prefix}-${field}-error`,
-    children: errors[field],
+    children: errors[field] ? t(errors[field]) : errors[field],
   });
 
   return { errors, fail, clear, reset, fieldProps, errorProps };

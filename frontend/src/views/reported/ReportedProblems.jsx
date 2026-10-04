@@ -27,23 +27,24 @@ import { PRIORITIES, PROBLEM_PRIORITY, PROBLEM_STATUS, ROPS_STATUSES, problemPri
 import { gminaName, problemPlace } from "@/lib/gminy";
 import { PageHeader } from "@/components/page-header";
 import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
+import { localDateFormat, localize, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
+const dateFormat = localDateFormat({ dateStyle: "medium", timeStyle: "short" });
 const PRIORITY_RANK = Object.fromEntries(PRIORITIES.map((key, i) => [key, i]));
 
 // queues: which reports each tab shows
-const ROPS_QUEUES = {
+const ROPS_QUEUES = localize({
   rops: { label: "Do oceny ROPS", test: (p) => !waitsForGmina(p) && p.status !== "GMINA_REJECTED" },
   waiting: { label: "Czeka na gminę", test: (p) => waitsForGmina(p) },
   rejected: { label: "Odrzucone przez gminy", test: (p) => p.status === "GMINA_REJECTED" },
   all: { label: "Wszystkie", test: () => true },
-};
-const JST_QUEUES = {
+});
+const JST_QUEUES = localize({
   waiting: { label: "Do oceny", test: (p) => waitsForGmina(p) },
   forwarded: { label: "Przekazane do ROPS", test: (p) => !waitsForGmina(p) && p.status !== "GMINA_REJECTED" },
   rejected: { label: "Odrzucone", test: (p) => p.status === "GMINA_REJECTED" },
   all: { label: "Wszystkie", test: () => true },
-};
+});
 
 function normalize(text) {
   return (text ?? "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l");
@@ -67,7 +68,7 @@ function FilterChip({ active, label, count, onClick }) {
       )}
     >
       {label}
-      <span className="sr-only">, liczba:</span>
+      <span className="sr-only">{t(", liczba:")}</span>
       <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>{count}</span>
     </button>
   );
@@ -86,7 +87,7 @@ function Badges({ problem }) {
 
 function PriorityPill({ priority }) {
   const meta = problemPriority(priority);
-  return meta ? <StatusPill meta={meta} label="Priorytet" /> : null;
+  return meta ? <StatusPill meta={meta} label={t("Priorytet")} /> : null;
 }
 
 // what the gmina decided: note for ROPS on accept, reason on decline
@@ -96,7 +97,7 @@ function GminaNote({ item }) {
   return (
     <div className={cn("rounded-xl p-3 text-sm", rejected ? "bg-red-500/10" : "bg-teal-500/10")}>
       <p className={cn("text-xs font-medium uppercase tracking-wide", rejected ? "text-red-800 dark:text-red-300" : "text-teal-800 dark:text-teal-300")}>
-        {rejected ? "Powód odrzucenia przez gminę" : "Notatka gminy dla ROPS"}
+        {rejected ? t("Powód odrzucenia przez gminę") : t("Notatka gminy dla ROPS")}
       </p>
       <p className="whitespace-pre-line break-words">{item.gminaNote}</p>
     </div>
@@ -127,11 +128,11 @@ function ReviewForm({ item, onDone }) {
     <form onSubmit={save} className="rounded-xl bg-muted/50 p-4">
       <FieldGroup>
         {current === "GMINA_REJECTED" && (
-          <p className="text-sm text-muted-foreground">Gmina odrzuciła to zgłoszenie. Wybierz inny status, aby przywrócić je do oceny ROPS.</p>
+          <p className="text-sm text-muted-foreground">{t("Gmina odrzuciła to zgłoszenie. Wybierz inny status, aby przywrócić je do oceny ROPS.")}</p>
         )}
         <div className="grid gap-4 sm:grid-cols-2">
           <Field>
-            <FieldLabel htmlFor="problem-status">Status</FieldLabel>
+            <FieldLabel htmlFor="problem-status">{t("Status")}</FieldLabel>
             <NativeSelect id="problem-status" className="w-full" value={status} onChange={(e) => setStatus(e.target.value)}>
               {statuses.map((key) => (
                 <NativeSelectOption key={key} value={key}>{PROBLEM_STATUS[key].label}</NativeSelectOption>
@@ -139,9 +140,9 @@ function ReviewForm({ item, onDone }) {
             </NativeSelect>
           </Field>
           <Field>
-            <FieldLabel htmlFor="problem-priority">Priorytet</FieldLabel>
+            <FieldLabel htmlFor="problem-priority">{t("Priorytet")}</FieldLabel>
             <NativeSelect id="problem-priority" className="w-full" value={priority} onChange={(e) => setPriority(e.target.value)}>
-              <NativeSelectOption value="" disabled>Bez priorytetu</NativeSelectOption>
+              <NativeSelectOption value="" disabled>{t("Bez priorytetu")}</NativeSelectOption>
               {PRIORITIES.map((key) => (
                 <NativeSelectOption key={key} value={key}>{PROBLEM_PRIORITY[key].label}</NativeSelectOption>
               ))}
@@ -149,16 +150,16 @@ function ReviewForm({ item, onDone }) {
           </Field>
         </div>
         <Field>
-          <FieldLabel htmlFor="problem-reply">Odpowiedź do zgłaszającego</FieldLabel>
+          <FieldLabel htmlFor="problem-reply">{t("Odpowiedź do zgłaszającego")}</FieldLabel>
           <Textarea
             id="problem-reply"
             rows={4}
             value={reply}
-            placeholder="Zgłaszający zobaczy tę wiadomość w „Moich zgłoszeniach”"
+            placeholder={t("Zgłaszający zobaczy tę wiadomość w „Moich zgłoszeniach”")}
             onChange={(e) => setReply(e.target.value)}
           />
         </Field>
-        <Button type="submit" disabled={review.isPending}>{review.isPending ? "Zapisywanie..." : "Zapisz odpowiedź"}</Button>
+        <Button type="submit" disabled={review.isPending}>{review.isPending ? "Zapisywanie..." : t("Zapisz odpowiedź")}</Button>
       </FieldGroup>
     </form>
   );
@@ -175,12 +176,12 @@ function DecisionForm({ item, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (accept === null) return fail("choice", "Wybierz: przyjmij albo odrzuć");
-    if (accept && !priority) return fail("priority", "Wybierz priorytet");
-    if (!accept && !note.trim()) return fail("note", "Podaj powód odrzucenia");
+    if (accept === null) return fail("choice", t("Wybierz: przyjmij albo odrzuć"));
+    if (accept && !priority) return fail("priority", t("Wybierz priorytet"));
+    if (!accept && !note.trim()) return fail("note", t("Podaj powód odrzucenia"));
     try {
       await decide.mutateAsync({ id: item.problem.id, model: { accept, priority: accept ? priority : null, note } });
-      showToast(accept ? "Zgłoszenie przekazano do ROPS" : "Zgłoszenie odrzucono", "success");
+      showToast(accept ? t("Zgłoszenie przekazano do ROPS") : t("Zgłoszenie odrzucono"), "success");
       onDone();
     } catch (err) {
       showToast(err?.body?.message ?? null, "error");
@@ -196,20 +197,20 @@ function DecisionForm({ item, onDone }) {
     <form onSubmit={submit} noValidate className="rounded-xl bg-muted/50 p-4">
       <FieldGroup>
         <div role="radiogroup" aria-labelledby="decision-choice-label" id="decision-choice" className="flex flex-col gap-2">
-          <p id="decision-choice-label" className="text-sm font-medium">Decyzja gminy</p>
+          <p id="decision-choice-label" className="text-sm font-medium">{t("Decyzja gminy")}</p>
           <div className="flex flex-wrap gap-2">
             <Button type="button" role="radio" aria-checked={accept === true} variant={accept === true ? "default" : "outline"} onClick={() => choose(true)}>
-              Przyjmij i przekaż do ROPS
+              {t("Przyjmij i przekaż do ROPS")}
             </Button>
             <Button type="button" role="radio" aria-checked={accept === false} variant={accept === false ? "destructive" : "outline"} onClick={() => choose(false)}>
-              Odrzuć
+              {t("Odrzuć")}
             </Button>
           </div>
           <FieldError {...errorProps("choice")} />
         </div>
         {accept === true && (
           <Field>
-            <FieldLabel htmlFor="decision-priority">Priorytet</FieldLabel>
+            <FieldLabel htmlFor="decision-priority">{t("Priorytet")}</FieldLabel>
             <NativeSelect
               {...fieldProps("priority")}
               className="w-full"
@@ -219,7 +220,7 @@ function DecisionForm({ item, onDone }) {
                 clear("priority");
               }}
             >
-              <NativeSelectOption value="" disabled>Wybierz priorytet</NativeSelectOption>
+              <NativeSelectOption value="" disabled>{t("Wybierz priorytet")}</NativeSelectOption>
               {PRIORITIES.map((key) => (
                 <NativeSelectOption key={key} value={key}>{PROBLEM_PRIORITY[key].label}</NativeSelectOption>
               ))}
@@ -229,7 +230,7 @@ function DecisionForm({ item, onDone }) {
         )}
         {accept !== null && (
           <Field>
-            <FieldLabel htmlFor="decision-note">{accept ? "Notatka dla ROPS (opcjonalnie)" : "Powód odrzucenia"}</FieldLabel>
+            <FieldLabel htmlFor="decision-note">{accept ? t("Notatka dla ROPS (opcjonalnie)") : t("Powód odrzucenia")}</FieldLabel>
             <Textarea
               {...fieldProps("note", "decision-note-hint")}
               rows={3}
@@ -241,12 +242,12 @@ function DecisionForm({ item, onDone }) {
               }}
             />
             <FieldDescription id="decision-note-hint">
-              {accept ? "ROPS zobaczy notatkę przy zgłoszeniu." : "Zgłaszający zobaczy ten powód w „Moich zgłoszeniach”."}
+              {accept ? t("ROPS zobaczy notatkę przy zgłoszeniu.") : t("Zgłaszający zobaczy ten powód w „Moich zgłoszeniach”.")}
             </FieldDescription>
             <FieldError {...errorProps("note")} />
           </Field>
         )}
-        <Button type="submit" disabled={decide.isPending}>{decide.isPending ? "Zapisywanie..." : "Zapisz decyzję"}</Button>
+        <Button type="submit" disabled={decide.isPending}>{decide.isPending ? "Zapisywanie..." : t("Zapisz decyzję")}</Button>
       </FieldGroup>
     </form>
   );
@@ -267,39 +268,39 @@ function ProblemDialog({ item: listItem, isJst, onClose }) {
         <DialogHeader
           icon={Alert02Icon}
           tone="danger"
-          eyebrow="Zgłoszony problem"
+          eyebrow={t("Zgłoszony problem")}
           title={problem.title}
           titleId="problem-dialog-heading"
           onClose={onClose}
-          closeLabel="Zamknij szczegóły zgłoszenia"
+          closeLabel={t("Zamknij szczegóły zgłoszenia")}
         />
         <DialogBody className="flex flex-col gap-4 pt-1">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <StatusPill meta={problemStatus(problem.status)} />
             <PriorityPill priority={item.priority} />
-            {problem.localDate && <span>Zgłoszono <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time></span>}
+            {problem.localDate && <span>{t("Zgłoszono")}{" "}<time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time></span>}
             <span>{item.authorName ? `przez ${item.authorName}` : "anonimowo"}</span>
           </div>
           <Badges problem={problem} />
           {full.data?.imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element -- user-uploaded data URL
-            <img src={full.data.imageUrl} alt={`Zdjęcie dołączone do zgłoszenia: ${problem.title}`} className="max-h-72 w-full rounded-xl border object-cover" />
+            <img src={full.data.imageUrl} alt={t("Zdjęcie dołączone do zgłoszenia: {title}", { title: problem.title })} className="max-h-72 w-full rounded-xl border object-cover" />
           )}
           {problem.description && <p className="text-sm whitespace-pre-line break-words">{problem.description}</p>}
           <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
-            <span className="sr-only">Miejsce: </span>{problemPlace(problem, gminy)}
+            <span className="sr-only">{t("Miejsce:")}{" "}</span>{problemPlace(problem, gminy)}
           </p>
           <GminaNote item={item} />
           {isJst ? (
             waiting ? (
               <DecisionForm item={item} onDone={onClose} />
             ) : (
-              <p className="text-sm text-muted-foreground">Decyzja gminy została zapisana. Dalszą ocenę prowadzi ROPS.</p>
+              <p className="text-sm text-muted-foreground">{t("Decyzja gminy została zapisana. Dalszą ocenę prowadzi ROPS.")}</p>
             )
           ) : waiting ? (
             <p className="rounded-xl bg-muted/50 p-4 text-sm text-muted-foreground">
-              Zgłoszenie czeka na decyzję gminy. Będzie można je ocenić, gdy gmina je przyjmie albo odrzuci.
+              {t("Zgłoszenie czeka na decyzję gminy. Będzie można je ocenić, gdy gmina je przyjmie albo odrzuci.")}
             </p>
           ) : (
             <ReviewForm key={`${problem.id}-${problem.status}-${item.priority}`} item={item} onDone={onClose} />
@@ -346,16 +347,16 @@ function ProblemsList() {
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <PageHeader
           icon={AlertDiamondIcon}
-          title="Zgłoszone problemy"
+          title={t("Zgłoszone problemy")}
           description={isJst
-            ? `Zgłoszenia mieszkańców z gminy: ${gminaName(gminy.get(user.gminaId)) ?? "…"}. Przyjmij je z priorytetem albo odrzuć.`
-            : "Zgłoszenia przyjęte przez gminy i zgłoszenia bez gminy. Odpowiedź trafia do zgłaszającego."}
+            ? t("Zgłoszenia mieszkańców z gminy: {gmina}. Przyjmij je z priorytetem albo odrzuć.", { gmina: gminaName(gminy.get(user.gminaId)) ?? "…" })
+            : t("Zgłoszenia przyjęte przez gminy i zgłoszenia bez gminy. Odpowiedź trafia do zgłaszającego.")}
           actions={unseen > 0 && (
-            <p className="rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground">Nowe zgłoszenia: {unseen}</p>
+            <p className="rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground">{t("Nowe zgłoszenia: {count}", { count: unseen })}</p>
           )}
         />
 
-        <div role="search" aria-label="Filtry zgłoszeń" className="mb-6 flex flex-col gap-3">
+        <div role="search" aria-label={t("Filtry zgłoszeń")} className="mb-6 flex flex-col gap-3">
           <InputGroup>
             <InputGroupAddon>
               <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" />
@@ -363,12 +364,12 @@ function ProblemsList() {
             <InputGroupInput
               type="search"
               value={query}
-              placeholder="Szukaj po tytule, opisie, ulicy lub kategorii..."
-              aria-label="Szukaj zgłoszeń"
+              placeholder={t("Szukaj po tytule, opisie, ulicy lub kategorii...")}
+              aria-label={t("Szukaj zgłoszeń")}
               onChange={(e) => setQuery(e.target.value)}
             />
           </InputGroup>
-          <div role="group" aria-label="Kolejka zgłoszeń" className="flex flex-wrap gap-2">
+          <div role="group" aria-label={t("Kolejka zgłoszeń")} className="flex flex-wrap gap-2">
             {Object.entries(queues).map(([key, meta]) => (
               <FilterChip
                 key={key}
@@ -383,7 +384,7 @@ function ProblemsList() {
             ))}
           </div>
           {showStatusChips && (
-            <div role="group" aria-label="Status zgłoszenia" className="flex flex-wrap gap-2">
+            <div role="group" aria-label={t("Status zgłoszenia")} className="flex flex-wrap gap-2">
               {ROPS_STATUSES.map((key) => (
                 <FilterChip key={key} active={status === key} label={PROBLEM_STATUS[key].label} count={counts[key] ?? 0} onClick={() => setStatus(status === key ? null : key)} />
               ))}
@@ -393,7 +394,7 @@ function ProblemsList() {
         <p aria-live="polite" aria-atomic="true" className="sr-only">{isPending ? "" : `Wyniki: ${visible.length} z ${inQueue.length}`}</p>
 
         {isPending ? (
-          <LoadingStatus label="Wczytywanie zgłoszonych problemów" className="flex flex-col gap-3">
+          <LoadingStatus label={t("Wczytywanie zgłoszonych problemów")} className="flex flex-col gap-3">
             {Array.from({ length: 4 }, (_, i) => <Skeleton key={i} className="h-28 w-full rounded-xl" />)}
           </LoadingStatus>
         ) : visible.length > 0 ? (
@@ -414,8 +415,8 @@ function ProblemsList() {
                         </button>
                       </h2>
                       <div className="flex flex-wrap items-center gap-2">
-                        {isJst && waiting && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">Do oceny</span>}
-                        {!isJst && !item.adminSeen && !waiting && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">Nowe</span>}
+                        {isJst && waiting && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">{t("Do oceny")}</span>}
+                        {!isJst && !item.adminSeen && !waiting && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">{t("Nowe")}</span>}
                         <PriorityPill priority={item.priority} />
                         <StatusPill meta={problemStatus(problem.status)} />
                       </div>
@@ -425,19 +426,19 @@ function ProblemsList() {
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1.5">
                         <HugeiconsIcon icon={Location01Icon} strokeWidth={2} className="size-4 shrink-0" aria-hidden="true" />
-                        <span className="sr-only">Miejsce: </span>{problemPlace(problem, gminy)}
+                        <span className="sr-only">{t("Miejsce:")}{" "}</span>{problemPlace(problem, gminy)}
                       </span>
                       {problem.localDate && (
                         <span className="flex items-center gap-1.5 tabular-nums">
                           <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-4" aria-hidden="true" />
-                          <span className="sr-only">Zgłoszono: </span>
+                          <span className="sr-only">{t("Zgłoszono:")}{" "}</span>
                           <time dateTime={problem.localDate}>{dateFormat.format(new Date(problem.localDate))}</time>
                         </span>
                       )}
                       {item.adminReply && (
                         <span className="flex items-center gap-1.5">
                           <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} className="size-4" aria-hidden="true" />
-                          Udzielono odpowiedzi
+                          {t("Udzielono odpowiedzi")}
                         </span>
                       )}
                     </div>
@@ -450,11 +451,11 @@ function ProblemsList() {
           <Empty className="border border-dashed">
             <EmptyHeader>
               <EmptyMedia variant="icon"><HugeiconsIcon icon={InboxIcon} strokeWidth={2} aria-hidden="true" /></EmptyMedia>
-              <EmptyTitle>Brak zgłoszeń</EmptyTitle>
+              <EmptyTitle>{t("Brak zgłoszeń")}</EmptyTitle>
               <EmptyDescription>
                 {inQueue.length
-                  ? "Żadne zgłoszenie nie pasuje do filtrów."
-                  : isJst && queue === "waiting" ? "Nie ma zgłoszeń czekających na decyzję gminy." : "W tej kolejce nie ma zgłoszeń."}
+                  ? t("Żadne zgłoszenie nie pasuje do filtrów.")
+                  : isJst && queue === "waiting" ? t("Nie ma zgłoszeń czekających na decyzję gminy.") : t("W tej kolejce nie ma zgłoszeń.")}
               </EmptyDescription>
             </EmptyHeader>
           </Empty>

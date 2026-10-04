@@ -17,8 +17,9 @@ import { useAddReview, useInnovationReviews, useParticipate } from "@/api/hooks/
 import { useToast } from "@/helpers/ToastProvider"
 import { useFormErrors } from "@/helpers/useFormErrors"
 import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts"
+import { localDateFormat, t } from "@/lib/i18n";
 
-const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" })
+const dateFormat = localDateFormat({ dateStyle: "medium" })
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function reviewsLabel(count) {
@@ -32,7 +33,7 @@ function reviewsLabel(count) {
 export function Stars({ value, className }) {
   return (
     <span className={cn("inline-flex items-center gap-0.5", className)}>
-      <span className="sr-only">Ocena: {String(value).replace(".", ",")} z 5</span>
+      <span className="sr-only">{t("Ocena: {value} z 5", { value: String(value).replace(".", ",") })}</span>
       {[1, 2, 3, 4, 5].map((n) => (
         <HugeiconsIcon
           key={n}
@@ -49,7 +50,7 @@ export function Stars({ value, className }) {
 function RatingInput({ value, onChange, error, errorId }) {
   return (
     <fieldset aria-describedby={error ? errorId : undefined} aria-invalid={error ? true : undefined} id="review-rating" className="flex flex-col gap-2">
-      <legend className="mb-2 text-sm font-medium">Ocena (wymagane)</legend>
+      <legend className="mb-2 text-sm font-medium">{t("Ocena (wymagane)")}</legend>
       <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((n) => (
           <label key={n} className="cursor-pointer rounded-md p-1 has-[input:focus-visible]:outline-3 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-[var(--focus)]">
@@ -71,7 +72,7 @@ function RatingInput({ value, onChange, error, errorId }) {
           </label>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground" aria-hidden="true">{value ? `Wybrano ${value} z 5` : "Nie wybrano oceny"}</p>
+      <p className="text-xs text-muted-foreground" aria-hidden="true">{value ? t("Wybrano {value} z 5", { value }) : t("Nie wybrano oceny")}</p>
     </fieldset>
   )
 }
@@ -99,9 +100,9 @@ function ParticipationForm({ innovationId, innovationName, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!user && !form.contactEmail.trim() && !form.contactPhone.trim()) return fail("contactEmail", "Podaj email lub telefon, żebyśmy mogli się skontaktować")
+    if (!user && !form.contactEmail.trim() && !form.contactPhone.trim()) return fail("contactEmail", t("Podaj email lub telefon, żebyśmy mogli się skontaktować"))
     if (form.contactEmail.trim() && !EMAIL_REGEX.test(form.contactEmail.trim())) return fail("contactEmail", "Niepoprawny adres email, np. jan@example.com")
-    if (!form.motivation.trim()) return fail("motivation", "Napisz, dlaczego chcesz przetestować tę innowację")
+    if (!form.motivation.trim()) return fail("motivation", t("Napisz, dlaczego chcesz przetestować tę innowację"))
     try {
       await participate.mutateAsync({
         contactName: form.contactName.trim() || null,
@@ -112,7 +113,7 @@ function ParticipationForm({ innovationId, innovationName, onDone }) {
       showToast("Zgłoszenie do testów zostało wysłane. ROPS skontaktuje się z Tobą.", "success")
       onDone()
     } catch (err) {
-      if (err?.status === 400) fail("motivation", err.body?.message ?? "Sprawdź poprawność danych")
+      if (err?.status === 400) fail("motivation", err.body?.message ?? t("Sprawdź poprawność danych"))
       else showToast(null, "error")
     }
   }
@@ -121,31 +122,31 @@ function ParticipationForm({ innovationId, innovationName, onDone }) {
     <form onSubmit={submit} noValidate>
       <FieldGroup>
         <p className="text-sm text-muted-foreground">
-          {user ? "Status zgłoszenia zobaczysz w zakładce „Moje testy”." : "Zaloguj się, aby śledzić status zgłoszenia. Możesz też wysłać je bez konta."}
+          {user ? t("Status zgłoszenia zobaczysz w zakładce „Moje testy”.") : t("Zaloguj się, aby śledzić status zgłoszenia. Możesz też wysłać je bez konta.")}
         </p>
         <Field>
-          <FieldLabel htmlFor="tp-contactName">Imię i nazwisko lub nazwa organizacji</FieldLabel>
+          <FieldLabel htmlFor="tp-contactName">{t("Imię i nazwisko lub nazwa organizacji")}</FieldLabel>
           <Input {...fieldProps("contactName")} autoComplete="name" value={form.contactName} onChange={set("contactName")} maxLength={120} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="tp-contactEmail">Email</FieldLabel>
+          <FieldLabel htmlFor="tp-contactEmail">{t("Email")}</FieldLabel>
           <Input {...fieldProps("contactEmail")} type="email" autoComplete="email" value={form.contactEmail} onChange={set("contactEmail")} maxLength={160} />
           <FieldError {...errorProps("contactEmail")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="tp-contactPhone">Telefon (opcjonalnie)</FieldLabel>
+          <FieldLabel htmlFor="tp-contactPhone">{t("Telefon (opcjonalnie)")}</FieldLabel>
           <Input {...fieldProps("contactPhone")} type="tel" autoComplete="tel" value={form.contactPhone} onChange={set("contactPhone")} maxLength={30} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="tp-motivation">Dlaczego chcesz przetestować „{innovationName}”? (wymagane)</FieldLabel>
+          <FieldLabel htmlFor="tp-motivation">{t("Dlaczego chcesz przetestować „{name}”? (wymagane)", { name: innovationName })}</FieldLabel>
           <Textarea {...fieldProps("motivation", "tp-motivation-hint")} required rows={4} value={form.motivation} onChange={set("motivation")} maxLength={2000} />
-          <FieldDescription id="tp-motivation-hint">Np. gdzie i z kim chcesz ją wdrożyć.</FieldDescription>
+          <FieldDescription id="tp-motivation-hint">{t("Np. gdzie i z kim chcesz ją wdrożyć.")}</FieldDescription>
           <FieldError {...errorProps("motivation")} />
         </Field>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
+          <Button type="button" variant="ghost" onClick={onDone}>{t("Anuluj")}</Button>
           <Button type="submit" disabled={participate.isPending}>
-            {participate.isPending ? "Wysyłanie..." : "Wyślij zgłoszenie"}
+            {participate.isPending ? t("Wysyłanie...") : t("Wyślij zgłoszenie")}
           </Button>
         </div>
       </FieldGroup>
@@ -167,8 +168,8 @@ function ReviewForm({ innovationId, onDone }) {
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!form.rating) return fail("rating", "Wybierz ocenę od 1 do 5")
-    if (!form.comment.trim()) return fail("comment", "Napisz kilka słów o swoich doświadczeniach")
+    if (!form.rating) return fail("rating", t("Wybierz ocenę od 1 do 5"))
+    if (!form.comment.trim()) return fail("comment", t("Napisz kilka słów o swoich doświadczeniach"))
     try {
       await addReview.mutateAsync({
         reviewerName: form.reviewerName.trim() || null,
@@ -179,7 +180,7 @@ function ReviewForm({ innovationId, onDone }) {
       showToast("Dziękujemy za opinię!", "success")
       onDone()
     } catch (err) {
-      if (err?.status === 400) fail("comment", err.body?.message ?? "Sprawdź poprawność danych")
+      if (err?.status === 400) fail("comment", err.body?.message ?? t("Sprawdź poprawność danych"))
       else showToast(null, "error")
     }
   }
@@ -198,23 +199,23 @@ function ReviewForm({ innovationId, onDone }) {
         />
         <FieldError {...errorProps("rating")} />
         <Field>
-          <FieldLabel htmlFor="review-reviewerName">Podpis (opcjonalnie)</FieldLabel>
+          <FieldLabel htmlFor="review-reviewerName">{t("Podpis (opcjonalnie)")}</FieldLabel>
           <Input {...fieldProps("reviewerName", "review-name-hint")} value={form.reviewerName} onChange={set("reviewerName")} maxLength={100} />
-          <FieldDescription id="review-name-hint">Bez podpisu opinia będzie oznaczona jako „Anonimowy tester”.</FieldDescription>
+          <FieldDescription id="review-name-hint">{t("Bez podpisu opinia będzie oznaczona jako „Anonimowy tester”.")}</FieldDescription>
         </Field>
         <Field>
-          <FieldLabel htmlFor="review-comment">Opinia (wymagane)</FieldLabel>
+          <FieldLabel htmlFor="review-comment">{t("Opinia (wymagane)")}</FieldLabel>
           <Textarea {...fieldProps("comment")} required rows={4} value={form.comment} onChange={set("comment")} maxLength={2000} />
           <FieldError {...errorProps("comment")} />
         </Field>
         <Field>
-          <FieldLabel htmlFor="review-improvementSuggestion">Co można poprawić? (opcjonalnie)</FieldLabel>
+          <FieldLabel htmlFor="review-improvementSuggestion">{t("Co można poprawić? (opcjonalnie)")}</FieldLabel>
           <Textarea {...fieldProps("improvementSuggestion")} rows={3} value={form.improvementSuggestion} onChange={set("improvementSuggestion")} maxLength={2000} />
         </Field>
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <Button type="button" variant="ghost" onClick={onDone}>Anuluj</Button>
+          <Button type="button" variant="ghost" onClick={onDone}>{t("Anuluj")}</Button>
           <Button type="submit" disabled={addReview.isPending}>
-            {addReview.isPending ? "Wysyłanie..." : "Dodaj opinię"}
+            {addReview.isPending ? t("Wysyłanie...") : t("Dodaj opinię")}
           </Button>
         </div>
       </FieldGroup>
@@ -232,35 +233,35 @@ export default function InnovationTesting({ innovationId, innovationName }) {
 
   return (
     <section aria-labelledby="section-testing" className="mt-8 rounded-2xl border border-border bg-card p-5 shadow-elevation-1 sm:p-6">
-      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold tracking-tight">{canTest ? "Przetestuj i oceń" : "Opinie i wdrożenie"}</h2>
+      <h2 id="section-testing" className="mb-1.5 font-heading text-lg font-semibold tracking-tight">{canTest ? t("Przetestuj i oceń") : t("Opinie i wdrożenie")}</h2>
       <p className="mb-4 text-muted-foreground">
         {canTest
-          ? "Chcesz wypróbować tę innowację u siebie? Zgłoś się do testów. Testowałeś ją już? Podziel się opinią."
-          : "Sprawdź, jak oceniają tę innowację testerzy, i przygotuj plan jej wdrożenia w swojej gminie."}
+          ? t("Chcesz wypróbować tę innowację u siebie? Zgłoś się do testów. Testowałeś ją już? Podziel się opinią.")
+          : t("Sprawdź, jak oceniają tę innowację testerzy, i przygotuj plan jej wdrożenia w swojej gminie.")}
       </p>
       <div className="mb-6 flex flex-wrap gap-2">
         {canTest && (
           <Button onClick={() => setDialog("participate")}>
             <HugeiconsIcon icon={TestTube01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Zgłoś się do testów
+            {t("Zgłoś się do testów")}
           </Button>
         )}
         <Link href={`/implementation-plan?innovation=${encodeURIComponent(innovationId)}`} className={buttonVariants({ variant: "outline" })}>
-          Plan wdrożenia w mojej gminie
+          {t("Plan wdrożenia w mojej gminie")}
         </Link>
         {canTest && (
           <Button variant="outline" onClick={() => setDialog("review")}>
             <HugeiconsIcon icon={StarIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Dodaj opinię
+            {t("Dodaj opinię")}
           </Button>
         )}
       </div>
 
-      <h3 className="mb-3 font-heading font-semibold">Opinie testerów</h3>
+      <h3 className="mb-3 font-heading font-semibold">{t("Opinie testerów")}</h3>
       {reviews.isPending ? (
-        <LoadingStatus label="Wczytywanie opinii"><Skeleton className="h-24 w-full rounded-xl" /></LoadingStatus>
+        <LoadingStatus label={t("Wczytywanie opinii")}><Skeleton className="h-24 w-full rounded-xl" /></LoadingStatus>
       ) : !data?.totalReviews ? (
-        <p className="text-sm text-muted-foreground">{canTest ? "Ta innowacja nie ma jeszcze opinii. Twoja może być pierwsza!" : "Ta innowacja nie ma jeszcze opinii testerów."}</p>
+        <p className="text-sm text-muted-foreground">{canTest ? t("Ta innowacja nie ma jeszcze opinii. Twoja może być pierwsza!") : t("Ta innowacja nie ma jeszcze opinii testerów.")}</p>
       ) : (
         <>
           <p className="mb-4 flex flex-wrap items-center gap-2 text-sm">
@@ -278,7 +279,7 @@ export default function InnovationTesting({ innovationId, innovationName }) {
                 <p className="text-sm whitespace-pre-line break-words">{review.comment}</p>
                 {review.improvementSuggestion && (
                   <p className="mt-2 text-sm text-muted-foreground whitespace-pre-line break-words">
-                    <span className="font-medium text-foreground">Do poprawy: </span>{review.improvementSuggestion}
+                    <span className="font-medium text-foreground">{t("Do poprawy:")}{" "}</span>{review.improvementSuggestion}
                   </p>
                 )}
                 {review.createdAt && (
@@ -293,12 +294,12 @@ export default function InnovationTesting({ innovationId, innovationName }) {
       )}
 
       <Modal open={dialog === "participate"} onClose={close} labelledBy="tp-heading" className="max-w-lg">
-        <ModalCard headingId="tp-heading" title="Zgłoś się do testów" description={innovationName} onClose={close}>
+        <ModalCard headingId="tp-heading" title={t("Zgłoś się do testów")} description={innovationName} onClose={close}>
           <ParticipationForm innovationId={innovationId} innovationName={innovationName} onDone={close} />
         </ModalCard>
       </Modal>
       <Modal open={dialog === "review"} onClose={close} labelledBy="review-heading" className="max-w-lg">
-        <ModalCard headingId="review-heading" title="Dodaj opinię" description={innovationName} onClose={close}>
+        <ModalCard headingId="review-heading" title={t("Dodaj opinię")} description={innovationName} onClose={close}>
           <ReviewForm innovationId={innovationId} onDone={close} />
         </ModalCard>
       </Modal>

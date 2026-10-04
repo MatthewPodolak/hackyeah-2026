@@ -7,6 +7,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import { createAccessibleMap, onActivateKey } from "@/lib/map";
 import { pinTone, problemStatus } from "@/lib/problems";
+import { t } from "@/lib/i18n";
 
 const NO_PROBLEMS = [];
 const AREA_STYLE = { color: "#1d4ed8", weight: 3, dashArray: "8 6", fillColor: "#3b82f6", fillOpacity: 0.06 };
@@ -28,7 +29,7 @@ function pinIcon(problem, selected) {
   pin.appendChild(dot);
   const label = document.createElement("span");
   label.className = "sr-only";
-  label.textContent = `Problem: ${problem.title}${problem.street ? `, ${problem.street}` : ""}. Status: ${problemStatus(problem.status).label}`;
+  label.textContent = t("Problem: {title}. Status: {status}", { title: problem.street ? `${problem.title}, ${problem.street}` : problem.title, status: problemStatus(problem.status).label });
   pin.appendChild(label);
   const [w, h] = selected ? [46, 60] : [38, 50];
   return L.divIcon({ html: pin, className: "problem-pin-wrapper", iconSize: [w, h], iconAnchor: [w / 2, h - 2] });
@@ -44,7 +45,7 @@ function clusterIcon(cluster) {
   pin.appendChild(number);
   const label = document.createElement("span");
   label.className = "sr-only";
-  label.textContent = `Grupa ${count} zgłoszeń. Naciśnij, aby przybliżyć`;
+  label.textContent = t("Grupa zgłoszeń: {count}. Naciśnij, aby przybliżyć", { count });
   pin.appendChild(label);
   const [w, h] = count >= 20 ? [56, 72] : count >= 5 ? [50, 64] : [44, 58];
   return L.divIcon({ html: pin, className: "problem-pin-wrapper problem-cluster-wrapper", iconSize: [w, h], iconAnchor: [w / 2, h - 2] });
@@ -64,7 +65,7 @@ function popupContent(target) {
 }
 
 // area: optional GeoJSON feature (e.g. the gmina of a JST account), outlined and zoomed to
-export default function MapView({ target, area, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = "Mapa zgłoszonych problemów" }) {
+export default function MapView({ target, area, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = t("Mapa zgłoszonych problemów") }) {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
   const markerRef = useRef(null);

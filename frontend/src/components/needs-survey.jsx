@@ -15,6 +15,7 @@ import { SURVEY_ACCESS, SURVEY_AGE, SURVEY_LONELINESS, SURVEY_PRIORITIES, readSu
 import { cn } from "@/lib/utils";
 import { ROLES, useAuth } from "@/api/context/AuthContext";
 import { isOnboardingDone, onboardingServerSnapshot, subscribeOnboarding } from "@/lib/onboarding";
+import { t } from "@/lib/i18n";
 
 const EMPTY = { priorities: [], serviceAccess: null, loneliness: null, ageGroup: null, gminaId: "" };
 const STEPS = 4;
@@ -95,10 +96,10 @@ function SurveyDialog({ open, onClose, onDone }) {
   };
 
   const questions = [
-    { title: "Co w Twojej okolicy najbardziej wymaga poprawy?", hint: "Wybierz jeden lub dwa obszary." },
-    { title: "Jak łatwo jest u Ciebie uzyskać pomoc?", hint: "Na przykład opiekę, wsparcie, poradę w urzędzie." },
-    { title: "Jak często Ty lub ktoś Ci bliski czuje się samotny?", hint: "Odpowiedź jest anonimowa." },
-    { title: "Ile masz lat?", hint: "Gmina jest opcjonalna – pomoże samorządowi zobaczyć potrzeby swoich mieszkańców." },
+    { title: t("Co w Twojej okolicy najbardziej wymaga poprawy?"), hint: t("Wybierz jeden lub dwa obszary.") },
+    { title: t("Jak łatwo jest u Ciebie uzyskać pomoc?"), hint: t("Na przykład opiekę, wsparcie, poradę w urzędzie.") },
+    { title: t("Jak często Ty lub ktoś Ci bliski czuje się samotny?"), hint: t("Odpowiedź jest anonimowa.") },
+    { title: t("Ile masz lat?"), hint: t("Gmina jest opcjonalna – pomoże samorządowi zobaczyć potrzeby swoich mieszkańców.") },
   ];
   const q = questions[step];
 
@@ -107,21 +108,21 @@ function SurveyDialog({ open, onClose, onDone }) {
       <DialogPanel>
         <DialogHeader
           icon={CheckListIcon}
-          eyebrow={sent ? "Ankieta wysłana" : `Głos mieszkańców · pytanie ${step + 1} z ${STEPS}`}
-          title="Pomóż nam poznać potrzeby Małopolski"
+          eyebrow={sent ? t("Ankieta wysłana") : t("Głos mieszkańców · pytanie {step} z {total}", { step: step + 1, total: STEPS })}
+          title={t("Pomóż nam poznać potrzeby Małopolski")}
           titleId="survey-heading"
-          description="4 krótkie pytania, tylko klikanie. Bez logowania i danych osobowych."
+          description={t("4 krótkie pytania, tylko klikanie. Bez logowania i danych osobowych.")}
           descriptionId="survey-description"
           onClose={close}
         >
           {!sent && (
             <div
               role="progressbar"
-              aria-label="Postęp ankiety"
+              aria-label={t("Postęp ankiety")}
               aria-valuemin={1}
               aria-valuemax={STEPS}
               aria-valuenow={step + 1}
-              aria-valuetext={`Pytanie ${step + 1} z ${STEPS}`}
+              aria-valuetext={t("Pytanie {step} z {total}", { step: step + 1, total: STEPS })}
               className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-muted"
             >
               <div className="h-full rounded-full bg-primary transition-[width] duration-300" style={{ width: `${((step + 1) / STEPS) * 100}%` }} />
@@ -134,14 +135,14 @@ function SurveyDialog({ open, onClose, onDone }) {
             <DialogBody className="pt-2">
               <div className="flex flex-col items-center gap-4 py-4 text-center">
                 <IconTile icon={CheckmarkCircle02Icon} tone="success" size="lg" />
-                <h3 ref={headingRef} tabIndex={-1} className="font-heading text-xl font-bold tracking-tight outline-none">Dziękujemy!</h3>
+                <h3 ref={headingRef} tabIndex={-1} className="font-heading text-xl font-bold tracking-tight outline-none">{t("Dziękujemy!")}</h3>
                 <p className="max-w-sm text-sm text-muted-foreground">
-                  Twoje odpowiedzi trafią do ROPS Kraków i samorządów. Pomogą wybrać innowacje, które najbardziej przydadzą się w Twojej okolicy.
+                  {t("Twoje odpowiedzi trafią do ROPS Kraków i samorządów. Pomogą wybrać innowacje, które najbardziej przydadzą się w Twojej okolicy.")}
                 </p>
               </div>
             </DialogBody>
             <DialogFooter>
-              <Button onClick={close}>Zamknij</Button>
+              <Button onClick={close}>{t("Zamknij")}</Button>
             </DialogFooter>
           </>
         ) : (
@@ -225,7 +226,7 @@ function SurveyDialog({ open, onClose, onDone }) {
                       ))}
                     </div>
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="survey-gmina" className="text-sm font-medium">Twoja gmina (opcjonalnie)</label>
+                      <label htmlFor="survey-gmina" className="text-sm font-medium">{t("Twoja gmina (opcjonalnie)")}</label>
                       <NativeSelect
                         id="survey-gmina"
                         className="w-full"
@@ -233,7 +234,7 @@ function SurveyDialog({ open, onClose, onDone }) {
                         disabled={!regions.data}
                         onChange={(e) => setForm((f) => ({ ...f, gminaId: e.target.value }))}
                       >
-                        <NativeSelectOption value="">Wolę nie podawać</NativeSelectOption>
+                        <NativeSelectOption value="">{t("Wolę nie podawać")}</NativeSelectOption>
                         {regions.data?.powiaty.map((powiat) => (
                           <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
                             {powiat.gminy.map((gmina) => (
@@ -249,12 +250,12 @@ function SurveyDialog({ open, onClose, onDone }) {
             </DialogBody>
             <DialogFooter>
               {step > 0 ? (
-                <Button variant="ghost" onClick={() => setStep(step - 1)}>Wstecz</Button>
+                <Button variant="ghost" onClick={() => setStep(step - 1)}>{t("Wstecz")}</Button>
               ) : (
-                <Button variant="ghost" onClick={close}>Nie teraz</Button>
+                <Button variant="ghost" onClick={close}>{t("Nie teraz")}</Button>
               )}
               <Button onClick={next} disabled={!answered || submit.isPending}>
-                {step < STEPS - 1 ? "Dalej" : submit.isPending ? "Wysyłanie..." : "Wyślij odpowiedzi"}
+                {step < STEPS - 1 ? t("Dalej") : submit.isPending ? t("Wysyłanie...") : t("Wyślij odpowiedzi")}
               </Button>
             </DialogFooter>
           </>
@@ -304,16 +305,16 @@ export default function NeedsSurvey({ className }) {
           <div className="flex items-start gap-3">
             <IconTile icon={CheckListIcon} size="sm" />
             <div className="min-w-0 flex-1">
-              <h2 id="survey-invite-title" className="font-heading text-base font-bold tracking-tight">Masz 30 sekund?</h2>
-              <p className="mt-0.5 text-sm text-muted-foreground">Odpowiedz na 4 pytania o potrzeby w Twojej okolicy. Tylko klikanie, bez logowania.</p>
+              <h2 id="survey-invite-title" className="font-heading text-base font-bold tracking-tight">{t("Masz 30 sekund?")}</h2>
+              <p className="mt-0.5 text-sm text-muted-foreground">{t("Odpowiedz na 4 pytania o potrzeby w Twojej okolicy. Tylko klikanie, bez logowania.")}</p>
             </div>
-            <Button variant="ghost" size="icon-sm" className="-mt-1 -mr-2 shrink-0" onClick={dismiss} aria-label="Zamknij zaproszenie do ankiety">
+            <Button variant="ghost" size="icon-sm" className="-mt-1 -mr-2 shrink-0" onClick={dismiss} aria-label={t("Zamknij zaproszenie do ankiety")}>
               <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-4" />
             </Button>
           </div>
           <div className="mt-4 flex gap-2">
-            <Button className="flex-1" onClick={start}>Wypełnij ankietę</Button>
-            <Button variant="ghost" onClick={dismiss}>Nie teraz</Button>
+            <Button className="flex-1" onClick={start}>{t("Wypełnij ankietę")}</Button>
+            <Button variant="ghost" onClick={dismiss}>{t("Nie teraz")}</Button>
           </div>
         </aside>
       )}
@@ -324,7 +325,7 @@ export default function NeedsSurvey({ className }) {
           onClick={start}
         >
           <HugeiconsIcon icon={CheckListIcon} strokeWidth={1.8} data-icon="inline-start" aria-hidden="true" />
-          Ankieta · 30 s
+          {t("Ankieta · 30 s")}
         </Button>
       )}
       <SurveyDialog
