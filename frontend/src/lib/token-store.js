@@ -1,6 +1,6 @@
 const NO_TOKENS = [];
 
-export function createTokenStore(storageKey) {
+function createScopedStore(storageKey) {
   const listeners = new Set();
   let cachedRaw = null;
   let cachedTokens = NO_TOKENS;
@@ -50,6 +50,17 @@ export function createTokenStore(storageKey) {
     },
     forget(token) {
       save(load().filter((t) => t !== token));
+    },
+  };
+}
+
+export function createTokenStore(baseKey) {
+  const scopes = new Map();
+  return {
+    forUser(userId) {
+      const key = userId == null ? baseKey : `${baseKey}:user:${userId}`;
+      if (!scopes.has(key)) scopes.set(key, createScopedStore(key));
+      return scopes.get(key);
     },
   };
 }

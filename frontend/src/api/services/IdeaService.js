@@ -38,6 +38,12 @@ export const IdeaService = {
     return res;
   },
 
+  async mine({ ct, timeoutMs } = {}) {
+    const { method, url } = API.idea.mine;
+
+    return apiJson(url, { method: method }, { ct, timeoutMs });
+  },
+
   async getByToken(token, { ct, timeoutMs } = {}) {
     const { method, url } = API.idea.byToken;
 

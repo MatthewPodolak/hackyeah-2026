@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { AuthService } from "@/api/services/AuthService";
 
@@ -41,7 +41,30 @@ export function AuthProvider({ children }) {
   const openPanel = useCallback((mode = "login") => setPanelMode(mode === "register" ? "register" : "login"), []);
   const closePanel = useCallback(() => setPanelMode(null), []);
 
-  const setUser = useCallback((value) => queryClient.setQueryData(ME_KEY, value), [queryClient]);
+  const [accountGeneration, setAccountGeneration] = useState(0);
+  const resolvedUserId = me.isPending ? undefined : user?.id ?? null;
+  const lastUserId = useRef(undefined);
+
+  const dropAccountData = useCallback(() => {
+    queryClient.cancelQueries({ predicate: (q) => q.queryKey[0] !== ME_KEY[0] });
+    queryClient.resetQueries({ predicate: (q) => q.queryKey[0] !== ME_KEY[0] });
+    setAccountGeneration((g) => g + 1);
+  }, [queryClient]);
+
+  const setUser = useCallback((value) => {
+    const nextId = value?.id ?? null;
+    if (lastUserId.current !== nextId) {
+      lastUserId.current = nextId;
+      dropAccountData();
+    }
+    queryClient.setQueryData(ME_KEY, value);
+  }, [queryClient, dropAccountData]);
+
+  useEffect(() => {
+    if (resolvedUserId === undefined) return;
+    if (lastUserId.current !== undefined && lastUserId.current !== resolvedUserId) dropAccountData();
+    lastUserId.current = resolvedUserId;
+  }, [resolvedUserId, dropAccountData]);
 
   const login = useCallback(async (credentials) => {
     const res = await AuthService.login(credentials);
@@ -89,12 +112,13 @@ export function AuthProvider({ children }) {
       register,
       logout,
       refresh,
+      accountGeneration,
       isPanelOpen: panelMode !== null,
       panelMode,
       openPanel,
       closePanel,
     }),
-    [user, role, accountStatus, isPendingInstitution, effectiveRole, me.isPending, hasRole, login, register, logout, refresh, panelMode, openPanel, closePanel]
+    [user, role, accountStatus, isPendingInstitution, effectiveRole, me.isPending, hasRole, login, register, logout, refresh, accountGeneration, panelMode, openPanel, closePanel]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
@@ -104,6 +128,11 @@ export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
   return ctx;
+}
+
+export function AccountScope({ children }) {
+  const { accountGeneration } = useAuth();
+  return <Fragment key={accountGeneration}>{children}</Fragment>;
 }
 
 export function ShowFor({ roles, logged, fallback = null, children }) {
