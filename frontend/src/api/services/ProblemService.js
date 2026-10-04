@@ -43,6 +43,31 @@ export const ProblemService = {
     return res;
   },
 
+  // JST: reports of its gmina waiting for its decision
+  async reportedWaiting({ ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.reportedWaiting;
+
+    const res = await apiJson(url,
+      {
+        method: method
+      },
+      { ct, timeoutMs });
+
+    return res?.waiting ?? 0;
+  },
+
+  // JST: { accept, priority, note }
+  async decide(id, model, { ct, timeoutMs } = {}) {
+    const { method, url } = API.problem.decide;
+
+    return apiJson(url(id),
+      {
+        method: method,
+        body: JSON.stringify(model)
+      },
+      { ct, timeoutMs });
+  },
+
   async getById(id, { ct, timeoutMs } = {}) {
     const { method, url } = API.problem.getById;
 

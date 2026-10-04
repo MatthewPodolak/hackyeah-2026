@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useUnseenIdeasCount } from "@/api/hooks/useAdminIdeas"
 import { useUnseenProblems } from "@/api/hooks/useAdmin"
+import { useGminaWaiting } from "@/api/hooks/useProblemsQuery"
 import AccessibilityControls from "@/components/accessibility-controls"
 
 import { ROLES, useAuth } from "@/api/context/AuthContext"
@@ -88,7 +89,10 @@ export function AppSidebar() {
   const isInstitution = hasRole(ROLES.JST, ROLES.ROPS)
   const isRops = hasRole(ROLES.ROPS)
   const { data: unseenIdeas } = useUnseenIdeasCount(isInstitution)
-  const { data: unseenProblems } = useUnseenProblems(isRops)
+  // ROPS: new reports in its queue; JST: reports of its gmina waiting for its decision
+  const { data: unseenByRops } = useUnseenProblems(isRops)
+  const { data: waitingForGmina } = useGminaWaiting(hasRole(ROLES.JST))
+  const unseenProblems = isRops ? unseenByRops : waitingForGmina
 
   const isActive = (url) => (url === "/" ? pathname === "/" : pathname.startsWith(url))
 

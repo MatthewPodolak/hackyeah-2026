@@ -1,5 +1,7 @@
 package com.example.backend.dto;
 
+import com.example.backend.model.ProblemPriority;
+
 import java.time.Instant;
 
 public record ProblemTrackingResponse(
@@ -8,5 +10,8 @@ public record ProblemTrackingResponse(
         String adminReply,
         Instant updatedAt,
         boolean adminSeen,
-        String authorName
+        String authorName,
+        ProblemPriority priority,
+        String gminaNote,
+        Instant gminaDecidedAt
 ) {}

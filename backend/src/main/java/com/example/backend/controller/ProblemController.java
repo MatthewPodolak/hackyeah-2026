@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.GminaDecisionRequest;
 import com.example.backend.dto.ProblemRequest;
 import com.example.backend.dto.ProblemTrackingResponse;
 import com.example.backend.dto.ProblemResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.example.backend.dto.ProblemSummaryResponse;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/problems")
@@ -38,8 +40,18 @@ public class ProblemController {
     }
 
     @GetMapping("/reported")
-    public List<ProblemSummaryResponse> getReportedProblems(@AuthenticationPrincipal Jwt jwt) {
+    public List<ProblemTrackingResponse> getReportedProblems(@AuthenticationPrincipal Jwt jwt) {
         return problemService.getReportedProblems(Long.valueOf(jwt.getSubject()));
+    }
+
+    @GetMapping("/reported/waiting-count")
+    public Map<String, Long> getWaitingForGminaCount(@AuthenticationPrincipal Jwt jwt) {
+        return Map.of("waiting", problemService.getWaitingForGminaCount(Long.valueOf(jwt.getSubject())));
+    }
+
+    @PostMapping("/reported/{id}/decision")
+    public ProblemTrackingResponse decideAsGmina(@AuthenticationPrincipal Jwt jwt, @PathVariable Long id, @RequestBody GminaDecisionRequest request) {
+        return problemService.decideAsGmina(Long.valueOf(jwt.getSubject()), id, request);
     }
 
     @GetMapping("/{id}")
