@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Cancel01Icon, CheckListIcon, CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import Modal from "@/components/modal";
@@ -14,6 +14,7 @@ import { useToast } from "@/helpers/ToastProvider";
 import { SURVEY_ACCESS, SURVEY_AGE, SURVEY_LONELINESS, SURVEY_PRIORITIES, readSurveyState, writeSurveyState } from "@/lib/survey";
 import { cn } from "@/lib/utils";
 import { ROLES, useAuth } from "@/api/context/AuthContext";
+import { isOnboardingDone, onboardingServerSnapshot, subscribeOnboarding } from "@/lib/onboarding";
 
 const EMPTY = { priorities: [], serviceAccess: null, loneliness: null, ageGroup: null, gminaId: "" };
 const STEPS = 4;
@@ -267,16 +268,18 @@ export default function NeedsSurvey({ className }) {
   const { isLoading, isLogged, role } = useAuth();
   const [status, setStatus] = useState(null);
   const [inviteVisible, setInviteVisible] = useState(false);
+  const onboardingDone = useSyncExternalStore(subscribeOnboarding, isOnboardingDone, onboardingServerSnapshot);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const saved = readSurveyState();
+    if (!saved?.status && !onboardingDone) return;
     const id = setTimeout(() => {
       if (saved?.status) setStatus(saved.status);
       else setInviteVisible(true);
     }, saved?.status ? 0 : INVITE_DELAY);
     return () => clearTimeout(id);
-  }, []);
+  }, [onboardingDone]);
 
   const dismiss = () => {
     writeSurveyState("dismissed");
