@@ -19,6 +19,19 @@ function pinIcon(problem, selected) {
   return L.divIcon({ html: pin, className: "problem-pin-wrapper", iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
 }
 
+function popupContent(target) {
+  const box = document.createElement("div");
+  const name = document.createElement("strong");
+  name.textContent = target.name;
+  box.appendChild(name);
+  if (target.place) {
+    const place = document.createElement("div");
+    place.textContent = target.place;
+    box.appendChild(place);
+  }
+  return box;
+}
+
 // area: optional GeoJSON feature (e.g. the gmina of a JST account), outlined and zoomed to
 export default function MapView({ target, area, problems = NO_PROBLEMS, selectedProblemId, onProblemClick, onMapClick, label = "Mapa zgłoszonych problemów" }) {
   const containerRef = useRef(null);
@@ -104,6 +117,12 @@ export default function MapView({ target, area, problems = NO_PROBLEMS, selected
     const map = mapRef.current;
     if (!map || !target) return;
     if (markerRef.current) markerRef.current.remove();
+    markerRef.current = null;
+    const animate = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (target.marker === false) {
+      map.flyTo([target.lat, target.lon], target.zoom ?? 17, { animate });
+      return;
+    }
     markerRef.current = L.circleMarker([target.lat, target.lon], {
       radius: 9,
       color: "#1d4ed8",
@@ -111,9 +130,11 @@ export default function MapView({ target, area, problems = NO_PROBLEMS, selected
       fillOpacity: 0.8,
     })
       .addTo(map)
-      .bindPopup(target.name)
-      .openPopup();
-    map.flyTo([target.lat, target.lon], 16);
+      .bindPopup(popupContent(target), { autoPan: false });
+    const marker = markerRef.current;
+    map.once("moveend", () => marker.openPopup());
+    if (target.bounds) map.flyToBounds(target.bounds, { maxZoom: 17, padding: [80, 80], animate });
+    else map.flyTo([target.lat, target.lon], target.zoom ?? 16, { animate });
   }, [target]);
 
   return <div ref={containerRef} className="relative z-0 isolate w-full h-full" />;
