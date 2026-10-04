@@ -10,5 +10,6 @@ public record UserResponse(
         Role role,
         AccountStatus accountStatus,
         String gminaId,
-        String nip
+        String nip,
+        ApplicantProfile profile
 ) {}

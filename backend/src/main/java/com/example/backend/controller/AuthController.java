@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.config.SecurityConfig;
+import com.example.backend.dto.ApplicantProfile;
 import com.example.backend.dto.AuthResponse;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
@@ -41,6 +42,11 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, tokenCookie("", Duration.ZERO).toString())
                 .build();
+    }
+
+    @PatchMapping("/me")
+    public UserResponse updateMe(@AuthenticationPrincipal Jwt jwt, @RequestBody ApplicantProfile request) {
+        return authService.updateProfile(Long.valueOf(jwt.getSubject()), request);
     }
 
     @GetMapping("/me")

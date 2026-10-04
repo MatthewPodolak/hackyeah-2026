@@ -2,34 +2,26 @@
 
 import { useEffect, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, Calendar03Icon, Coins01Icon, Delete02Icon, Edit02Icon } from "@hugeicons/core-free-icons";
-import { Button } from "@/components/ui/button";
+import { Add01Icon, ArrowRight01Icon, Calendar03Icon, Coins01Icon, Delete02Icon, Edit02Icon, LinkSquare02Icon } from "@hugeicons/core-free-icons";
+import Link from "next/link";
+import { cn } from "cn";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import LoadingStatus from "@/components/loading-status";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { useFormErrors } from "@/helpers/useFormErrors";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import RoleGuard from "@/views/reported/RoleGuard";
-import { ROLES } from "@/api/context/AuthContext";
-import { useAdminGrantCalls, useDeleteGrantCall, useSaveGrantCall } from "@/api/hooks/useGrantCalls";
+import { ROLES, useAuth } from "@/api/context/AuthContext";
+import { useDeleteGrantCall, useGrantCalls, useSaveGrantCall } from "@/api/hooks/useGrantCalls";
+import { APPLICANT_TYPES, CALL_PHASES, FILL_BY, callCriteria, callPhase, callSections, daysLeft, plnFormat } from "@/lib/grants";
 import { useToast } from "@/helpers/ToastProvider";
 import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 const EMPTY = { name: "", description: "", openFrom: "", openTo: "", requiredSections: "" };
-
-function today() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function callState(call) {
-  const now = today();
-  if (call.openTo < now) return { label: "Zakończony", className: "bg-muted text-muted-foreground" };
-  if (call.openFrom > now) return { label: "Zaplanowany", className: "bg-sky-500/15 text-sky-800 dark:text-sky-300" };
-  return { label: "Aktywny", className: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" };
-}
 
 function GrantForm({ initial, onDone }) {
   const [form, setForm] = useState(initial);
@@ -102,11 +94,142 @@ function GrantForm({ initial, onDone }) {
   );
 }
 
-function GrantCallsList() {
-  const calls = useAdminGrantCalls();
+function Pill({ meta, children }) {
+  return <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", meta?.className)}>{children ?? meta?.label}</span>;
+}
+
+function Fact({ label, value }) {
+  return (
+    <div className="rounded-lg bg-muted/50 px-3 py-2">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="font-semibold">{value}</p>
+    </div>
+  );
+}
+
+// real form sections (who fills each) and evaluation criteria of a call
+function FormDetails({ call }) {
+  const sections = callSections(call);
+  const criteria = callCriteria(call);
+  if (!sections.length && !criteria) return null;
+  return (
+    <details className="rounded-lg border p-3 text-sm">
+      <summary className="cursor-pointer font-medium">Sekcje wniosku i kryteria oceny</summary>
+      {sections.length > 0 && (
+        <ol className="mt-3 flex list-decimal flex-col gap-1.5 pl-5">
+          {sections.map((section, i) => (
+            <li key={i}>
+              <span className="mr-2">{section.title}</span>
+              {FILL_BY[section.fillBy] && <Pill meta={FILL_BY[section.fillBy]} />}
+            </li>
+          ))}
+        </ol>
+      )}
+      {criteria?.items?.length > 0 && (
+        <div className="mt-3">
+          <p className="font-medium">Kryteria oceny{criteria.maxPoints ? ` (maks. ${criteria.maxPoints} pkt)` : ""}</p>
+          <ul className="mt-1 flex list-disc flex-col gap-1 pl-5">
+            {criteria.items.map((item, i) => (
+              <li key={i}>{item.name}{item.points ? `: ${item.points} pkt` : ""}</li>
+            ))}
+          </ul>
+          {criteria.passRule && <p className="mt-1 text-muted-foreground">Warunek: {criteria.passRule}</p>}
+        </div>
+      )}
+    </details>
+  );
+}
+
+function CallCard({ call, canManage, onEdit, onDelete, deleting }) {
+  const phase = callPhase(call);
+  const open = phase === "open";
+  return (
+    <li className={cn("flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-elevation-1", open && "border-2 border-emerald-700 dark:border-emerald-400")}>
+      <div className="flex flex-wrap items-center gap-2">
+        <Pill meta={CALL_PHASES[phase]}>
+          <span className="sr-only">Status: </span>{CALL_PHASES[phase].label}{open ? ` · do ${dateFormat.format(new Date(call.openTo))}` : ""}
+        </Pill>
+        {call.demo && <Pill meta={{ className: "bg-amber-500/15 text-amber-800 dark:text-amber-300" }}>Nabór przykładowy (demo)</Pill>}
+      </div>
+      <div>
+        <h2 className="text-lg font-semibold leading-snug">{call.name}</h2>
+        {call.project && <p className="text-sm text-muted-foreground">{call.demo ? `Wzorowany na projekcie ROPS: ${call.project}` : call.project}</p>}
+      </div>
+      <p className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
+        <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" aria-hidden="true" />
+        <span className="sr-only">Termin: </span>
+        {dateFormat.format(new Date(call.openFrom))} – {dateFormat.format(new Date(call.openTo))}
+      </p>
+      {(call.maxGrantPLN != null || call.ownContributionRequired != null || open) && (
+        <div className="grid gap-2 sm:grid-cols-3">
+          {call.maxGrantPLN != null && <Fact label="Maks. grant" value={plnFormat.format(call.maxGrantPLN)} />}
+          {call.ownContributionRequired != null && <Fact label="Wkład własny" value={call.ownContributionRequired ? "Wymagany" : "Nie wymagany"} />}
+          {open && <Fact label="Zostało" value={`${daysLeft(call)} dni`} />}
+        </div>
+      )}
+      {call.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{call.description}</p>}
+      {call.applicantTypes?.length > 0 && (
+        <div>
+          <p className="mb-1.5 text-sm font-medium">Kto może złożyć wniosek</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {call.applicantTypes.map((type) => (
+              <li key={type} className="rounded-full bg-muted px-2.5 py-0.5 text-xs">{APPLICANT_TYPES[type] ?? type}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <FormDetails call={call} />
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        {call.sourceUrl && (
+          <a href={call.sourceUrl} target="_blank" rel="noreferrer" className={buttonVariants({ variant: "ghost", size: "sm" })}>
+            <HugeiconsIcon icon={LinkSquare02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+            {call.demo ? "Oryginalny nabór ROPS" : "Strona naboru ROPS"}<span className="sr-only"> (otwiera się w nowej karcie)</span>
+          </a>
+        )}
+        {canManage && (
+          <>
+            <Button variant="ghost" size="sm" onClick={() => onDelete(call)} disabled={deleting}>
+              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              Usuń<span className="sr-only"> nabór {call.name}</span>
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => onEdit(call)}>
+              <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              Edytuj<span className="sr-only"> nabór {call.name}</span>
+            </Button>
+          </>
+        )}
+        {open && (
+          <Link href={`/my-ideas?call=${call.id}`} className={buttonVariants({ size: "sm" })}>
+            Przygotuj wniosek z AI<span className="sr-only">: {call.name}</span>
+            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" aria-hidden="true" />
+          </Link>
+        )}
+      </div>
+    </li>
+  );
+}
+
+// "Otwarte" also lists upcoming calls; finished ones only under "Zakończone"
+const PHASE_FILTERS = {
+  open: { label: "Otwarte", test: (call) => callPhase(call) !== "closed" },
+  closed: { label: "Zakończone", test: (call) => callPhase(call) === "closed" },
+  all: { label: "Wszystkie", test: () => true },
+};
+
+export default function GrantCalls() {
+  const calls = useGrantCalls();
   const remove = useDeleteGrantCall();
   const { showToast } = useToast();
+  const { role, hasRole } = useAuth();
+  const canManage = hasRole(ROLES.JST, ROLES.ROPS);
   const [editing, setEditing] = useState(null);
+  const [phase, setPhase] = useState("all");
+  // an organisation sees the calls it can apply to
+  const [applicant, setApplicant] = useState(role === ROLES.NGO ? "NGO" : "");
+
+  const all = calls.data ?? [];
+  const forApplicant = all.filter((call) => !applicant || !call.applicantTypes?.length || call.applicantTypes.includes(applicant));
+  const visible = forApplicant.filter(PHASE_FILTERS[phase].test);
 
   const del = async (call) => {
     if (!window.confirm(`Usunąć nabór „${call.name}”?`)) return;
@@ -124,8 +247,8 @@ function GrantCallsList() {
         <PageHeader
           icon={Coins01Icon}
           title="Nabory grantowe"
-          description="Aktywne nabory widzą autorzy pomysłów i mogą przygotować do nich szkic wniosku"
-          actions={!editing && (
+          description="Granty na innowacje społeczne w Małopolsce. Do otwartego naboru przygotujesz szkic wniosku z AI na podstawie swojego pomysłu."
+          actions={canManage && !editing && (
             <Button onClick={() => setEditing(EMPTY)}>
               <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
               Nowy nabór
@@ -139,41 +262,51 @@ function GrantCallsList() {
           </div>
         )}
 
+        <div role="search" aria-label="Filtry naborów" className="mb-6 flex flex-wrap items-center gap-2">
+          <div role="group" aria-label="Status naboru" className="flex flex-wrap gap-2">
+            {Object.entries(PHASE_FILTERS).map(([key, filter]) => (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={phase === key}
+                onClick={() => setPhase(key)}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+                  phase === key ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
+                )}
+              >
+                {filter.label}
+                <span className="sr-only">, liczba:</span>
+                <span className="rounded-full px-1.5 text-xs tabular-nums">{forApplicant.filter(filter.test).length}</span>
+              </button>
+            ))}
+          </div>
+          <div className="ml-auto flex items-center gap-2">
+            <label htmlFor="grant-applicant" className="text-sm font-medium">Dla:</label>
+            <NativeSelect id="grant-applicant" value={applicant} onChange={(e) => setApplicant(e.target.value)}>
+              <NativeSelectOption value="">Wszystkich</NativeSelectOption>
+              {Object.entries(APPLICANT_TYPES).map(([key, label]) => (
+                <NativeSelectOption key={key} value={key}>{label}</NativeSelectOption>
+              ))}
+            </NativeSelect>
+          </div>
+        </div>
+        <p aria-live="polite" aria-atomic="true" className="sr-only">{calls.isPending ? "" : `Wyniki: ${visible.length} z ${all.length}`}</p>
+
         {calls.isPending ? (
-          <LoadingStatus label="Wczytywanie naborów"><Skeleton className="h-32 w-full rounded-xl" /></LoadingStatus>
-        ) : calls.data?.length ? (
-          <ul className="flex flex-col gap-3">
-            {calls.data.map((call) => {
-              const state = callState(call);
-              return (
-                <li key={call.id} className="flex flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-4">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <h2 className="font-semibold">{call.name}</h2>
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${state.className}`}><span className="sr-only">Status: </span>{state.label}</span>
-                  </div>
-                  <p className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
-                    <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" aria-hidden="true" />
-                    <span className="sr-only">Termin: </span>
-                    {dateFormat.format(new Date(call.openFrom))} – {dateFormat.format(new Date(call.openTo))}
-                  </p>
-                  {call.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{call.description}</p>}
-                  <div className="flex justify-end gap-2">
-                    <Button variant="ghost" size="sm" onClick={() => del(call)} disabled={remove.isPending}>
-                      <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                      Usuń<span className="sr-only"> nabór {call.name}</span>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditing({ ...EMPTY, ...call, description: call.description ?? "", requiredSections: call.requiredSections ?? "" })}
-                    >
-                      <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-                      Edytuj<span className="sr-only"> nabór {call.name}</span>
-                    </Button>
-                  </div>
-                </li>
-              );
-            })}
+          <LoadingStatus label="Wczytywanie naborów"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
+        ) : visible.length ? (
+          <ul className="flex flex-col gap-4">
+            {visible.map((call) => (
+              <CallCard
+                key={call.id}
+                call={call}
+                canManage={canManage}
+                deleting={remove.isPending}
+                onDelete={del}
+                onEdit={(c) => setEditing({ ...EMPTY, ...c, description: c.description ?? "", requiredSections: c.requiredSections ?? "" })}
+              />
+            ))}
           </ul>
         ) : (
           <Empty className="border border-dashed">
@@ -182,19 +315,11 @@ function GrantCallsList() {
                 <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} />
               </EmptyMedia>
               <EmptyTitle>Brak naborów</EmptyTitle>
-              <EmptyDescription>Dodaj pierwszy nabór, żeby autorzy pomysłów mogli przygotować wnioski.</EmptyDescription>
+              <EmptyDescription>{all.length ? "Żaden nabór nie pasuje do filtrów." : "Nie ma jeszcze ogłoszonych naborów."}</EmptyDescription>
             </EmptyHeader>
           </Empty>
         )}
       </div>
     </div>
-  );
-}
-
-export default function GrantCallsAdmin() {
-  return (
-    <RoleGuard roles={[ROLES.JST, ROLES.ROPS]}>
-      <GrantCallsList />
-    </RoleGuard>
   );
 }

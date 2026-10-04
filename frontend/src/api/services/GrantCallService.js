@@ -4,6 +4,13 @@ import { API } from "@/api/endpoints.js";
 const AI_TIMEOUT = 90000;
 
 export const GrantCallService = {
+  // public: all calls, open first
+  async all({ ct, timeoutMs } = {}) {
+    const { method, url } = API.grantCall.all;
+
+    return apiJson(url, { method: method }, { ct, timeoutMs });
+  },
+
   async active({ ct, timeoutMs } = {}) {
     const { method, url } = API.grantCall.active;
 

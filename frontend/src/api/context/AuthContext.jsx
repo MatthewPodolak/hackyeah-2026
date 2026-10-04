@@ -78,6 +78,12 @@ export function AuthProvider({ children }) {
     return res.user;
   }, [setUser]);
 
+  const updateProfile = useCallback(async (model) => {
+    const updated = await AuthService.updateProfile(model);
+    setUser(updated);
+    return updated;
+  }, [setUser]);
+
   const logout = useCallback(async () => {
     try {
       await AuthService.logout();
@@ -110,6 +116,7 @@ export function AuthProvider({ children }) {
       hasRole,
       login,
       register,
+      updateProfile,
       logout,
       refresh,
       accountGeneration,
@@ -118,7 +125,7 @@ export function AuthProvider({ children }) {
       openPanel,
       closePanel,
     }),
-    [user, role, accountStatus, isPendingInstitution, effectiveRole, me.isPending, hasRole, login, register, logout, refresh, accountGeneration, panelMode, openPanel, closePanel]
+    [user, role, accountStatus, isPendingInstitution, effectiveRole, me.isPending, hasRole, login, register, updateProfile, logout, refresh, accountGeneration, panelMode, openPanel, closePanel]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

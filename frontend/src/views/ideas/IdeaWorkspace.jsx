@@ -9,6 +9,7 @@ import {
   Calendar03Icon,
   CheckmarkCircle02Icon,
   Copy01Icon,
+  FileDownloadIcon,
   FileEditIcon,
   SparklesIcon,
 } from "@hugeicons/core-free-icons";
@@ -24,7 +25,12 @@ import { CanvasField, formatCanvasValue } from "@/components/canvas/canvas-field
 import { useCanvasSpec, useIdeaByToken, useIdeaFeedback, useSaveCanvas, useSuggestCanvas, useVisualize } from "@/api/hooks/useCanvas";
 import { API } from "@/api/endpoints";
 import { useActiveGrantCalls, useGrantApplication } from "@/api/hooks/useGrantCalls";
+import { FILL_BY } from "@/lib/grants";
+import { buildFilledForm, downloadPdf, formTemplateFor, planTotal } from "@/lib/grantFormPdf";
 import { useToast } from "@/helpers/ToastProvider";
+import { useAuth } from "@/api/context/AuthContext";
+import { ApplicantPanel, missingApplicantData } from "@/components/applicant-panel";
+import { Checkbox } from "@/components/ui/checkbox";
 import { IDEA_STATUS } from "@/lib/ideas";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
@@ -244,11 +250,17 @@ function FeedbackTab({ token, feedback, beforeAi }) {
   );
 }
 
-function GrantTab({ token, beforeAi }) {
+function GrantTab({ token, beforeAi, initialCallId }) {
   const calls = useActiveGrantCalls();
   const application = useGrantApplication();
-  const [callId, setCallId] = useState(null);
+  const [callId, setCallId] = useState(initialCallId);
   const [extraInfo, setExtraInfo] = useState("");
+  const [buildingPdf, setBuildingPdf] = useState(false);
+  // per application: who works on this project and the confirmed statements
+  const [teamIndexes, setTeamIndexes] = useState([]);
+  const [statementsOk, setStatementsOk] = useState(false);
+  const { user } = useAuth();
+  const savedTeam = user?.role === "NGO" ? user.profile?.team ?? [] : [];
   const { showToast } = useToast();
 
   const generate = async () => {
@@ -258,7 +270,7 @@ function GrantTab({ token, beforeAi }) {
     }
     try {
       await beforeAi();
-      await application.mutateAsync({ callId, model: { ideaToken: token, extraInfo: extraInfo.trim() } });
+      await application.mutateAsync({ callId, model: { ideaToken: token, extraInfo: extraInfo.trim(), teamMemberIndexes: teamIndexes } });
     } catch (err) {
       showToast(aiErrorMessage(err), "error");
     }
@@ -291,6 +303,29 @@ function GrantTab({ token, beforeAi }) {
 
   const sections = application.data?.sections ?? [];
   const fullText = sections.map((s) => `${s.title}\n\n${s.content}`).join("\n\n");
+  // the call the draft was written for, even if another one is selected now
+  const draftCall = calls.data.find((call) => call.id === application.variables?.callId);
+
+  const total = planTotal(sections);
+  const overLimit = draftCall?.maxGrantPLN != null && total > draftCall.maxGrantPLN;
+  const missing = missingApplicantData(user);
+  const pdfMissing = [...(user ? [] : ["zalogowanie"]), ...missing];
+
+  const downloadForm = async () => {
+    if (!statementsOk) {
+      showToast("Potwierdź oświadczenia, aby pobrać formularz", "error");
+      return;
+    }
+    setBuildingPdf(true);
+    try {
+      const applicant = user ? { ...user, statementsConfirmedAt: new Date() } : null;
+      downloadPdf(await buildFilledForm(draftCall, sections, applicant), "Formularz aplikacyjny - szkic HubMI.pdf");
+    } catch {
+      showToast("Nie udało się przygotować PDF. Skopiuj szkic jako tekst.", "error");
+    } finally {
+      setBuildingPdf(false);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -312,6 +347,7 @@ function GrantTab({ token, beforeAi }) {
               <HugeiconsIcon icon={CheckmarkCircle02Icon} strokeWidth={2} aria-hidden="true" className="absolute right-3 top-3 size-5 text-emerald-700 dark:text-emerald-400" />
             )}
             <span className="font-semibold">{call.name}</span>
+            {call.demo && <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-300">Nabór przykładowy (demo)</span>}
             <span className="flex items-center gap-1 text-xs text-muted-foreground tabular-nums">
               <HugeiconsIcon icon={Calendar03Icon} strokeWidth={2} className="size-3.5" />
               {dateFormat.format(new Date(call.openFrom))} – {dateFormat.format(new Date(call.openTo))}
@@ -320,6 +356,24 @@ function GrantTab({ token, beforeAi }) {
           </button>
         ))}
       </div>
+
+      <ApplicantPanel />
+
+      {savedTeam.length > 0 && (
+        <fieldset className="flex flex-col gap-2 rounded-xl border p-4">
+          <legend className="px-1 text-sm font-medium">Zespół tego projektu</legend>
+          <p className="text-xs text-muted-foreground">AI opisze zespół w punkcie 11 na podstawie ról i doświadczenia zaznaczonych osób.</p>
+          {savedTeam.map((member, i) => (
+            <label key={i} className="flex items-center gap-2 text-sm">
+              <Checkbox
+                checked={teamIndexes.includes(i)}
+                onCheckedChange={(checked) => setTeamIndexes((list) => (checked ? [...list, i] : list.filter((x) => x !== i)))}
+              />
+              {member.name || "Bez imienia"}{member.role ? ` – ${member.role}` : ""}
+            </label>
+          ))}
+        </fieldset>
+      )}
 
       <label htmlFor="grant-extra" className="text-sm font-medium">Dodatkowe informacje do wniosku (opcjonalnie)</label>
       <Textarea
@@ -341,16 +395,48 @@ function GrantTab({ token, beforeAi }) {
         <div className="flex flex-col gap-3 rounded-2xl border border-border p-4">
           <div className="flex items-center justify-between gap-2">
             <h3 className="font-semibold">Szkic wniosku</h3>
-            <Button variant="outline" size="sm" onClick={() => copy(fullText)}>
-              <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" />
-              Kopiuj całość
-            </Button>
+            <div className="flex flex-wrap gap-2">
+              <Button variant="outline" size="sm" onClick={() => copy(fullText)}>
+                <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} data-icon="inline-start" />
+                Kopiuj całość
+              </Button>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground">Fragmenty oznaczone „[do uzupełnienia]” wymagają Twoich danych.</p>
+          {formTemplateFor(draftCall) && (
+            <div className="flex flex-col gap-3 rounded-lg border bg-muted/30 p-3 text-sm">
+              <p className="font-medium">Wypełniony formularz aplikacyjny ROPS (PDF)</p>
+              <p className="text-muted-foreground">
+                {pdfMissing.length
+                  ? `Formularz będzie niepełny – brakuje: ${pdfMissing.join(", ")}. Uzupełnij „Twoje dane do wniosku” wyżej.`
+                  : "Wszystkie dane pomysłodawcy są uzupełnione."}
+              </p>
+              {total > 0 && (
+                <p className={overLimit ? "font-medium text-destructive" : "text-muted-foreground"}>
+                  Wnioskowana kwota z planu: {new Intl.NumberFormat("pl-PL").format(total)} zł
+                  {overLimit ? ` – więcej niż maksymalny grant (${new Intl.NumberFormat("pl-PL").format(draftCall.maxGrantPLN)} zł). Popraw koszty w planie.` : ""}
+                </p>
+              )}
+              <label className="flex items-start gap-2">
+                <Checkbox className="mt-0.5" checked={statementsOk} onCheckedChange={(checked) => setStatementsOk(!!checked)} />
+                <span>Potwierdzam, że zapoznałem/am się z oświadczeniami w punkcie 12 formularza i są one zgodne z prawdą.</span>
+              </label>
+              <Button variant="outline" size="sm" className="self-start" onClick={downloadForm} disabled={buildingPdf}>
+                {buildingPdf ? <Spinner data-icon="inline-start" /> : <HugeiconsIcon icon={FileDownloadIcon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />}
+                {buildingPdf ? "Przygotowuję PDF..." : "Pobierz wypełniony wzór (PDF)"}
+              </Button>
+              <p className="text-xs text-muted-foreground">Wniosek składa się w formularzu elektronicznym ROPS – PDF to szkic do sprawdzenia.</p>
+            </div>
+          )}
+          <p className="text-xs text-muted-foreground">Fragmenty oznaczone „[do uzupełnienia]” wymagają Twoich danych. „AI szkic” sprawdź, „Do zatwierdzenia” potwierdź, „Uzupełniasz Ty” wypełnij sam.</p>
           {sections.map((section, i) => (
             <section key={i} className="rounded-lg bg-muted/40 p-3">
               <div className="flex items-start justify-between gap-2">
-                <h4 className="text-sm font-semibold">{section.title}</h4>
+                <h4 className="flex flex-wrap items-center gap-2 text-sm font-semibold">
+                  {section.title}
+                  {FILL_BY[section.fillBy] && (
+                    <span className={cn("rounded-full px-2 py-0.5 text-xs font-medium", FILL_BY[section.fillBy].className)}>{FILL_BY[section.fillBy].label}</span>
+                  )}
+                </h4>
                 <Button variant="ghost" size="icon-sm" aria-label={`Kopiuj sekcję: ${section.title}`} onClick={() => copy(`${section.title}\n\n${section.content}`)}>
                   <HugeiconsIcon icon={Copy01Icon} strokeWidth={2} aria-hidden="true" />
                 </Button>
@@ -407,7 +493,7 @@ function VisualizationTab({ token, idea }) {
   );
 }
 
-function Workspace({ token, details, spec }) {
+function Workspace({ token, details, spec, initialTab, initialCallId }) {
   const [answers, setAnswers] = useState(() => details.canvas ?? {});
   const [dirty, setDirty] = useState(false);
   const save = useSaveCanvas(token);
@@ -451,7 +537,7 @@ function Workspace({ token, details, spec }) {
         </p>
       </header>
 
-      <Tabs defaultValue="canvas" className="gap-4">
+      <Tabs defaultValue={initialTab ?? "canvas"} className="gap-4">
         <TabsList className="h-auto! flex-wrap">
           <TabsTrigger value="canvas">Kanwa innowacji</TabsTrigger>
           <TabsTrigger value="feedback">Ocena AI</TabsTrigger>
@@ -468,7 +554,7 @@ function Workspace({ token, details, spec }) {
           <VisualizationTab token={token} idea={idea} />
         </TabsContent>
         <TabsContent value="grant">
-          <GrantTab token={token} beforeAi={beforeAi} />
+          <GrantTab token={token} beforeAi={beforeAi} initialCallId={initialCallId} />
         </TabsContent>
       </Tabs>
 
@@ -486,7 +572,7 @@ function Workspace({ token, details, spec }) {
   );
 }
 
-export default function IdeaWorkspace({ token }) {
+export default function IdeaWorkspace({ token, initialTab, initialCallId = null }) {
   const details = useIdeaByToken(token);
   const spec = useCanvasSpec();
 
@@ -501,7 +587,7 @@ export default function IdeaWorkspace({ token }) {
             </EmptyHeader>
           </Empty>
         ) : details.data && spec.data ? (
-          <Workspace token={token} details={details.data} spec={spec.data} />
+          <Workspace token={token} details={details.data} spec={spec.data} initialTab={initialTab} initialCallId={initialCallId} />
         ) : (
           <LoadingStatus label="Wczytywanie pomysłu" className="flex flex-col gap-4">
             <Skeleton className="h-10 w-2/3" />

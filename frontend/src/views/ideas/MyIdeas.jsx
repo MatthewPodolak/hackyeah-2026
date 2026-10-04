@@ -26,6 +26,7 @@ import {
   ideaTokens,
   toIdeaCardRequest,
 } from "@/lib/ideas";
+import { useGrantCalls } from "@/api/hooks/useGrantCalls";
 import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
@@ -100,7 +101,23 @@ function EditForm({ token, idea, onDone }) {
   );
 }
 
-function IdeaCard({ token, query, onForget }) {
+// which call the user is preparing an application for
+function GrantCallHint({ callId, hasIdeas }) {
+  const calls = useGrantCalls();
+  const call = calls.data?.find((c) => c.id === callId);
+  return (
+    <div role="status" className="mb-6 rounded-xl border border-emerald-700 bg-emerald-500/10 p-4 text-sm dark:border-emerald-400">
+      <p className="font-medium">Wniosek grantowy{call ? `: ${call.name}` : ""}</p>
+      <p className="text-muted-foreground">
+        {hasIdeas
+          ? "Wybierz pomysł i kliknij „Przygotuj wniosek”. AI napisze szkic według sekcji tego naboru."
+          : "Najpierw dodaj swój pomysł przyciskiem „Nowa propozycja”. Potem przygotujesz do niego wniosek."}
+      </p>
+    </div>
+  );
+}
+
+function IdeaCard({ token, query, onForget, callId }) {
   const [editing, setEditing] = useState(false);
 
   if (query.isPending) {
@@ -185,8 +202,11 @@ function IdeaCard({ token, query, onForget }) {
             <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
             Edytuj<span className="sr-only">: {idea.title}</span>
           </Button>
-          <Link href={`/my-ideas/${encodeURIComponent(token)}`} className={buttonVariants({ size: "sm" })}>
-            Rozwiń pomysł<span className="sr-only">: {idea.title}</span>
+          <Link
+            href={callId ? `/my-ideas/${encodeURIComponent(token)}?tab=grant&call=${callId}` : `/my-ideas/${encodeURIComponent(token)}`}
+            className={buttonVariants({ size: "sm" })}
+          >
+            {callId ? "Przygotuj wniosek" : "Rozwiń pomysł"}<span className="sr-only">: {idea.title}</span>
             <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} data-icon="inline-end" aria-hidden="true" />
           </Link>
         </div>
@@ -195,7 +215,8 @@ function IdeaCard({ token, query, onForget }) {
   );
 }
 
-export default function MyIdeas() {
+// callId: set when coming from "Przygotuj wniosek z AI" on a grant call
+export default function MyIdeas({ callId = null }) {
   const { isLogged } = useAuth();
   const { tokens: localTokens, remember: rememberIdeaToken, forget } = useScopedTokens(ideaTokens);
   const mine = useMyIdeas(isLogged);
@@ -228,6 +249,8 @@ export default function MyIdeas() {
           }
         />
 
+        {callId && <GrantCallHint callId={callId} hasIdeas={tokens.length > 0} />}
+
         <form onSubmit={addCode} className="mb-8 flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-elevation-1">
           <label htmlFor="idea-code" className="text-sm font-medium">Masz kod propozycji z innego urządzenia?</label>
           <div className="flex gap-2">
@@ -250,7 +273,7 @@ export default function MyIdeas() {
         ) : tokens.length ? (
           <div className="flex flex-col gap-4">
             {tokens.map((token, i) => (
-              <IdeaCard key={token} token={token} query={queries[i]} onForget={ownedTokens.has(token) ? null : forget} />
+              <IdeaCard key={token} token={token} query={queries[i]} onForget={ownedTokens.has(token) ? null : forget} callId={callId} />
             ))}
           </div>
         ) : (

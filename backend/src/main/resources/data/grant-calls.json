@@ -1,0 +1,346 @@
+{
+  "source": "https://rops.krakow.pl/nabory-szkolenia-granty-dotacje-wizyty-studyjne-studia-specjalizacje-superwizje/granty-na-innowacje-spoleczne",
+  "note": "Real ROPS Kraków grant calls (finished) + one demo call (demo = true, invented dates) built from the real Inkubator call.",
+  "applicantTypes": {
+    "JST": "samorząd terytorialny",
+    "JST_UNIT": "jednostka organizacyjna JST (OPS, PCPR, CUS)",
+    "NGO": "organizacja pozarządowa",
+    "SOCIAL_ECONOMY": "podmiot ekonomii społecznej",
+    "PERSON": "osoba fizyczna",
+    "PUBLIC": "podmiot publiczny",
+    "COMPANY": "firma / spółka",
+    "INFORMAL_GROUP": "grupa nieformalna"
+  },
+  "forms": {
+    "usluga-wrazliwa": {
+      "name": "Wniosek o grant",
+      "sections": [
+        {
+          "title": "Nazwa wybranej do wdrożenia innowacji społecznej",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Dane wnioskodawcy",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Doświadczenie wnioskodawcy",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Tytuł innowacyjnej usługi społecznej",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Opis innowacyjnej usługi społecznej",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Na czym będzie polegała innowacyjna usługa społeczna świadczona w społeczności lokalnej?",
+            "Jakie są jej główne założenia i działania?",
+            "Jaki ma cel i jaką zmianę zamierza wywołać?",
+            "W jaki sposób planuje się wykorzystanie wybranej innowacji społecznej?"
+          ]
+        },
+        {
+          "title": "Daty realizacji (Etap 1 i Etap 2, łącznie nie dłużej niż 18 miesięcy)",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Grupa docelowa",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Diagnoza problemu i opis odbiorców usługi",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Na jaki problem odpowiada usługa i jaka jest skala problemu na planowanym obszarze wdrażania?",
+            "Charakterystyka grupy docelowej, problemy i potrzeby, bariery uczestnictwa, liczebność, liczba osób planowana do objęcia usługą",
+            "Źródła informacji i danych dotyczących grupy docelowej",
+            "Czy odbiorcy usługi to grupy wykluczone społecznie i dlaczego?"
+          ]
+        },
+        {
+          "title": "Opis sposobu rekrutacji, w tym kryteria oraz ramy czasowe",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Liczba osób objętych wsparciem grantu",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Obszar wdrażania usługi (gmina, powiat, kilka gmin…)",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Oczekiwane efekty realizacji grantu",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Plan działania i koszty",
+          "fillBy": "AI_DRAFT",
+          "aiRule": "costs are drafts marked 'do weryfikacji'; the user must check every amount"
+        },
+        {
+          "title": "Wskaźnik obligatoryjny produktu: Liczba osób objętych usługami świadczonymi w społeczności lokalnej",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Wnioskowana kwota grantu (suma kosztów z planu działania)",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Wydatki w ramach cross-financingu (tak/nie) + koncepcja trwałości",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Zgodność z zasadami horyzontalnymi",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "równość kobiet i mężczyzn",
+            "równość szans i niedyskryminacja, w tym dostępność usługi",
+            "Karta Praw Podstawowych i Konwencja o Prawach Osób Niepełnosprawnych",
+            "zrównoważony rozwój i DNSH"
+          ]
+        },
+        {
+          "title": "Koncepcja utrzymania efektów wdrożenia innowacji (po zakończeniu finansowania)",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Uzasadnienie spełnienia zasady deinstytucjonalizacji",
+          "fillBy": "AI_DRAFT"
+        },
+        {
+          "title": "Oświadczenia podmiotu",
+          "fillBy": "USER_CONFIRM"
+        }
+      ],
+      "criteria": {
+        "maxPoints": 100,
+        "passRule": "minimum 50% punktów w każdym kryterium obligatoryjnym",
+        "items": [
+          {
+            "name": "Adekwatność koncepcji wdrożenia innowacji",
+            "points": "0–20"
+          },
+          {
+            "name": "Efektywność wdrożenia innowacji",
+            "points": "0–20"
+          },
+          {
+            "name": "Zasięg wdrożenia innowacji społecznej",
+            "points": "0–20"
+          },
+          {
+            "name": "Koncepcja utrzymania efektów wdrożenia innowacji",
+            "points": "0–20"
+          },
+          {
+            "name": "Doświadczenie Wnioskodawcy (kryterium premiujące)",
+            "points": "10 (2 obszary) / 20 (3 obszary)"
+          }
+        ]
+      }
+    },
+    "inkubator-wlaczenia-spolecznego": {
+      "name": "Formularz aplikacyjny",
+      "sections": [
+        {
+          "title": "Tytuł innowacji",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Krótki i kojarzący się z przedmiotem innowacji"
+          ]
+        },
+        {
+          "title": "Dane pomysłodawcy",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Opis innowacji",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Na czym polega innowacja?",
+            "Jaki jest jej charakter (produkt, aplikacja, model pracy, rozwiązanie technologiczne)?",
+            "Jak rozwiązanie realizuje cel: włączenie społeczne / przeciwdziałanie wykluczeniu?",
+            "Jak rozwiązanie wpisuje się w ideę deinstytucjonalizacji?"
+          ]
+        },
+        {
+          "title": "Innowacyjność rozwiązania",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Czy podobne rozwiązania są stosowane w Polsce albo na świecie?",
+            "Jaką nową wartość wnosi projekt?",
+            "Czym wyróżnia się na tle innych?"
+          ]
+        },
+        {
+          "title": "Diagnoza problemu",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Na jaki problem odpowiada innowacja – dane statystyczne obrazujące skalę problemu?",
+            "Podstawy diagnozy (raporty, badania)?",
+            "Czy problem jest zgodny z tematem z Mapy Wyzwań Społecznych – jakim?"
+          ]
+        },
+        {
+          "title": "Opis odbiorców innowacji",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Do kogo jest skierowana?",
+            "Co tę grupę wyróżnia, jakie ma potrzeby?",
+            "Dlaczego są to osoby wykluczone lub zagrożone wykluczeniem?"
+          ]
+        },
+        {
+          "title": "Zmiana jaką wprowadza innowacja",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Jak rozwiązanie wpłynie na problem?",
+            "Co zmieni w życiu odbiorców?",
+            "Jak wpłynie na włączenie społeczne?"
+          ]
+        },
+        {
+          "title": "Wizja przyszłości innowacji",
+          "fillBy": "AI_DRAFT",
+          "questions": [
+            "Czy ma potencjał do zastosowania na dużą skalę?",
+            "Czy może być rozszerzona na inne grupy, konteksty, miejsca?",
+            "Łatwość stosowania i wdrażalność"
+          ]
+        },
+        {
+          "title": "Plan działania i koszty (okres przygotowawczy ≤ 3 mies., okres testowania ≤ 9 mies., Faza I i II testu)",
+          "fillBy": "AI_DRAFT",
+          "aiRule": "Każde działanie w osobnej linii w formacie: ETAP | działanie | termin | koszt, gdzie ETAP to PRZYGOTOWANIE, FAZA I albo FAZA II; max 3 działania w przygotowaniu i po 2 w każdej fazie; koszty to szkic do weryfikacji, suma nie większa niż maksymalna kwota grantu."
+        },
+        {
+          "title": "Wnioskowana kwota grantu",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Zespół projektowy i jego doświadczenie",
+          "fillBy": "USER"
+        },
+        {
+          "title": "Oświadczenia",
+          "fillBy": "USER_CONFIRM"
+        }
+      ],
+      "criteria": {
+        "maxPoints": 50,
+        "passRule": "minimum 21 pkt; minimum 5 pkt w kryterium Innowacyjność i minimum 4 pkt w każdym pozostałym",
+        "items": [
+          {
+            "name": "Innowacyjność rozwiązania",
+            "points": "0–10"
+          },
+          {
+            "name": "Adekwatność do potrzeb odbiorców i użytkowników",
+            "points": "0–10"
+          },
+          {
+            "name": "Efektywność kosztowa",
+            "points": "0–10"
+          },
+          {
+            "name": "Uniwersalność",
+            "points": "0–10"
+          },
+          {
+            "name": "Wizja rozwoju pomysłu w przyszłości",
+            "points": "0–10"
+          }
+        ]
+      }
+    }
+  },
+  "calls": [
+    {
+      "key": "usluga-wrazliwa-2",
+      "name": "II nabór wniosków na pilotażowe wdrożenie usług społecznych bazujących na innowacyjnych rozwiązaniach",
+      "project": "Usługa Wrażliwa – upowszechnianie innowacji społecznych w środowiskach lokalnych",
+      "goal": "Pilotażowe wdrożenie innowacyjnej usługi społecznej w społeczności lokalnej, opartej na jednej ze wskazanych przez ROPS innowacji społecznych.",
+      "coverage": "100% kosztów opracowania, przygotowania i testowania usługi",
+      "maxGrantPLN": 600000,
+      "ownContributionRequired": false,
+      "applicantTypes": [
+        "JST",
+        "JST_UNIT",
+        "NGO",
+        "SOCIAL_ECONOMY"
+      ],
+      "openFrom": "2026-05-27",
+      "openTo": "2026-06-30",
+      "sourceUrl": "https://rops.krakow.pl/nabory-szkolenia-granty-dotacje-wizyty-studyjne-studia-specjalizacje-superwizje/granty-na-innowacje-spoleczne,ii-nabor-wnioskow-na-pilotazowe-wdrozenie-uslug-spolecznych-bazujacych-na-innowacyjnych-rozwiazaniach-w-ramach-projektu-usluga-wrazliwa-upowszechnianie-innowacji-spolecznych-w-srodowiskach-lokalnych",
+      "form": "usluga-wrazliwa",
+      "demo": false
+    },
+    {
+      "key": "usluga-wrazliwa-1",
+      "name": "Nabór wniosków na pilotażowe wdrożenie usług społecznych bazujących na innowacyjnych rozwiązaniach",
+      "project": "Usługa Wrażliwa – upowszechnianie innowacji społecznych w środowiskach lokalnych",
+      "goal": "Pilotażowe wdrożenie innowacyjnej usługi społecznej w społeczności lokalnej, opartej na jednej ze wskazanych przez ROPS innowacji społecznych.",
+      "coverage": "100% kosztów opracowania, przygotowania i testowania usługi",
+      "maxGrantPLN": 600000,
+      "ownContributionRequired": false,
+      "applicantTypes": [
+        "JST",
+        "JST_UNIT",
+        "NGO",
+        "SOCIAL_ECONOMY"
+      ],
+      "openFrom": "2025-12-22",
+      "openTo": "2026-02-20",
+      "sourceUrl": "https://rops.krakow.pl/nabory-szkolenia-granty-dotacje-wizyty-studyjne-studia-specjalizacje-superwizje/granty-na-innowacje-spoleczne,nabor-wnioskow-na-pilotazowe-wdrozenie-uslug-spolecznych-bazujacych-na-innowacyjnych-rozwiazaniach-w-ramach-projektu-usluga-wrazliwa-upowszechnianie-innowacji-spolecznych-w-srodowiskach-lokalnych",
+      "form": "usluga-wrazliwa",
+      "demo": false
+    },
+    {
+      "key": "inkubator-wlaczenia-spolecznego-2",
+      "name": "Nabór aplikacji (wniosków) na innowacje społeczne",
+      "project": "Inkubator Włączenia Społecznego 2.0",
+      "goal": "Opracowanie i przetestowanie innowacji społecznej (produktu, narzędzia, usługi, modelu wsparcia) dla osób wykluczonych lub zagrożonych wykluczeniem społecznym (m.in. osób z niepełnosprawnością, wychowanków placówek opiekuńczo-wychowawczych, osób starszych, w kryzysie bezdomności, ubogich).",
+      "coverage": "100% kosztów opracowania, przygotowania i testowania innowacji",
+      "maxGrantPLN": 120000,
+      "ownContributionRequired": false,
+      "applicantTypes": [
+        "PERSON",
+        "NGO",
+        "PUBLIC",
+        "COMPANY",
+        "SOCIAL_ECONOMY",
+        "INFORMAL_GROUP"
+      ],
+      "openFrom": "2024-11-13",
+      "openTo": "2024-12-13",
+      "sourceUrl": "https://rops.krakow.pl/nabory-szkolenia-granty-dotacje-wizyty-studyjne-studia-specjalizacje-superwizje/granty-na-innowacje-spoleczne,nabor-aplikacji-wnioskow-na-innowacje-spoleczne-w-ramach-projektu-pn-inkubator-wlaczenia-spolecznego-20",
+      "form": "inkubator-wlaczenia-spolecznego",
+      "demo": false
+    },
+    {
+      "key": "demo-inkubator-2026-10",
+      "name": "Nabór pomysłów na innowacje społeczne (nabór przykładowy)",
+      "project": "Inkubator Włączenia Społecznego 2.0",
+      "goal": "Opracowanie i przetestowanie innowacji społecznej (produktu, narzędzia, usługi, modelu wsparcia) dla osób wykluczonych lub zagrożonych wykluczeniem społecznym (m.in. osób z niepełnosprawnością, wychowanków placówek opiekuńczo-wychowawczych, osób starszych, w kryzysie bezdomności, ubogich).",
+      "coverage": "100% kosztów opracowania, przygotowania i testowania innowacji",
+      "maxGrantPLN": 120000,
+      "ownContributionRequired": false,
+      "applicantTypes": [
+        "PERSON",
+        "NGO",
+        "PUBLIC",
+        "COMPANY",
+        "SOCIAL_ECONOMY",
+        "INFORMAL_GROUP"
+      ],
+      "openFrom": "2026-10-01",
+      "openTo": "2026-10-31",
+      "sourceUrl": "https://rops.krakow.pl/nabory-szkolenia-granty-dotacje-wizyty-studyjne-studia-specjalizacje-superwizje/granty-na-innowacje-spoleczne,nabor-aplikacji-wnioskow-na-innowacje-spoleczne-w-ramach-projektu-pn-inkubator-wlaczenia-spolecznego-20",
+      "form": "inkubator-wlaczenia-spolecznego",
+      "demo": true
+    }
+  ]
+}
