@@ -92,6 +92,8 @@ export const API = {
     mine: { method: "GET", url: "/api/v1/me/problems" },
     get: { method: "GET", url: "/api/v1/problems/get-problems" },
     reported: { method: "GET", url: "/api/v1/problems/reported" },
+    reportedWaiting: { method: "GET", url: "/api/v1/problems/reported/waiting-count" },
+    decide: { method: "POST", url: (id) => `/api/v1/problems/reported/${id}/decision` },
     getById: { method: "GET", url: (id) => `/api/v1/problems/${id}` }
   },
 };

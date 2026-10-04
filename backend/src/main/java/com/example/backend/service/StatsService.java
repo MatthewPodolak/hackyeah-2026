@@ -73,7 +73,7 @@ public class StatsService {
         Map<String, Long> totals = new LinkedHashMap<>();
         totals.put("problems", (long) allProblems.size());
         totals.put("problemsUnseen", allProblems.stream().filter(p -> Boolean.FALSE.equals(p.getAdminSeen())).count());
-        totals.put("problemsOpen", allProblems.stream().filter(p -> p.effectiveStatus() != ProblemStatus.RESOLVED && p.effectiveStatus() != ProblemStatus.REJECTED).count());
+        totals.put("problemsOpen", allProblems.stream().filter(p -> p.effectiveStatus() != ProblemStatus.RESOLVED && p.effectiveStatus() != ProblemStatus.REJECTED && p.effectiveStatus() != ProblemStatus.GMINA_REJECTED).count());
         totals.put("ideas", (long) allIdeas.size());
         totals.put("ideasUnseen", allIdeas.stream().filter(i -> !i.isAdminSeen()).count());
 

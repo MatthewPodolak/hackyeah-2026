@@ -59,9 +59,24 @@ public class Problem {
 
     private Boolean adminSeen;
 
+    // JST decision: priority on accept, note for ROPS on accept or reason on decline
+    @Enumerated(EnumType.STRING)
+    @Column(length = 10)
+    private ProblemPriority priority;
+
+    @Column(columnDefinition = "TEXT")
+    private String gminaNote;
+
+    private Instant gminaDecidedAt;
+
     private Instant updatedAt;
 
     public ProblemStatus effectiveStatus() {
         return status == null ? ProblemStatus.SUBMITTED : status;
+    }
+
+    // a report with a gmina waits for the JST decision before ROPS can work on it
+    public boolean waitsForGmina() {
+        return gminaId != null && effectiveStatus() == ProblemStatus.SUBMITTED;
     }
 }

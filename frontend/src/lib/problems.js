@@ -1,7 +1,9 @@
 import { createTokenStore } from "@/lib/token-store";
 
 export const PROBLEM_STATUS = {
-  SUBMITTED: { label: "Przyjęte", className: "bg-sky-500/15 text-sky-800 dark:text-sky-300" },
+  SUBMITTED: { label: "Zgłoszone", className: "bg-sky-500/15 text-sky-800 dark:text-sky-300" },
+  FORWARDED: { label: "Przekazane do ROPS", className: "bg-teal-500/15 text-teal-800 dark:text-teal-300" },
+  GMINA_REJECTED: { label: "Odrzucone przez gminę", className: "bg-red-500/10 text-red-700 dark:text-red-300" },
   IN_REVIEW: { label: "Analizowane", className: "bg-amber-500/15 text-amber-800 dark:text-amber-300" },
   IN_PROGRESS: { label: "W realizacji", className: "bg-violet-500/15 text-violet-800 dark:text-violet-300" },
   RESOLVED: { label: "Rozwiązane", className: "bg-emerald-500/15 text-emerald-800 dark:text-emerald-300" },
@@ -10,6 +12,28 @@ export const PROBLEM_STATUS = {
 
 export function problemStatus(status) {
   return PROBLEM_STATUS[status] ?? PROBLEM_STATUS.SUBMITTED;
+}
+
+// statuses ROPS sets; SUBMITTED and GMINA_REJECTED belong to the gmina
+export const ROPS_STATUSES = ["FORWARDED", "IN_REVIEW", "IN_PROGRESS", "RESOLVED", "REJECTED"];
+
+// set by the JST on accept, ROPS can change it; listed from the most urgent
+export const PROBLEM_PRIORITY = {
+  URGENT: { label: "Pilny", className: "bg-red-600 text-white" },
+  HIGH: { label: "Wysoki", className: "bg-orange-500/20 text-orange-800 dark:text-orange-300" },
+  MEDIUM: { label: "Średni", className: "bg-amber-500/15 text-amber-800 dark:text-amber-300" },
+  LOW: { label: "Niski", className: "bg-muted text-muted-foreground" },
+};
+
+export const PRIORITIES = Object.keys(PROBLEM_PRIORITY);
+
+export function problemPriority(priority) {
+  return PROBLEM_PRIORITY[priority] ?? null;
+}
+
+// a report with a gmina waits for the JST decision before it reaches ROPS
+export function waitsForGmina(problem) {
+  return !!problem.gminaId && (problem.status ?? "SUBMITTED") === "SUBMITTED";
 }
 
 export const problemTokens = createTokenStore("myProblemTokens");

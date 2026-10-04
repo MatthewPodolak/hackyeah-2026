@@ -19,7 +19,7 @@ import { useScopedTokens } from "@/hooks/useScopedTokens";
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 
 function ReportCard({ item, token }) {
-  const { problem, adminReply, updatedAt } = item;
+  const { problem, adminReply, updatedAt, gminaNote } = item;
   const category = getProblemCategoryOption(problem.category);
 
   return (
@@ -44,6 +44,12 @@ function ReportCard({ item, token }) {
           </span>
         )}
       </div>
+      {problem.status === "GMINA_REJECTED" && gminaNote && (
+        <div className="rounded-xl bg-red-500/10 p-3 text-sm">
+          <p className="text-xs font-medium uppercase tracking-wide text-red-800 dark:text-red-300">Gmina odrzuciła zgłoszenie</p>
+          <p className="whitespace-pre-line">{gminaNote}</p>
+        </div>
+      )}
       {adminReply ? (
         <div className="flex gap-2 rounded-xl bg-violet-500/10 p-3 text-sm">
           <HugeiconsIcon icon={BubbleChatIcon} strokeWidth={2} aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-violet-700 dark:text-violet-300" />
@@ -54,7 +60,11 @@ function ReportCard({ item, token }) {
           </div>
         </div>
       ) : (
-        <p className="text-sm text-muted-foreground">Zgłoszenie czeka na odpowiedź.</p>
+        problem.status !== "GMINA_REJECTED" && (
+          <p className="text-sm text-muted-foreground">
+            {problem.status === "SUBMITTED" && problem.gminaId ? "Zgłoszenie czeka na ocenę gminy." : "Zgłoszenie czeka na odpowiedź."}
+          </p>
+        )
       )}
     </article>
   );

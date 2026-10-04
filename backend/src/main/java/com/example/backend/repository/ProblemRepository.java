@@ -16,14 +16,19 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
     @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina, coalesce(p.status, com.example.backend.model.ProblemStatus.SUBMITTED)) from Problem p")
     List<ProblemSummaryResponse> findAllSummaries();
 
-    @Query("select new com.example.backend.dto.ProblemSummaryResponse(p.id, p.title, p.description, p.latitude, p.longitude, p.localDate, p.street, p.category, p.targetGroup, p.gminaId, p.wholeGmina, coalesce(p.status, com.example.backend.model.ProblemStatus.SUBMITTED)) from Problem p where p.gminaId = :gminaId")
-    List<ProblemSummaryResponse> findSummariesByGminaId(@Param("gminaId") String gminaId);
-
     Optional<Problem> findByTrackingToken(String trackingToken);
 
     List<Problem> findByAuthorIdOrderByLocalDateDesc(Long authorId);
 
     List<Problem> findAllByOrderByLocalDateDesc();
 
-    long countByAdminSeen(Boolean adminSeen);
+    List<Problem> findByGminaIdOrderByLocalDateDesc(String gminaId);
+
+    // JST badge: reports of its gmina still waiting for its decision
+    @Query("select count(p) from Problem p where p.gminaId = :gminaId and (p.status is null or p.status = com.example.backend.model.ProblemStatus.SUBMITTED)")
+    long countWaitingForGmina(@Param("gminaId") String gminaId);
+
+    // ROPS badge: not opened yet and already in the ROPS queue (no gmina, or forwarded by the gmina)
+    @Query("select count(p) from Problem p where p.adminSeen = false and (p.gminaId is null or p.status = com.example.backend.model.ProblemStatus.FORWARDED)")
+    long countUnseenByRops();
 }
