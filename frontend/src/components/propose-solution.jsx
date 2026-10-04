@@ -153,7 +153,7 @@ export default function ProposeSolution({ open, problem, onClose }) {
               </div>
               <div className="min-w-0 flex-1">
                 <CardTitle>
-                  <h2 id="s-heading" className="text-base font-semibold">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
+                  <h2 id="s-heading" className="font-heading text-xl font-bold tracking-tight">{problem ? "Zaproponuj rozwiązanie" : "Zaproponuj innowację"}</h2>
                 </CardTitle>
                 <CardDescription id="s-subheading" className="mt-1">
                   {problem ? (

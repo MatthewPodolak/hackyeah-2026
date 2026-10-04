@@ -82,7 +82,7 @@ function FilterChip({ active, label, count, onClick }) {
     >
       {label}
       <span className="sr-only">, liczba:</span>
-      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>
+      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>
         {count}
       </span>
     </button>
@@ -171,7 +171,7 @@ function IdeaDetails({ id, onClose }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs font-medium uppercase tracking-wide text-emerald-700 dark:text-emerald-400">Propozycja innowacji</p>
-                <h2 id="idea-details-heading" className="text-lg font-semibold leading-snug break-words">
+                <h2 id="idea-details-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">
                   {idea ? idea.title : "Wczytywanie propozycji…"}
                 </h2>
               </div>
@@ -258,9 +258,9 @@ function IdeasList() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="mx-auto w-full max-w-5xl px-4 pt-14 pb-10 md:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <header className="mb-6">
-          <h1 className="font-heading text-2xl font-semibold">Zgłoszone innowacje</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszone innowacje</h1>
           <p className="text-muted-foreground">Propozycje rozwiązań i innowacji przesłane przez mieszkańców</p>
         </header>
 

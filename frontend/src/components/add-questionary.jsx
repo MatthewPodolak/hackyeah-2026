@@ -193,7 +193,7 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
       <Card>
         <CardHeader>
           <CardTitle>
-            <h2 id="q-heading" className="text-base font-semibold">Zgłoś problem</h2>
+            <h2 id="q-heading" className="font-heading text-xl font-bold tracking-tight">Zgłoś problem</h2>
           </CardTitle>
           <CardDescription id="q-intro">
             Uzupełnij dane problemu i wskaż lokalizację. Wszystkie pola poza zdjęciem są wymagane.

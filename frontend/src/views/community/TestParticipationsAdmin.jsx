@@ -33,7 +33,7 @@ function FilterChip({ active, label, count, onClick }) {
     >
       {label}
       <span className="sr-only">, liczba:</span>
-      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground")}>{count}</span>
+      <span className={cn("rounded-full px-1.5 text-xs tabular-nums", active ? "bg-primary-foreground font-semibold text-primary" : "bg-muted text-muted-foreground")}>{count}</span>
     </button>
   );
 }
@@ -64,9 +64,9 @@ function ParticipationsList() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="mx-auto w-full max-w-5xl px-4 pt-14 pb-10 md:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
         <header className="mb-6">
-          <h1 className="font-heading text-2xl font-semibold">Zgłoszenia do testów</h1>
+          <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszenia do testów</h1>
           <p className="text-muted-foreground">Osoby i organizacje, które chcą przetestować innowacje z biblioteki</p>
         </header>
 
