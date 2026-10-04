@@ -16,13 +16,7 @@ export const READINESS = {
   READY: { label: "Działa", icon: "🚀" },
 };
 
-const ideaTokens = createTokenStore("myIdeaTokens");
-
-export const loadIdeaTokens = ideaTokens.load;
-export const getServerIdeaTokens = ideaTokens.serverSnapshot;
-export const subscribeIdeaTokens = ideaTokens.subscribe;
-export const rememberIdeaToken = ideaTokens.remember;
-export const forgetIdeaToken = ideaTokens.forget;
+export const ideaTokens = createTokenStore("myIdeaTokens");
 
 export function toIdeaCardRequest(idea, changes = {}) {
   return {

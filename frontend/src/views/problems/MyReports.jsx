@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Alert02Icon, BubbleChatIcon, Location01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { useAuth } from "@/api/context/AuthContext";
 import { useMyProblems, useProblemsByTokens } from "@/api/hooks/useAdmin";
 import { getProblemCategoryOption } from "@/lib/problemCategories";
 import { problemStatus, problemTokens } from "@/lib/problems";
+import { useScopedTokens } from "@/hooks/useScopedTokens";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 
@@ -61,7 +62,7 @@ function ReportCard({ item, token }) {
 
 export default function MyReports() {
   const { isLogged } = useAuth();
-  const tokens = useSyncExternalStore(problemTokens.subscribe, problemTokens.load, problemTokens.serverSnapshot);
+  const { tokens, remember, forget } = useScopedTokens(problemTokens);
   const byTokens = useProblemsByTokens(tokens);
   const mine = useMyProblems(isLogged);
   const [code, setCode] = useState("");
@@ -87,7 +88,7 @@ export default function MyReports() {
     e.preventDefault();
     const value = code.trim();
     if (!value) return;
-    problemTokens.remember(value);
+    remember(value);
     setCode("");
   };
 
@@ -123,7 +124,7 @@ export default function MyReports() {
                   <span className="min-w-0 text-muted-foreground">
                     Nie znaleziono zgłoszenia o kodzie <code className="break-all font-mono text-foreground">{token}</code>
                   </span>
-                  <Button variant="ghost" size="sm" onClick={() => problemTokens.forget(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>
+                  <Button variant="ghost" size="sm" onClick={() => forget(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>
                 </div>
               );
             })}

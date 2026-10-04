@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useMemo, useState } from "react";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon, BulbIcon, Delete02Icon, Edit02Icon, BubbleChatIcon } from "@hugeicons/core-free-icons";
@@ -13,7 +13,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { useFormErrors } from "@/helpers/useFormErrors";
 import { Empty, EmptyContent, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
-import { useIdeasByTokens } from "@/api/hooks/useIdeasQuery";
+import { useIdeasByTokens, useMyIdeas } from "@/api/hooks/useIdeasQuery";
+import { useAuth } from "@/api/context/AuthContext";
+import { useScopedTokens } from "@/hooks/useScopedTokens";
 import { useUpdateIdea } from "@/api/hooks/useIdeaMutation";
 import { useProposal } from "@/api/context/ProposalContext";
 import { useToast } from "@/helpers/ToastProvider";
@@ -21,11 +23,7 @@ import { getTargetGroupOption } from "@/lib/problemCategories";
 import {
   IDEA_STATUS,
   READINESS,
-  forgetIdeaToken,
-  getServerIdeaTokens,
-  loadIdeaTokens,
-  rememberIdeaToken,
-  subscribeIdeaTokens,
+  ideaTokens,
   toIdeaCardRequest,
 } from "@/lib/ideas";
 
@@ -101,7 +99,7 @@ function EditForm({ token, idea, onDone }) {
   );
 }
 
-function IdeaCard({ token, query }) {
+function IdeaCard({ token, query, onForget }) {
   const [editing, setEditing] = useState(false);
 
   if (query.isPending) {
@@ -120,7 +118,7 @@ function IdeaCard({ token, query }) {
           {query.error?.status === 404 ? "Nie znaleziono propozycji o kodzie" : "Nie udało się wczytać propozycji"}{" "}
           <code className="break-all font-mono text-foreground">{token}</code>
         </span>
-        <Button variant="ghost" size="sm" onClick={() => forgetIdeaToken(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>
+        {onForget && <Button variant="ghost" size="sm" onClick={() => onForget(token)} aria-label={`Usuń z listy kod ${token}`}>Usuń</Button>}
       </div>
     );
   }
@@ -176,10 +174,12 @@ function IdeaCard({ token, query }) {
         <EditForm token={token} idea={idea} onDone={() => setEditing(false)} />
       ) : (
         <div className="flex flex-wrap justify-end gap-2">
-          <Button variant="ghost" size="sm" onClick={() => forgetIdeaToken(token)}>
-            <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
-            Usuń z listy<span className="sr-only">: {idea.title}</span>
-          </Button>
+          {onForget && (
+            <Button variant="ghost" size="sm" onClick={() => onForget(token)}>
+              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+              Usuń z listy<span className="sr-only">: {idea.title}</span>
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
             <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
             Edytuj<span className="sr-only">: {idea.title}</span>
@@ -195,7 +195,11 @@ function IdeaCard({ token, query }) {
 }
 
 export default function MyIdeas() {
-  const tokens = useSyncExternalStore(subscribeIdeaTokens, loadIdeaTokens, getServerIdeaTokens);
+  const { isLogged } = useAuth();
+  const { tokens: localTokens, remember: rememberIdeaToken, forget } = useScopedTokens(ideaTokens);
+  const mine = useMyIdeas(isLogged);
+  const ownedTokens = useMemo(() => new Set((mine.data ?? []).map((item) => item.idea.trackingToken)), [mine.data]);
+  const tokens = useMemo(() => [...new Set([...localTokens, ...ownedTokens])], [localTokens, ownedTokens]);
   const queries = useIdeasByTokens(tokens);
   const { openProposal } = useProposal();
   const [code, setCode] = useState("");
@@ -236,10 +240,15 @@ export default function MyIdeas() {
           </div>
         </form>
 
-        {tokens.length ? (
+        {isLogged && mine.isPending && !tokens.length ? (
+          <div role="status">
+            <span className="sr-only">Wczytywanie propozycji</span>
+            <Skeleton aria-hidden="true" className="h-40 w-full rounded-xl" />
+          </div>
+        ) : tokens.length ? (
           <div className="flex flex-col gap-4">
             {tokens.map((token, i) => (
-              <IdeaCard key={token} token={token} query={queries[i]} />
+              <IdeaCard key={token} token={token} query={queries[i]} onForget={ownedTokens.has(token) ? null : forget} />
             ))}
           </div>
         ) : (
@@ -249,7 +258,7 @@ export default function MyIdeas() {
                 <HugeiconsIcon icon={BulbIcon} strokeWidth={2} />
               </EmptyMedia>
               <EmptyTitle>Nie masz jeszcze propozycji</EmptyTitle>
-              <EmptyDescription>Propozycje wysłane z tej przeglądarki pojawią się tutaj automatycznie.</EmptyDescription>
+              <EmptyDescription>{isLogged ? "Propozycje wysłane z tego konta pojawią się tutaj automatycznie." : "Propozycje wysłane z tej przeglądarki pojawią się tutaj automatycznie."}</EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Button onClick={() => openProposal()}>Zaproponuj innowację</Button>
