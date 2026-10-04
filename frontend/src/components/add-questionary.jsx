@@ -4,13 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import dynamic from "next/dynamic"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { DialogBody, DialogFooter, DialogHeader, DialogPanel, FormStep } from "@/components/dialog-parts"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { ImageAdd01Icon, Megaphone01Icon, Search01Icon } from "@hugeicons/core-free-icons"
 import {
   Field,
   FieldDescription,
@@ -191,167 +187,194 @@ export default function AddQuestionary({ open, onClose, onSubmitted }) {
       : `Wybrane miejsce: ${street.data ?? `${form.location.lat.toFixed(5)}, ${form.location.lon.toFixed(5)}`}`
 
   return (
-    <Modal open={open} onClose={close} labelledBy="q-heading" describedBy="q-intro" className="max-w-md">
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            <h2 id="q-heading" className="font-heading text-xl font-bold tracking-tight">Zgłoś problem</h2>
-          </CardTitle>
-          <CardDescription id="q-intro">
-            Uzupełnij dane problemu i wskaż lokalizację. Wszystkie pola poza zdjęciem są wymagane.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} noValidate>
-            <FieldGroup>
-              <Field>
-                <FieldLabel htmlFor="q-title">Tytuł</FieldLabel>
-                <div className="relative">
-                  <Input
-                    {...fieldProps("title")}
-                    ref={titleRef}
+    <Modal open={open} onClose={close} labelledBy="q-heading" describedBy="q-intro" className="max-w-2xl">
+      <DialogPanel>
+        <DialogHeader
+          icon={Megaphone01Icon}
+          tone="danger"
+          title="Zgłoś problem"
+          titleId="q-heading"
+          description="Opisz problem i wskaż miejsce. Wszystkie pola poza zdjęciem są wymagane."
+          descriptionId="q-intro"
+          onClose={close}
+        />
+        <form onSubmit={handleSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
+          <DialogBody className="pt-2">
+            <FieldGroup className="gap-6">
+              <FormStep number={1} title="Co się dzieje?">
+                <Field>
+                  <FieldLabel htmlFor="q-title">Tytuł</FieldLabel>
+                  <div className="relative">
+                    <Input
+                      {...fieldProps("title")}
+                      ref={titleRef}
+                      required
+                      placeholder="np. Brak podjazdu dla wózków przy przychodni"
+                      className={speechSupported ? "pr-11" : undefined}
+                      value={form.title}
+                      onChange={(e) => set("title")(e.target.value)}
+                    />
+                    <SpeechButton target={titleRef} className="top-1/2 -translate-y-1/2" />
+                  </div>
+                  <FieldError {...errorProps("title")} />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="q-description">Opis</FieldLabel>
+                  <Textarea
+                    {...fieldProps("description", "q-description-hint")}
                     required
-                    className={speechSupported ? "pr-11" : undefined}
-                    value={form.title}
-                    onChange={(e) => set("title")(e.target.value)}
+                    placeholder="Kogo i jak dotyka ten problem? Od kiedy trwa?"
+                    value={form.description}
+                    onChange={(e) => set("description")(e.target.value)}
                   />
-                  <SpeechButton target={titleRef} className="top-1/2 -translate-y-1/2" />
-                </div>
-                <FieldError {...errorProps("title")} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-description">Opis</FieldLabel>
-                <FieldDescription id="q-description-hint">Nie podawaj imion, nazwisk ani adresów.</FieldDescription>
-                <Textarea
-                  {...fieldProps("description", "q-description-hint")}
-                  required
-                  value={form.description}
-                  onChange={(e) => set("description")(e.target.value)}
-                />
-                <FieldError {...errorProps("description")} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-category">Kategoria</FieldLabel>
-                <NativeSelect
-                  {...fieldProps("category")}
-                  required
-                  className="w-full"
-                  value={form.category}
-                  onChange={(e) => set("category")(e.target.value)}
-                >
-                  <NativeSelectOption value="" disabled>Wybierz kategorię</NativeSelectOption>
-                  {PROBLEM_CATEGORY_OPTIONS.map((option) => (
-                    <NativeSelectOption key={option.value} value={option.value}>
-                      {option.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-                <FieldError {...errorProps("category")} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-targetGroup">Kogo dotyczy</FieldLabel>
-                <NativeSelect
-                  {...fieldProps("targetGroup")}
-                  required
-                  className="w-full"
-                  value={form.targetGroup}
-                  onChange={(e) => set("targetGroup")(e.target.value)}
-                >
-                  <NativeSelectOption value="" disabled>Wybierz grupę</NativeSelectOption>
-                  {TARGET_GROUP_OPTIONS.map((option) => (
-                    <NativeSelectOption key={option.value} value={option.value}>
-                      {option.label}
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-                <FieldError {...errorProps("targetGroup")} />
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-address">Lokalizacja (adres)</FieldLabel>
-                <div className="flex gap-2">
-                  <Input
-                    {...fieldProps("address", "q-location-status")}
-                    value={address}
-                    autoComplete="off"
-                    placeholder="np. Floriańska 15"
-                    onChange={(e) => setAddress(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key !== "Enter") return
-                      e.preventDefault()
-                      searchAddress()
-                    }}
-                  />
-                  <Button type="button" variant="outline" onClick={searchAddress} disabled={searching}>
-                    {searching ? "Szukam..." : "Szukaj"}
-                  </Button>
-                </div>
-                <FieldError {...errorProps("address")} />
-                <div className="h-56 w-full overflow-hidden rounded-md border">
-                  <LocationPicker value={form.location} focus={gminaFocus} onChange={pickLocation} />
-                </div>
-                <FieldDescription id="q-location-status" aria-live="polite">
-                  {locationStatus}
-                </FieldDescription>
-                {outside && (
-                  <p role="alert" className="text-sm text-destructive">{OUTSIDE_MALOPOLSKA_MSG}</p>
-                )}
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-gmina">Gmina</FieldLabel>
-                <NativeSelect
-                  {...fieldProps("gmina", "q-gmina-hint")}
-                  required
-                  className="w-full"
-                  value={gminaId}
-                  disabled={!regions.data}
-                  onChange={(e) => pickGmina(e.target.value)}
-                >
-                  <NativeSelectOption value="" disabled>
-                    {regions.isPending ? "Wczytuję gminy..." : "Wybierz gminę z listy"}
-                  </NativeSelectOption>
-                  {regions.data?.powiaty.map((powiat) => (
-                    <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
-                      {powiat.gminy.map((gmina) => (
-                        <NativeSelectOption key={gmina.id} value={gmina.id}>{gmina.label}</NativeSelectOption>
+                  <FieldDescription id="q-description-hint">Nie podawaj imion, nazwisk ani adresów prywatnych.</FieldDescription>
+                  <FieldError {...errorProps("description")} />
+                </Field>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field>
+                    <FieldLabel htmlFor="q-category">Kategoria</FieldLabel>
+                    <NativeSelect
+                      {...fieldProps("category")}
+                      required
+                      className="w-full"
+                      value={form.category}
+                      onChange={(e) => set("category")(e.target.value)}
+                    >
+                      <NativeSelectOption value="" disabled>Wybierz kategorię</NativeSelectOption>
+                      {PROBLEM_CATEGORY_OPTIONS.map((option) => (
+                        <NativeSelectOption key={option.value} value={option.value}>
+                          {option.label}
+                        </NativeSelectOption>
                       ))}
-                    </NativeSelectOptGroup>
-                  ))}
-                </NativeSelect>
-                <FieldDescription id="q-gmina-hint">Uzupełnia się po wybraniu miejsca na mapie. Możesz też wybrać gminę bez mapy.</FieldDescription>
-                <FieldError {...errorProps("gmina")} />
-              </Field>
-              <Field orientation="horizontal">
-                <Checkbox
-                  id="q-whole-gmina"
-                  checked={form.wholeGmina}
-                  disabled={!gminaId}
-                  onCheckedChange={setWholeGmina}
-                />
-                <FieldLabel htmlFor="q-whole-gmina">Dotyczy całej gminy, bez dokładnego miejsca</FieldLabel>
-              </Field>
-              <Field>
-                <FieldLabel htmlFor="q-photo">Zdjęcie (opcjonalne, do 5 MB)</FieldLabel>
-                <Input
-                  {...fieldProps("photo")}
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => set("photo")(e.target.files?.[0] ?? null)}
-                />
-                <FieldError {...errorProps("photo")} />
-                {photoPreview && (
-                  <img src={photoPreview} alt="Podgląd wybranego zdjęcia" className="max-h-40 w-full rounded-md object-cover" />
-                )}
-              </Field>
-              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
-                <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || shapes.isPending}>
-                  {addProblem.isPending ? "Szukam rozwiązań..." : "Dodaj"}
-                </Button>
-              </div>
+                    </NativeSelect>
+                    <FieldError {...errorProps("category")} />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="q-targetGroup">Kogo dotyczy</FieldLabel>
+                    <NativeSelect
+                      {...fieldProps("targetGroup")}
+                      required
+                      className="w-full"
+                      value={form.targetGroup}
+                      onChange={(e) => set("targetGroup")(e.target.value)}
+                    >
+                      <NativeSelectOption value="" disabled>Wybierz grupę</NativeSelectOption>
+                      {TARGET_GROUP_OPTIONS.map((option) => (
+                        <NativeSelectOption key={option.value} value={option.value}>
+                          {option.label}
+                        </NativeSelectOption>
+                      ))}
+                    </NativeSelect>
+                    <FieldError {...errorProps("targetGroup")} />
+                  </Field>
+                </div>
+              </FormStep>
+
+              <FormStep number={2} title="Gdzie?" description="Wpisz adres albo kliknij miejsce na mapie.">
+                <Field>
+                  <FieldLabel htmlFor="q-address">Adres</FieldLabel>
+                  <div className="flex gap-2">
+                    <Input
+                      {...fieldProps("address", "q-location-status")}
+                      value={address}
+                      autoComplete="off"
+                      placeholder="np. Floriańska 15"
+                      onChange={(e) => setAddress(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key !== "Enter") return
+                        e.preventDefault()
+                        searchAddress()
+                      }}
+                    />
+                    <Button type="button" variant="outline" className="h-11" onClick={searchAddress} disabled={searching}>
+                      <HugeiconsIcon icon={Search01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
+                      {searching ? "Szukam..." : "Szukaj"}
+                    </Button>
+                  </div>
+                  <FieldError {...errorProps("address")} />
+                  <div className="h-60 w-full overflow-hidden rounded-2xl border border-border">
+                    <LocationPicker value={form.location} focus={gminaFocus} onChange={pickLocation} />
+                  </div>
+                  <FieldDescription id="q-location-status" aria-live="polite">
+                    {locationStatus}
+                  </FieldDescription>
+                  {outside && (
+                    <p role="alert" className="text-sm text-destructive">{OUTSIDE_MALOPOLSKA_MSG}</p>
+                  )}
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="q-gmina">Gmina</FieldLabel>
+                  <NativeSelect
+                    {...fieldProps("gmina", "q-gmina-hint")}
+                    required
+                    className="w-full"
+                    value={gminaId}
+                    disabled={!regions.data}
+                    onChange={(e) => pickGmina(e.target.value)}
+                  >
+                    <NativeSelectOption value="" disabled>
+                      {regions.isPending ? "Wczytuję gminy..." : "Wybierz gminę z listy"}
+                    </NativeSelectOption>
+                    {regions.data?.powiaty.map((powiat) => (
+                      <NativeSelectOptGroup key={powiat.id} label={powiat.label}>
+                        {powiat.gminy.map((gmina) => (
+                          <NativeSelectOption key={gmina.id} value={gmina.id}>{gmina.label}</NativeSelectOption>
+                        ))}
+                      </NativeSelectOptGroup>
+                    ))}
+                  </NativeSelect>
+                  <FieldDescription id="q-gmina-hint">Uzupełnia się po wybraniu miejsca na mapie. Możesz też wybrać gminę bez mapy.</FieldDescription>
+                  <FieldError {...errorProps("gmina")} />
+                </Field>
+                <Field orientation="horizontal" className="rounded-xl bg-muted/60 p-3">
+                  <Checkbox
+                    id="q-whole-gmina"
+                    checked={form.wholeGmina}
+                    disabled={!gminaId}
+                    onCheckedChange={setWholeGmina}
+                  />
+                  <FieldLabel htmlFor="q-whole-gmina">Dotyczy całej gminy, bez dokładnego miejsca</FieldLabel>
+                </Field>
+              </FormStep>
+
+              <FormStep number={3} title="Zdjęcie" description="Opcjonalnie, do 5 MB.">
+                <Field>
+                  <label
+                    htmlFor="q-photo"
+                    className="flex cursor-pointer items-center gap-4 rounded-2xl border border-dashed border-outline p-4 hover:bg-muted/60 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[var(--focus)]"
+                  >
+                    <Input
+                      {...fieldProps("photo")}
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => set("photo")(e.target.files?.[0] ?? null)}
+                    />
+                    {photoPreview ? (
+                      <img src={photoPreview} alt="Podgląd wybranego zdjęcia" className="size-16 shrink-0 rounded-xl object-cover" />
+                    ) : (
+                      <span aria-hidden="true" className="flex size-16 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+                        <HugeiconsIcon icon={ImageAdd01Icon} strokeWidth={1.8} className="size-7" />
+                      </span>
+                    )}
+                    <span className="min-w-0 text-sm">
+                      <span className="block font-semibold">{form.photo ? form.photo.name : "Dodaj zdjęcie"}</span>
+                      <span className="block text-muted-foreground">{form.photo ? "Kliknij, aby zmienić" : "JPG lub PNG, maks. 5 MB"}</span>
+                    </span>
+                  </label>
+                  <FieldError {...errorProps("photo")} />
+                </Field>
+              </FormStep>
             </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
+          </DialogBody>
+          <DialogFooter>
+            <Button type="button" variant="ghost" onClick={close}>Anuluj</Button>
+            <Button type="submit" disabled={addProblem.isPending || street.isFetching || searching || shapes.isPending}>
+              {addProblem.isPending ? "Szukam rozwiązań..." : "Wyślij zgłoszenie"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogPanel>
     </Modal>
   )
 }

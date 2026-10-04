@@ -39,7 +39,7 @@ function CategoryChip({ active, icon, label, count, onClick }) {
       onClick={onClick}
       className={cn(
         "flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
+        active ? "border-primary bg-primary text-primary-foreground" : "border-outline bg-background hover:bg-muted"
       )}
     >
       {icon && <span aria-hidden="true">{icon}</span>}

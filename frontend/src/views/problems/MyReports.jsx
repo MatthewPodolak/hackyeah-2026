@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, BubbleChatIcon, Location01Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, BubbleChatIcon, Location01Icon, Megaphone01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import { useMyProblems, useProblemsByTokens } from "@/api/hooks/useAdmin";
 import { getProblemCategoryOption } from "@/lib/problemCategories";
 import { problemStatus, problemTokens } from "@/lib/problems";
 import { useScopedTokens } from "@/hooks/useScopedTokens";
+import { PageHeader } from "@/components/page-header";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium" });
 
@@ -23,7 +24,7 @@ function ReportCard({ item, token }) {
   const category = getProblemCategoryOption(problem.category);
 
   return (
-    <article aria-labelledby={`report-${problem.id}`} className="flex flex-col gap-3 rounded-xl border bg-card p-5">
+    <article aria-labelledby={`report-${problem.id}`} className="flex flex-col gap-3 rounded-2xl border border-border bg-card shadow-elevation-1 p-5">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <h2 id={`report-${problem.id}`} className="font-semibold break-words">{problem.title}</h2>
@@ -105,14 +106,13 @@ export default function MyReports() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-3xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6">
-          <h1 className="font-heading text-3xl font-bold tracking-tight">Moje zgłoszenia</h1>
-          <p className="text-muted-foreground">
-            Status i odpowiedzi na zgłoszone przez Ciebie problemy. {isLogged ? "Widzisz zgłoszenia z konta i z tej przeglądarki." : "Bez logowania widzisz zgłoszenia wysłane z tej przeglądarki."}
-          </p>
-        </header>
+        <PageHeader
+          icon={Megaphone01Icon}
+          title="Moje zgłoszenia"
+          description={<>Status i odpowiedzi na zgłoszone przez Ciebie problemy. {isLogged ? "Widzisz zgłoszenia z konta i z tej przeglądarki." : "Bez logowania widzisz zgłoszenia wysłane z tej przeglądarki."}</>}
+        />
 
-        <form onSubmit={addCode} className="mb-6 flex flex-col gap-2">
+        <form onSubmit={addCode} className="mb-8 flex flex-col gap-2 rounded-2xl border border-border bg-card p-4 shadow-elevation-1">
           <label htmlFor="report-code" className="text-sm font-medium">Masz kod zgłoszenia z innego urządzenia?</label>
           <div className="flex gap-2">
             <Input id="report-code" value={code} autoComplete="off" placeholder="Wklej kod zgłoszenia" onChange={(e) => setCode(e.target.value)} />
@@ -130,7 +130,7 @@ export default function MyReports() {
               if (data) return <ReportCard key={key} item={data} token={token} />;
               if (query?.data) return <ReportCard key={key} item={query.data} token={token} />;
               return (
-                <div key={key} className="flex items-center justify-between gap-3 rounded-xl border border-dashed p-4 text-sm">
+                <div key={key} className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-outline p-4 text-sm">
                   <span className="min-w-0 text-muted-foreground">
                     Nie znaleziono zgłoszenia o kodzie <code className="break-all font-mono text-foreground">{token}</code>
                   </span>

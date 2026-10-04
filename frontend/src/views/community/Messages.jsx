@@ -3,9 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, Cancel01Icon, Chatting01Icon, SentIcon } from "@hugeicons/core-free-icons";
+import { Add01Icon, Chatting01Icon, SentIcon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +21,8 @@ import { useFormErrors } from "@/helpers/useFormErrors";
 import { useRegions } from "@/api/hooks/useRegionsQuery";
 import { NativeSelect, NativeSelectOptGroup, NativeSelectOption } from "@/components/ui/native-select";
 import { CONVERSATION_STATUS, CONVERSATION_TYPE } from "@/lib/community";
+import { PageHeader } from "@/components/page-header";
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const TYPES = Object.entries(CONVERSATION_TYPE);
@@ -65,28 +66,16 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start gap-3">
-          <div className="min-w-0 flex-1">
-            <CardTitle><h2 id="conv-heading" className="text-base font-semibold">Nowa rozmowa</h2></CardTitle>
-            <CardDescription className="mt-1">
-              {canChooseRecipient ? "Wybierz, do kogo piszesz: do ROPS albo do samorządu swojej gminy." : "Wiadomość trafi do pracowników ROPS Kraków."}
-            </CardDescription>
-          </div>
-          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
+    <DialogPanel>
+      <DialogHeader icon={Chatting01Icon} title="Nowa rozmowa" titleId="conv-heading" description={canChooseRecipient ? "Wybierz, do kogo piszesz: do ROPS albo do samorządu swojej gminy." : "Wiadomość trafi do pracowników ROPS Kraków."} onClose={onClose} />
+      <DialogBody className="pt-1">
         <form onSubmit={submit} noValidate>
           <FieldGroup>
             {canChooseRecipient && (
               <fieldset className="flex flex-col gap-2">
                 <legend className="mb-2 text-sm font-medium">Do kogo piszesz?</legend>
                 {RECIPIENTS.map((option) => (
-                  <label key={option.value} className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3", form.recipient === option.value ? "border-primary bg-muted/60" : "border-foreground/45")}>
+                  <label key={option.value} className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border border-border p-3", form.recipient === option.value ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60")}>
                     <input type="radio" name="conv-recipient" value={option.value} checked={form.recipient === option.value} onChange={set("recipient")} className="mt-1 size-4 accent-[var(--primary)]" />
                     <span>
                       <span className="block text-sm font-medium">{option.label}</span>
@@ -113,7 +102,7 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
             <fieldset className="flex flex-col gap-2">
               <legend className="mb-2 text-sm font-medium">Rodzaj rozmowy</legend>
               {TYPES.map(([value, meta]) => (
-                <label key={value} className={cn("flex cursor-pointer items-start gap-3 rounded-xl border p-3", form.type === value ? "border-primary bg-muted/60" : "border-foreground/45")}>
+                <label key={value} className={cn("flex cursor-pointer items-start gap-3 rounded-2xl border border-border p-3", form.type === value ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-outline hover:bg-muted/60")}>
                   <input type="radio" name="conv-type" value={value} checked={form.type === value} onChange={set("type")} className="mt-1 size-4 accent-[var(--primary)]" />
                   <span>
                     <span className="block text-sm font-medium">{meta.label}</span>
@@ -138,8 +127,8 @@ function NewConversation({ canChooseRecipient, onCreated, onClose }) {
             </div>
           </FieldGroup>
         </form>
-      </CardContent>
-    </Card>
+      </DialogBody>
+    </DialogPanel>
   );
 }
 
@@ -177,7 +166,7 @@ function Thread({ conversation, headingRef }) {
   };
 
   return (
-    <section aria-labelledby="thread-heading" className="flex min-h-0 flex-col gap-4 rounded-xl border bg-card p-4">
+    <section aria-labelledby="thread-heading" className="flex min-h-0 flex-col gap-4 rounded-2xl border border-border bg-card shadow-elevation-1 p-4">
       <header className="flex flex-wrap items-start justify-between gap-2 border-b pb-3">
         <div className="min-w-0">
           <h2 id="thread-heading" ref={headingRef} tabIndex={-1} className="font-semibold break-words outline-none">{conversation.subject}</h2>
@@ -274,24 +263,21 @@ function MessagesView() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-6xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Wiadomości</h1>
-            <p className="text-muted-foreground">
-              {role === ROLES.ROPS
-                ? "Wiadomości od mieszkańców, organizacji i samorządów skierowane do ROPS"
-                : role === ROLES.JST
-                  ? "Wiadomości od mieszkańców do Twojej gminy i Twoje rozmowy z ROPS"
-                  : "Rozmowy z ROPS i samorządem Twojej gminy"}
-            </p>
-          </div>
-          {canWrite && (
+        <PageHeader
+          icon={Chatting01Icon}
+          title="Wiadomości"
+          description={role === ROLES.ROPS
+            ? "Wiadomości od mieszkańców, organizacji i samorządów skierowane do ROPS"
+            : role === ROLES.JST
+              ? "Wiadomości od mieszkańców do Twojej gminy i Twoje rozmowy z ROPS"
+              : "Rozmowy z ROPS i samorządem Twojej gminy"}
+          actions={canWrite && (
             <Button onClick={() => setCreating(true)}>
               <HugeiconsIcon icon={Add01Icon} strokeWidth={2} data-icon="inline-start" aria-hidden="true" />
               {role === ROLES.JST ? "Napisz do ROPS" : "Nowa rozmowa"}
             </Button>
           )}
-        </header>
+        />
 
         {conversations.isPending ? (
           <LoadingStatus label="Wczytywanie rozmów"><Skeleton className="h-48 w-full rounded-xl" /></LoadingStatus>
@@ -316,8 +302,8 @@ function MessagesView() {
                       onClick={() => open(c.id)}
                       aria-current={c.id === selectedId ? "true" : undefined}
                       className={cn(
-                        "flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors",
-                        c.id === selectedId ? "border-primary bg-muted" : "border-foreground/45 hover:bg-muted"
+                        "flex w-full flex-col items-start gap-1 rounded-2xl border border-border p-3 text-left transition-colors",
+                        c.id === selectedId ? "border-primary bg-secondary/60 dark:bg-secondary/40" : "border-border bg-card shadow-elevation-1 hover:shadow-elevation-2"
                       )}
                     >
                       <span className="font-medium break-words">{c.subject}</span>
@@ -334,7 +320,7 @@ function MessagesView() {
             {selected ? (
               <Thread key={selected.id} conversation={selected} headingRef={headingRef} />
             ) : (
-              <p className="rounded-xl border border-dashed p-6 text-sm text-muted-foreground">Wybierz rozmowę z listy, aby zobaczyć wiadomości.</p>
+              <p className="rounded-2xl border border-dashed border-outline p-6 text-sm text-muted-foreground">Wybierz rozmowę z listy, aby zobaczyć wiadomości.</p>
             )}
           </div>
         )}

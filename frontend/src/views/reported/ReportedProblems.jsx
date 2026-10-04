@@ -3,13 +3,12 @@
 import { useMemo, useState } from "react";
 import { cn } from "cn";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Alert02Icon, BubbleChatIcon, Calendar03Icon, Cancel01Icon, InboxIcon, Location01Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Alert02Icon, AlertDiamondIcon, BubbleChatIcon, Calendar03Icon, InboxIcon, Location01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "@/components/ui/empty";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +25,8 @@ import { useFormErrors } from "@/helpers/useFormErrors";
 import { getProblemCategoryOption, getTargetGroupOption } from "@/lib/problemCategories";
 import { PRIORITIES, PROBLEM_PRIORITY, PROBLEM_STATUS, ROPS_STATUSES, problemPriority, problemStatus, waitsForGmina } from "@/lib/problems";
 import { gminaName, problemPlace } from "@/lib/gminy";
+import { PageHeader } from "@/components/page-header";
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
 
 const dateFormat = new Intl.DateTimeFormat("pl-PL", { dateStyle: "medium", timeStyle: "short" });
 const PRIORITY_RANK = Object.fromEntries(PRIORITIES.map((key, i) => [key, i]));
@@ -62,7 +63,7 @@ function FilterChip({ active, label, count, onClick }) {
       onClick={onClick}
       className={cn(
         "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
-        active ? "border-primary bg-primary text-primary-foreground" : "border-foreground/45 bg-background hover:bg-muted"
+        active ? "border-primary bg-primary text-primary-foreground" : "border-outline bg-background hover:bg-muted"
       )}
     >
       {label}
@@ -262,20 +263,17 @@ function ProblemDialog({ item: listItem, isJst, onClose }) {
 
   return (
     <Modal open onClose={onClose} labelledBy="problem-dialog-heading" className="max-w-2xl">
-      <Card className="pt-0">
-        <div aria-hidden="true" className="h-1.5 bg-red-500" />
-        <CardHeader>
-          <div className="flex items-start gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium uppercase tracking-wide text-red-700 dark:text-red-400">Zgłoszony problem</p>
-              <h2 id="problem-dialog-heading" className="font-heading text-xl font-bold tracking-tight leading-snug break-words">{problem.title}</h2>
-            </div>
-            <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij szczegóły zgłoszenia">
-              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+      <DialogPanel>
+        <DialogHeader
+          icon={Alert02Icon}
+          tone="danger"
+          eyebrow="Zgłoszony problem"
+          title={problem.title}
+          titleId="problem-dialog-heading"
+          onClose={onClose}
+          closeLabel="Zamknij szczegóły zgłoszenia"
+        />
+        <DialogBody className="flex flex-col gap-4 pt-1">
           <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
             <StatusPill meta={problemStatus(problem.status)} />
             <PriorityPill priority={item.priority} />
@@ -306,8 +304,8 @@ function ProblemDialog({ item: listItem, isJst, onClose }) {
           ) : (
             <ReviewForm key={`${problem.id}-${problem.status}-${item.priority}`} item={item} onDone={onClose} />
           )}
-        </CardContent>
-      </Card>
+        </DialogBody>
+      </DialogPanel>
     </Modal>
   );
 }
@@ -346,17 +344,16 @@ function ProblemsList() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h1 className="font-heading text-3xl font-bold tracking-tight">Zgłoszone problemy</h1>
-            <p className="text-muted-foreground">
-              {isJst
-                ? `Zgłoszenia mieszkańców z gminy: ${gminaName(gminy.get(user.gminaId)) ?? "…"}. Przyjmij je z priorytetem albo odrzuć.`
-                : "Zgłoszenia przyjęte przez gminy i zgłoszenia bez gminy. Odpowiedź trafia do zgłaszającego."}
-            </p>
-          </div>
-          {unseen > 0 && <p className="text-sm font-medium">Nowe zgłoszenia: {unseen}</p>}
-        </header>
+        <PageHeader
+          icon={AlertDiamondIcon}
+          title="Zgłoszone problemy"
+          description={isJst
+            ? `Zgłoszenia mieszkańców z gminy: ${gminaName(gminy.get(user.gminaId)) ?? "…"}. Przyjmij je z priorytetem albo odrzuć.`
+            : "Zgłoszenia przyjęte przez gminy i zgłoszenia bez gminy. Odpowiedź trafia do zgłaszającego."}
+          actions={unseen > 0 && (
+            <p className="rounded-full bg-secondary px-3 py-1.5 text-sm font-semibold text-secondary-foreground">Nowe zgłoszenia: {unseen}</p>
+          )}
+        />
 
         <div role="search" aria-label="Filtry zgłoszeń" className="mb-6 flex flex-col gap-3">
           <InputGroup>
@@ -405,7 +402,7 @@ function ProblemsList() {
               const { problem } = item;
               const waiting = waitsForGmina(problem);
               return (
-                <li key={problem.id} className="relative flex gap-4 rounded-xl border bg-card p-4 transition-shadow hover:shadow-md has-[button:focus-visible]:ring-3 has-[button:focus-visible]:ring-ring/50">
+                <li key={problem.id} className="relative flex gap-4 rounded-2xl border border-border bg-card shadow-elevation-1 p-4 transition-shadow hover:shadow-elevation-2 has-[button:focus-visible]:ring-3 has-[button:focus-visible]:ring-ring/50">
                   <div aria-hidden="true" className="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-500/10 text-red-700 dark:text-red-400">
                     <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} className="size-5" />
                   </div>

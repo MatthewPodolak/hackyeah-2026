@@ -49,7 +49,7 @@ function FieldGroup({
     <div
       data-slot="field-group"
       className={cn(
-        "group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4",
+        "group/field-group @container/field-group flex w-full flex-col gap-5 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4",
         className
       )}
       {...props}
@@ -58,7 +58,7 @@ function FieldGroup({
 }
 
 const fieldVariants = cva(
-  "group/field flex w-full gap-3 data-[invalid=true]:text-destructive",
+  "group/field flex w-full gap-2 data-[invalid=true]:text-destructive",
   {
     variants: {
       orientation: {

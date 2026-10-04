@@ -3,9 +3,8 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, Cancel01Icon, Delete02Icon, Edit02Icon, Search01Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon, Database01Icon, Delete02Icon, Edit02Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
@@ -23,6 +22,8 @@ import { useKnowledgeResources } from "@/api/hooks/useCanvas";
 import { useToast } from "@/helpers/ToastProvider";
 import { useFormErrors } from "@/helpers/useFormErrors";
 import formCategories from "@/data/form-categories.json";
+import { PageHeader } from "@/components/page-header";
+import { DialogBody, DialogHeader, DialogPanel } from "@/components/dialog-parts";
 
 const WHO = Object.entries(formCategories.whoCategories);
 const PROBLEMS = Object.entries(formCategories.problemCategories);
@@ -58,17 +59,10 @@ function normalize(text) {
 
 function DialogCard({ headingId, title, onClose, children }) {
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start gap-3">
-          <h2 id={headingId} className="min-w-0 flex-1 text-base font-semibold">{title}</h2>
-          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Zamknij okno">
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" />
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>{children}</CardContent>
-    </Card>
+    <DialogPanel>
+      <DialogHeader icon={Database01Icon} title={title} titleId={headingId} onClose={onClose} />
+      <DialogBody className="pt-1">{children}</DialogBody>
+    </DialogPanel>
   );
 }
 
@@ -278,7 +272,7 @@ function InnovationsTab() {
       ) : (
         <ul className="flex flex-col gap-2">
           {visible.map((innovation) => (
-            <li key={innovation.id} className="flex flex-col gap-2 rounded-xl border bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
+            <li key={innovation.id} className="flex flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <Link href={`/innovations/${innovation.id}`} className="font-medium underline-offset-4 hover:underline">{innovation.name}</Link>
                 {innovation.shortDescription && <p className="line-clamp-1 text-sm text-muted-foreground">{innovation.shortDescription}</p>}
@@ -333,7 +327,7 @@ function ResourcesTab() {
       ) : (
         <ul className="flex flex-col gap-2">
           {(resources.data ?? []).map((resource) => (
-            <li key={resource.id} className="flex flex-col gap-2 rounded-xl border bg-card p-3 sm:flex-row sm:items-center sm:justify-between">
+            <li key={resource.id} className="flex flex-col gap-2 rounded-2xl border border-border bg-card shadow-elevation-1 p-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <a href={resource.url} target="_blank" rel="noreferrer" className="font-medium underline-offset-4 hover:underline">
                   {resource.title}<span className="sr-only"> (otwiera się w nowej karcie)</span>
@@ -367,10 +361,11 @@ function CatalogPanel() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="mx-auto w-full max-w-5xl px-4 pt-18 pb-10 md:px-8">
-        <header className="mb-6">
-          <h1 className="font-heading text-3xl font-bold tracking-tight">Katalog wiedzy</h1>
-          <p className="text-muted-foreground">Edytuj Bibliotekę Innowacji i materiały bazy wiedzy. Zmiany są widoczne od razu.</p>
-        </header>
+        <PageHeader
+          icon={Database01Icon}
+          title="Katalog wiedzy"
+          description="Edytuj Bibliotekę Innowacji i materiały bazy wiedzy. Zmiany są widoczne od razu."
+        />
         <Tabs defaultValue="innovations" className="gap-4">
           <TabsList>
             <TabsTrigger value="innovations">Innowacje</TabsTrigger>
