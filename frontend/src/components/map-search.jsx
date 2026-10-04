@@ -1,11 +1,13 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useId, useMemo, useRef, useState } from "react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { AlertDiamondIcon, Building03Icon, Cancel01Icon, Home01Icon, Loading03Icon, Location01Icon, Search01Icon } from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 import { GeocodeService } from "@/api/services/GeocodeService";
 import { usePlaceSuggestions } from "@/api/hooks/useStreetQuery";
+import { SpeechButton } from "@/components/speech-button";
+import { useSpeechSupported } from "@/hooks/useSpeechToText";
 
 const KIND_ICON = {
   Ulica: Location01Icon,
@@ -38,6 +40,8 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
   const [searching, setSearching] = useState(false);
   const places = usePlaceSuggestions(value, bias);
   const query = value.trim();
+  const inputRef = useRef(null);
+  const speechSupported = useSpeechSupported();
 
   const problemMatches = useMemo(() => {
     const ws = words(query);
@@ -167,6 +171,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
       <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" className="pointer-events-none absolute top-[22px] left-4 size-5 -translate-y-1/2 text-muted-foreground" />
       <input
         id={`${uid}-input`}
+        ref={inputRef}
         type="text"
         role="combobox"
         autoComplete="off"
@@ -188,11 +193,13 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
         onKeyDown={onKeyDown}
         placeholder="Szukaj ulicy, miejsca lub zgłoszenia…"
         className={cn(
-          "h-11 w-full rounded-full border border-border bg-card pr-12 pl-12 text-sm text-foreground shadow-elevation-2 outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/40",
+          "h-11 w-full rounded-full border border-border bg-card pl-12 text-sm text-foreground shadow-elevation-2 outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/40",
+          // room for the clear button, and the microphone where the browser can dictate
+          speechSupported ? "pr-20" : "pr-12",
           expanded && "rounded-b-none rounded-t-[22px] border-b-transparent"
         )}
       />
-      <span id={`${uid}-hint`} className="sr-only">Wpisz nazwę ulicy lub zgłoszenia i naciśnij Enter, aby przybliżyć mapę. Tekst filtruje też zgłoszenia na mapie.</span>
+      <span id={`${uid}-hint`} className="sr-only">Wpisz albo podyktuj nazwę ulicy lub zgłoszenia i naciśnij Enter, aby przybliżyć mapę. Tekst filtruje też zgłoszenia na mapie.</span>
       <div className="absolute top-0 right-1 flex h-11 items-center">
         {busy && <HugeiconsIcon icon={Loading03Icon} strokeWidth={2} aria-hidden="true" className="mr-1 size-4 animate-spin text-muted-foreground" />}
         {value && (
@@ -210,6 +217,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
             <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} aria-hidden="true" className="size-4" />
           </button>
         )}
+        <SpeechButton target={inputRef} className="static mr-1" />
       </div>
 
       <div
