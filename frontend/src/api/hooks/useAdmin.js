@@ -42,30 +42,6 @@ export function useUnseenProblems(enabled) {
   });
 }
 
-export function useInstitutionAccounts() {
-  return useQuery({
-    queryKey: ["admin", "users"],
-    queryFn: ({ signal }) => AdminService.users(null, { ct: signal }),
-  });
-}
-
-export function usePendingAccounts(enabled) {
-  return useQuery({
-    queryKey: ["admin", "users", "pending"],
-    queryFn: ({ signal }) => AdminService.pendingUsers({ ct: signal }),
-    enabled,
-    refetchInterval: 60_000,
-  });
-}
-
-export function useSetAccountStatus() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ id, status }) => AdminService.setUserStatus(id, status),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin", "users"] }),
-  });
-}
-
 export function useCatalog() {
   return useQuery({
     queryKey: ["catalog", "innovations"],

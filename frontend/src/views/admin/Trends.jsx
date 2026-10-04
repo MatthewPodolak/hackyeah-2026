@@ -121,7 +121,6 @@ function Dashboard({ gminaId, showUnseen }) {
         {tile("conversationsOpen", "Otwarte rozmowy")}
         {tile("partnerships", "Ogłoszenia o partnerstwo")}
         {tile("reviews", "Opinie testerów")}
-        {tile("pendingAccounts", "Konta czekające na akceptację")}
       </section>
 
       <Insights key={gminaId ?? "region"} gminaId={gminaId} />

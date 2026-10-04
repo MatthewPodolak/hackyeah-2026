@@ -29,7 +29,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private static final Set<Role> REGISTRABLE_ROLES = Set.of(Role.CITIZEN, Role.JST, Role.ROPS);
+    private static final Set<Role> REGISTRABLE_ROLES = Set.of(Role.CITIZEN, Role.NGO);
+    private static final int[] NIP_WEIGHTS = {6, 5, 7, 2, 3, 4, 5, 6, 7};
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
@@ -40,8 +41,9 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
-        if (!REGISTRABLE_ROLES.contains(request.role())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Niedozwolony typ konta");
+        Role role = request.role() == null ? Role.CITIZEN : request.role();
+        if (!REGISTRABLE_ROLES.contains(role)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Konta samorządów i ROPS zakłada administrator platformy");
         }
         String email = request.email().trim().toLowerCase();
         if (appUserRepository.existsByEmailIgnoreCase(email)) {
@@ -52,8 +54,11 @@ public class AuthService {
         user.setName(request.name().trim());
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.setRole(request.role());
-        user.setAccountStatus(request.role() == Role.CITIZEN ? AccountStatus.ACTIVE : AccountStatus.PENDING);
+        user.setRole(role);
+        if (role == Role.NGO) {
+            user.setNip(validNip(request.nip()));
+        }
+        user.setAccountStatus(AccountStatus.ACTIVE);
         user.setCreatedAt(Instant.now());
 
         return issueToken(appUserRepository.save(user));
@@ -73,6 +78,19 @@ public class AuthService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
+    static String validNip(String raw) {
+        String digits = raw == null ? "" : raw.replaceAll("[\\s-]", "");
+        if (!digits.matches("\\d{10}")) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "NIP musi mieć 10 cyfr");
+        }
+        int sum = 0;
+        for (int i = 0; i < 9; i++) sum += (digits.charAt(i) - '0') * NIP_WEIGHTS[i];
+        if (sum % 11 == 10 || sum % 11 != digits.charAt(9) - '0') {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Niepoprawny NIP – sprawdź cyfry");
+        }
+        return digits;
+    }
+
     private AuthResponse issueToken(AppUser user) {
         Instant now = Instant.now();
         Instant expiresAt = now.plus(expiration);
@@ -90,6 +108,6 @@ public class AuthService {
     }
 
     private static UserResponse toResponse(AppUser user) {
-        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.effectiveStatus(), user.getGminaId());
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.effectiveStatus(), user.getGminaId(), user.getNip());
     }
 }
