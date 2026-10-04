@@ -11,16 +11,17 @@ export const PROBLEM_STATUS = {
 };
 
 export const PIN_TONES = [
-  { key: "open", label: "Nowe i analizowane" },
-  { key: "progress", label: "W realizacji" },
-  { key: "resolved", label: "Rozwiązane" },
+  { key: "open", label: "Nowe", statuses: ["SUBMITTED"] },
+  { key: "review", label: "W ocenie gminy lub ROPS", statuses: ["FORWARDED", "IN_REVIEW"] },
+  { key: "progress", label: "W realizacji", statuses: ["IN_PROGRESS"] },
+  { key: "resolved", label: "Rozwiązane", statuses: ["RESOLVED"] },
+  { key: "closed", label: "Odrzucone", statuses: ["REJECTED", "GMINA_REJECTED"] },
 ];
 
+const TONE_BY_STATUS = Object.fromEntries(PIN_TONES.flatMap((tone) => tone.statuses.map((status) => [status, tone.key])));
+
 export function pinTone(status) {
-  if (status === "IN_PROGRESS") return "progress";
-  if (status === "RESOLVED") return "resolved";
-  if (status === "REJECTED" || status === "GMINA_REJECTED") return "closed";
-  return "open";
+  return TONE_BY_STATUS[status] ?? "open";
 }
 
 export function problemStatus(status) {

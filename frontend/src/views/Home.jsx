@@ -14,7 +14,7 @@ import { useGminyIndex, useGminyShapes } from "@/api/hooks/useRegionsQuery";
 import { useAuth } from "@/api/context/AuthContext";
 import { gminaName } from "@/lib/gminy";
 import MapSearch, { normalize } from "@/components/map-search";
-import { PIN_TONES } from "@/lib/problems";
+import { PIN_TONES, pinTone } from "@/lib/problems";
 import NeedsSurvey from "@/components/needs-survey";
 import OnboardingTour from "@/components/onboarding-tour";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -83,6 +83,15 @@ export default function Home() {
       return words.every((word) => text.includes(word));
     });
   }, [scopedProblems, filter]);
+
+  const counts = useMemo(() => {
+    const result = {};
+    for (const problem of visibleProblems) {
+      const tone = pinTone(problem.status);
+      result[tone] = (result[tone] ?? 0) + 1;
+    }
+    return result;
+  }, [visibleProblems]);
 
   const bias = useMemo(() => {
     if (!myArea) return null;
@@ -154,12 +163,13 @@ export default function Home() {
       <ul
         data-tour="legend"
         aria-label="Legenda kolorów pinezek"
-        className="absolute bottom-6 left-[76px] z-[1000] hidden items-center gap-4 rounded-2xl border border-border bg-card/95 px-4 py-2.5 text-xs font-medium shadow-elevation-2 backdrop-blur sm:flex"
+        className="absolute bottom-6 left-[76px] z-[1000] hidden max-w-[calc(100%-340px)] flex-wrap items-center gap-x-4 gap-y-1.5 rounded-2xl border border-border bg-card/95 px-4 py-2.5 text-xs font-medium shadow-elevation-2 backdrop-blur sm:flex"
       >
         {PIN_TONES.map((tone) => (
-          <li key={tone.key} className="flex items-center gap-1.5">
+          <li key={tone.key} className="flex items-center gap-1.5 whitespace-nowrap">
             <span aria-hidden="true" className={`pin-legend-dot problem-pin--${tone.key}`} />
             {tone.label}
+            {counts[tone.key] > 0 && <span className="text-muted-foreground tabular-nums">{counts[tone.key]}</span>}
           </li>
         ))}
       </ul>
