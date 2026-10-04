@@ -31,7 +31,7 @@ function placeLabel(place) {
   return place.place ? `${place.name}, ${place.place}` : place.name;
 }
 
-export default function MapSearch({ value, onChange, problems, bias, onPickPlace, onPickProblem, className }) {
+export default function MapSearch({ value, onChange, problems, bias, onPickPlace, onPickProblem, className, ...props }) {
   const uid = useId();
   const listId = `${uid}-list`;
   const [open, setOpen] = useState(false);
@@ -166,7 +166,7 @@ export default function MapSearch({ value, onChange, problems, bias, onPickPlace
         );
 
   return (
-    <div role="search" className={cn("relative z-10 w-full", className)}>
+    <div role="search" className={cn("relative z-10 w-full", className)} {...props}>
       <label htmlFor={`${uid}-input`} className="sr-only">Szukaj ulicy, miejsca lub zgłoszenia</label>
       <HugeiconsIcon icon={Search01Icon} strokeWidth={2} aria-hidden="true" className="pointer-events-none absolute top-[22px] left-4 size-5 -translate-y-1/2 text-muted-foreground" />
       <input

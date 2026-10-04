@@ -115,7 +115,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <nav aria-label="Menu główne">
+        <nav aria-label="Menu główne" data-tour="menu">
           <NavGroup label="Nawigacja" items={publicItems} isActive={isActive} onAction={() => openProposal()} />
           <NavGroup label="Moje sprawy" items={myItems.filter((item) => (!item.requiresLogin || isLogged) && item.hiddenFor !== role)} isActive={isActive} />
           {isInstitution && (
@@ -123,7 +123,7 @@ export function AppSidebar() {
           )}
           {isRops && <NavGroup label="Administracja ROPS" items={ropsItems} isActive={isActive} />}
         </nav>
-        <SidebarGroup>
+        <SidebarGroup data-tour="a11y">
           <SidebarGroupLabel>Ułatwienia dostępu</SidebarGroupLabel>
           <SidebarGroupContent>
             <AccessibilityControls />
